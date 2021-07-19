@@ -6,8 +6,11 @@ import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import LayoutOne from "../../layouts/LayoutOne";
-import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import useInputs from "../../customHooks/useInputs";
+import {useDispatch, useSelector} from "react-redux";
+import {signin} from "../../member/loginSlice";
+import axios from "axios";
+import {useHistory} from "react-router-dom";
 
 const initStateLogin = {
     email: "",
@@ -21,26 +24,45 @@ const initStateSignUp = {
     passwordCheck:"",
     name:"",
     birth:"",
+    gender:"남자",
     phone:"",
     address:"",
     detailAddress:""
 }
 
 const LoginRegister = ({ location }) => {
-  const { pathname } = location;
-
+    const history = useHistory();
+    const baseUrl = process.env.REACT_APP_API_DEV_URL;
+    const {pathname} = location;
+    const info = useSelector(state=>state.login);
+    console.log("이아래는 useSelector");
+    console.log(info);
     const [loginForm, onChange] = useInputs(initStateLogin);
     const [signupForm, signupChange] = useInputs(initStateSignUp);
+
+    /**
+     * 클릭시 axios로 로그인검증, 이후 LocalStorage에 저장.( email, roles, accessToken, RefreshToken )
+     * @param e
+     */
     const loginBtn = (e) => {
         e.preventDefault();
-
+        axios.post(`${baseUrl}/member/login`, loginForm).then(value =>
+        {
+            dispatch(signin(value.data.response));
+            history.push("/");
+        });
     };
+
+    const signupBtn = (e) => {
+        e.preventDefault();
+        axios.post(`${baseUrl}/member/`, signupForm).then(value => console.log(value));
+        history.push("/login-register")
+    };
+
+    const dispatch = useDispatch();
 
     console.log(signupForm);
     return (
-
-
-
         <Fragment>
             <LayoutOne headerTop="visible">
                 <div className="login-register-area pt-100 pb-100">
@@ -181,7 +203,7 @@ const LoginRegister = ({ location }) => {
                                                                 onChange={signupChange}
                                                             />
                                                             <div className="button-box">
-                                                                <button type="submit">
+                                                                <button onClick={signupBtn}>
                                                                     <span>Register</span>
                                                                 </button>
                                                             </div>

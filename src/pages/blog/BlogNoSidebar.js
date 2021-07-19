@@ -8,7 +8,19 @@ import BlogPostsNoSidebar from "../../wrappers/blog/BlogPostsNoSidebar";
 import boardService from "./boardService";
 
 const initState = {
-    boardDtoList: [],
+    boardDtoList: [{
+        bno: 0,
+        title:'',
+        writer:'',
+        boardType: '',
+        content: '',
+        email: '',
+        isPrivate:0,
+        removed:0,
+        replyCnt:0,
+        modDate:'',
+        regDate:''
+    },],
     boardListRequestDTO:{
         page:1,
         size:0,
@@ -17,7 +29,7 @@ const initState = {
     },
     pageMaker:{
         page:1,
-        size:0,
+        size:9,
         totalCount:0,
         pageList:[],
         prev:false,
@@ -30,7 +42,7 @@ const BlogNoSidebar = ({ location }) => {
 
     useEffect(() => {
       boardService.getBoardList().then(res => {
-        setData(res)
+        setData(res.response)
       })
     }, [])
     console.log(data)
@@ -52,7 +64,7 @@ const BlogNoSidebar = ({ location }) => {
                         <div className="mr-20">
                           <div className="row">
                             {/* blog posts */}
-                            <BlogPostsNoSidebar />
+                            <BlogPostsNoSidebar data={data} />
                           </div>
 
                           {/* blog pagination */}

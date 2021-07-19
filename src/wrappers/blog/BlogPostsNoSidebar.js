@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
-const BlogPostsNoSidebar = () => {
+const BlogPostsNoSidebar = ({data}) => {
+  console.log(data)
   return (
     <Fragment>
         <div className="col-lg-4 col-md-6 col-sm-12">

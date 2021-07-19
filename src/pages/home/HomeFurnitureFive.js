@@ -25,16 +25,7 @@ const HomeFurnitureFive = () => {
         headerTop="visible"
       >
         {/* hero slider */}
-        <HeroSliderThirty />
-        {/* countdown */}
-        <CountDownFive
-          spaceTopClass="pt-115"
-          spaceBottomClass="pb-115"
-          image="/assets/img/banner/deal-9.png"
-          dateTime="November 13, 2021 12:12:00"
-        />
-        {/* brand logo slider */}
-        <BrandLogoSliderFour spaceBottomClass="pb-50" spaceTopClass="pt-50" />
+        {/*<HeroSliderThirty />*/}
         {/* tab product */}
         <TabProductNineteen
           spaceTopClass="pt-95"
@@ -42,16 +33,6 @@ const HomeFurnitureFive = () => {
           category="furniture"
           productGridStyleClass="product-wrap-10--style2"
         />
-        {/* video popup */}
-        <VideoPopupTwo spaceBottomClass="pb-100" />
-        {/* product slider */}
-        <ProductSliderThree
-          category="furniture"
-          spaceBottomClass="pb-100"
-          colorClass="product-wrap-8--brown"
-        />
-        {/* image slider */}
-        <ImageSliderTwo />
       </LayoutOne>
     </Fragment>
   );

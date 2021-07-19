@@ -222,7 +222,16 @@
   .single-comment-wrapper {
     display: flex;
     border: 1px solid #aaaaaa;
-    padding: 10px;
+    &.mt-35 {
+      margin-top: 15px;
+      padding:10px;
+    }
+    &.mt-50 {
+      &.ml-120{
+        margin-top: 15px;
+        padding:10px;
+      }
+    }
     @media #{$xs-layout} {
       display: block;
       &.mt-35 {
@@ -240,39 +249,52 @@
         margin-right: 28px;
         margin-bottom: 20px;
       }
-      img {
-        width: 100%;
-        @media #{$xs-layout} {
-          width: auto;
-        }
-      }
     }
     .blog-comment-content {
+      width:100%;
       h4 {
         font-size: 16px;
         font-weight: 500;
         line-height: 1;
-
         margin: 0;
       }
       span {
         font-size: 15px;
-
+        opacity: 50%;
         display: block;
-
-        margin: 6px 0 8px;
       }
       p {
         font-size: 14px;
-
+        word-wrap: break-word;
+        word-break: break-word;
         margin-bottom: 10px;
       }
-      .blog-details-btn {
-        a {
-          font-size: 14px;
-          font-weight: 500;
 
-          text-transform: capitalize;
+      .btnForReply {
+        flex-direction: row-reverse;
+        .btn {
+          span {
+            font-weight: 500;
+            line-height: 20px;
+
+            width: 30px;
+            height: 20px;
+
+            transition: all 0.3s ease 0s;
+            transform: translateY(-50%);
+            text-align: center;
+
+            color: #9a9a9a;
+            border-radius: 50px;
+            background-color: #eeeeee;
+          }
+          &:hover,
+          &.active {
+            span {
+              color: #fff;
+              background-color: $theme-color;
+            }
+          }
         }
       }
     }
@@ -281,6 +303,25 @@
         margin-left: 0;
       }
     }
+  }
+}
+
+.reply-pagination {
+  text-align: center;
+
+  span {
+    font-weight: 500;
+    line-height: 20px;
+    width: 30px;
+
+    margin-right: 8px;
+    transition: all 0.3s ease 0s;
+    transform: translateY(-50%);
+    text-align: center;
+
+    color: #9a9a9a;
+    border-radius: 50px;
+    background-color: #eeeeee;
   }
 }
 
@@ -308,17 +349,7 @@
     flex-direction: column;
     .text-leave {
       border: 1px solid #eaeaea;
-      textarea {
-        height: 100%;
-        max-width: 750px;
-        padding-left: 20px;
-        color: #333;
-        border: none;
-        padding-bottom: 0px;
-        padding-top:0px;
-        background: transparent none repeat scroll 0 0;
-        box-shadow: none;
-      }
+
     }
     .col-md-2 {
       input {
@@ -337,6 +368,58 @@
       }
     }
   }
+
+  /**
+  대댓글 작성 인풋용 css. 이게 필요한가? 굳이 이렇게 안하고 하는 방법은 없을까..?
+   */
+  .reReply-blog-form {
+    @media #{$xs-layout} {
+      margin-top: 20px;
+    }
+    flex-direction: column;
+    .text-leave {
+      border: 1px solid #eaeaea;
+      height: 100%;
+      input {
+        height: 100%;
+      }
+    }
+    .col-md-2 {
+      input:nth-child(1) {
+        font-weight: 500;
+        height:48%;
+
+        margin-bottom: 5px;
+
+        cursor: pointer;
+        letter-spacing: 1px;
+
+        color: #fff;
+        border: none;
+        background-color: $theme-color;
+        &:hover {
+          background-color: #333;
+        }
+      }
+      input:nth-child(2) {
+        font-weight: 500;
+        height:48%;
+
+        margin-bottom: 5px;
+
+        cursor: pointer;
+        letter-spacing: 1px;
+
+        color: #fff;
+        border: none;
+        background-color: #af163b;
+        &:hover {
+          background-color: #333;
+        }
+      }
+    }
+  }
+
 }
 
 .nav-style-4.owl-carousel:hover .owl-nav div {

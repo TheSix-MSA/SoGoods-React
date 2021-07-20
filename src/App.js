@@ -11,6 +11,8 @@ import instance from "./modules/axiosConfig";
 //the six
 const FundingBoard = lazy(()=>import("./components/funding/FundingBoard"));
 
+import Previews from "./pages/attach-dragNdrop/Previews";
+import Board from "./pages/attach-dragNdrop/Board";
 
 // home pages
 const HomeFashion = lazy(() => import("./pages/home/HomeFashion"));
@@ -150,6 +152,12 @@ const App = (props) => {
               }
             >
               <Switch>
+
+                <Route
+                    exact
+                    path={process.env.PUBLIC_URL + "/drag"}
+                    component={Board}
+                />
                 <Route
                   exact
                   path={process.env.PUBLIC_URL + "/"}

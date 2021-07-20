@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
 import Swiper from "react-id-swiper";
-import ProductGridEleven from "./ProductGridEleven";
 
 const ProductSliderFive = ({
   spaceBottomClass,
@@ -37,14 +36,7 @@ const ProductSliderFive = ({
     >
       <div className="row">
         <Swiper {...settings}>
-          <ProductGridEleven
-            category={category}
-            type={type}
-            limit={6}
-            spaceBottomClass="mb-25"
-            productGridStyleClass={productGridStyleClass}
-            sliderClassName="swiper-slide"
-          />
+
         </Swiper>
       </div>
     </div>

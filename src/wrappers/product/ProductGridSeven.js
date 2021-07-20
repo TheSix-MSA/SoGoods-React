@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
-import { getProducts } from "../../helpers/product";
 import ProductGridSingleSeven from "../../components/product/ProductGridSingleSeven";
 
 const ProductGridSeven = ({

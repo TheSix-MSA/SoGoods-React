@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import SectionTitle from "../../components/section-title/SectionTitle";
-import ProductGrid from "./ProductGrid";
 
 const TabProductThirteen = ({
   spaceTopClass,
@@ -48,32 +47,17 @@ const TabProductThirteen = ({
           <Tab.Content>
             <Tab.Pane eventKey="newArrival">
               <div className="row">
-                <ProductGrid
-                  category={category}
-                  type="new"
-                  limit={4}
-                  spaceBottomClass="mb-25"
-                />
+
               </div>
             </Tab.Pane>
             <Tab.Pane eventKey="bestSeller">
               <div className="row">
-                <ProductGrid
-                  category={category}
-                  type="bestSeller"
-                  limit={4}
-                  spaceBottomClass="mb-25"
-                />
+
               </div>
             </Tab.Pane>
             <Tab.Pane eventKey="saleItems">
               <div className="row">
-                <ProductGrid
-                  category={category}
-                  type="saleItems"
-                  limit={4}
-                  spaceBottomClass="mb-25"
-                />
+
               </div>
             </Tab.Pane>
           </Tab.Content>

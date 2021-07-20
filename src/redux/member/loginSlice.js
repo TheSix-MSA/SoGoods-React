@@ -3,8 +3,6 @@ import axios from "axios";
 import {act} from "react-dom/test-utils";
 
 const initState = {
-    accessToken:"",
-    refreshToken:"",
     email : "",
     roles : [],
 }
@@ -13,11 +11,17 @@ const loginSlice = createSlice({
     initialState:initState,
     reducers:{
         signin:(state, action) => {
-            console.log("여기는액션안");
-            return action.payload;
+            localStorage.setItem("accessToken", action.payload.accessToken);
+            localStorage.setItem("refreshToken", action.payload.refreshToken);
+            console.log(action.payload);
+            return {email:action.payload.email, roles: action.payload.roles};
+        },
+        signout: (state, action) => {
+            localStorage.clear();
+            return {...initState}
         }
     }
 });
 
-export const {signin} = loginSlice.actions;
+export const {signin,signout} = loginSlice.actions;
 export default loginSlice.reducer;

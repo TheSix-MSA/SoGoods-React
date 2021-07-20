@@ -6,6 +6,7 @@ import { ToastProvider } from "react-toast-notifications";
 import { multilanguage, loadLanguages } from "redux-multilanguage";
 import { connect } from "react-redux";
 import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
+import Previews from "./pages/test/MyDropzone";
 
 // home pages
 const HomeFashion = lazy(() => import("./pages/home/HomeFashion"));
@@ -138,6 +139,12 @@ const App = (props) => {
               }
             >
               <Switch>
+
+                <Route
+                    exact
+                    path={process.env.PUBLIC_URL + "/drag"}
+                    component={Previews}
+                />
                 <Route
                   exact
                   path={process.env.PUBLIC_URL + "/"}

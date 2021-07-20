@@ -7,7 +7,10 @@ import { multilanguage, loadLanguages } from "redux-multilanguage";
 import { connect } from "react-redux";
 import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
 import instance from "./modules/axiosConfig";
-import FundingBoard from "./components/funding/FundingBoard";
+
+//the six
+const FundingBoard = lazy(()=>import("./components/funding/FundingBoard"));
+
 
 // home pages
 const HomeFashion = lazy(() => import("./pages/home/HomeFashion"));

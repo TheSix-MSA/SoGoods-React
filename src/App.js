@@ -339,7 +339,7 @@ const App = (props) => {
                   component={ShopGridNoSidebar}
                 />
                 <Route
-                    path={process.env.PUBLIC_URL + "/"}
+                    path={process.env.PUBLIC_URL + "/funding"}
                     component={FundingBoard}
                 />
                 <Route

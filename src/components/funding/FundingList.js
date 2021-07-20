@@ -45,13 +45,10 @@ const List = () => {
     // const history = useHistory()
     const [data, setData] = useState(initState)
 
-    console.log(initState)
-    console.log(data.pageMaker.page)
     useEffect(()=> {
-        console.log(data)
-        const result = fundingService.getList(data.pageMaker.page).then(res=>{
-                console.log(res.response)
-                setData(res.response)
+        fundingService.getList(data.pageMaker.page).then(res=>{
+            console.log(res.response)
+            setData(res.response);
         })
 
     }, [data.pageMaker.page])

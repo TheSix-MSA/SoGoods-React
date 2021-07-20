@@ -36,15 +36,16 @@ const boardSlice = createSlice({
     initialState: initState,
     reducers: {
         movePage:((state, action) => {
-            return { page : action.payload }
+            state.pageMaker.page = action.payload
         })
     },
     extraReducers:builder => {
         builder
             .addCase(getBoardData.pending ,(state, action) => {
-                return { msg: ' 로딩중 '}
+                return {...state}
             })
             .addCase(getBoardData.fulfilled, (state, action) => {
+                console.log(action.payload.response)
                 return  action.payload.response
             })
     }

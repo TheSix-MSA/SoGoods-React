@@ -7,6 +7,7 @@ import { multilanguage, loadLanguages } from "redux-multilanguage";
 import { connect } from "react-redux";
 import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
 import instance from "./modules/axiosConfig";
+import BoardRegister from "./pages/blog/BoardRegister";
 
 //the six
 const FundingBoard = lazy(()=>import("./components/funding/FundingBoard"));
@@ -156,7 +157,11 @@ const App = (props) => {
               }
             >
               <Switch>
-
+                <Route
+                  exact
+                  path={process.env.PUBLIC_URL + "/boardRegister"}
+                  component={BoardRegister}
+                />
                 <Route
                     exact
                     path={process.env.PUBLIC_URL + "/drag"}

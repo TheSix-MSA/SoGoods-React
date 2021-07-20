@@ -9,3 +9,13 @@ export const getBoardData = createAsyncThunk('async/boardAsyncService', async (p
     console.log(result)
     return result.data
 })
+
+export const registerBoard = createAsyncThunk('async/boardAsyncService', async (data) => {
+    const result = await instance({
+        url: `/board/FREE`,
+        method: 'post',
+        data: data, JSON
+    })
+    console.log(result)
+    return result.data
+})

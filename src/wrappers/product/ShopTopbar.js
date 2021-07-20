@@ -4,9 +4,7 @@ import ShopTopAction from "../../components/product/ShopTopAction";
 
 const ShopTopbar = ({
   getLayout,
-  getFilterSortParams,
-  productCount,
-  sortedProductCount
+  getFilterSortParams
 }) => {
   return (
     <Fragment>
@@ -14,8 +12,6 @@ const ShopTopbar = ({
       <ShopTopAction
         getLayout={getLayout}
         getFilterSortParams={getFilterSortParams}
-        productCount={productCount}
-        sortedProductCount={sortedProductCount}
       />
     </Fragment>
   );

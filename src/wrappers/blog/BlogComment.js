@@ -35,7 +35,7 @@ const BlogComment = () => {
   useEffect(() => {
     repliesService.getList(replies.bno, replies.pageMaker.page).then(res => {
       setReplies(res.data.response);
-    }).catch();
+    });
     /***
      * catch 문 채워줘야함
      */

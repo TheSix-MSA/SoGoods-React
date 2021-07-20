@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { useLocation } from "react-router-dom";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
-import '../../../assets/scss/lbd/_partial-nucleo-icons.scss'
-// import '../../../assets/scss/lbd/_navbars.scss'
 
 // import routes from "routes.js";
 

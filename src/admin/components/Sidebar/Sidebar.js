@@ -4,8 +4,6 @@ import { Nav } from "react-bootstrap";
 import '../../css/light-bootstrap-dashboard.css'
 import '../../css/documentation.css'
 import '../../css/demo.css'
-// import '../../css/light-bootstrap-dashboard-react.css'
-// import '../../css/light-bootstrap-dashboard-react.css'
 
 
 import logo from "../../../assets/img/reactlogo.png";

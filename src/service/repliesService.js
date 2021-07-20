@@ -33,14 +33,14 @@ const repliesService = () => {
      */
     const getList = async (bno, page) => {
         return await instance({
-            url: "reply/list/"+bno+"/"+page,
+            url: "/reply/list/"+bno+"/"+page,
             method: 'get'
         })
     }
 
     const insertReply = async (reply, page) => {
         const res =  await instance({
-            url: "reply/",
+            url: "/reply/",
             method: 'post',
             data: reply
         });
@@ -50,7 +50,7 @@ const repliesService = () => {
 
     const deleteReply = async (rno, page) => {
         const res = await instance({
-            url: "reply/"+rno,
+            url: "/reply/"+rno,
             method: 'delete'
         });
         movePage(page);
@@ -59,7 +59,7 @@ const repliesService = () => {
 
     const updateReply = async (reply, page) => {
         const res =  await instance({
-            url: "reply/",
+            url: "/reply/",
             method: 'put',
             data: reply
         });

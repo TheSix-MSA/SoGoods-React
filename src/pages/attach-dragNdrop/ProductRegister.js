@@ -1,9 +1,5 @@
 import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Previews from "./Previews";
-import ProductInfo from "./ProductInfo";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -54,36 +50,7 @@ const ProductRegister = ({addProductInfo}) => {
 
     return (
         <>
-            <Grid container className={classes.root} spacing={2}>
-                <Grid item >
-                    <Paper className={classes.control}>
-                        <Grid container justifyContent="center" spacing={spacing}>
-                            <Grid item>
-                                <ProductInfo addInfo={addInfo}></ProductInfo>
-                            </Grid>
-                        </Grid>
-                    </Paper>
-                </Grid>
-                <Grid item >
-                    <Paper className={classes.control}>
-                        <Grid container>
-                            <Grid item>
-                                <Previews addPictures={addPictures}></Previews>
-                            </Grid>
-                        </Grid>
-                    </Paper>
-                </Grid>
-                <Grid item >
-                    <Paper className={classes.control}>
-                        <Grid container justifyContent="center" spacing={spacing}>
-                            <Grid item>
-                                <button onClick={()=>{addProductInfo(product)}}>확인</button>
-                            </Grid>
-                        </Grid>
-                    </Paper>
-                </Grid>
 
-            </Grid>
         </>
     );
 }

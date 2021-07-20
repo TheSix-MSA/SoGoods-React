@@ -1,8 +1,5 @@
 import axios from "axios";
-import process from "process";
 import instance from "../../modules/axiosConfig";
-
-const baseURL = 'http://localhost:8090/funding';
 
 const headerObj = {
     headers: {
@@ -14,26 +11,29 @@ const fundingService = () => {
 
     const getList = async (page) => {
         console.log(page)
-        const list = await axios.get(baseURL+"/list?page="+page);
-        const data = await list.data;
-        console.log(data);
-
-         // const getList = async (data) => {
-         //  return await instance({
-         //          url: `${process.env.REACT_APP_API_DEV_URL}`,
-         //          method: 'get',
-         //          data: data, JSON
-         //      });
-         //  };
-       return data
+        const list = await instance({
+            url: `/funding/list?page=${page}`,
+            method: 'get'
+        });
+       return list.data
     }
 
-    const registerFunding = async () => {
-        const result = await axios.post(baseURL+"/");
-        const data = await result.data;
-        return data;
-    }
+    // const registerFunding = async (form) => {
+    //     const jsonData = JSON.stringify(form);
+    //     const result = await axios.post(baseURL, jsonData, headerObj);
+    //     const data = await result.data;
+    //     console.log(data);
+    //     return data;
+    // }
 
+    const registerFunding = async (form) => {
+        const result = await instance({
+            url : `/funding/`,
+            method: 'post',
+            data : JSON
+        });
+        return result.data
+    }
 
 
 

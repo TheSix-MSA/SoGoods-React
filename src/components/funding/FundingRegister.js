@@ -1,15 +1,31 @@
-import React, { Fragment } from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import Tab from "react-bootstrap/Tab";
 import LayoutOne from "../../layouts/LayoutOne";
 import Nav from "react-bootstrap/Nav";
 import fundingService from "./fundingService";
+import useInputs from "../../customHooks/useInputs";
+
+
+const initState = {
+    title:'',
+    content:'',
+    writer:'',
+    email:'',
+    dueDate:null,
+    targetAmount:0,
+    productDTOs:[]
+}
 
 const FundingRegister = () => {
 
-    const formData = fundingService.registerFunding().then(res=>{
-        console.log(res.response)
-    })
+    const form = useInputs(initState)
+    console.log(form)
 
+    const sendFormData = async () => {
+        const result = await fundingService.registerFunding({...form}).then(res=>{
+            console.log(res.response)
+        })
+    }
 
     return (
         <div>
@@ -34,17 +50,25 @@ const FundingRegister = () => {
                                                         <input
                                                             type="title"
                                                             name="funding-title"
+                                                            value={form.title}
                                                             placeholder="제목"
+                                                        />
+                                                        <input
+                                                            type="hidden"
+                                                            name="writer"
+                                                            value={form.writer}
+                                                            placeholder="작성자"
+                                                        />
+                                                        <input
+                                                            type="hidden"
+                                                            name="email"
+                                                            placeholder="이메일"
                                                         />
                                                         <textarea
                                                             name="content"
                                                             placeholder="내용을 입력하세요."
                                                         />
-                                                        <h5>상품 등록</h5>
-                                                        <input
-                                                            type="file"
-                                                            name="file"
-                                                        />
+                                                        <button>상품등록</button>
                                                         <div style={{display:"flex"}}>
                                                         <input
                                                             name="dueDate"
@@ -58,7 +82,7 @@ const FundingRegister = () => {
                                                         />
                                                         </div>
                                                         <div className="button-box">
-                                                            <button type="submit">
+                                                            <button type="submit" onClick={sendFormData}>
                                                                 <span>펀딩 등록하기</span>
                                                             </button>
                                                         </div>

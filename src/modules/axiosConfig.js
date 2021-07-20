@@ -1,4 +1,5 @@
 import axios from "axios";
+import process from "process";
 
 /**
  * const result = async (data) => {

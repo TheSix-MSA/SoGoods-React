@@ -7,6 +7,7 @@ import { multilanguage, loadLanguages } from "redux-multilanguage";
 import { connect } from "react-redux";
 import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
 import instance from "./modules/axiosConfig";
+import FundingBoard from "./components/funding/FundingBoard";
 
 // home pages
 const HomeFashion = lazy(() => import("./pages/home/HomeFashion"));
@@ -336,6 +337,10 @@ const App = (props) => {
                 <Route
                   path={process.env.PUBLIC_URL + "/shop-grid-no-sidebar"}
                   component={ShopGridNoSidebar}
+                />
+                <Route
+                    path={process.env.PUBLIC_URL + "/"}
+                    component={FundingBoard}
                 />
                 <Route
                   path={process.env.PUBLIC_URL + "/shop-grid-full-width"}

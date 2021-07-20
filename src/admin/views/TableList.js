@@ -54,17 +54,10 @@ const initState = {
 const TableList = () => {
 
     const [members, setMembers] = useState(initState);
-    const [flag, setFlag] = useState(false);
+    // const [flag, setFlag] = useState(false);
     console.log(11111, members)
 
     useEffect(() => {
-        // // axios.get("/data/members.json")
-        // axios.get("http://13.209.213.239:8000/member/list")
-        //     .then(res => {
-        //         console.log(res.data)
-        //         setMembers(res.data.response.memberList)
-        //         console.log(2222, res.data.response.memberList)
-        //     })
         adminService.getMemberList(members.pageMaker.page).then(res => {
             setMembers(res.data.response);
         });
@@ -72,17 +65,28 @@ const TableList = () => {
 // []<-밴 삭제 여부 클릭이벤트 상태 변경값 주기
 
     const movePage = (num) => {
-        /**
-         * 재렌더링을 위해 만든 함수. 댓글 페이지가 바뀌거나 바뀌지 않더라도
-         * 새로운 댓글이 입력되거나 하면 실행하여 재랜더링.
-         */
         members.pageMaker.page = num;
         setMembers({...members});
-        setFlag(!flag);
+        adminService.setMovePage(movePage);
     }
-    adminService.setMovePage(movePage);
 
-    const list = members.map(member => {
+    const nextPage = () => {
+
+        members.pageMaker.page = members.pageMaker.page+1;
+
+        setMembers({...members});
+        adminService.setNextPrev(nextPage);
+    }
+    const prevPage = () => {
+
+        members.pageMaker.page = members.pageMaker.page-1;
+
+        setMembers({...members});
+        adminService.setNextPrev(prevPage);
+    }
+
+
+    const list = members.memberList.map(member => {
         return <tr key={member.email}>
             <td>{member.email}</td>
             <td>{member.name}</td>
@@ -98,25 +102,11 @@ const TableList = () => {
     })
     console.log(333333333, list)
 
-    // const pageMaker = res
-//
-//     return (
-//         <>
-//         {list}
-//         </>
-//     );
-// };
+    const a = "A" === "B" ? "a" :
+        "b" ==="b" ?true===true?"C":"AAA"        :false
+    console.log("정답",a)
 
-
-    // export default TableList;
-//
-//
-// const th = ({member}) => {
     return (
-        // <Admin>
-        // <Fragment>
-        <>
-            <Container fluid>
                 <Row>
                     <Col md="12">
                         <Card className="strpied-tabled-with-hover">
@@ -132,7 +122,7 @@ const TableList = () => {
                                     <tr>
                                         <th className="border-0">이메일</th>
                                         <th className="border-0">이름</th>
-                                        <th className="border-0">생일</th>
+                                        <th className="border-0">생년월일</th>
                                         <th className="border-0">전화번호</th>
                                         <th className="border-0">주소</th>
                                         <th className="border-0">성별</th>
@@ -149,17 +139,28 @@ const TableList = () => {
                             </Card.Body>
                         </Card>
                         <div style={{textAlign: "center"}}>
-                            <button>prev</button>
-                            <button>next</button>
+
+                            {/*{members.pageMaker.prev===true?*/}
+                            {/*    <span onClick={() => prevPage()}>Prev</span>:false}*/}
+
+                            {members.pageMaker.prev===true?false:
+                                members.pageMaker.page!==1?
+                                <span onClick={() => prevPage()}>Prev</span>:false}
+
+                            {members.pageMaker.pageList.map(page => page===members.pageMaker.page?
+                                <span key={page}><b>{page}</b></span>:
+                                <span key={page} onClick={() => movePage(page)}>{page}</span>)}
+
+                            {members.pageMaker.next===false?null:
+                                members.memberList.length===members.pageMaker.size?
+                                    <span onClick={() => nextPage()}>Next</span>:false}
+
+
                         </div>
                     </Col>
 
                 </Row>
-            </Container>
-        </>
 
-        // </Fragment>
-        // </Admin>
     );
 }
 

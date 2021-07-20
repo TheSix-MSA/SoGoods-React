@@ -14,7 +14,7 @@ import LayoutOne from "../../layouts/LayoutOne";
 
 import routes from "./routes.js";
 
-// import sidebarImage from "assets/img/sidebar-3.jpg";
+// import sidebarImage from "../../assets/img/sidebar-3.jpg";
 
 function Admin(){
 
@@ -56,10 +56,8 @@ function Admin(){
   return (
     <>
       <div className="wrapper">
-        <Sidebar routes={routes} />
-        {/*<Sidebar/>*/}
+        <Sidebar routes={routes}  />
         <div className="main-panel" ref={mainPanel}>
-        {/*<div className="main-panel">*/}
           <AdminNavbar />
           <div className="content">
             <Switch>{getRoutes(routes)}</Switch>

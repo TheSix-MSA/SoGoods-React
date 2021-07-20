@@ -7,7 +7,7 @@ const adminService = () => {
 
     const getMemberList = async (page) => {
         return await instance({
-            url: "/member/list" + "/" + page,
+            url: "/member/list?page=" + page,
             method: 'get'
         })
     }
@@ -15,9 +15,12 @@ const adminService = () => {
     const setMovePage = (func) => {
         movePage = func;
     }
+    const setNextPrev = (func) => {
+        movePage = func;
+    }
 
 
-    return {getMemberList,setMovePage}
+    return {getMemberList,setMovePage,setNextPrev}
 
 }
 export default adminService();

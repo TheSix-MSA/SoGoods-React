@@ -37,6 +37,12 @@ const boardSlice = createSlice({
     reducers: {
         movePage:((state, action) => {
             state.pageMaker.page = action.payload
+        }),
+        prevPage:((state, action) => {
+            state.pageMaker.page = action.payload - 5
+        }),
+        nextPage:((state, action) => {
+            state.pageMaker.page = action.payload + 5
         })
     },
     extraReducers:builder => {
@@ -51,5 +57,5 @@ const boardSlice = createSlice({
     }
 })
 
-export const {movePage} = boardSlice.actions
+export const {movePage, nextPage, prevPage} = boardSlice.actions
 export default boardSlice.reducer

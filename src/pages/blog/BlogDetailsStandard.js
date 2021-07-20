@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { Fragment } from "react";
+import React, {Fragment, useEffect} from "react";
 import MetaTags from "react-meta-tags";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import LayoutOne from "../../layouts/LayoutOne";
@@ -7,10 +7,17 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import BlogSidebar from "../../wrappers/blog/BlogSidebar";
 import BlogComment from "../../wrappers/blog/BlogComment";
 import BlogPost from "../../wrappers/blog/BlogPost";
+import {useDispatch, useSelector} from "react-redux";
+import {getOneBoard} from "../../board/boardAsyncService";
 
 const BlogDetailsStandard = ({ location }) => {
   const { pathname } = location;
-
+  const boardData = useSelector(state => state.board.boardDtoList.bno)
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getOneBoard(boardData))
+    },[])
+    console.log(11111, boardData)
   return (
     <Fragment>
       <MetaTags>

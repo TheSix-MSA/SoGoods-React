@@ -5,7 +5,7 @@ import wishlistReducer from "./wishlistReducer";
 import compareReducer from "./compareReducer";
 import { combineReducers } from "redux";
 import { createMultilanguageReducer } from "redux-multilanguage";
-import loginSlice from "../../member/loginSlice";
+import loginSlice from "../member/loginSlice";
 
 const rootReducer = combineReducers({
   multilanguage: createMultilanguageReducer({ currentLanguageCode: "en" }),

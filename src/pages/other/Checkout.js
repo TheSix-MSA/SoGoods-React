@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import MetaTags from "react-meta-tags";
 import { connect } from "react-redux";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
-import { getDiscountPrice } from "../../helpers/product";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 
@@ -141,10 +140,7 @@ const Checkout = ({ location, cartItems, currency }) => {
                         <div className="your-order-middle">
                           <ul>
                             {cartItems.map((cartItem, key) => {
-                              const discountedPrice = getDiscountPrice(
-                                cartItem.price,
-                                cartItem.discount
-                              );
+                              const discountedPrice =0;
                               const finalProductPrice = (
                                 cartItem.price * currency.currencyRate
                               ).toFixed(2);
@@ -232,12 +228,4 @@ Checkout.propTypes = {
   currency: PropTypes.object,
   location: PropTypes.object
 };
-
-const mapStateToProps = state => {
-  return {
-    cartItems: state.cartData,
-    currency: state.currencyData
-  };
-};
-
-export default connect(mapStateToProps)(Checkout);
+export default connect()(Checkout);

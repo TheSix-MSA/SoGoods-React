@@ -4,7 +4,6 @@ import MetaTags from "react-meta-tags";
 import Paginator from "react-hooks-paginator";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import { connect } from "react-redux";
-import { getSortedProducts } from "../../helpers/product";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import ShopTopbar from "../../wrappers/product/ShopTopbar";
@@ -88,17 +87,6 @@ const FundingList = ({ location, products, productTabClass}) => {
         setFilterSortValue(sortValue);
     };
 
-    useEffect(() => {
-        let sortedProducts = getSortedProducts(products, sortType, sortValue);
-        const filterSortedProducts = getSortedProducts(
-            sortedProducts,
-            filterSortType,
-            filterSortValue
-        );
-        sortedProducts = filterSortedProducts;
-        setSortedProducts(sortedProducts);
-
-    }, [offset, products, sortType, sortValue, filterSortType, filterSortValue]);
 
     return (
         <Fragment>

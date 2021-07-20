@@ -4,7 +4,6 @@ import MetaTags from 'react-meta-tags';
 import Paginator from 'react-hooks-paginator';
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic';
 import { connect } from 'react-redux';
-import { getSortedProducts } from '../../helpers/product';
 import LayoutOne from '../../layouts/LayoutOne';
 import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb';
 import ShopSidebar from '../../wrappers/product/ShopSidebar';
@@ -40,11 +39,11 @@ const ShopGridStandard = ({location, products}) => {
     }
 
     useEffect(() => {
-        let sortedProducts = getSortedProducts(products, sortType, sortValue);
-        const filterSortedProducts = getSortedProducts(sortedProducts, filterSortType, filterSortValue);
+        let sortedProducts = null;
+        const filterSortedProducts = null
         sortedProducts = filterSortedProducts;
         setSortedProducts(sortedProducts);
-        setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
+        setCurrentData(sortedProducts?.slice(offset, offset + pageLimit));
     }, [offset, products, sortType, sortValue, filterSortType, filterSortValue ]);
 
     return (
@@ -70,7 +69,7 @@ const ShopGridStandard = ({location, products}) => {
                             </div>
                             <div className="col-lg-9 order-1 order-lg-2">
                                 {/* shop topbar default */}
-                                <ShopTopbar getLayout={getLayout} getFilterSortParams={getFilterSortParams} productCount={products.length} sortedProductCount={currentData.length} />
+                                <ShopTopbar getLayout={getLayout} getFilterSortParams={getFilterSortParams} productCount={0} sortedProductCount={0} />
 
                                 {/* shop page content default */}
                                 <ShopProducts layout={layout} products={currentData} />
@@ -78,7 +77,7 @@ const ShopGridStandard = ({location, products}) => {
                                 {/* shop product pagination */}
                                 <div className="pro-pagination-style text-center mt-30">
                                     <Paginator
-                                        totalRecords={sortedProducts.length}
+                                        totalRecords={0}
                                         pageLimit={pageLimit}
                                         pageNeighbours={2}
                                         setOffset={setOffset}
@@ -103,10 +102,5 @@ ShopGridStandard.propTypes = {
   products: PropTypes.array
 }
 
-const mapStateToProps = state => {
-    return{
-        products: state.productData.products
-    }
-}
 
-export default connect(mapStateToProps)(ShopGridStandard);
+export default connect()(ShopGridStandard);

@@ -19,7 +19,7 @@ const ProductGridEleven = ({
 }) => {
   return (
     <Fragment>
-      {products.map((product) => {
+      {products?.map((product) => {
         return (
           <ProductGridSingleEleven
             sliderClassName={sliderClassName}
@@ -35,12 +35,12 @@ const ProductGridEleven = ({
               cartItems.filter((cartItem) => cartItem.id === product.id)[0]
             }
             wishlistItem={
-              wishlistItems.filter(
+              wishlistItems?.filter(
                 (wishlistItem) => wishlistItem.id === product.id
               )[0]
             }
             compareItem={
-              compareItems.filter(
+              compareItems?.filter(
                 (compareItem) => compareItem.id === product.id
               )[0]
             }

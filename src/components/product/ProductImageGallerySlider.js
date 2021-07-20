@@ -40,8 +40,7 @@ const ProductImageGallerySlider = ({ product }) => {
   return (
     <div className="product-large-image-wrapper product-large-image-wrapper--slider">
       <Swiper {...gallerySwiperParams}>
-        {product.image &&
-          product.image.map((single, key) => {
+        {[1,2,3,4].map((single, key) => {
             return (
               <div key={key}>
                 <div className="single-image">

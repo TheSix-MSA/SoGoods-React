@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import React from "react";
 import { connect } from "react-redux";
 import { useToasts } from "react-toast-notifications";
-import { getDiscountPrice } from "../../helpers/product";
 import ProductImageGallerySlider from "../../components/product/ProductImageGallerySlider";
 import ProductDescriptionInfoSlider from "../../components/product/ProductDescriptionInfoSlider";
 
@@ -15,19 +14,17 @@ const ProductImageDescription = ({
   wishlistItems,
   compareItems
 }) => {
-  const wishlistItem = wishlistItems.filter(
+  const wishlistItem = wishlistItems?.filter(
     wishlistItem => wishlistItem.id === product.id
   )[0];
-  const compareItem = compareItems.filter(
+  const compareItem = compareItems?.filter(
     compareItem => compareItem.id === product.id
   )[0];
   const { addToast } = useToasts();
 
-  const discountedPrice = getDiscountPrice(product.price, product.discount);
-  const finalProductPrice = +(product.price * currency.currencyRate).toFixed(2);
-  const finalDiscountedPrice = +(
-    discountedPrice * currency.currencyRate
-  ).toFixed(2);
+  const discountedPrice = 0;
+  const finalProductPrice = 0;
+  const finalDiscountedPrice = 0;
 
   return (
     <div
@@ -71,13 +68,5 @@ ProductImageDescription.propTypes = {
   wishlistItems: PropTypes.array
 };
 
-const mapStateToProps = state => {
-  return {
-    currency: state.currencyData,
-    cartItems: state.cartData,
-    wishlistItems: state.wishlistData,
-    compareItems: state.compareData
-  };
-};
 
-export default connect(mapStateToProps)(ProductImageDescription);
+export default connect()(ProductImageDescription);

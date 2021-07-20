@@ -31,12 +31,12 @@ const ProductGrid = ({
               cartItems.filter(cartItem => cartItem.id === product.id)[0]
             }
             wishlistItem={
-              wishlistItems.filter(
+              wishlistItems?.filter(
                 wishlistItem => wishlistItem.id === product.id
               )[0]
             }
             compareItem={
-              compareItems.filter(
+              compareItems?.filter(
                 compareItem => compareItem.id === product.id
               )[0]
             }

@@ -12,51 +12,90 @@ import {
     Row,
     Col,
 } from "react-bootstrap";
-import axios from "axios";
-import Admin from "../layouts/Admin";
+import adminService from "../sevice/adminService";
 
-const initState = []
-const initpage = {
-    page: 1,
-    size: 0,
-    keyword: null,
-    type: null,
-    pageList: [],
-    startPage: 1,
-    endPage: 10,
-    prev: false,
-    next: true
+const initState = {
+    memberList: [
+        {
+            email: "",
+            password: null,
+            name: "",
+            gender: "",
+            birth: "",
+            phone: "",
+            address: "",
+            detailAddress: "",
+            removed: false,
+            banned: false,
+            provider: "",
+            social: false,
+            regDate: "",
+            loginDate: "",
+            roleSet: []
+        },],
+    pageMaker: {
+        page: 1,
+        size: 10,
+        keyword: "",
+        type: "",
+        pageList: [],
+        startPage: 1,
+        endPage: 10,
+        prev: false,
+        next: false
+    },
+    requestListDTO: {
+        page: 1,
+        size: 10,
+        keyword: "",
+        type: ""
+    }
 }
 const TableList = () => {
 
-    const [members, setMembers] = useState(initState)
+    const [members, setMembers] = useState(initState);
+    const [flag, setFlag] = useState(false);
     console.log(11111, members)
 
     useEffect(() => {
-        // axios.get("/data/members.json")
-        axios.get("http://13.209.213.239:8000/member/list")
-            .then(res => {
-                console.log(res.data)
-                setMembers(res.data.response.memberList)
-                console.log(2222, res.data.response.memberList)
-            })
-    }, [])
+        // // axios.get("/data/members.json")
+        // axios.get("http://13.209.213.239:8000/member/list")
+        //     .then(res => {
+        //         console.log(res.data)
+        //         setMembers(res.data.response.memberList)
+        //         console.log(2222, res.data.response.memberList)
+        //     })
+        adminService.getMemberList(members.pageMaker.page).then(res => {
+            setMembers(res.data.response);
+        });
+    }, [members.pageMaker.page])
 // []<-밴 삭제 여부 클릭이벤트 상태 변경값 주기
 
-    const list = members.map(member =>
-    {
-        return<tr key={member.email}>
+    const movePage = (num) => {
+        /**
+         * 재렌더링을 위해 만든 함수. 댓글 페이지가 바뀌거나 바뀌지 않더라도
+         * 새로운 댓글이 입력되거나 하면 실행하여 재랜더링.
+         */
+        members.pageMaker.page = num;
+        setMembers({...members});
+        setFlag(!flag);
+    }
+    adminService.setMovePage(movePage);
+
+    const list = members.map(member => {
+        return <tr key={member.email}>
             <td>{member.email}</td>
             <td>{member.name}</td>
             <td>{member.birth}</td>
             <td>{member.phone}</td>
             <td>{member.address} {member.detailAddress}</td>
             <td>{member.gender}</td>
-            <td style={{textAlign:"center"}}>{member.banned?"🔴":"🟢"}</td>
-            <td>{member.removed?"삭제된계정":"정상계정"}</td>
-            <td>{member.roleSet[member.roleSet.length-1]}</td>
+            <td style={{textAlign: "center"}}>{member.banned ? "🔴" : "🟢"}</td>
+            <td>{member.removed ? "삭제된계정" : "정상계정"}</td>
+            <td>{member.roleSet[member.roleSet.length - 1]}</td>
             <td>{member.regDate}</td>
-        </tr>})
+        </tr>
+    })
     console.log(333333333, list)
 
     // const pageMaker = res
@@ -109,8 +148,9 @@ const TableList = () => {
                                 </Table>
                             </Card.Body>
                         </Card>
-                        <div style={{textAlign:"center"}}>
-                        <button>prev</button><button>next</button>
+                        <div style={{textAlign: "center"}}>
+                            <button>prev</button>
+                            <button>next</button>
                         </div>
                     </Col>
 

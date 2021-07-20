@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React, { useEffect, Suspense, lazy } from "react";
 import ScrollToTop from "./helpers/scroll-top";
 import {BrowserRouter as Router, Switch, Route, BrowserRouter} from "react-router-dom";
-import { ToastProvider } from "react-toast-notifications";
+import {useToasts} from "react-toast-notifications";
 import { multilanguage, loadLanguages } from "redux-multilanguage";
 import { connect } from "react-redux";
 import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
@@ -107,6 +107,7 @@ const DashBoard = lazy(() => import("./admin/views/Dashboard"));
 
 
 const App = (props) => {
+  const { addToast } = useToasts();
   useEffect(() => {
     props.dispatch(
       loadLanguages({
@@ -126,6 +127,8 @@ const App = (props) => {
           return config;
         },
         function (error) {
+          console.log(111,error);
+          console.log(222,error.response);
           return Promise.reject(error);
         }
     );
@@ -134,6 +137,13 @@ const App = (props) => {
           return config;
         },
         (error) => {
+          // addToast(content, {
+          //   appearance: 'error',
+          //   autoDismiss: true,
+          // })
+          console.log(111,error);
+          console.log(222,error.response);
+
           return Promise.reject(error);
         }
     );
@@ -141,7 +151,6 @@ const App = (props) => {
   /* 로딩 끝 */
 
   return (
-    <ToastProvider placement="bottom-left">
       <BreadcrumbsProvider>
         <Router>
           <ScrollToTop>
@@ -413,7 +422,6 @@ const App = (props) => {
           </ScrollToTop>
         </Router>
       </BreadcrumbsProvider>
-    </ToastProvider>
   );
 };
 

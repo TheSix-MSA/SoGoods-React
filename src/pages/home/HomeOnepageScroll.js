@@ -21,7 +21,7 @@ const HomeOnepageScroll = () => {
     sectionClassName: "Section", // the section class name
     sectionPaddingTop: "0", // the section top padding
     sectionPaddingBottom: "0", // the section bottom padding
-    verticalAlign: true // align the content of each section vertical
+    verticalAlign: true, // align the content of each section vertical
   };
   return (
     <Fragment>

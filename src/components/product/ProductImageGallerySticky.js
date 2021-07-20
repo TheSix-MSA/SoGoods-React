@@ -4,21 +4,12 @@ import React from "react";
 const productImageGallerySticky = ({ product }) => {
   return (
     <div className="product-large-image-wrapper product-large-image-wrapper--sticky">
-      {product.discount || product.new ? (
         <div className="product-img-badges">
-          {product.discount ? (
-            <span className="pink">-{product.discount}%</span>
-          ) : (
-            ""
-          )}
-          {product.new ? <span className="purple">New</span> : ""}
+            <span className="pink">123%</span>
+          <span className="purple">New</span>
         </div>
-      ) : (
-        ""
-      )}
       <div className="product-sticky-image mb--10">
-        {product.image &&
-          product.image.map((single, key) => {
+        {[1,2,3,4].map((single, key) => {
             return (
               <div className="product-sticky-image__single mb-10" key={key}>
                 <img

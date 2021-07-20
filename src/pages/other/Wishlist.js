@@ -5,13 +5,6 @@ import { useToasts } from "react-toast-notifications";
 import MetaTags from "react-meta-tags";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import { connect } from "react-redux";
-import { getDiscountPrice } from "../../helpers/product";
-import {
-  addToWishlist,
-  deleteFromWishlist,
-  deleteAllFromWishlist
-} from "../../redux/actions/wishlistActions";
-import { addToCart } from "../../redux/actions/cartActions";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 
@@ -65,10 +58,7 @@ const Wishlist = ({
                         </thead>
                         <tbody>
                           {wishlistItems.map((wishlistItem, key) => {
-                            const discountedPrice = getDiscountPrice(
-                              wishlistItem.price,
-                              wishlistItem.discount
-                            );
+                            const discountedPrice = 0;
                             const finalProductPrice = (
                               wishlistItem.price * currency.currencyRate
                             ).toFixed(2);
@@ -253,29 +243,4 @@ Wishlist.propTypes = {
   wishlistItems: PropTypes.array
 };
 
-const mapStateToProps = state => {
-  return {
-    cartItems: state.cartData,
-    wishlistItems: state.wishlistData,
-    currency: state.currencyData
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    addToCart: (item, addToast, quantityCount) => {
-      dispatch(addToCart(item, addToast, quantityCount));
-    },
-    addToWishlist: (item, addToast, quantityCount) => {
-      dispatch(addToWishlist(item, addToast, quantityCount));
-    },
-    deleteFromWishlist: (item, addToast, quantityCount) => {
-      dispatch(deleteFromWishlist(item, addToast, quantityCount));
-    },
-    deleteAllFromWishlist: addToast => {
-      dispatch(deleteAllFromWishlist(addToast));
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Wishlist);
+export default connect()(Wishlist);

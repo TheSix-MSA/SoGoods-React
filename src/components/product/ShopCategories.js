@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { setActiveSort } from "../../helpers/product";
 
 const ShopCategories = ({ categories, getSortParams }) => {
   return (
@@ -14,7 +13,6 @@ const ShopCategories = ({ categories, getSortParams }) => {
                 <button
                   onClick={e => {
                     getSortParams("category", "");
-                    setActiveSort(e);
                   }}
                 >
                   <span className="checkmark" /> All Categories
@@ -28,7 +26,6 @@ const ShopCategories = ({ categories, getSortParams }) => {
                     <button
                       onClick={e => {
                         getSortParams("category", category);
-                        setActiveSort(e);
                       }}
                     >
                       {" "}

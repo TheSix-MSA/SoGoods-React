@@ -254,7 +254,7 @@
 }
 
 .single-sidebar-blog {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
 
@@ -262,6 +262,10 @@
   padding: 0 0 20px;
 
   border-bottom: 1px solid #dee0e4;
+  @media #{$lg-layout} {
+    display: block;
+
+  }
   &:last-child {
     border-bottom: none;
   }

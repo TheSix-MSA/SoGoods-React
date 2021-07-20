@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import React from "react";
 import { multilanguage } from "redux-multilanguage";
 import { connect } from "react-redux";
-import { setCurrency } from "../../redux/actions/currencyActions";
 import LanguageCurrencyChanger from "./sub-components/LanguageCurrencyChanger";
 
 const HeaderTop = ({
@@ -28,7 +27,7 @@ const HeaderTop = ({
         <p>
           Free delivery on order over{" "}
           <span>
-            {currency.currencySymbol + (200 * currency.currencyRate).toFixed(2)}
+            123123
           </span>
         </p>
       </div>
@@ -43,22 +42,5 @@ HeaderTop.propTypes = {
   currentLanguageCode: PropTypes.string,
   dispatch: PropTypes.func
 };
-
-const mapStateToProps = state => {
-  return {
-    currency: state.currencyData
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    setCurrency: currencyName => {
-      dispatch(setCurrency(currencyName));
-    }
-  };
-};
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
 )(multilanguage(HeaderTop));

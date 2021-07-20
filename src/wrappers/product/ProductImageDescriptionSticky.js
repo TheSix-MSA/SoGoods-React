@@ -3,7 +3,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { useToasts } from "react-toast-notifications";
 import Sticky from "react-sticky-el";
-import { getDiscountPrice } from "../../helpers/product";
 import ProductDescriptionInfo from "../../components/product/ProductDescriptionInfo";
 import ProductImageGallerySticky from "../../components/product/ProductImageGallerySticky";
 
@@ -16,19 +15,17 @@ const ProductImageDescriptionSticky = ({
   wishlistItems,
   compareItems
 }) => {
-  const wishlistItem = wishlistItems.filter(
+  const wishlistItem = wishlistItems?.filter(
     wishlistItem => wishlistItem.id === product.id
   )[0];
-  const compareItem = compareItems.filter(
+  const compareItem = compareItems?.filter(
     compareItem => compareItem.id === product.id
   )[0];
   const { addToast } = useToasts();
 
-  const discountedPrice = getDiscountPrice(product.price, product.discount);
-  const finalProductPrice = +(product.price * currency.currencyRate).toFixed(2);
-  const finalDiscountedPrice = +(
-    discountedPrice * currency.currencyRate
-  ).toFixed(2);
+  const discountedPrice = 0;
+  const finalProductPrice = 0;
+  const finalDiscountedPrice = 0;
 
   return (
     <div
@@ -77,13 +74,5 @@ ProductImageDescriptionSticky.propTypes = {
   wishlistItems: PropTypes.array
 };
 
-const mapStateToProps = state => {
-  return {
-    currency: state.currencyData,
-    cartItems: state.cartData,
-    wishlistItems: state.wishlistData,
-    compareItems: state.compareData
-  };
-};
 
-export default connect(mapStateToProps)(ProductImageDescriptionSticky);
+export default connect()(ProductImageDescriptionSticky);

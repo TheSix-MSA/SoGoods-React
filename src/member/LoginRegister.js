@@ -1,17 +1,15 @@
 import PropTypes from "prop-types";
 import React, {Fragment, useState} from "react";
-import MetaTags from "react-meta-tags";
 import { Link } from "react-router-dom";
-import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import LayoutOne from "../layouts/LayoutOne";
 import useInputs from "../customHooks/useInputs";
 import {useDispatch, useSelector} from "react-redux";
 import {signin} from "../redux/member/loginSlice";
-import axios from "axios";
 import {useHistory} from "react-router-dom";
 import instance from "../modules/axiosConfig";
+import Postcode from "./Postcode";
 
 const initStateLogin = {
     email: "",
@@ -46,6 +44,7 @@ const LoginRegister = ({ location }) => {
     const [loginForm, onChange] = useInputs(initStateLogin);
     const [signupForm, signupChange] = useInputs(initStateSignUp);
     const [verifyForm, setVerifyForm] = useState(initStateVerify);
+    const [postFlag, setPostFlag] = useState(false);
 
     /**
      * 클릭시 axios로 로그인검증, 이후 LocalStorage에 저장.( email, roles, accessToken, RefreshToken )
@@ -81,7 +80,7 @@ const LoginRegister = ({ location }) => {
         e.preventDefault();
 
         const result = await instance({
-            url: `/member/login`,
+            url: '/member/login',
             method: 'PUT',
             data: signupForm
         });
@@ -103,6 +102,17 @@ const LoginRegister = ({ location }) => {
             setVerifyForm({...verifyForm});
         }
     }
+
+    const popupPost = () => {
+        setPostFlag(!postFlag);
+    };
+
+    const addAddress = (address) => {
+        signupForm.address = address;
+        console.log(signupForm);
+        signupChange({...signupForm});
+    };
+
 
 
     const dispatch = useDispatch();
@@ -173,14 +183,24 @@ const LoginRegister = ({ location }) => {
                                                     <div className="login-register-form">
                                                         <form>
                                                             <div className="button-box">
-                                                                <input
-                                                                    name="email"
-                                                                    placeholder="Email"
-                                                                    type="email"
-                                                                    style={{width: "70%"}}
-                                                                    value={signupForm.email}
-                                                                    onChange={signupChange}
-                                                                />
+                                                                {verifyForm.verify === false ?
+                                                                    <input
+                                                                        name="email"
+                                                                        placeholder="Email"
+                                                                        type="email"
+                                                                        style={{width: "70%"}}
+                                                                        value={signupForm.email}
+                                                                        onChange={signupChange}
+                                                                    /> :
+                                                                    <input
+                                                                        name="email"
+                                                                        placeholder="Email"
+                                                                        type="email"
+                                                                        style={{width: "70%", background: "lightblue"}}
+                                                                        value={signupForm.email}
+                                                                        disabled={true}
+                                                                    />
+                                                                }
                                                                 {verifyForm.verifyBtn === "0" ?
                                                                     <button style={{marginLeft: "10px"}}
                                                                             onClick={verifyEmail}>
@@ -198,14 +218,24 @@ const LoginRegister = ({ location }) => {
                                                                 }
                                                             </div>
                                                             <div className="button-box">
-                                                                <input
-                                                                    name="code"
-                                                                    placeholder="Verifying Code"
-                                                                    type="code"
-                                                                    style={{width: "70%"}}
-                                                                    value={signupForm.code}
-                                                                    onChange={signupChange}
-                                                                />
+                                                                {verifyForm.verify === false ?
+                                                                    <input
+                                                                        name="code"
+                                                                        placeholder="Verifying Code"
+                                                                        type="code"
+                                                                        style={{width: "70%"}}
+                                                                        value={signupForm.code}
+                                                                        onChange={signupChange}
+                                                                    /> :
+                                                                    <input
+                                                                        name="code"
+                                                                        placeholder="Verifying Code"
+                                                                        type="code"
+                                                                        style={{width: "70%", background: "lightblue"}}
+                                                                        value={signupForm.code}
+                                                                        disabled={true}
+                                                                    />
+                                                                }
                                                                 {verifyForm.verify === false ?
                                                                     <button style={{marginLeft: "10px"}}
                                                                             onClick={codeCheck}>
@@ -225,7 +255,7 @@ const LoginRegister = ({ location }) => {
                                                                 onChange={signupChange}
                                                             />
                                                             <input
-                                                                type="passwordCheck"
+                                                                type="password"
                                                                 name="passwordCheck"
                                                                 placeholder="PasswordCheck"
                                                                 value={signupForm.passwordCheck}
@@ -258,7 +288,9 @@ const LoginRegister = ({ location }) => {
                                                                 type="address"
                                                                 value={signupForm.address}
                                                                 onChange={signupChange}
+                                                                onClick={popupPost}
                                                             />
+                                                            {postFlag?<Postcode addAddress={addAddress}></Postcode>:null}
                                                             <input
                                                                 name="detailAddress"
                                                                 placeholder="Detail Address"

@@ -6,8 +6,8 @@ import { ToastProvider } from "react-toast-notifications";
 import { multilanguage, loadLanguages } from "redux-multilanguage";
 import { connect } from "react-redux";
 import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
-import Previews from "./pages/attach-dragNdrop/Previews";
 import Board from "./pages/attach-dragNdrop/Board";
+import instance from "./modules/axiosConfig";
 
 // home pages
 const HomeFashion = lazy(() => import("./pages/home/HomeFashion"));
@@ -123,6 +123,27 @@ const App = (props) => {
       })
     );
   });
+
+  useEffect(() => {
+    instance.interceptors.request.use(
+        function (config) {
+          //로딩과 알림 호출
+          return config;
+        },
+        function (error) {
+          return Promise.reject(error);
+        }
+    );
+    instance.interceptors.response.use(
+        (config) => {
+          return config;
+        },
+        (error) => {
+          return Promise.reject(error);
+        }
+    );
+  }, []);
+  /* 로딩 끝 */
 
   return (
     <ToastProvider placement="bottom-left">

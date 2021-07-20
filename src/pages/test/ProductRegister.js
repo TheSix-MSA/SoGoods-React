@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -7,6 +7,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import Paper from '@material-ui/core/Paper';
 import Previews from "./Previews";
+import ProductInfo from "./ProductInfo";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,13 +22,39 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+
+const initState = {
+    info: {
+        title: '',
+        content: '',
+    },
+    pictures: []
+}
+
 const ProductRegister = ({addProductInfo}) => {
     const [spacing, setSpacing] = React.useState(2);
+    const [product, setProduct] = useState(initState)
+
     const classes = useStyles();
 
     const handleChange = (event) => {
         setSpacing(Number(event.target.value));
     };
+
+    const add = (event) => {
+        setSpacing(Number(event.target.value));
+    };
+
+    const addInfo = (info) => {
+        product.info = info
+        setProduct({...product})
+    }
+
+    const addPictures = (pictures) => {
+        product.pictures = pictures
+        setProduct({...product})
+        console.log(product)
+    }
 
     return (
 
@@ -35,7 +62,7 @@ const ProductRegister = ({addProductInfo}) => {
             <Grid item xs={12}>
                 <Grid container justifyContent="center" spacing={spacing}>
                     <Grid item>
-                        <Paper className={classes.paper} />
+                        <ProductInfo addInfo={addInfo}></ProductInfo>
                     </Grid>
                 </Grid>
             </Grid>
@@ -43,11 +70,12 @@ const ProductRegister = ({addProductInfo}) => {
                 <Paper className={classes.control}>
                     <Grid container>
                         <Grid item>
-                            <Previews></Previews>
+                            <Previews addPictures={addPictures}></Previews>
                         </Grid>
                     </Grid>
                 </Paper>
             </Grid>
+            <button onClick={()=>{addProductInfo(product)}}>확인</button>
         </Grid>
     );
 }

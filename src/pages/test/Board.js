@@ -7,25 +7,25 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Previews from "./Previews";
 import ProductRegister from "./ProductRegister";
+import BoardService from "./BoardService";
 
-const initState = [
-    {
-        product:{
-            name: '',
-            desc: '',
-            price: '',
-        },
-        pictures:[
+const img = {
+    display: 'block',
+    width: 100,
+    height: 50,
 
-        ],
-    },
-]
+};
+
+const btn ={
+    float: 'none',
+}
 
 const Board = () => {
     const [open, setOpen] = useState(false);
-    const [allProduct, setAllProduct] = useState({...initState})
-
-    const handleClickOpen = () => {
+    const [allProduct, setAllProduct] = useState([])
+    console.log(allProduct)
+    const handleClickOpen = (e) => {
+        e.stopPropagation()
         setOpen(true);
     };
 
@@ -33,17 +33,42 @@ const Board = () => {
         setOpen(false);
     };
 
-    const addProductInfo = (obj)=>{
-        const newProduct = [...allProduct, obj]
-        setAllProduct(newProduct)
+    const addProductInfo = (product)=>{
+        allProduct.push(product)
+        console.log(allProduct)
+        setAllProduct([...allProduct])
+        handleClose()
+    }
+
+    const productList = allProduct.map((product, idx)=>{
+
+        const allImg = product.pictures;
+        return (
+            <>
+                <li  >
+                    <p onClick={handleClickOpen}>{product['info']['title']} - {product['info']['content']}</p>
+                    <div>
+                        {allImg.map((picture,j)=><img key={j} src={picture.preview} style={img}/>)}
+                    </div>
+                </li>
+            </>
+        )
+    });
+
+    const addRegister = () => {
+        console.log(allProduct)
     }
 
     return (
         <div>
-            <h1>BOARD</h1>
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                상품 등록
-            </Button>
+            <h1>BOARD</h1> <Button onClick={addRegister} variant="outlined" color="primary">등록</Button>
+            {productList}
+            <div style={{display: 'block'}}>
+                <Button style={btn} variant="outlined" color="primary" onClick={handleClickOpen}>
+                    상품 등록
+                </Button>
+            </div>
+
 
             <Dialog
                 open={open}
@@ -51,8 +76,7 @@ const Board = () => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-
-                <ProductRegister addProductInfo={addProductInfo}></ProductRegister>
+                <ProductRegister  addProductInfo={addProductInfo}></ProductRegister>
 
                 {/*<DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>*/}
                 {/*<DialogContent>*/}

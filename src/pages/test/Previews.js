@@ -62,8 +62,10 @@ const img = {
 };
 
 
-function Previews(props) {
+const Previews = ({addPictures}) => {
     const [files, setFiles] = useState([]);
+
+
     const maxFiles = 6
     const {
         getRootProps,
@@ -80,10 +82,11 @@ function Previews(props) {
             const inFiles = acceptedFiles.map(file => Object.assign(file, {
                 preview: URL.createObjectURL(file)
             }))
-            // console.log("newFiles", inFiles)
             const newFiles = [...files, ...inFiles]
+
             if(newFiles.length <= max){
                 setFiles(newFiles)
+                addPictures(newFiles)
             }else{
                 console.log(`파일갯수 ${max} 초과`)
             }
@@ -134,9 +137,7 @@ function Previews(props) {
             <aside style={thumbsContainer}>
                 {thumbs}
             </aside>
-            <div style={{alignItems: "center"}}>
-                {files.length>0 && <button style={{}}>확인</button>}
-            </div>
+
         </section>
     );
 }

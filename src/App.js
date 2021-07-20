@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, { useEffect, Suspense, lazy } from "react";
 import ScrollToTop from "./helpers/scroll-top";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {BrowserRouter as Router, Switch, Route, BrowserRouter} from "react-router-dom";
 import { ToastProvider } from "react-toast-notifications";
 import { multilanguage, loadLanguages } from "redux-multilanguage";
 import { connect } from "react-redux";
@@ -101,6 +101,11 @@ const Compare = lazy(() => import("./pages/other/Compare"));
 const Checkout = lazy(() => import("./pages/other/Checkout"));
 
 const NotFound = lazy(() => import("./pages/other/NotFound"));
+
+const TableList = lazy(() => import("./admin/views/TableList"));
+const Admin = lazy(() => import("./admin/layouts/Admin"));
+const DashBoard = lazy(() => import("./admin/views/Dashboard"));
+
 
 const App = (props) => {
   useEffect(() => {
@@ -389,6 +394,19 @@ const App = (props) => {
                   path={process.env.PUBLIC_URL + "/not-found"}
                   component={NotFound}
                 />
+                {/*<Route*/}
+                {/*    path={process.env.PUBLIC_URL + "/admin/list"}*/}
+                {/*    component={TableList}*/}
+                {/*/>*/}
+                {/*<Route*/}
+                {/*    path={process.env.PUBLIC_URL + "/admin/DashBoard"}*/}
+                {/*    component={DashBoard}*/}
+                {/*/>*/}
+                <Route
+                    path={process.env.PUBLIC_URL + "/admin"}
+                    component={Admin}
+                />
+
 
                 <Route exact component={NotFound} />
               </Switch>

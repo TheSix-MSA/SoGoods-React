@@ -34,7 +34,7 @@ const fundingService = () => {
     // 펀딩 게시글 한개만 가져오기
     const getOneFunding = async (fno) => {
         const result = await instance({
-            url:`/funding/read/`+ fno,
+            url:`/funding/`+ fno,
             method:'get'
         })
         return result.data

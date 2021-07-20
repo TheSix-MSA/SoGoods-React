@@ -9,7 +9,7 @@ function useInputs(initialForm) {
         setForm(form => ({ ...form, [name]: value }));
     }, []);
 
-    return [form, onChange];
+    return [form, onChange, setForm];
 }
 
 export default useInputs;

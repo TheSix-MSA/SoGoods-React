@@ -13,20 +13,16 @@ const initState = {
 }
 
 const ReplyInput = ({bno, maxPage}) => {
-    const [reply, changeReply] = useInputs(initState);
+    const [reply, changeReply, setReply] = useInputs(initState);
 
     const send = () => {
         reply.keyValue = bno;
-        repliesService.insertReply(reply, maxPage).then().catch();
-
+        repliesService.insertReply(reply, maxPage).then();
         /***
          * insert후 textarea에 있는 값 + reply.content의 값을 ""로 바꿔줘야한다.
-         */
-
-
-        /***
          * catch 문 채워줘야함
          */
+        setReply({...reply, content:""})
     }
 
     return (
@@ -36,7 +32,7 @@ const ReplyInput = ({bno, maxPage}) => {
                 <div className="row">
                     <div className="col-md-10">
                         <div className="text-leave">
-                            <input type="textarea" name="content" placeholder="Message"
+                            <textarea className="DatGeulInput" name="content" placeholder="Message" maxLength={2000}
                                    onChange={changeReply} value={reply.content}/>
                         </div>
                     </div>

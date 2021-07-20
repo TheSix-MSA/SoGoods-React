@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { Fragment } from "react";
+import React, {Fragment, useState} from "react";
 import MetaTags from "react-meta-tags";
 import { Link } from "react-router-dom";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
@@ -20,7 +20,6 @@ const initStateLogin = {
 
 const initStateSignUp = {
     email:"",
-    code:"",
     password:"",
     passwordCheck:"",
     name:"",
@@ -28,7 +27,15 @@ const initStateSignUp = {
     gender:"남자",
     phone:"",
     address:"",
-    detailAddress:""
+    detailAddress:"",
+    code:"",
+
+}
+
+const initStateVerify = {
+    verifyBtn:"0", //0:클릭하지않음 , 1: 재전송, 2: 승인완료(disable)
+    verifyCode:"",
+    verify:false
 }
 
 const LoginRegister = ({ location }) => {
@@ -36,10 +43,9 @@ const LoginRegister = ({ location }) => {
     const baseUrl = process.env.REACT_APP_API_DEV_URL;
     const {pathname} = location;
     const info = useSelector(state=>state.login);
-    console.log("이아래는 useSelector");
-    console.log(info);
     const [loginForm, onChange] = useInputs(initStateLogin);
     const [signupForm, signupChange] = useInputs(initStateSignUp);
+    const [verifyForm, setVerifyForm] = useState(initStateVerify);
 
     /**
      * 클릭시 axios로 로그인검증, 이후 LocalStorage에 저장.( email, roles, accessToken, RefreshToken )
@@ -47,11 +53,6 @@ const LoginRegister = ({ location }) => {
      */
     const loginBtn = async (e) => {
         e.preventDefault();
-        // axios.post(`${baseUrl}/member/login`, loginForm).then(value =>
-        // {
-        //     dispatch(signin(value.data.response));
-        //     history.push("/");
-        // });
 
         const result = await instance({
             url: '/member/login',
@@ -64,15 +65,48 @@ const LoginRegister = ({ location }) => {
 
     };
 
-    const signupBtn = (e) => {
-        e.preventDefault();
-        axios.post(`${baseUrl}/member/`, signupForm).then(value => console.log(value));
-        history.push("/login-register")
+    const signupBtn = async (e) => {
+
+        const result = await instance({
+            url: '/member/',
+            method: 'POST',
+            data: signupForm
+        });
+        result();
+        history.push("/login-register");
+
     };
+
+    const verifyEmail = async (e) => {
+        e.preventDefault();
+
+        const result = await instance({
+            url: `/member/login`,
+            method: 'PUT',
+            data: signupForm
+        });
+
+        console.log(result);
+
+        verifyForm['verifyCode'] = result.data.response.code;
+        console.log(signupForm);
+        verifyForm['verifyBtn'] = '1';
+        setVerifyForm({...verifyForm});
+    };
+
+    const codeCheck = (e)=>{
+        e.preventDefault();
+        if(verifyForm.verifyCode === signupForm.code){
+            verifyForm['verify'] = true;
+            verifyForm['verifyBtn'] = "2";
+            console.log(verifyForm);
+            setVerifyForm({...verifyForm});
+        }
+    }
+
 
     const dispatch = useDispatch();
 
-    console.log(signupForm);
     return (
         <Fragment>
             <LayoutOne headerTop="visible">
@@ -147,9 +181,21 @@ const LoginRegister = ({ location }) => {
                                                                     value={signupForm.email}
                                                                     onChange={signupChange}
                                                                 />
-                                                                <button style={{marginLeft: "20px"}}>
-                                                                    <span>인증</span>
-                                                                </button>
+                                                                {verifyForm.verifyBtn === "0" ?
+                                                                    <button style={{marginLeft: "10px"}}
+                                                                            onClick={verifyEmail}>
+                                                                        <span>인증</span>
+                                                                    </button> :
+                                                                    verifyForm.verifyBtn === "1" ?
+                                                                        <button style={{marginLeft: "10px"}}
+                                                                                onClick={verifyEmail}>
+                                                                            <span>재전송</span>
+                                                                        </button> :
+                                                                        <button style={{marginLeft: "10px"}}
+                                                                                disabled={true}>
+                                                                            <span>인증완료</span>
+                                                                        </button>
+                                                                }
                                                             </div>
                                                             <div className="button-box">
                                                                 <input
@@ -160,9 +206,16 @@ const LoginRegister = ({ location }) => {
                                                                     value={signupForm.code}
                                                                     onChange={signupChange}
                                                                 />
-                                                                <button style={{marginLeft: "20px"}}>
-                                                                    <span>확인</span>
-                                                                </button>
+                                                                {verifyForm.verify === false ?
+                                                                    <button style={{marginLeft: "10px"}}
+                                                                            onClick={codeCheck}>
+                                                                        <span>확인</span>
+                                                                    </button> :
+                                                                    <button style={{marginLeft: "10px"}}
+                                                                            disabled={true}>
+                                                                        <span>인증완료</span>
+                                                                    </button>
+                                                                }
                                                             </div>
                                                             <input
                                                                 type="password"

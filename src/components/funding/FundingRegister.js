@@ -2,8 +2,13 @@ import React, { Fragment } from "react";
 import Tab from "react-bootstrap/Tab";
 import LayoutOne from "../../layouts/LayoutOne";
 import Nav from "react-bootstrap/Nav";
+import fundingService from "./fundingService";
 
 const FundingRegister = () => {
+
+    const formData = fundingService.registerFunding().then(res=>{
+        console.log(res.response)
+    })
 
 
     return (

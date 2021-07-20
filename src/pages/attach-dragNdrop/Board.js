@@ -45,7 +45,7 @@ const Board = () => {
         const allImg = product.pictures;
         return (
             <>
-                <li  >
+                <li >
                     <p onClick={handleClickOpen}>{product['info']['title']} - {product['info']['content']}</p>
                     <div>
                         {allImg.map((picture,j)=><img key={j} src={picture.preview} style={img}/>)}
@@ -76,15 +76,14 @@ const Board = () => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <ProductRegister  addProductInfo={addProductInfo}></ProductRegister>
 
-                {/*<DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>*/}
-                {/*<DialogContent>*/}
-                {/*    <DialogContentText id="alert-dialog-description">*/}
-                {/*        Let Google help apps determine location. This means sending anonymous location data to*/}
-                {/*        Google, even when no apps are running.*/}
-                {/*    </DialogContentText>*/}
-                {/*</DialogContent>*/}
+
+                <DialogTitle id="alert-dialog-title">{'상품 등록'}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        <ProductRegister  addProductInfo={addProductInfo}></ProductRegister>
+                    </DialogContentText>
+                </DialogContent>
                 {/*<DialogActions>*/}
                 {/*    <Button onClick={handleClose} color="primary">*/}
                 {/*        Disagree*/}

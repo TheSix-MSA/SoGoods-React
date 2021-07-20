@@ -132,7 +132,7 @@ const Previews = ({addPictures}) => {
         <section className="container">
             <div {...getRootProps({className: 'dropzone', style: style})}>
                 <input {...getInputProps()} />
-                <p>Drag 'n' drop some files here, or click to select files</p>
+                <p>이곳으로 파일을 드래그하거나, 이곳을 클릭하세요</p>
             </div>
             <aside style={thumbsContainer}>
                 {thumbs}

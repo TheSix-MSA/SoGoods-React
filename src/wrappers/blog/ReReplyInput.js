@@ -13,7 +13,7 @@ const initState = {
 }
 
 const ReReplyInput = ({dto, bno, page}) => {
-    const [reReply, changeReReply] = useInputs(initState);
+    const [reReply, changeReReply, setReReply] = useInputs(initState);
 
     const send = () => {
         /**
@@ -24,6 +24,7 @@ const ReReplyInput = ({dto, bno, page}) => {
         reReply.parentId = dto.rno;
         repliesService.getRemoveInput();
         repliesService.insertReply(reReply, page).then().catch();
+        setReReply({...reReply, content:""})
         /***
          * catch 문 채워줘야함
          */

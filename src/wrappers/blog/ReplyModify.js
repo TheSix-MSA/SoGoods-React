@@ -3,7 +3,7 @@ import useInputs from "../../customHooks/useInputs";
 import repliesService from "../../service/repliesService";
 
 const ReplyModify = ({dto, page}) => {
-    const [reply, changeReply] = useInputs({
+    const [reply, changeReply, setReply] = useInputs({
         email: dto.email,
         content: dto.content,
         rno: dto.rno
@@ -12,7 +12,7 @@ const ReplyModify = ({dto, page}) => {
     const send = () => {
         repliesService.updateReply(reply, page).then();
         repliesService.getRemoveModifyInput();
-
+        setReply({...reply, content:""})
         /***
          * 수정 후 textarea에 있는 값 + reply.content의 값을 ""로 바꿔줘야한다.
          */

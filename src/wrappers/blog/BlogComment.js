@@ -39,7 +39,7 @@ const BlogComment = () => {
     /***
      * catch 문 채워줘야함
      */
-  }, [replies.pageMaker.page, flag]);
+  }, [replies.pageMaker.page, flag, replies.bno]);
 
   const deleteReply = (rno) => {
     repliesService.deleteReply(rno, replies.pageMaker.page)

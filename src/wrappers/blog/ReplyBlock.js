@@ -1,7 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import ReplyInput from "./ReplyInput";
+import React from 'react';
 import ReReplyInput from "./ReReplyInput";
-import repliesService from "../../service/repliesService";
 import ReplyModify from "./ReplyModify";
 import getFormatDate from "../../modules/getFormatDate";
 

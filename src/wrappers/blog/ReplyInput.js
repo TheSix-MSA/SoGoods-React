@@ -18,10 +18,6 @@ const ReplyInput = ({bno, maxPage}) => {
     const send = () => {
         reply.keyValue = bno;
         repliesService.insertReply(reply, maxPage).then();
-        /***
-         * insert후 textarea에 있는 값 + reply.content의 값을 ""로 바꿔줘야한다.
-         * catch 문 채워줘야함
-         */
         setReply({...reply, content:""})
     }
 

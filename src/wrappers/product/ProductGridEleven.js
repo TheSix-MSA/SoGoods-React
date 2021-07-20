@@ -3,9 +3,6 @@ import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import { getProducts } from "../../helpers/product";
 import ProductGridSingleEleven from "../../components/product/ProductGridSingleEleven";
-import { addToCart } from "../../redux/actions/cartActions";
-import { addToWishlist } from "../../redux/actions/wishlistActions";
-import { addToCompare } from "../../redux/actions/compareActions";
 
 const ProductGridEleven = ({
   products,
@@ -71,47 +68,4 @@ ProductGridEleven.propTypes = {
   wishlistItems: PropTypes.array
 };
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    products: getProducts(
-      state.productData.products,
-      ownProps.category,
-      ownProps.type,
-      ownProps.limit
-    ),
-    currency: state.currencyData,
-    cartItems: state.cartData,
-    wishlistItems: state.wishlistData,
-    compareItems: state.compareData
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addToCart: (
-      item,
-      addToast,
-      quantityCount,
-      selectedProductColor,
-      selectedProductSize
-    ) => {
-      dispatch(
-        addToCart(
-          item,
-          addToast,
-          quantityCount,
-          selectedProductColor,
-          selectedProductSize
-        )
-      );
-    },
-    addToWishlist: (item, addToast) => {
-      dispatch(addToWishlist(item, addToast));
-    },
-    addToCompare: (item, addToast) => {
-      dispatch(addToCompare(item, addToast));
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProductGridEleven);
+export default connect()(ProductGridEleven);

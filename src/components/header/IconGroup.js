@@ -3,7 +3,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import MenuCart from "./sub-components/MenuCart";
-import { deleteFromCart } from "../../redux/actions/cartActions";
 
 const IconGroup = ({
   currency,
@@ -124,22 +123,4 @@ IconGroup.propTypes = {
   deleteFromCart: PropTypes.func,
   wishlistData: PropTypes.array
 };
-
-const mapStateToProps = state => {
-  return {
-    currency: state.currencyData,
-    cartData: state.cartData,
-    wishlistData: state.wishlistData,
-    compareData: state.compareData
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    deleteFromCart: (item, addToast) => {
-      dispatch(deleteFromCart(item, addToast));
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(IconGroup);
+export default connect()(IconGroup);

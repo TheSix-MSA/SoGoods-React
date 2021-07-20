@@ -5,8 +5,6 @@ import { useToasts } from "react-toast-notifications";
 import MetaTags from "react-meta-tags";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import { connect } from "react-redux";
-import { addToCart } from "../../redux/actions/cartActions";
-import { deleteFromCompare } from "../../redux/actions/compareActions";
 import { getDiscountPrice } from "../../helpers/product";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
@@ -248,24 +246,4 @@ Compare.propTypes = {
   deleteFromCompare: PropTypes.func
 };
 
-const mapStateToProps = state => {
-  return {
-    cartItems: state.cartData,
-    compareItems: state.compareData,
-    currency: state.currencyData
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    addToCart: (item, addToast, quantityCount) => {
-      dispatch(addToCart(item, addToast, quantityCount));
-    },
-
-    deleteFromCompare: (item, addToast) => {
-      dispatch(deleteFromCompare(item, addToast));
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Compare);
+export default connect()(Compare);

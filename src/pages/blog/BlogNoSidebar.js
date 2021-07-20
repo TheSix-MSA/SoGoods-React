@@ -14,7 +14,7 @@ const BlogNoSidebar = () => {
     const dispatch = useDispatch()
     const history = useHistory()
     useEffect(() => {
-        dispatch(getBoardData(1));
+        dispatch(getBoardData(pageMaker.page));
     }, [])
     const boardRegister = () => {
         history.push(`/board/FREE`)
@@ -32,7 +32,9 @@ const BlogNoSidebar = () => {
                 <Breadcrumb/>
                 <div className="blog-area pt-100 pb-100 blog-no-sidebar">
                     <div className="container">
-                        <div style={{display:"block", textAlign:"right", margin:"2rem"}} onClick={boardRegister}> 글쓰기 </div>
+                        <div style={{display: "block", textAlign: "right", margin: "2rem"}}
+                             onClick={boardRegister}> 글쓰기
+                        </div>
                         <div className="row">
                             <div className="col-lg-12">
                                 <div className="mr-20">
@@ -41,7 +43,7 @@ const BlogNoSidebar = () => {
                                         <BlogPostsNoSidebar boardData={boardDtoList}/>
                                     </div>
                                     {/* blog pagination */}
-                                    { pageMaker && <BlogPagination pageMaker={pageMaker}/> }
+                                    {pageMaker && <BlogPagination pageMaker={pageMaker}/>}
                                 </div>
                             </div>
                         </div>

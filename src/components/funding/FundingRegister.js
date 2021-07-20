@@ -18,13 +18,12 @@ const initState = {
 
 const FundingRegister = () => {
 
-    const form = useInputs(initState)
-    console.log(form)
+    const [form, changeForm] = useInputs(initState);
 
     const sendFormData = async () => {
-        const result = await fundingService.registerFunding({...form}).then(res=>{
-            console.log(res.response)
-        })
+        console.log(form);
+        const result = await fundingService.registerFunding({...form});
+        console.log(result)
     }
 
     return (
@@ -50,39 +49,50 @@ const FundingRegister = () => {
                                                         <input
                                                             type="title"
                                                             name="funding-title"
-                                                            value={form.title}
                                                             placeholder="제목"
+                                                            onChange={changeForm}
                                                         />
                                                         <input
                                                             type="hidden"
                                                             name="writer"
-                                                            value={form.writer}
                                                             placeholder="작성자"
+                                                            onChange={changeForm}
                                                         />
                                                         <input
                                                             type="hidden"
                                                             name="email"
                                                             placeholder="이메일"
+                                                            onChange={changeForm}
                                                         />
+                                                        {/*<input*/}
+                                                        {/*    type="text"*/}
+                                                        {/*    name="content"*/}
+                                                        {/*    placeholder="내용을 입력하세요."*/}
+                                                        {/*    onChange={changeForm}/>*/}
                                                         <textarea
+                                                            type="text"
                                                             name="content"
                                                             placeholder="내용을 입력하세요."
+                                                            onChange={changeForm}
                                                         />
+
                                                         <button>상품등록</button>
                                                         <div style={{display:"flex"}}>
                                                         <input
                                                             name="dueDate"
                                                             placeholder="date"
                                                             type="date"
+                                                            onChange={changeForm}
                                                         />
                                                         <input
                                                             name="targetAmount"
                                                             placeholder="목표금액"
                                                             type="text"
+                                                            onChange={changeForm}
                                                         />
                                                         </div>
                                                         <div className="button-box">
-                                                            <button type="submit" onClick={sendFormData}>
+                                                            <button type="submit" onClick={()=>sendFormData}>
                                                                 <span>펀딩 등록하기</span>
                                                             </button>
                                                         </div>

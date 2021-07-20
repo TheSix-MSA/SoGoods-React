@@ -11,6 +11,7 @@ import {
     useHistory
 } from "react-router-dom";
 import FundingRegister from "./FundingRegister";
+import FundingRead from "./FundingRead";
 
 
 export default  () => {
@@ -20,7 +21,7 @@ export default  () => {
                 <Switch>
                     <Route path={`/funding/list`} component={FundingList}>
                     </Route>
-                    <Route path={`/funding/read/:fno`}>
+                    <Route path={`/funding/read`} component={FundingRead}>
                     </Route>
                     <Route path={`/funding/register`} component={FundingRegister}>
                     </Route>

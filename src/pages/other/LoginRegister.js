@@ -6,35 +6,65 @@ import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import LayoutOne from "../../layouts/LayoutOne";
-import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import useInputs from "../../customHooks/useInputs";
+import {useDispatch, useSelector} from "react-redux";
+import {signin} from "../../member/loginSlice";
+import axios from "axios";
+import {useHistory} from "react-router-dom";
 
 const initStateLogin = {
     email: "",
     password: ""
 };
 
-const LoginRegister = ({ location }) => {
-  const { pathname } = location;
+const initStateSignUp = {
+    email:"",
+    code:"",
+    password:"",
+    passwordCheck:"",
+    name:"",
+    birth:"",
+    gender:"남자",
+    phone:"",
+    address:"",
+    detailAddress:""
+}
 
-    const [form, onChange] = useInputs(initStateLogin);
-    console.log(form);
+const LoginRegister = ({ location }) => {
+    const history = useHistory();
+    const baseUrl = process.env.REACT_APP_API_DEV_URL;
+    const {pathname} = location;
+    const info = useSelector(state=>state.login);
+    console.log("이아래는 useSelector");
+    console.log(info);
+    const [loginForm, onChange] = useInputs(initStateLogin);
+    const [signupForm, signupChange] = useInputs(initStateSignUp);
+
+    /**
+     * 클릭시 axios로 로그인검증, 이후 LocalStorage에 저장.( email, roles, accessToken, RefreshToken )
+     * @param e
+     */
+    const loginBtn = (e) => {
+        e.preventDefault();
+        axios.post(`${baseUrl}/member/login`, loginForm).then(value =>
+        {
+            dispatch(signin(value.data.response));
+            history.push("/");
+        });
+    };
+
+    const signupBtn = (e) => {
+        e.preventDefault();
+        axios.post(`${baseUrl}/member/`, signupForm).then(value => console.log(value));
+        history.push("/login-register")
+    };
+
+    const dispatch = useDispatch();
+
+    console.log(signupForm);
     return (
         <Fragment>
-            {/*<MetaTags>*/}
-            {/*  <title>Flone | Login</title>*/}
-            {/*  <meta*/}
-            {/*    name="description"*/}
-            {/*    content="Compare page of flone react minimalist eCommerce template."*/}
-            {/*  />*/}
-            {/*</MetaTags>*/}
-            {/*<BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>*/}
-            {/*<BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>*/}
-            {/*  Login Register*/}
-            {/*</BreadcrumbsItem>*/}
             <LayoutOne headerTop="visible">
-                {/*/!* breadcrumb *!/*/}
-                {/*<Breadcrumb />*/}
                 <div className="login-register-area pt-100 pb-100">
                     <div className="container">
                         <div className="row">
@@ -62,14 +92,14 @@ const LoginRegister = ({ location }) => {
                                                                 type="text"
                                                                 name="email"
                                                                 placeholder="Username"
-                                                                value={form.email}
+                                                                value={loginForm.email}
                                                                 onChange={onChange}
                                                             />
                                                             <input
                                                                 type="password"
                                                                 name="password"
                                                                 placeholder="Password"
-                                                                value={form.password}
+                                                                value={loginForm.password}
                                                                 onChange={onChange}
                                                             />
                                                             <div className="button-box">
@@ -81,7 +111,7 @@ const LoginRegister = ({ location }) => {
                                                                     </Link>
                                                                 </div>
                                                                 <div>
-                                                                    <button type="submit">
+                                                                    <button onClick={loginBtn}>
                                                                         <span>Login</span>
                                                                     </button>
                                                                     <button style={{marginLeft: "20px"}}>
@@ -99,53 +129,81 @@ const LoginRegister = ({ location }) => {
                                                         <form>
                                                             <div className="button-box">
                                                                 <input
-                                                                    name="user-email"
+                                                                    name="email"
                                                                     placeholder="Email"
                                                                     type="email"
                                                                     style={{width: "70%"}}
+                                                                    value={signupForm.email}
+                                                                    onChange={signupChange}
                                                                 />
                                                                 <button style={{marginLeft: "20px"}}>
                                                                     <span>인증</span>
                                                                 </button>
                                                             </div>
+                                                            <div className="button-box">
+                                                                <input
+                                                                    name="code"
+                                                                    placeholder="Verifying Code"
+                                                                    type="code"
+                                                                    style={{width: "70%"}}
+                                                                    value={signupForm.code}
+                                                                    onChange={signupChange}
+                                                                />
+                                                                <button style={{marginLeft: "20px"}}>
+                                                                    <span>확인</span>
+                                                                </button>
+                                                            </div>
                                                             <input
                                                                 type="password"
-                                                                name="user-password"
+                                                                name="password"
                                                                 placeholder="Password"
+                                                                value={signupForm.password}
+                                                                onChange={signupChange}
                                                             />
                                                             <input
                                                                 type="passwordCheck"
-                                                                name="user-passwordCheck"
+                                                                name="passwordCheck"
                                                                 placeholder="PasswordCheck"
+                                                                value={signupForm.passwordCheck}
+                                                                onChange={signupChange}
                                                             />
                                                             <input
-                                                                name="user-name"
+                                                                name="name"
                                                                 placeholder="Name"
                                                                 type="name"
+                                                                value={signupForm.name}
+                                                                onChange={signupChange}
                                                             />
                                                             <input
-                                                                name="user-birth"
+                                                                name="birth"
                                                                 placeholder="Birth"
                                                                 type="birth"
+                                                                value={signupForm.birth}
+                                                                onChange={signupChange}
                                                             />
                                                             <input
-                                                                name="user-phone"
+                                                                name="phone"
                                                                 placeholder="Phone"
                                                                 type="phone"
+                                                                value={signupForm.phone}
+                                                                onChange={signupChange}
                                                             />
                                                             <input
-                                                                name="user-address"
+                                                                name="address"
                                                                 placeholder="Address"
                                                                 type="address"
+                                                                value={signupForm.address}
+                                                                onChange={signupChange}
                                                             />
                                                             <input
-                                                                name="user-detailAddress"
+                                                                name="detailAddress"
                                                                 placeholder="Detail Address"
                                                                 type="DetailAddress"
+                                                                value={signupForm.detailAddress}
+                                                                onChange={signupChange}
                                                             />
-
                                                             <div className="button-box">
-                                                                <button type="submit">
+                                                                <button onClick={signupBtn}>
                                                                     <span>Register</span>
                                                                 </button>
                                                             </div>

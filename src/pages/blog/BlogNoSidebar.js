@@ -1,86 +1,60 @@
 import PropTypes from "prop-types";
-import React, {Fragment, useEffect, useState} from "react";
+import React, {Fragment, useEffect} from "react";
 import MetaTags from "react-meta-tags";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import BlogPagination from "../../wrappers/blog/BlogPagination";
 import BlogPostsNoSidebar from "../../wrappers/blog/BlogPostsNoSidebar";
-import boardService from "./boardService";
+import {useDispatch, useSelector} from "react-redux";
+import {getBoardData} from "../../board/boardAsyncService";
+import {useHistory} from "react-router-dom";
 
-const initState = {
-    boardDtoList: [{
-        bno: 0,
-        title:'',
-        writer:'',
-        boardType: '',
-        content: '',
-        email: '',
-        isPrivate:0,
-        removed:0,
-        replyCnt:0,
-        modDate:'',
-        regDate:''
-    },],
-    boardListRequestDTO:{
-        page:1,
-        size:0,
-        keyword:'',
-        type:''
-    },
-    pageMaker:{
-        page:1,
-        size:9,
-        totalCount:0,
-        pageList:[],
-        prev:false,
-        next:false
-    }
-}
-const BlogNoSidebar = ({ location }) => {
-    const { pathname } = location;
-    const [data, setData] = useState(initState);
-
+const BlogNoSidebar = () => {
+    const {boardDtoList, pageMaker} = useSelector(state => state.board);
+    const dispatch = useDispatch()
+    const history = useHistory()
     useEffect(() => {
-      boardService.getBoardList().then(res => {
-        setData(res.response)
-      })
+        dispatch(getBoardData(1));
     }, [])
-    console.log(data)
-  return (
-    <Fragment>
-              <MetaTags>
+    const boardRegister = () => {
+        history.push(`/board/FREE`)
+    }
+    return (
+        <Fragment>
+            <MetaTags>
                 <meta
-                  name="description"
-                  content="Blog of flone react minimalist eCommerce template."
+                    name="description"
+                    content="Blog of flone react minimalist eCommerce template."
                 />
-              </MetaTags>
-              <LayoutOne headerTop="visible">
+            </MetaTags>
+            <LayoutOne headerTop="visible">
                 {/* breadcrumb */}
-                <Breadcrumb />
+                <Breadcrumb/>
                 <div className="blog-area pt-100 pb-100 blog-no-sidebar">
-                  <div className="container">
-                    <div className="row">
-                      <div className="col-lg-12">
-                        <div className="mr-20">
-                          <div className="row">
-                            {/* blog posts */}
-                            <BlogPostsNoSidebar data={data} />
-                          </div>
-
-                          {/* blog pagination */}
-                          <BlogPagination />
+                    <div className="container">
+                        <div style={{display:"block", textAlign:"right", margin:"2rem"}} onClick={boardRegister}> 글쓰기 </div>
+                        <div className="row">
+                            <div className="col-lg-12">
+                                <div className="mr-20">
+                                    <div className="row">
+                                        {/* blog posts */}
+                                        <BlogPostsNoSidebar boardData={boardDtoList}/>
+                                    </div>
+                                    {/* blog pagination */}
+                                    { pageMaker && <BlogPagination pageMaker={pageMaker}/> }
+                                </div>
+                            </div>
                         </div>
-                      </div>
                     </div>
-                  </div>
                 </div>
-              </LayoutOne>
-    </Fragment>
-  );
+            </LayoutOne>
+        </Fragment>
+    );
 };
 
+
 BlogNoSidebar.propTypes = {
-  location: PropTypes.object
+    location: PropTypes.object
 };
 
 export default BlogNoSidebar;

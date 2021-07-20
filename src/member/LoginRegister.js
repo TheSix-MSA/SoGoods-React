@@ -11,6 +11,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {signin} from "../redux/member/loginSlice";
 import axios from "axios";
 import {useHistory} from "react-router-dom";
+import instance from "../modules/axiosConfig";
 
 const initStateLogin = {
     email: "",
@@ -44,13 +45,23 @@ const LoginRegister = ({ location }) => {
      * 클릭시 axios로 로그인검증, 이후 LocalStorage에 저장.( email, roles, accessToken, RefreshToken )
      * @param e
      */
-    const loginBtn = (e) => {
+    const loginBtn = async (e) => {
         e.preventDefault();
-        axios.post(`${baseUrl}/member/login`, loginForm).then(value =>
-        {
-            dispatch(signin(value.data.response));
-            history.push("/");
+        // axios.post(`${baseUrl}/member/login`, loginForm).then(value =>
+        // {
+        //     dispatch(signin(value.data.response));
+        //     history.push("/");
+        // });
+
+        const result = await instance({
+            url: '/member/login',
+            method: 'POST',
+            data: loginForm
         });
+
+        dispatch(signin(result.data.response));
+        history.push("/");
+
     };
 
     const signupBtn = (e) => {

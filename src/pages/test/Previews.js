@@ -33,7 +33,8 @@ const thumbsContainer = {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 16
+    marginTop: 16,
+    minHeight: 100,
 };
 
 const thumb = {
@@ -63,6 +64,7 @@ const img = {
 
 function Previews(props) {
     const [files, setFiles] = useState([]);
+    const maxFiles = 6
     const {
         getRootProps,
         getInputProps,
@@ -71,10 +73,10 @@ function Previews(props) {
         isDragReject
     } = useDropzone({
         accept: 'image/*',
-        maxFiles:3,
+        maxFiles:maxFiles,
         onDrop: acceptedFiles => {
             console.log("Before", files)
-            const max = 5;
+            const max = maxFiles;
             const inFiles = acceptedFiles.map(file => Object.assign(file, {
                 preview: URL.createObjectURL(file)
             }))
@@ -85,8 +87,6 @@ function Previews(props) {
             }else{
                 console.log(`파일갯수 ${max} 초과`)
             }
-
-
         }
     });
 
@@ -116,7 +116,6 @@ function Previews(props) {
                     onClick={(e)=>{removeThumb(idx,e)}}
                     style={img}
                 />
-                <p>X</p>
             </div>
         </div>
     ));
@@ -135,7 +134,9 @@ function Previews(props) {
             <aside style={thumbsContainer}>
                 {thumbs}
             </aside>
-            <button>확인</button>
+            <div style={{alignItems: "center"}}>
+                {files.length>0 && <button style={{}}>확인</button>}
+            </div>
         </section>
     );
 }

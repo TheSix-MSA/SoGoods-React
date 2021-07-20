@@ -57,22 +57,13 @@ const ProductImageGallery = ({ product }) => {
   return (
     <Fragment>
       <div className="product-large-image-wrapper">
-        {product.discount || product.new ? (
           <div className="product-img-badges">
-            {product.discount ? (
-              <span className="pink">-{product.discount}%</span>
-            ) : (
-              ""
-            )}
-            {product.new ? <span className="purple">New</span> : ""}
+              <span className="pink">123%</span>
+             <span className="purple">New</span>
           </div>
-        ) : (
-          ""
-        )}
         <LightgalleryProvider>
           <Swiper {...gallerySwiperParams}>
-            {product.image &&
-              product.image.map((single, key) => {
+            {[1,2,3].map((single, key) => {
                 return (
                   <div key={key}>
                     <LightgalleryItem
@@ -98,8 +89,7 @@ const ProductImageGallery = ({ product }) => {
       </div>
       <div className="product-small-image-wrapper mt-15">
         <Swiper {...thumbnailSwiperParams}>
-          {product.image &&
-            product.image.map((single, key) => {
+          {[1,2,3].map((single, key) => {
               return (
                 <div key={key}>
                   <div className="single-image">

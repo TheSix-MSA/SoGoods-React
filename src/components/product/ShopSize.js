@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { setActiveSort } from "../../helpers/product";
 
 const ShopSize = ({ sizes, getSortParams }) => {
   return (
@@ -14,7 +13,6 @@ const ShopSize = ({ sizes, getSortParams }) => {
                 <button
                   onClick={e => {
                     getSortParams("size", "");
-                    setActiveSort(e);
                   }}
                 >
                   <span className="checkmark" /> All Sizes{" "}
@@ -29,7 +27,6 @@ const ShopSize = ({ sizes, getSortParams }) => {
                       className="text-uppercase"
                       onClick={e => {
                         getSortParams("size", size);
-                        setActiveSort(e);
                       }}
                     >
                       {" "}

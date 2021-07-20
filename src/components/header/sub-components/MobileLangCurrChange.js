@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import React from "react";
 import { multilanguage, changeLanguage } from "redux-multilanguage";
 import { connect } from "react-redux";
-import { setCurrency } from "../../../redux/actions/currencyActions";
 
 const MobileLangCurrChange = ({
   currency,
@@ -46,7 +45,7 @@ const MobileLangCurrChange = ({
       <div className="lang-curr-style">
         <span className="title mb-2">Choose Currency</span>
         <select
-          value={currency.currencyName}
+          value={123123}
           onChange={e => {
             setCurrencyTrigger(e);
             closeMobileMenu();
@@ -68,21 +67,5 @@ MobileLangCurrChange.propTypes = {
   dispatch: PropTypes.func
 };
 
-const mapStateToProps = state => {
-  return {
-    currency: state.currencyData
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    setCurrency: currencyName => {
-      dispatch(setCurrency(currencyName));
-    }
-  };
-};
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
 )(multilanguage(MobileLangCurrChange));

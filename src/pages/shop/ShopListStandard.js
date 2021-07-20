@@ -4,7 +4,6 @@ import MetaTags from "react-meta-tags";
 import Paginator from "react-hooks-paginator";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import { connect } from "react-redux";
-import { getSortedProducts } from "../../helpers/product";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import ShopSidebar from "../../wrappers/product/ShopSidebar";
@@ -40,15 +39,11 @@ const ShopListStandard = ({ location, products }) => {
   };
 
   useEffect(() => {
-    let sortedProducts = getSortedProducts(products, sortType, sortValue);
-    const filterSortedProducts = getSortedProducts(
-      sortedProducts,
-      filterSortType,
-      filterSortValue
-    );
+    let sortedProducts = null;
+    const filterSortedProducts = null;
     sortedProducts = filterSortedProducts;
     setSortedProducts(sortedProducts);
-    setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
+    setCurrentData(sortedProducts?.slice(offset, offset + pageLimit));
   }, [offset, products, sortType, sortValue, filterSortType, filterSortValue]);
 
   return (
@@ -86,8 +81,8 @@ const ShopListStandard = ({ location, products }) => {
                 <ShopTopbar
                   getLayout={getLayout}
                   getFilterSortParams={getFilterSortParams}
-                  productCount={products.length}
-                  sortedProductCount={currentData.length}
+                  productCount={0}
+                  sortedProductCount={0}
                 />
 
                 {/* shop page content default */}
@@ -96,7 +91,7 @@ const ShopListStandard = ({ location, products }) => {
                 {/* shop product pagination */}
                 <div className="pro-pagination-style text-center mt-30">
                   <Paginator
-                    totalRecords={sortedProducts.length}
+                    totalRecords={0}
                     pageLimit={pageLimit}
                     pageNeighbours={2}
                     setOffset={setOffset}
@@ -121,10 +116,5 @@ ShopListStandard.propTypes = {
   products: PropTypes.array
 };
 
-const mapStateToProps = state => {
-  return {
-    products: state.productData.products
-  };
-};
 
-export default connect(mapStateToProps)(ShopListStandard);
+export default connect()(ShopListStandard);

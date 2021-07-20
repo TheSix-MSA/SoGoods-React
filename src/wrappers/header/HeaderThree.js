@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { setCurrency } from "../../redux/actions/currencyActions";
 import { multilanguage } from "redux-multilanguage";
 import Logo from "../../components/header/Logo";
 import IconGroup from "../../components/header/IconGroup";
@@ -85,21 +84,5 @@ HeaderThree.propTypes = {
   dispatch: PropTypes.func
 };
 
-const mapStateToProps = state => {
-  return {
-    currency: state.currencyData
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    setCurrency: currencyName => {
-      dispatch(setCurrency(currencyName));
-    }
-  };
-};
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
 )(multilanguage(HeaderThree));

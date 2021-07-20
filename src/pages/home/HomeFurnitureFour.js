@@ -4,7 +4,6 @@ import LayoutOne from "../../layouts/LayoutOne";
 import CountDownFive from "../../wrappers/countdown/CountDownFive";
 import BrandLogoSliderOne from "../../wrappers/brand-logo/BrandLogoSliderOne";
 import ImageSliderTwo from "../../wrappers/image-slider/ImageSliderTwo";
-import TabProductNineteen from "../../wrappers/product/TabProductNineteen";
 import VideoPopupTwo from "../../components/video-popup/VideoPopupTwo";
 import FeatureIconSeven from "../../wrappers/feature-icon/FeatureIconSeven";
 import CategoryFiveGrid from "../../wrappers/category/CategoryFiveGrid";
@@ -35,11 +34,7 @@ const HomeFurnitureFour = () => {
         {/* video popup */}
         <VideoPopupTwo />
         {/* tab product */}
-        <TabProductNineteen
-          spaceTopClass="pt-95"
-          spaceBottomClass="pb-100"
-          category="furniture"
-        />
+
         {/* countdown */}
         <CountDownFive
           spaceTopClass="pt-115"

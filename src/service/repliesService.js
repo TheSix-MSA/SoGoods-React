@@ -1,11 +1,11 @@
-import axios from "axios";
+import instance from "../modules/axiosConfig";
 
 const repliesService = () => {
-    const baseUrl = process.env.REACT_APP_API_DEV_URL;
-
     let movePage;
 
     let removeInput;
+
+    let removeModifyInput;
 
     const setMovePage = (func)=>{
         movePage=func;
@@ -19,30 +19,57 @@ const repliesService = () => {
         return removeInput();
     }
 
+    const setRemoveModifyInput = (func) => {
+        removeModifyInput=func;
+    }
+
+    const getRemoveModifyInput = ()=>{
+        return removeModifyInput();
+    }
+
     /**
      * 개시글(bno)에 달린 댓글들을 page에 맞는 개수만큼 가져오는 함수
      * 페이지 정보도 같이 가져온다
      */
     const getList = async (bno, page) => {
-        const res = await axios.get(baseUrl+"reply/list/"+bno+"/"+page);
-        const data = await res.data;
-        return data;
+        return await instance({
+            url: "/reply/list/"+bno+"/"+page,
+            method: 'get'
+        })
     }
 
     const insertReply = async (reply, page) => {
-        const res = await axios.post(baseUrl+"reply/", reply);
+        const res =  await instance({
+            url: "/reply/",
+            method: 'post',
+            data: reply
+        });
         movePage(page);
         return res;
     }
 
     const deleteReply = async (rno, page) => {
-        const res = await axios.delete(baseUrl+"reply/"+rno);
+        const res = await instance({
+            url: "/reply/"+rno,
+            method: 'delete'
+        });
         movePage(page);
         return res;
     }
 
-    return {getList, insertReply, setMovePage, deleteReply,
-    setRemoveInput,getRemoveInput}
+    const updateReply = async (reply, page) => {
+        const res =  await instance({
+            url: "/reply/",
+            method: 'put',
+            data: reply
+        });
+        movePage(page);
+        return res;
+    }
+
+    return {getList, insertReply, updateReply, deleteReply,
+    setRemoveInput,getRemoveInput, setMovePage,
+    getRemoveModifyInput, setRemoveModifyInput}
 }
 
 export default repliesService();

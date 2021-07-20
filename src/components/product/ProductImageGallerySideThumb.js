@@ -73,22 +73,13 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
           }`}
         >
           <div className="product-large-image-wrapper">
-            {product.discount || product.new ? (
               <div className="product-img-badges">
-                {product.discount ? (
-                  <span className="pink">-{product.discount}%</span>
-                ) : (
-                  ""
-                )}
-                {product.new ? <span className="purple">New</span> : ""}
+                  <span className="pink">`12123%</span>
+                <span className="purple">New</span>
               </div>
-            ) : (
-              ""
-            )}
             <LightgalleryProvider>
               <Swiper {...gallerySwiperParams}>
-                {product.image &&
-                  product.image.map((single, key) => {
+                {[1,2,3,4].map((single, key) => {
                     return (
                       <div key={key}>
                         <LightgalleryItem
@@ -122,8 +113,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
         >
           <div className="product-small-image-wrapper product-small-image-wrapper--side-thumb">
             <Swiper {...thumbnailSwiperParams}>
-              {product.image &&
-                product.image.map((single, key) => {
+              {[1,2,3,4].map((single, key) => {
                   return (
                     <div key={key}>
                       <div className="single-image">

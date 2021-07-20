@@ -1,9 +1,6 @@
 import PropTypes from "prop-types";
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
-import { addToCart } from "../../redux/actions/cartActions";
-import { addToWishlist } from "../../redux/actions/wishlistActions";
-import { addToCompare } from "../../redux/actions/compareActions";
 import ProductGridListSingle from "../../components/product/ProductGridListSingle";
 
 const ProductGrid = ({
@@ -20,7 +17,7 @@ const ProductGrid = ({
 }) => {
   return (
     <Fragment>
-      {products.map(product => {
+      {products?.map(product => {
         return (
           <ProductGridListSingle
             sliderClassName={sliderClassName}
@@ -34,12 +31,12 @@ const ProductGrid = ({
               cartItems.filter(cartItem => cartItem.id === product.id)[0]
             }
             wishlistItem={
-              wishlistItems.filter(
+              wishlistItems?.filter(
                 wishlistItem => wishlistItem.id === product.id
               )[0]
             }
             compareItem={
-              compareItems.filter(
+              compareItems?.filter(
                 compareItem => compareItem.id === product.id
               )[0]
             }
@@ -64,41 +61,4 @@ ProductGrid.propTypes = {
   wishlistItems: PropTypes.array
 };
 
-const mapStateToProps = state => {
-  return {
-    currency: state.currencyData,
-    cartItems: state.cartData,
-    wishlistItems: state.wishlistData,
-    compareItems: state.compareData
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    addToCart: (
-      item,
-      addToast,
-      quantityCount,
-      selectedProductColor,
-      selectedProductSize
-    ) => {
-      dispatch(
-        addToCart(
-          item,
-          addToast,
-          quantityCount,
-          selectedProductColor,
-          selectedProductSize
-        )
-      );
-    },
-    addToWishlist: (item, addToast) => {
-      dispatch(addToWishlist(item, addToast));
-    },
-    addToCompare: (item, addToast) => {
-      dispatch(addToCompare(item, addToast));
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProductGrid);
+export default connect()(ProductGrid);

@@ -14,6 +14,14 @@ const memberService = () => {
         })
     }
 
+    const getMemberApprovalList = async (page) => {
+        console.log(" getMemberList started");
+        return await instance({
+            url: `member/list?approval=true&page=${page}`,
+            method: 'get'
+        })
+    }
+
     const changeRole =  async (email) => {
         console.log(" changeRole started");
         const res = await instance({
@@ -21,8 +29,9 @@ const memberService = () => {
             method: 'post'
         });
         console.log(res)
-        setRole(res.data.response.roleSet[res.data.response.roleSet.length-1])
-        console.log(res.data.response.roleSet[res.data.response.roleSet.length-1])
+        setRole(res.data.response.roleSet[0])
+        console.log(res.data.response.roleSet[0])
+
         return res;
     }
 
@@ -55,7 +64,7 @@ const memberService = () => {
     }
 
 
-    return {getMemberList,setMovePage,setNextPrev,changeRole,setRoleService,changeBanned, setBannedService}
+    return {getMemberList,setMovePage,setNextPrev,changeRole,setRoleService,changeBanned, setBannedService, getMemberApprovalList}
 
 }
 export default memberService();

@@ -53,18 +53,20 @@ const initState = {
         type: ""
     }
 }
-const MemberTable = () => {
+const MemberApprovalTable = () => {
 
     const [members, setMembers] = useState(initState);
     const [role, setRole] = useState("");
-    const [banned, setBanned] = useState(false);
+    // const [approval, setApproval] = useState(true);
 
 
     useEffect(() => {
-        memberService.getMemberList(members.pageMaker.page).then(res => {
+        memberService.getMemberApprovalList(members.pageMaker.page).then(res => {
             setMembers(res.data.response);
+
         });
-    }, [members.pageMaker.page, role, banned])
+    }, [members.pageMaker.page, role])
+
 
     const movePage = (num) => {
         members.pageMaker.page = num;
@@ -86,9 +88,9 @@ const MemberTable = () => {
         setMembers({...members});
         memberService.setNextPrev(prevPage);
     }
-
+    //
     const changeRole = (member) => {
-        if (member.roleSet[2] || member.roleSet[1] !== "ADMIN") {
+        if (member.roleSet[2] !== "ADMIN") {
             memberService.changeRole(member.email)
                 .then();
         }
@@ -96,34 +98,30 @@ const MemberTable = () => {
     memberService.setRoleService(setRole)
 
 
-    const changeBanned = (member) => {
-        memberService.changeBanned(member.email)
-            .then();
-
-    }
-    memberService.setBannedService(setBanned)
-
     const list = members.memberList.map(member => {
-        return <tr key={member.email}>
-            <td>{member.email}</td>
-            <td>{member.name}</td>
-            <td>{member.birth}</td>
-            <td>{member.phone}</td>
-            <td>{member.address} {member.detailAddress}</td>
-            <td>{member.gender}</td>
-            <td onClick={() => changeBanned(member)} style={{textAlign: "center"}}>{member.banned ? "🟢" : "🔴"}</td>
-            <td>{member.removed ? "삭제" : "정상"}</td>
-            <td onClick={() => changeRole(member)}>{member.roleSet[0]} </td>
-            <td>{member.regDate}</td>
-        </tr>
+
+        return (member.roleSet[0]==="GENERAL"?
+            <tr key={member.email}>
+                <td>{member.email}</td>
+                <td>{member.name}</td>
+                <td>{member.birth}</td>
+                <td>{member.phone}</td>
+                <td>{member.address} {member.detailAddress}</td>
+                <td>{member.gender}</td>
+                <td onClick={() => changeRole(member)} style={{textAlign: "center"}}>{member.approval ? "✔" : ""}</td>
+                <td style={{textAlign: "center"}}>{member.approval ? "❌" : ""}</td>
+            </tr>:null
+
+        )
     })
 
     return (
+        <Container fluid>
         <Row>
             <Col md="12">
                 <Card className="strpied-tabled-with-hover">
                     <Card.Header>
-                        <Card.Title as="h4">회원 리스트</Card.Title>
+                        <Card.Title as="h4">작가 승인 리스트</Card.Title>
                         <p className="card-category">
                             회원정보
                         </p>
@@ -138,15 +136,13 @@ const MemberTable = () => {
                                 <th className="border-0">전화번호</th>
                                 <th className="border-0">주소</th>
                                 <th className="border-0">성별</th>
-                                <th className="border-0">밴 여부</th>
-                                <th className="border-0">삭제 여부</th>
-                                <th className="border-0">권한</th>
-                                <th className="border-0">가입날짜</th>
+                                <th className="border-0">작가 승인 처리</th>
+                                <th className="border-0">작가 반려 처리</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {/*<MemberList members={members} changeBanned={changeBanned} changeRole={changeRole} />*/}
                             {list}
+
                             </tbody>
                         </Table>
                         <MemberPagination members={members} prevPage={prevPage} movePage={movePage}
@@ -155,10 +151,11 @@ const MemberTable = () => {
                 </Card>
             </Col>
         </Row>
+        </Container>
 
     );
 }
 
-export default MemberTable;
+export default MemberApprovalTable;
 
 

@@ -13,14 +13,14 @@ const fundingService = () => {
         })
     }
 
-    const setAuthorized =  async (fno,page) => {
+    const setAuthorized =  async (fno) => {
         console.log(" setAuthorized started");
         const res = await instance({
             url: `funding/req/${fno}`,
             method: 'put'
         });
         console.log(res)
-        movePage(page)
+        // movePage(page)
         return res;
     }
     // const setAuthorizedService =(func) =>{

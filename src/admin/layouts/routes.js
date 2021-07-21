@@ -3,6 +3,8 @@ import Dashboard from "../views/Dashboard.js";
 import MemberTable from "../views/MemberTable";
 import FundingList from "../views/FundingTable";
 import FundingTable from "../views/FundingTable";
+import MemberApprovalTable from "../views/MemberApprovalTable";
+import FundingRequestTable from "../views/FundingRequestTable";
 // import Typography from "views/Typography.js";
 // import Icons from "views/Icons.js";
 // import Maps from "views/Maps.js";
@@ -40,26 +42,26 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
+    path: "/approval",
+    name: "Approval Request",
+    icon: "nc-icon nc-atom",
+    component: MemberApprovalTable,
+    layout: "/admin",
+  },
+  {
     path: "/funding",
     name: "Funding List",
     icon: "nc-icon nc-paper-2",
     component: FundingTable,
     layout: "/admin",
   },
-  // {
-  //   path: "/icons",
-  //   name: "Icons",
-  //   icon: "nc-icon nc-atom",
-  //   component: Icons,
-  //   layout: "/admin",
-  // },
-  // {
-  //   path: "/maps",
-  //   name: "Maps",
-  //   icon: "nc-icon nc-pin-3",
-  //   component: Maps,
-  //   layout: "/admin",
-  // },
+  {
+    path: "/fundingrequest",
+    name: "Funding Request",
+    icon: "nc-icon nc-pin-3",
+    component: FundingRequestTable,
+    layout: "/admin",
+  },
   // {
   //   path: "/notifications",
   //   name: "Notifications",

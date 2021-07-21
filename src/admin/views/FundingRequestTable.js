@@ -49,7 +49,7 @@ const initState = {
         type: ""
     }
 }
-const FundingTable = () => {
+const FundingRequestTable = () => {
 
     const [funding, setFunding] = useState(initState);
     const [flag, setFlag] = useState(false);
@@ -81,7 +81,7 @@ const FundingTable = () => {
     fundingService.setMovePage(movePage);
 
     const list = funding.dtoList.map(fund => {
-        return <tr key={fund.fundingDTO.fno}>
+        return(fund.fundingDTO.authorized===false? <tr key={fund.fundingDTO.fno}>
             <td>{fund.fundingDTO.title}</td>
             <td>{fund.fundingDTO.writer}</td>
             <td>{fund.fundingDTO.email}</td>
@@ -89,11 +89,12 @@ const FundingTable = () => {
             <td>{fund.fundingDTO.targetAmount}</td>
             <td>{fund.fundingDTO.totalAmount}</td>
             <td>{fund.fundingDTO.targetAmount/fund.fundingDTO.totalAmount}%달성</td>
-            <td>{fund.fundingDTO.success ? "🟢" : "🔴"}</td>
-            <td>{fund.fundingDTO.removed ? "🟢" : "🔴"}</td>
             <td>{fund.fundingDTO.dueDate}</td>
             <td>{fund.fundingDTO.regDate}</td>
-        </tr>
+            <td onClick={() => setAuthorized(fund)}
+                style={{textAlign: "center"}}>{fund.fundingDTO.authorized ? "🟢" : "🔴"}</td>
+        </tr>:null
+        )
     })
 
     return (
@@ -117,10 +118,9 @@ const FundingTable = () => {
                                 <th className="border-0">목표금액</th>
                                 <th className="border-0">현재금액</th>
                                 <th className="border-0">펀딩 진행률</th>
-                                <th className="border-0">펀딩 성공 여부</th>
-                                <th className="border-0">삭제 여부</th>
                                 <th className="border-0">펀딩기한</th>
                                 <th className="border-0">신청날짜</th>
+                                <th className="border-0">승인 여부</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -146,6 +146,6 @@ const FundingTable = () => {
     );
 }
 
-export default FundingTable;
+export default FundingRequestTable;
 
 

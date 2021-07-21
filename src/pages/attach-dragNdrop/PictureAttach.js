@@ -62,10 +62,9 @@ const img = {
 };
 
 
-const Previews = ({addPictures}) => {
+const PictureAttach = ({updatePictures}) => {
+
     const [files, setFiles] = useState([]);
-
-
     const maxFiles = 6
     const {
         getRootProps,
@@ -77,7 +76,6 @@ const Previews = ({addPictures}) => {
         accept: 'image/*',
         maxFiles:maxFiles,
         onDrop: acceptedFiles => {
-            console.log("Before", files)
             const max = maxFiles;
             const inFiles = acceptedFiles.map(file => Object.assign(file, {
                 preview: URL.createObjectURL(file)
@@ -86,7 +84,7 @@ const Previews = ({addPictures}) => {
 
             if(newFiles.length <= max){
                 setFiles(newFiles)
-                addPictures(newFiles)
+                updatePictures(newFiles)
             }else{
                 console.log(`파일갯수 ${max} 초과`)
             }
@@ -104,20 +102,14 @@ const Previews = ({addPictures}) => {
         isDragAccept
     ]);
 
-    const removeThumb = (idx, e)=>{
-        files.splice(idx, 1)
-        const [...newfiles] = files
-        setFiles(newfiles)
-        console.log("After Remove", files)
-    }
-
     const thumbs = files.map((file, idx)=> (
         <div style={thumb} key={file.name}>
             <div style={thumbInner}>
                 <img
                     src={file.preview}
-                    onClick={(e)=>{removeThumb(idx,e)}}
+
                     style={img}
+                    alt={'미리보기'}
                 />
             </div>
         </div>
@@ -141,4 +133,4 @@ const Previews = ({addPictures}) => {
         </section>
     );
 }
-export default Previews
+export default PictureAttach

@@ -5,24 +5,29 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import ProductRegister from "./ProductRegister";
+import productService from "./productService";
 
-const img = {
+const imgStyle = {
     display: 'block',
     width: 100,
     height: 50,
-
 };
 
 const btn ={
     float: 'none',
 }
 
-const Board = () => {
+const initAllProduct = [
+    {info: {},pictures:[]},
+]
+
+const ProductInputList = () => {
     const [open, setOpen] = useState(false);
-    const [allProduct, setAllProduct] = useState([])
-    console.log(allProduct)
+    const [allProduct, setAllProduct] = useState(initAllProduct)
+
+    productService.setOpenFlag(setOpen)
+
     const handleClickOpen = (e) => {
-        e.stopPropagation()
         setOpen(true);
     };
 
@@ -30,41 +35,42 @@ const Board = () => {
         setOpen(false);
     };
 
-    const addProductInfo = (product)=>{
-        allProduct.push(product)
-        console.log(allProduct)
-        setAllProduct([...allProduct])
-        handleClose()
-    }
-
-    const productList = allProduct.map((product, idx)=>{
-
-        const allImg = product.pictures;
-        return (
-            <>
-                <li >
-                    <p onClick={handleClickOpen}>{product['info']['title']} - {product['info']['content']}</p>
-                    <div>
-                        {allImg.map((picture,j)=><img key={j} src={picture.preview} style={img}/>)}
-                    </div>
-                </li>
-            </>
-        )
-    });
-
     const addRegister = () => {
         console.log(allProduct)
     }
 
+    const editProduct = (product)=>{
+        console.log('test')
+        productService.updateProduct(product)
+    }
+
+    const list = productService.getProductList().map((product, i)=>{
+        return (
+            <>
+                <li key={i} onClick={()=>{editProduct(product)}}>
+                    <p>{product.text.title} : {product.text.content}</p>
+                    <div>{product.pictures.map((picture ,j)=>
+                        <img key={j} src={picture.preview} style={imgStyle}/>)}
+                    </div>
+                </li>
+            </>
+        )
+    })
+
+
+
     return (
         <div>
             <h1>BOARD</h1> <Button onClick={addRegister} variant="outlined" color="primary">등록</Button>
-            {productList}
+
             <div style={{display: 'block'}}>
                 <Button style={btn} variant="outlined" color="primary" onClick={handleClickOpen}>
                     상품 등록
                 </Button>
             </div>
+            <ol>
+                {list}
+            </ol>
 
 
             <Dialog
@@ -72,14 +78,13 @@ const Board = () => {
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
+                maxWidth='lg'
             >
 
 
-                <DialogTitle id="alert-dialog-title">{'상품 등록'}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{'상품 등록/수정'}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        <ProductRegister  addProductInfo={addProductInfo}></ProductRegister>
-                    </DialogContentText>
+                    <ProductRegister></ProductRegister>
                 </DialogContent>
                 {/*<DialogActions>*/}
                 {/*    <Button onClick={handleClose} color="primary">*/}
@@ -93,4 +98,4 @@ const Board = () => {
         </div>
     );
 }
-export default Board
+export default ProductInputList

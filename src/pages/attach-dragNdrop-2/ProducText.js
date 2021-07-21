@@ -1,20 +1,20 @@
 import React, {useState} from 'react';
 import useInputs from "../../customHooks/useInputs";
+import productService from "./productService";
 const initState = {
     title: '',
     content: '',
 }
 
-
-
-
-const ProductInfo = ({updateText}) => {
+const ProductText = ({}) => {
 
     const [form, changeForm] = useInputs(initState);
 
     const changeValue = (e)=>{
         changeForm(e)
-        updateText(form)
+        productService.setText(form)
+
+        productService.getProduct().text = form
     }
 
     return (
@@ -25,4 +25,4 @@ const ProductInfo = ({updateText}) => {
     )
 }
 
-export default ProductInfo
+export default ProductText

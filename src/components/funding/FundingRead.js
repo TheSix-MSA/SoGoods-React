@@ -19,12 +19,13 @@ const FundingRead = ({location}) => {
 
     const { pathname } = location;
 
-    const fno = useParams()
+    let {fno} = useParams()
+    console.log(fno)
 
     const [funding, setFunding] = useState(initState)
 
     useEffect(()=>{
-        fundingService.getOneFunding(5).then(res=> {
+        fundingService.getOneFunding(fno).then(res=> {
             console.log(res.response)
             setFunding(res.response)
         })

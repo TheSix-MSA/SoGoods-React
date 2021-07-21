@@ -21,7 +21,7 @@ export default  () => {
                 <Switch>
                     <Route path={`/funding/list`} component={FundingList}>
                     </Route>
-                    <Route path={`/funding/read`} component={FundingRead}>
+                    <Route path={`/funding/read/:fno`} component={FundingRead}>
                     </Route>
                     <Route path={`/funding/register`} component={FundingRegister}>
                     </Route>

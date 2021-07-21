@@ -2,16 +2,20 @@ import PropTypes from "prop-types";
 import React, { useEffect, Suspense, lazy } from "react";
 import ScrollToTop from "./helpers/scroll-top";
 import {BrowserRouter as Router, Switch, Route, BrowserRouter} from "react-router-dom";
-import { ToastProvider } from "react-toast-notifications";
+
 import { multilanguage, loadLanguages } from "redux-multilanguage";
 import { connect } from "react-redux";
 import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
 import instance from "./modules/axiosConfig";
+import {useToasts} from "react-toast-notifications";
+import ProductInputList from "./pages/attach-dragNdrop/ProductInputList";
+import BoardRegister from "./pages/blog/BoardRegister";
+import BoardModify from "./pages/blog/BoardModify";
 
 //the six
 const FundingBoard = lazy(()=>import("./components/funding/FundingBoard"));
+const ProductInput = lazy(()=>import("./pages/attach-dragNdrop-2/ProductInputList"));
 
-const Board = lazy(()=>import("./pages/attach-dragNdrop/Board"))
 
 // home pages
 const HomeFashion = lazy(() => import("./pages/home/HomeFashion"));
@@ -101,12 +105,13 @@ const Checkout = lazy(() => import("./pages/other/Checkout"));
 
 const NotFound = lazy(() => import("./pages/other/NotFound"));
 
-const TableList = lazy(() => import("./admin/views/TableList"));
+const TableList = lazy(() => import("./admin/views/MemberTable"));
 const Admin = lazy(() => import("./admin/layouts/Admin"));
 const DashBoard = lazy(() => import("./admin/views/Dashboard"));
 
 
 const App = (props) => {
+  const {addToast} = useToasts()
   useEffect(() => {
     props.dispatch(
       loadLanguages({
@@ -131,17 +136,28 @@ const App = (props) => {
     );
     instance.interceptors.response.use(
         (config) => {
+          if(!config.data.success){
+            console.log(config.data.error.message);
+            addToast(
+                config.data.error.message, {appearance: 'error',autoDismiss: true, id:"errorToast"}
+            );
+            return Promise.reject(config.data.error.message);
+          }
+          console.log(123,config.data);
           return config;
         },
         (error) => {
-          return Promise.reject(error);
+          addToast(
+              error.response.data.error.message, {appearance: 'error', autoDismiss: true},
+          );
+          console.log(error.response.data.error.message);
+          return Promise.reject(error.response.data.error.message);
         }
     );
   }, []);
   /* 로딩 끝 */
 
   return (
-    <ToastProvider placement="bottom-left">
       <BreadcrumbsProvider>
         <Router>
           <ScrollToTop>
@@ -156,12 +172,12 @@ const App = (props) => {
               }
             >
               <Switch>
-
                 <Route
                     exact
-                    path={process.env.PUBLIC_URL + "/drag"}
-                    component={Board}
+                    path={process.env.PUBLIC_URL + "/product/input"}
+                    component={ProductInput}
                 />
+
                 <Route
                   exact
                   path={process.env.PUBLIC_URL + "/"}
@@ -349,10 +365,21 @@ const App = (props) => {
                   path={process.env.PUBLIC_URL + "/blog-right-sidebar"}
                   component={BlogRightSidebar}
                 />
+
                 <Route
-                  path={process.env.PUBLIC_URL + "/blog-details-standard"}
+                    exact
+                    path={process.env.PUBLIC_URL + "/boardRegister"}
+                    component={BoardRegister}
+                /> {/* 재연 - Board 작성 컴포넌트로 사용 */}
+
+                <Route
+                  path={`/board/FREE/:bno/:currentPage`}
                   component={BlogDetailsStandard}
-                />
+                /> {/* 재연 - Board 상세보기 컴포넌트로 사용 */}
+                <Route
+                  path={`/board/modify/FREE/:bno/:currentPage`}
+                  component={BoardModify}
+                /> {/* 재연 - Board 수정 컴포넌트로 사용 */}
 
                 {/* Other pages */}
                 <Route
@@ -393,14 +420,6 @@ const App = (props) => {
                   path={process.env.PUBLIC_URL + "/not-found"}
                   component={NotFound}
                 />
-                {/*<Route*/}
-                {/*    path={process.env.PUBLIC_URL + "/admin/list"}*/}
-                {/*    component={TableList}*/}
-                {/*/>*/}
-                {/*<Route*/}
-                {/*    path={process.env.PUBLIC_URL + "/admin/DashBoard"}*/}
-                {/*    component={DashBoard}*/}
-                {/*/>*/}
                 <Route
                     path={process.env.PUBLIC_URL + "/admin"}
                     component={Admin}
@@ -413,7 +432,6 @@ const App = (props) => {
           </ScrollToTop>
         </Router>
       </BreadcrumbsProvider>
-    </ToastProvider>
   );
 };
 

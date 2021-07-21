@@ -9,7 +9,7 @@ import rootReducer from "./redux/reducers/rootReducer";
 import App from "./App";
 import "./assets/scss/style.scss";
 import * as serviceWorker from "./serviceWorker";
-
+import { ToastProvider } from "react-toast-notifications";
 import { composeWithDevTools } from "redux-devtools-extension";
 
 const store = createStore(
@@ -20,7 +20,9 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+      <ToastProvider>
+         <App />
+      </ToastProvider>
   </Provider>,
   document.getElementById("root")
 );

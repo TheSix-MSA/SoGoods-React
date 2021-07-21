@@ -1,8 +1,10 @@
 import React, {Fragment} from "react";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import getFormatDate from "../../modules/getFormatDate";
 
-const BlogPostsNoSidebar = ({boardData}) => {
+const BlogPostsNoSidebar = ({boardData, currentPage}) => {
+    const history = useHistory();
+
     return (
         <Fragment>
             {boardData?.map((data, idx) => (
@@ -20,18 +22,18 @@ const BlogPostsNoSidebar = ({boardData}) => {
                                 </ul>
                             </div>
                             <h4>
-                                <Link to={process.env.PUBLIC_URL + "/blog-details-standard"}>
+                                <div onClick={()=>{history.push(`/board/FREE/${data.bno}/${currentPage}`)}}>
                                     {data.title}
-                                </Link>
+                                </div>
                             </h4>
                             <p>
                                 {data.content}
                             </p>
                             <div className="blog-share-comment">
                                 <div className="blog-btn-2">
-                                    <Link to={process.env.PUBLIC_URL + "/blog-details-standard"}>
+                                    <div onClick={()=>{history.push(`/board/FREE/${data.bno}/${currentPage}`)}}>
                                         더보기
-                                    </Link>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -1,43 +1,33 @@
 import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import fundingService from "./fundingService";
-
-const initState = {
-    products:[]
-}
+import getLeftDate from "../../modules/dateCalc";
+//
 const BlogSidebar = (funding) => {
-
-    const [cartList, setCartList] = useState(initState);
-    const [cnt, setCnt] = useState(0)
-
-    // funding.productDTOs.map(product=> {
-    //     product.cnt = cnt;
-    //     setCnt(product.cnt);
-    // })
+    const [cartList, setCartList] = useState(funding.productDTOs?.map(item=>{
+        return {...item,count:0}}));
 
     const dueDate = funding.fundingDTO.dueDate;
-    console.log(dueDate);
-    // const strArr = dueDate.split("-", 2);
-    // strArr.map((i)=> console.log(i));
-
+    console.log(getLeftDate(dueDate),"일 남음"); // 남은 일 계산
 
     // 배열에 추가
     const addCart = (product) => {
-        cartList.products.push(product);
-        setCartList({...cartList});
-        console.log(cartList);
+        setCartList(cartList.map(p=>{
+            if(p.pno === product.pno) return {...p,count:(p.count||0)+1}
+            return p;
+        }));
     }
 
     // 배열에서 삭제
     const deleteCart = (p) => {
-        const target = cartList.products.indexOf(p, 1);
-        cartList.products.splice(target, 1);
-        console.log(cartList)
-        setCartList({...cartList});
+        setCartList(cartList.map((item)=>{
+            if(item.count <= 0) return {...item,count:0}
+            if(item.pno === p.pno) return {...item,count:item.count-1}
+            return item;
+        }))
     }
 
-
-    const productList = funding.productDTOs.map((p, idx)=>
+    const productList = cartList.map((p, idx)=>
             <div className="single-sidebar-blog" key={idx}>
                 <h5>{idx+1}번 리워드 </h5>
                  <div className="sidebar-blog-img">
@@ -55,7 +45,7 @@ const BlogSidebar = (funding) => {
                         <h6>{p.des}</h6>
                         <div>
                             <button onClick={()=> deleteCart(p)}> - </button>
-                            <div>{p.cnt}</div>
+                            <div>{p.count}개</div>
                             <button onClick={()=> addCart(p)}> + </button>
                         </div>
                     </div>

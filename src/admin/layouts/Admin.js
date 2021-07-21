@@ -1,12 +1,8 @@
 import React, { Component, Fragment } from "react";
 import { useLocation, Route, Switch } from "react-router-dom";
-import TableList from "../views/TableList";
 import Sidebar from "../components/Sidebar/Sidebar";
 import AdminNavbar from "../components/Navbars/AdminNavbar";
 import FooterOne from "../../wrappers/footer/FooterOne";
-import PropTypes from "prop-types";
-import LayoutOne from "../../layouts/LayoutOne";
-
 // import AdminNavbar from "components/Navbars/AdminNavbar";
 // import Footer from "components/Footer/Footer";
 

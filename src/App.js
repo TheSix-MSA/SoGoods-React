@@ -101,7 +101,7 @@ const Checkout = lazy(() => import("./pages/other/Checkout"));
 
 const NotFound = lazy(() => import("./pages/other/NotFound"));
 
-const TableList = lazy(() => import("./admin/views/TableList"));
+const TableList = lazy(() => import("./admin/views/MemberTable"));
 const Admin = lazy(() => import("./admin/layouts/Admin"));
 const DashBoard = lazy(() => import("./admin/views/Dashboard"));
 
@@ -393,14 +393,6 @@ const App = (props) => {
                   path={process.env.PUBLIC_URL + "/not-found"}
                   component={NotFound}
                 />
-                {/*<Route*/}
-                {/*    path={process.env.PUBLIC_URL + "/admin/list"}*/}
-                {/*    component={TableList}*/}
-                {/*/>*/}
-                {/*<Route*/}
-                {/*    path={process.env.PUBLIC_URL + "/admin/DashBoard"}*/}
-                {/*    component={DashBoard}*/}
-                {/*/>*/}
                 <Route
                     path={process.env.PUBLIC_URL + "/admin"}
                     component={Admin}

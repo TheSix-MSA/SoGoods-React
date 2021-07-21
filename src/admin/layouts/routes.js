@@ -1,6 +1,8 @@
 import Dashboard from "../views/Dashboard.js";
 // import UserProfile from "views/UserProfile.js";
-import TableList from "../views/TableList";
+import MemberTable from "../views/MemberTable";
+import FundingList from "../views/FundingTable";
+import FundingTable from "../views/FundingTable";
 // import Typography from "views/Typography.js";
 // import Icons from "views/Icons.js";
 // import Maps from "views/Maps.js";
@@ -31,19 +33,19 @@ const dashboardRoutes = [
   //   layout: "/admin",
   // },
   {
-    path: "/table",
-    name: "Table List",
+    path: "/member",
+    name: "Member List",
     icon: "nc-icon nc-notes",
-    component: TableList,
+    component: MemberTable,
     layout: "/admin",
-  }
-  // {
-  //   path: "/typography",
-  //   name: "Typography",
-  //   icon: "nc-icon nc-paper-2",
-  //   component: Typography,
-  //   layout: "/admin",
-  // },
+  },
+  {
+    path: "/funding",
+    name: "Funding List",
+    icon: "nc-icon nc-paper-2",
+    component: FundingTable,
+    layout: "/admin",
+  },
   // {
   //   path: "/icons",
   //   name: "Icons",

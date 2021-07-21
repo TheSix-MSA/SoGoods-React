@@ -8,11 +8,12 @@ import { connect } from "react-redux";
 import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
 import instance from "./modules/axiosConfig";
 import {useToasts} from "react-toast-notifications";
+import ProductInputList from "./pages/attach-dragNdrop/ProductInputList";
 
 //the six
 const FundingBoard = lazy(()=>import("./components/funding/FundingBoard"));
+const ProductInput = lazy(()=>import("./pages/attach-dragNdrop-2/ProductInputList"));
 
-const Board = lazy(()=>import("./pages/attach-dragNdrop/Board"))
 
 // home pages
 const HomeFashion = lazy(() => import("./pages/home/HomeFashion"));
@@ -172,9 +173,10 @@ const App = (props) => {
 
                 <Route
                     exact
-                    path={process.env.PUBLIC_URL + "/drag"}
-                    component={Board}
+                    path={process.env.PUBLIC_URL + "/product/input"}
+                    component={ProductInput}
                 />
+
                 <Route
                   exact
                   path={process.env.PUBLIC_URL + "/"}

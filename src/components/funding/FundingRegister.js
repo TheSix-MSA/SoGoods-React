@@ -4,6 +4,7 @@ import LayoutOne from "../../layouts/LayoutOne";
 import Nav from "react-bootstrap/Nav";
 import fundingService from "./fundingService";
 import useInputs from "../../customHooks/useInputs";
+import getFormatDate from "../../modules/getFormatDate";
 
 
 const initState = {
@@ -11,19 +12,20 @@ const initState = {
     content:'',
     writer:'',
     email:'',
-    dueDate:null,
+    dueDate:"",
     targetAmount:0,
     productDTOs:[]
 }
 
 const FundingRegister = () => {
 
-    const [form, changeForm] = useInputs(initState);
+    const [form, changeForm, setForm] = useInputs({...initState});
 
     const sendFormData = async () => {
         console.log(form);
         const result = await fundingService.registerFunding({...form});
         console.log(result)
+        setForm({...initState})
     }
 
     return (
@@ -45,58 +47,67 @@ const FundingRegister = () => {
                                                         </Nav.Link>
                                                     </Nav.Item>
                                                     </Nav>
-                                                    <form>
                                                         <input
                                                             type="title"
-                                                            name="funding-title"
+                                                            name="title"
+                                                            value={form.title}
                                                             placeholder="제목"
                                                             onChange={changeForm}
                                                         />
                                                         <input
                                                             type="hidden"
                                                             name="writer"
+                                                            value={form.writer}
                                                             placeholder="작성자"
                                                             onChange={changeForm}
                                                         />
                                                         <input
                                                             type="hidden"
                                                             name="email"
+                                                            value={form.email}
                                                             placeholder="이메일"
                                                             onChange={changeForm}
                                                         />
-                                                        {/*<input*/}
-                                                        {/*    type="text"*/}
-                                                        {/*    name="content"*/}
-                                                        {/*    placeholder="내용을 입력하세요."*/}
-                                                        {/*    onChange={changeForm}/>*/}
                                                         <textarea
                                                             type="text"
                                                             name="content"
+                                                            value={form.content}
                                                             placeholder="내용을 입력하세요."
                                                             onChange={changeForm}
                                                         />
-
+                                                        메인 이미지
+                                                        <input
+                                                            type="file"
+                                                            name="mainImage"
+                                                            onChange={changeForm}
+                                                        />
                                                         <button>상품등록</button>
                                                         <div style={{display:"flex"}}>
                                                         <input
                                                             name="dueDate"
                                                             placeholder="date"
+                                                            value={form.dueDate}
                                                             type="date"
                                                             onChange={changeForm}
+                                                            min={getFormatDate(new Date())}
                                                         />
                                                         <input
                                                             name="targetAmount"
+                                                            value={form.targetAmount}
                                                             placeholder="목표금액"
                                                             type="text"
                                                             onChange={changeForm}
+                                                            onInput={({ target }) => {
+                                                                          target.value = target.value.replace(/[^0-9]/g, "");
+                                                                          target.value = target.value.replace(/,/g, "");
+                                                                        }}
                                                         />
                                                         </div>
                                                         <div className="button-box">
-                                                            <button type="submit" onClick={()=>sendFormData}>
+                                                            <button type="button" onClick={()=>sendFormData()}>
                                                                 <span>펀딩 등록하기</span>
                                                             </button>
                                                         </div>
-                                                    </form>
                                                 </div>
                                             </div>
                                         </Tab.Pane>

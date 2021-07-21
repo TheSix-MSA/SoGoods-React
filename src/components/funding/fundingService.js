@@ -10,10 +10,10 @@ const headerObj = {
 const fundingService = () => {
 
     // 펀딩 리스트 얻어오기
-    const getList = async (page) => {
+    const getList = async (page, keyword="", type="") => {
         console.log(page)
         const list = await instance({
-            url: `/funding/list?page=${page}`,
+            url: `/funding/list?page=${page}&keyword=${keyword}&type=${type}`,
             method: 'get'
         });
        return list.data
@@ -21,12 +21,11 @@ const fundingService = () => {
 
     // 펀딩 등록처리 하기
     const registerFunding = async (form) => {
-        console.log(form)
-        const jsonData = JSON.stringify(form);
+
         const result = await instance({
-            url : `/funding`,
+            url : `/funding/`,
             method: 'post',
-            data : jsonData
+            data : form
         });
         return result.data
     }
@@ -34,7 +33,7 @@ const fundingService = () => {
     // 펀딩 게시글 한개만 가져오기
     const getOneFunding = async (fno) => {
         const result = await instance({
-            url:`/funding/`+ fno,
+            url:`/funding/`+ fno +`/`,
             method:'get'
         })
         return result.data

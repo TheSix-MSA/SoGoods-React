@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
-import { getProducts } from "../../helpers/product";
 import ProductGridSingle from "../../components/product/ProductGridSingle";
 
 const ProductGrid = ({
@@ -32,12 +31,12 @@ const ProductGrid = ({
               cartItems.filter(cartItem => cartItem.id === product.id)[0]
             }
             wishlistItem={
-              wishlistItems.filter(
+              wishlistItems?.filter(
                 wishlistItem => wishlistItem.id === product.id
               )[0]
             }
             compareItem={
-              compareItems.filter(
+              compareItems?.filter(
                 compareItem => compareItem.id === product.id
               )[0]
             }

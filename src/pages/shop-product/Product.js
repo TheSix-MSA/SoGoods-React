@@ -41,13 +41,13 @@ const Product = ({ location, product }) => {
         {/* product description tab */}
         <ProductDescriptionTab
           spaceBottomClass="pb-90"
-          productFullDesc={product.fullDescription}
+          productFullDesc={"product.fullDescription"}
         />
 
         {/* related product slider */}
         <RelatedProductSlider
           spaceBottomClass="pb-95"
-          category={product.category[0]}
+          category={"굳"}
         />
       </LayoutOne>
     </Fragment>
@@ -59,13 +59,4 @@ Product.propTypes = {
   product: PropTypes.object
 };
 
-const mapStateToProps = (state, ownProps) => {
-  const itemId = ownProps.match.params.id;
-  return {
-    product: state.productData.products.filter(
-      single => single.id === itemId
-    )[0]
-  };
-};
-
-export default connect(mapStateToProps)(Product);
+export default connect()(Product);

@@ -347,10 +347,15 @@
       margin-top: 20px;
     }
     flex-direction: column;
+
     .text-leave {
       border: 1px solid #eaeaea;
 
+      .DatGeulInput{
+        resize: none;
+      }
     }
+
     .col-md-2 {
       input {
         font-weight: 500;
@@ -370,24 +375,27 @@
   }
 
   /**
-  대댓글 작성 인풋용 css. 이게 필요한가? 굳이 이렇게 안하고 하는 방법은 없을까..?
-   */
+    대댓글 작성 인풋용 css. 이게 필요한가? 굳이 이렇게 안하고 하는 방법은 없을까..?
+     */
   .reReply-blog-form {
     @media #{$xs-layout} {
       margin-top: 20px;
     }
     flex-direction: column;
+
     .text-leave {
       border: 1px solid #eaeaea;
       height: 100%;
-      input {
-        height: 100%;
+
+      .DatGeulInput{
+        resize: none;
       }
     }
+
     .col-md-2 {
       input:nth-child(1) {
         font-weight: 500;
-        height:48%;
+        height: 48%;
 
         margin-bottom: 5px;
 
@@ -397,13 +405,15 @@
         color: #fff;
         border: none;
         background-color: $theme-color;
+
         &:hover {
           background-color: #333;
         }
       }
+
       input:nth-child(2) {
         font-weight: 500;
-        height:48%;
+        height: 48%;
 
         margin-bottom: 5px;
 
@@ -413,14 +423,91 @@
         color: #fff;
         border: none;
         background-color: #af163b;
+
         &:hover {
           background-color: #333;
         }
       }
     }
   }
-
 }
+
+/**
+댓글 수정 인풋용 css
+ */
+.blog-reply-wrapper-modify {
+  @media #{$xs-layout} {
+    &.mt-50 {
+      margin-top: 30px;
+    }
+  }
+
+  .blog-dec-title {
+    font-size: 20px;
+    font-weight: 600;
+
+    margin: 0;
+
+    text-transform: uppercase;
+    @media #{$xs-layout} {
+      font-size: 18px;
+    }
+  }
+
+  .reply-blog-form-modify {
+    @media #{$xs-layout} {
+      margin-top: 20px;
+    }
+    flex-direction: column;
+
+    .text-leave {
+      border: 1px solid #eaeaea;
+
+      .DatGeulInput{
+        resize: none;
+      }
+    }
+
+    .col-md-2 {
+      input:nth-child(1) {
+        font-weight: 500;
+        height: 48%;
+
+        margin-bottom: 5px;
+
+        cursor: pointer;
+        letter-spacing: 1px;
+
+        color: #fff;
+        border: none;
+        background-color: $theme-color;
+
+        &:hover {
+          background-color: #333;
+        }
+      }
+
+      input:nth-child(2) {
+        font-weight: 500;
+        height: 48%;
+
+        margin-bottom: 5px;
+
+        cursor: pointer;
+        letter-spacing: 1px;
+
+        color: #fff;
+        border: none;
+        background-color: #af163b;
+
+        &:hover {
+          background-color: #333;
+        }
+      }
+    }
+  }
+}
+
 
 .nav-style-4.owl-carousel:hover .owl-nav div {
   visibility: visible;

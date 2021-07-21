@@ -3,7 +3,6 @@ import React from "react";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import SectionTitle from "../../components/section-title/SectionTitle";
-import ProductGrid from "./ProductGrid";
 
 const TabProductTen = ({
   spaceTopClass,
@@ -47,32 +46,17 @@ const TabProductTen = ({
           <Tab.Content>
             <Tab.Pane eventKey="newArrival">
               <div className="row">
-                <ProductGrid
-                  category={category}
-                  type="new"
-                  limit={8}
-                  spaceBottomClass="mb-25"
-                />
+
               </div>
             </Tab.Pane>
             <Tab.Pane eventKey="bestSeller">
               <div className="row">
-                <ProductGrid
-                  category={category}
-                  type="bestSeller"
-                  limit={8}
-                  spaceBottomClass="mb-25"
-                />
+
               </div>
             </Tab.Pane>
             <Tab.Pane eventKey="saleItems">
               <div className="row">
-                <ProductGrid
-                  category={category}
-                  type="saleItems"
-                  limit={8}
-                  spaceBottomClass="mb-25"
-                />
+
               </div>
             </Tab.Pane>
           </Tab.Content>

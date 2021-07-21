@@ -1,22 +1,44 @@
 import React from 'react';
+import useInputs from "../../customHooks/useInputs";
+import repliesService from "../../service/repliesService";
 
-const ReplyModify = () => {
+const ReplyModify = ({dto, page}) => {
+    const [reply, changeReply, setReply] = useInputs({
+        email: dto.email,
+        content: dto.content,
+        rno: dto.rno
+    });
+
+    const send = () => {
+        repliesService.updateReply(reply, page).then();
+        repliesService.getRemoveModifyInput();
+        setReply({...reply, content:""})
+        /***
+         * 수정 후 textarea에 있는 값 + reply.content의 값을 ""로 바꿔줘야한다.
+         */
+    }
+
+    const turnOff = () => {
+        /**
+         * 수정버튼은 눌렀으나 취소하면 발동하는 함수
+         */
+        repliesService.getRemoveModifyInput();
+    }
+
     return (
-        <div>
-            <div className="blog-reply-wrapper mt-50">
-                <h4 className="blog-dec-title">post a comment</h4>
-                <div className="reReply-blog-form">
-                    <div className="row">
-                        <div className="col-md-10">
-                            <div className="text-leave">
-                                <input type="textarea" name="content" placeholder="Message"
-                                       onChange={changeReReply} value={reReply.content}/>
-                            </div>
+        <div className="blog-reply-wrapper-modify">
+            <h4 className="blog-dec-title">edit your comment</h4>
+            <div className="reply-blog-form-modify">
+                <div className="row">
+                    <div className="col-md-10">
+                        <div className="text-leave">
+                            <textarea className="DatGeulInput" name="content" placeholder="Message" maxLength={2000}
+                                   onChange={changeReply} value={reply.content}/>
                         </div>
-                        <div className="col-md-2">
-                            <input type="submit" onClick={() => send()}/>
-                            <input type="submit" value="Cancel" onClick={()=> turnOff()}/>
-                        </div>
+                    </div>
+                    <div className="col-md-2">
+                        <input type="submit" onClick={() => send()}/>
+                        <input type="submit" value="Cancel" onClick={()=> turnOff()}/>
                     </div>
                 </div>
             </div>

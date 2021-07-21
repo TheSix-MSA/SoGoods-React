@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
-import { getProducts } from "../../helpers/product";
 import ProductGridSingleFour from "../../components/product/ProductGridSingleFour";
 
 const ProductGridFour = ({
@@ -18,7 +17,7 @@ const ProductGridFour = ({
 }) => {
   return (
     <Fragment>
-      {products.map(product => {
+      {products?.map(product => {
         return (
           <ProductGridSingleFour
             sliderClassName={sliderClassName}
@@ -32,12 +31,12 @@ const ProductGridFour = ({
               cartItems.filter(cartItem => cartItem.id === product.id)[0]
             }
             wishlistItem={
-              wishlistItems.filter(
+              wishlistItems?.filter(
                 wishlistItem => wishlistItem.id === product.id
               )[0]
             }
             compareItem={
-              compareItems.filter(
+              compareItems?.filter(
                 compareItem => compareItem.id === product.id
               )[0]
             }

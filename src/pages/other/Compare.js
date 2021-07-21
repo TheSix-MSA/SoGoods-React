@@ -5,7 +5,6 @@ import { useToasts } from "react-toast-notifications";
 import MetaTags from "react-meta-tags";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import { connect } from "react-redux";
-import { getDiscountPrice } from "../../helpers/product";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import Rating from "../../components/product/sub-components/ProductRating";
@@ -148,10 +147,7 @@ const Compare = ({
                           <tr>
                             <th className="title-column">Price</th>
                             {compareItems.map((compareItem, key) => {
-                              const discountedPrice = getDiscountPrice(
-                                compareItem.price,
-                                compareItem.discount
-                              );
+                              const discountedPrice =0;
                               const finalProductPrice = (
                                 compareItem.price * currency.currencyRate
                               ).toFixed(2);

@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import React, { Fragment } from "react";
 import ShopTopFilter from "./ShopTopFilter";
-import { toggleShopTopFilter } from "../../helpers/product";
 
 const ShopTopActionFilter = ({
   getFilterSortParams,
@@ -29,7 +28,7 @@ const ShopTopActionFilter = ({
         </div>
 
         <div className="filter-active">
-          <button onClick={e => toggleShopTopFilter(e)}>
+          <button>
             <i className="fa fa-plus"></i> filter
           </button>
         </div>

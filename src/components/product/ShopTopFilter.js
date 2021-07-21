@@ -1,18 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
-import {
-  getIndividualCategories,
-  getIndividualTags,
-  getIndividualColors,
-  getProductsIndividualSizes,
-  setActiveSort
-} from "../../helpers/product";
 
 const ShopTopFilter = ({ products, getSortParams }) => {
-  const uniqueCategories = getIndividualCategories(products);
-  const uniqueColors = getIndividualColors(products);
-  const uniqueSizes = getProductsIndividualSizes(products);
-  const uniqueTags = getIndividualTags(products);
 
   return (
     <div className="product-filter-wrapper" id="product-filter-wrapper">
@@ -22,15 +11,14 @@ const ShopTopFilter = ({ products, getSortParams }) => {
           <div className="col-md-3 col-sm-6 col-xs-12 mb-30">
             <div className="product-filter">
               <h5>Categories</h5>
-              {uniqueCategories ? (
+              {null ? (
                 <ul>
-                  {uniqueCategories.map((category, key) => {
+                  {[1,2,3,4].map((category, key) => {
                     return (
                       <li key={key}>
                         <button
                           onClick={e => {
                             getSortParams("category", category);
-                            setActiveSort(e);
                           }}
                         >
                           {category}
@@ -49,15 +37,14 @@ const ShopTopFilter = ({ products, getSortParams }) => {
           <div className="col-md-3 col-sm-6 col-xs-12 mb-30">
             <div className="product-filter">
               <h5>Color</h5>
-              {uniqueColors ? (
+              {null ? (
                 <ul>
-                  {uniqueColors.map((color, key) => {
+                  {[1,2,3,4].map((color, key) => {
                     return (
                       <li key={key}>
                         <button
                           onClick={e => {
                             getSortParams("color", color);
-                            setActiveSort(e);
                           }}
                         >
                           {color}
@@ -75,16 +62,15 @@ const ShopTopFilter = ({ products, getSortParams }) => {
           <div className="col-md-3 col-sm-6 col-xs-12 mb-30">
             <div className="product-filter">
               <h5>Size</h5>
-              {uniqueSizes ? (
+              {null ? (
                 <ul>
-                  {uniqueSizes.map((size, key) => {
+                  {[1,2,3,4,5].map((size, key) => {
                     return (
                       <li key={key}>
                         <button
                           className="text-uppercase"
                           onClick={e => {
                             getSortParams("size", size);
-                            setActiveSort(e);
                           }}
                         >
                           {size}
@@ -102,15 +88,14 @@ const ShopTopFilter = ({ products, getSortParams }) => {
           <div className="col-md-3 col-sm-6 col-xs-12 mb-30">
             <div className="product-filter product-filter--tag">
               <h5>Tag</h5>
-              {uniqueTags ? (
+              {null ? (
                 <ul>
-                  {uniqueTags.map((tag, key) => {
+                  {[1,2,3,4,5].map((tag, key) => {
                     return (
                       <li key={key}>
                         <button
                           onClick={e => {
                             getSortParams("tag", tag);
-                            setActiveSort(e);
                           }}
                         >
                           {tag}

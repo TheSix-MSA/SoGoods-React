@@ -1,14 +1,28 @@
 import React from 'react';
 import useInputs from "../../customHooks/useInputs";
-import {useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import LayoutOne from "../../layouts/LayoutOne";
 import Tab from "react-bootstrap/Tab";
+import {registerBoard} from "../../board/boardAsyncService";
+import {useHistory} from "react-router-dom";
+
+const initState = {
+    title:'',
+    writer:'',
+    email:'',
+    content:''
+}
 
 const BoardRegister = () => {
-    const boardForm = useSelector(state => state.board.initialState)
-    const [board, setBoard, onChange] = useInputs(boardForm);
-    console.log(boardForm)
+    const [board, onChange] = useInputs(initState);
+    const history = useHistory()
+    const dispatch = useDispatch()
+    const registe = () => {
+        dispatch(registerBoard(board));
+        history.push('/')
+    }
+
     return (
         <>
             <LayoutOne headerTop="visible">
@@ -27,26 +41,34 @@ const BoardRegister = () => {
                                                         <div className="login-register-form">
                                                             <form>
                                                                 <input
-                                                                    type="text"
-                                                                    name="title"
+                                                                    type={"text"}
+                                                                    name={"title"}
                                                                     placeholder="Title"
+                                                                    value={board.title}
                                                                     onChange={onChange}
                                                                 />
                                                                 <input
-                                                                    type="text"
-                                                                    name="writer"
+                                                                    type={"text"}
+                                                                    name={"writer"}
                                                                     placeholder="Writer"
+                                                                    value={board.writer}
+                                                                    onChange={onChange}
+                                                                />
+                                                                <input
+                                                                    type={"text"}
+                                                                    name={"email"}
+                                                                    placeholder="Email"
+                                                                    value={board.email}
                                                                     onChange={onChange}
                                                                 />
                                                                 <textarea
-                                                                    name="content"
+                                                                    name={"content"}
                                                                     placeholder="Content"
+                                                                    value={board.content}
                                                                     onChange={onChange}
                                                                 />
-                                                                <div className="button-box">
-                                                                    <button>
-                                                                        Submit
-                                                                    </button>
+                                                                <div className="col-md-2">
+                                                                    <input type="submit" onClick={()=>{registe()}}/>
                                                                 </div>
                                                             </form>
                                                         </div>

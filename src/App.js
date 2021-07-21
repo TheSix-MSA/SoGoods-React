@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
 import instance from "./modules/axiosConfig";
 import BoardRegister from "./pages/blog/BoardRegister";
+import BoardModify from "./pages/blog/BoardModify";
 
 //the six
 const FundingBoard = lazy(()=>import("./components/funding/FundingBoard"));
@@ -157,11 +158,6 @@ const App = (props) => {
               }
             >
               <Switch>
-                <Route
-                  exact
-                  path={process.env.PUBLIC_URL + "/boardRegister"}
-                  component={BoardRegister}
-                />
                 <Route
                     exact
                     path={process.env.PUBLIC_URL + "/drag"}
@@ -354,10 +350,21 @@ const App = (props) => {
                   path={process.env.PUBLIC_URL + "/blog-right-sidebar"}
                   component={BlogRightSidebar}
                 />
+
                 <Route
-                  path={process.env.PUBLIC_URL + "/blog-details-standard"}
+                    exact
+                    path={process.env.PUBLIC_URL + "/boardRegister"}
+                    component={BoardRegister}
+                /> {/* 재연 - Board 작성 컴포넌트로 사용 */}
+                
+                <Route
+                  path={`/board/FREE/:bno/:currentPage`}
                   component={BlogDetailsStandard}
-                />
+                /> {/* 재연 - Board 상세보기 컴포넌트로 사용 */}
+                <Route
+                  path={`/board/modify/FREE/:bno/:currentPage`}
+                  component={BoardModify}
+                /> {/* 재연 - Board 수정 컴포넌트로 사용 */}
 
                 {/* Other pages */}
                 <Route

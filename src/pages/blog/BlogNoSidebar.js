@@ -8,7 +8,8 @@ import BlogPostsNoSidebar from "../../wrappers/blog/BlogPostsNoSidebar";
 import {useDispatch, useSelector} from "react-redux";
 import {getBoardData} from "../../board/boardAsyncService";
 import {useHistory} from "react-router-dom";
-import {movePage} from "../../board/boardSlice";
+
+
 
 const BlogNoSidebar = () => {
     const {boardDtoList, pageMaker} = useSelector(state => state.board);
@@ -16,7 +17,7 @@ const BlogNoSidebar = () => {
     const history = useHistory()
     useEffect(() => {
         dispatch(getBoardData(pageMaker.page));
-    }, [pageMaker.page])
+    }, [history, boardDtoList.bno, pageMaker.page])
     const boardRegister = () => {
         history.push(`/boardRegister`)
     }
@@ -41,7 +42,7 @@ const BlogNoSidebar = () => {
                                 <div className="mr-20">
                                     <div className="row">
                                         {/* blog posts */}
-                                        <BlogPostsNoSidebar boardData={boardDtoList}/>
+                                        <BlogPostsNoSidebar boardData={boardDtoList} />
                                     </div>
                                     {/* blog pagination */}
                                     {pageMaker && <BlogPagination pageMaker={pageMaker}/>}

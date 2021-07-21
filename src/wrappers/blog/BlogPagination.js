@@ -10,7 +10,7 @@ const BlogPagination = ({pageMaker}) => {
                 {pageMaker.prev &&
                 <li>
                     <button className="prev" onClick={() => {
-                        dispatch(prevPage(pageMaker.page))
+                        dispatch(prevPage(pageMaker.start))
                     }}>
                         <i className="fa fa-angle-double-left"/>
                     </button>
@@ -26,7 +26,7 @@ const BlogPagination = ({pageMaker}) => {
                 {pageMaker.next &&
                 <li>
                     <button className="next" onClick={() => {
-                        dispatch(nextPage(pageMaker.page))
+                        dispatch(nextPage(pageMaker.end))
                     }}>
                         <i className="fa fa-angle-double-right"/>
                     </button>

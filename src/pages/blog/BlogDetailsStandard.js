@@ -7,7 +7,7 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import BlogSidebar from "../../wrappers/blog/BlogSidebar";
 import BlogComment from "../../wrappers/blog/BlogComment";
 import BlogPost from "../../wrappers/blog/BlogPost";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {getOneBoard} from "../../board/boardAsyncService";
 
 const initState = {
@@ -33,7 +33,7 @@ const BlogDetailsStandard = ({location, match}) => {
         dispatch(getOneBoard(bno)).unwrap().then(res => {
             setDetailData({...res})
         })
-    }, [])
+    }, [bno,dispatch])
     const data = detailData.response
     return (
             <Fragment>

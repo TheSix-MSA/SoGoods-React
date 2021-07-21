@@ -1,14 +1,36 @@
 import PropTypes from "prop-types";
-import React, { Fragment } from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import MetaTags from "react-meta-tags";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
+import {useSelector} from "react-redux";
+
+
+const initUserInfo = {
+  email:"",
+  password: "",
+  name: "",
+  gender: "",
+  birth: "",
+  phone: "",
+  address: "",
+};
 
 const MyAccount = ({ location }) => {
   const { pathname } = location;
+  const userSelector = useSelector(state => state.login);
+  const [userInfo, setUserInfo] = useState(initUserInfo);
+
+  useEffect(() => {
+
+
+
+  },[]);
+
+
 
   return (
     <Fragment>
@@ -50,7 +72,7 @@ const MyAccount = ({ location }) => {
                             <div className="row">
                               <div className="col-lg-6 col-md-6">
                                 <div className="billing-info">
-                                  <label>First Name</label>
+                                  <label>Name</label>
                                   <input type="text" />
                                 </div>
                               </div>

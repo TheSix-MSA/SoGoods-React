@@ -6,11 +6,10 @@ import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { Provider } from "react-redux";
 import rootReducer from "./redux/reducers/rootReducer";
-import {ToastProvider} from "react-toast-notifications";
 import App from "./App";
 import "./assets/scss/style.scss";
 import * as serviceWorker from "./serviceWorker";
-
+import { ToastProvider } from "react-toast-notifications";
 import { composeWithDevTools } from "redux-devtools-extension";
 
 const store = createStore(
@@ -21,8 +20,8 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
-      <ToastProvider placement="bottom-left">
-          <App />
+      <ToastProvider>
+         <App />
       </ToastProvider>
   </Provider>,
   document.getElementById("root")

@@ -2,11 +2,12 @@ import PropTypes from "prop-types";
 import React, { useEffect, Suspense, lazy } from "react";
 import ScrollToTop from "./helpers/scroll-top";
 import {BrowserRouter as Router, Switch, Route, BrowserRouter} from "react-router-dom";
-import {useToasts} from "react-toast-notifications";
+
 import { multilanguage, loadLanguages } from "redux-multilanguage";
 import { connect } from "react-redux";
 import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
 import instance from "./modules/axiosConfig";
+import {useToasts} from "react-toast-notifications";
 
 //the six
 const FundingBoard = lazy(()=>import("./components/funding/FundingBoard"));
@@ -107,7 +108,7 @@ const DashBoard = lazy(() => import("./admin/views/Dashboard"));
 
 
 const App = (props) => {
-  const { addToast } = useToasts();
+  const {addToast} = useToasts()
   useEffect(() => {
     props.dispatch(
       loadLanguages({
@@ -127,24 +128,27 @@ const App = (props) => {
           return config;
         },
         function (error) {
-          console.log(111,error);
-          console.log(222,error.response);
           return Promise.reject(error);
         }
     );
     instance.interceptors.response.use(
         (config) => {
+          if(!config.data.success){
+            console.log(config.data.error.message);
+            addToast(
+                config.data.error.message, {appearance: 'error',autoDismiss: true, id:"errorToast"}
+            );
+            return Promise.reject(config.data.error.message);
+          }
+          console.log(123,config.data);
           return config;
         },
         (error) => {
-          // addToast(content, {
-          //   appearance: 'error',
-          //   autoDismiss: true,
-          // })
-          console.log(111,error);
-          console.log(222,error.response);
-
-          return Promise.reject(error);
+          addToast(
+              error.response.data.error.message, {appearance: 'error', autoDismiss: true},
+          );
+          console.log(error.response.data.error.message);
+          return Promise.reject(error.response.data.error.message);
         }
     );
   }, []);

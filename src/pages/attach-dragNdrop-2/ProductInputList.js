@@ -20,20 +20,12 @@ const ProductInputList = () => {
     const [open, setOpen] = useState(false);
     productService.setOpenFn(setOpen)
 
-    const handleClickOpen = (e) => {
-        setOpen(true);
-    };
-
-    const handleAutoClose = () => {
-        setOpen(false);
-    };
-
     const list = productService.getProductList().map((product, i)=>{
         console.log(product)
         return (
             <>
                 <li key={i}>
-                    <p>{product.text.title} : {product.text.content}</p>
+                    <p onClick={()=>{productService.openDialogForEdit(i)}}>{product.text.title} : {product.text.content}</p>
                     <div>{product.pictures.map((picture ,j)=>
                         <img key={j} src={picture.preview} style={imgStyle}/>)}
                     </div>
@@ -51,7 +43,7 @@ const ProductInputList = () => {
 
 
             <div style={{display: 'block'}}>
-                <Button style={btn} variant="outlined" color="primary" onClick={handleClickOpen}>
+                <Button style={btn} variant="outlined" color="primary" onClick={productService.openDialog}>
                     상품 등록
                 </Button>
             </div>
@@ -59,7 +51,7 @@ const ProductInputList = () => {
             </ol>
             <Dialog
                 open={open}
-                onClose={handleAutoClose}
+                onClose={productService.closeDialog}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
                 maxWidth='lg'>

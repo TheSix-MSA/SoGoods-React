@@ -50,7 +50,7 @@ const FundingRequestTable = () => {
 
 
     const list = funding.map(fund => {
-        return (fund.removed === false?<tr key={fund.fno}>
+        return <tr key={fund.fno}>
                 <td>{fund.title}</td>
                 <td>{fund.writer}</td>
                 <td>{fund.email}</td>
@@ -63,8 +63,7 @@ const FundingRequestTable = () => {
                 <td onClick={() => setAuthorized(fund)}
                     style={{textAlign: "center"}}>{fund.authorized ? "" : "✔"}</td>
                 <td style={{textAlign: "center"}}>{fund.authorized ? "" : "❌"}</td>
-            </tr>: null
-        )
+            </tr>
     })
 
     return (

@@ -88,7 +88,7 @@ const MemberTable = () => {
     }
 
     const changeRole = (member) => {
-        if (member.roleSet[2] || member.roleSet[1] !== "ADMIN") {
+        if (member.roleSet[2] || member.roleSet[1] || member.roleSet[0] !== "ADMIN") {
             memberService.changeRole(member.email)
                 .then();
         }
@@ -113,7 +113,7 @@ const MemberTable = () => {
             <td>{member.gender}</td>
             <td onClick={() => changeBanned(member)} style={{textAlign: "center"}}>{member.banned ? "🟢" : "🔴"}</td>
             <td>{member.removed ? "삭제" : "정상"}</td>
-            <td onClick={() => changeRole(member)}>{member.roleSet[0]} </td>
+            <td onClick={() => changeRole(member)}>{member.roleSet[member.roleSet.length-1]} </td>
             <td>{member.regDate}</td>
         </tr>
     })

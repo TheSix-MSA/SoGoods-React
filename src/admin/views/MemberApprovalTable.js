@@ -100,7 +100,7 @@ const MemberApprovalTable = () => {
 
     const list = members.memberList.map(member => {
 
-        return (member.roleSet[0]==="GENERAL"?
+        return (member.roleSet[member.roleSet.length-1]==="GENERAL"?
             <tr key={member.email}>
                 <td>{member.email}</td>
                 <td>{member.name}</td>

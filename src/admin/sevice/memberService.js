@@ -29,8 +29,8 @@ const memberService = () => {
             method: 'post'
         });
         console.log(res)
-        setRole(res.data.response.roleSet[0])
-        console.log(res.data.response.roleSet[0])
+        setRole(res.data.response.roleSet[res.data.response.roleSet.length-1])
+        console.log(321312312421214,res.data.response)
 
         return res;
     }

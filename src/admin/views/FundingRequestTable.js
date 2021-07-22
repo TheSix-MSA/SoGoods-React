@@ -92,10 +92,13 @@ const FundingRequestTable = () => {
             <td>{fund.fundingDTO.dueDate}</td>
             <td>{fund.fundingDTO.regDate}</td>
             <td onClick={() => setAuthorized(fund)}
-                style={{textAlign: "center"}}>{fund.fundingDTO.authorized ? "🟢" : "🔴"}</td>
+                style={{textAlign: "center"}}>{fund.fundingDTO.authorized ? "🟢" : "✨"}</td>
         </tr>:null
         )
     })
+    console.log(77777777777777,list)
+    console.log(888888888888888,funding.dtoList)
+    // console.log(9999999999,funding.dtoList.fundingDTO.authorized)
 
     return (
         <Row>

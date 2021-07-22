@@ -129,7 +129,9 @@ const App = (props) => {
   });
 
   useEffect(() => {
-    const userData = localStorage.getItem("userData");
+    console.log("asdasdasd")
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    console.log(userData);
     if(!email && userData) {
       dispatch(loggedInUser(userData));
     }

@@ -70,8 +70,6 @@ const LoginRegister = ({ location }) => {
 
     };
 
-    axios.get("/ttb/api/ItemSearch.aspx?ttbkey=ttbdiqksk2110002&Query=aladdin&QueryType=Title&MaxResults=10&start=1&SearchTarget=Book&output=js&Version=20131101").then(value => console.log(value));
-
     /**
      * 회원가입버튼 클릭시 동작,
      * 세부기능 : 패스워드일치여부확인 , 인증여부확인, 항목입력값 존재여부 확인, 회원정보를 수집해 db에 저장.

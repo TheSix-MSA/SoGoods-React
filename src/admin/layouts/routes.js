@@ -56,7 +56,7 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
-    path: "/fundingrequest",
+    path: "/request",
     name: "Funding Request",
     icon: "nc-icon nc-pin-3",
     component: FundingRequestTable,

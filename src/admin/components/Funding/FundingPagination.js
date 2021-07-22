@@ -1,16 +1,15 @@
 import React from "react";
 
-const FundingPagination =({fundings},{movePage})=>{
+const FundingPagination =({funding},{movePage})=>{
     return(
         <div style={{textAlign: "center"}}>
-            {/*{fundings.pageMaker.page !== 1 ?*/}
-            {/*    <span onClick={() => prevPage()}>Prev</span> : false}*/}
-            {fundings.pageMaker.pageList.map(page => page === fundings.pageMaker.page ?
+            {funding.pageMaker.prev === false ? null :
+                <span onClick={() => movePage(funding.pageMaker.startPage-1)}>Prev</span>}
+            {funding.pageMaker.pageList.map(page => page === funding.pageMaker.page ?
                 <span key={page}><b>{page}</b></span> :
                 <span key={page} onClick={() => movePage(page)}>{page}</span>)}
-            {/*{members.pageMaker.next === false ? null :*/}
-            {/*    members.memberList.length === members.pageMaker.size ?*/}
-            {/*        <span onClick={() => nextPage()}>Next</span> : false}*/}
+            {funding.pageMaker.next === false ? null :
+                    <span onClick={() => movePage(funding.pageMaker.endPage+1)}>Next</span>}
         </div>
     )
 }

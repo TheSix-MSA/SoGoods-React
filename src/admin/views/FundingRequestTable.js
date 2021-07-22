@@ -10,95 +10,62 @@ import {
 import fundingService from "../sevice/fundingService";
 // import FundingPagination from "../components/Funding/FundingPagination";
 
-const initState = {
-    dtoList: [
+const initState =
+  [
         {
-            fundingDTO:
-                {
-                    fno: 1,
-                    title: "",
-                    writer: "",
-                    email: "",
-                    content: "",
-                    regDate: "",
-                    dueDate: "",
-                    success: false,
-                    removed: false,
-                    totalAmount: 0,
-                    targetAmount: 1,
-                    authorized: false
-                },
-            mainProductPno: 1,
-            favoriteCnt: 1
+            fno: 1,
+            title: "",
+            writer: "",
+            email: "",
+            content: "",
+            regDate: "",
+            dueDate: "",
+            success: false,
+            removed: false,
+            totalAmount: 0,
+            targetAmount: 1,
+            authorized: false
         },
-    ],
-    pageMaker: {
-        page: 1,
-        size: 10,
-        totalCount: 0,
-        keyword: "",
-        type: "",
-        pageList: [],
-        prev: false,
-        next: false
-    },
-    listRequestDTO: {
-        page: 1,
-        size: 10,
-        keyword: "",
-        type: ""
-    }
-}
+  ]
+
 const FundingRequestTable = () => {
 
     const [funding, setFunding] = useState(initState);
     const [flag, setFlag] = useState(false);
-
     useEffect(() => {
-        fundingService.getFundingList(funding.pageMaker.page)
+        fundingService.requestFundingList(funding)
             .then(res => {
                 setFunding(res.data.response);
-                console.log("dtoList 부터", res.data.response.dtoList)
-                console.log("fundingDTO 부터", res.data.response.dtoList.fundingDTO)
+                console.log(res.data.response)
             });
-    }, [funding.pageMaker.page,flag])
+    }, [flag])
 
 
     const setAuthorized = (fund) => {
-        fundingService.setAuthorized(fund.fundingDTO.fno)
+        fundingService.setAuthorized(fund.fno)
             .then()
-            .catch();
-        console.log("funding.fno",fund.fundingDTO.fno)
+        console.log("funding.fno", fund.fno)
+        setFlag(!flag)
     }
 
-    const movePage = (num) => {
 
-        funding.pageMaker.page = num;
-        setFunding({...funding});
-        setFlag(!flag);
-    }
-
-    fundingService.setMovePage(movePage);
-
-    const list = funding.dtoList.map(fund => {
-        return(fund.fundingDTO.authorized===false? <tr key={fund.fundingDTO.fno}>
-            <td>{fund.fundingDTO.title}</td>
-            <td>{fund.fundingDTO.writer}</td>
-            <td>{fund.fundingDTO.email}</td>
-            <td>{fund.fundingDTO.content}</td>
-            <td>{fund.fundingDTO.targetAmount}</td>
-            <td>{fund.fundingDTO.totalAmount}</td>
-            <td>{fund.fundingDTO.targetAmount/fund.fundingDTO.totalAmount}%달성</td>
-            <td>{fund.fundingDTO.dueDate}</td>
-            <td>{fund.fundingDTO.regDate}</td>
-            <td onClick={() => setAuthorized(fund)}
-                style={{textAlign: "center"}}>{fund.fundingDTO.authorized ? "🟢" : "✨"}</td>
-        </tr>:null
+    const list = funding.map(fund => {
+        return (fund.removed === false?<tr key={fund.fno}>
+                <td>{fund.title}</td>
+                <td>{fund.writer}</td>
+                <td>{fund.email}</td>
+                <td>{fund.content}</td>
+                <td>{fund.targetAmount}</td>
+                <td>{fund.totalAmount}</td>
+                <td>{fund.targetAmount / fund.totalAmount}%달성</td>
+                <td>{fund.dueDate}</td>
+                <td>{fund.regDate}</td>
+                <td onClick={() => setAuthorized(fund)}
+                    style={{textAlign: "center"}}>{fund.authorized ? "" : "✔"}</td>
+                <td style={{textAlign: "center"}}>{fund.authorized ? "" : "❌"}</td>
+            </tr>: null
         )
     })
-    console.log(77777777777777,list)
-    console.log(888888888888888,funding.dtoList)
-    // console.log(9999999999,funding.dtoList.fundingDTO.authorized)
 
     return (
         <Row>
@@ -111,7 +78,7 @@ const FundingRequestTable = () => {
                         </p>
                     </Card.Header>
                     <Card.Body className="table-full-width table-responsive px-20">
-                        <Table className="table-hover table-striped" style={{textAlign:"center"}}>
+                        <Table className="table-hover table-striped" style={{textAlign: "center"}}>
                             <thead>
                             <tr>
                                 <th className="border-0">제목</th>
@@ -123,7 +90,8 @@ const FundingRequestTable = () => {
                                 <th className="border-0">펀딩 진행률</th>
                                 <th className="border-0">펀딩기한</th>
                                 <th className="border-0">신청날짜</th>
-                                <th className="border-0">승인 여부</th>
+                                <th className="border-0">펀딩 신청 승인</th>
+                                <th className="border-0">펀딩 신청 반려</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -131,16 +99,7 @@ const FundingRequestTable = () => {
                             </tbody>
                         </Table>
                         <div style={{textAlign: "center"}}>
-                            {/*{fundings.pageMaker.page !== 1 ?*/}
-                            {/*    <span onClick={() => prevPage()}>Prev</span> : false}*/}
-                            {funding.pageMaker.pageList.map(page => page === funding.pageMaker.page ?
-                                <span key={page}><b>{page}</b></span> :
-                                <span key={page} onClick={() => movePage(page)}>{page}</span>)}
-                            {/*{members.pageMaker.next === false ? null :*/}
-                            {/*    members.memberList.length === members.pageMaker.size ?*/}
-                            {/*        <span onClick={() => nextPage()}>Next</span> : false}*/}
                         </div>
-                        {/*<FundingPagination fundings={fundings} movePage={movePage}/>*/}
                     </Card.Body>
                 </Card>
             </Col>

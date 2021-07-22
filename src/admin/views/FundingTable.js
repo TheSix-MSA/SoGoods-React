@@ -1,6 +1,5 @@
 import React, {useEffect, useState, Fragment} from "react";
 
-// react-bootstrap components
 import {
     Card,
     Table,
@@ -8,7 +7,8 @@ import {
     Col,
 } from "react-bootstrap";
 import fundingService from "../sevice/fundingService";
-// import FundingPagination from "../components/Funding/FundingPagination";
+import {useHistory} from "react-router-dom";
+import FundingPagination from "../components/Funding/FundingPagination";
 
 const initState = {
     dtoList: [
@@ -50,7 +50,7 @@ const initState = {
     }
 }
 const FundingTable = () => {
-
+    const history = useHistory();
     const [funding, setFunding] = useState(initState);
     const [flag, setFlag] = useState(false);
 
@@ -58,37 +58,32 @@ const FundingTable = () => {
         fundingService.getFundingList(funding.pageMaker.page)
             .then(res => {
                 setFunding(res.data.response);
-                console.log("dtoList 부터", res.data.response.dtoList)
-                console.log("fundingDTO 부터", res.data.response.dtoList.fundingDTO)
             });
-    }, [funding.pageMaker.page,flag])
+    }, [funding.pageMaker.page, flag])
 
-
-    const setAuthorized = (fund) => {
-        fundingService.setAuthorized(fund.fundingDTO.fno)
-            .then()
-            .catch();
-        console.log("funding.fno",fund.fundingDTO.fno)
-    }
 
     const movePage = (num) => {
 
         funding.pageMaker.page = num;
         setFunding({...funding});
         setFlag(!flag);
+        fundingService.setMovePage(movePage);
     }
 
-    fundingService.setMovePage(movePage);
+
+    const goToTable = (fno) => {
+        history.push("/funding/read/" + fno)
+    }
 
     const list = funding.dtoList.map(fund => {
         return <tr key={fund.fundingDTO.fno}>
-            <td>{fund.fundingDTO.title}</td>
+            <td onClick={() => goToTable(fund.fundingDTO.fno)}>{fund.fundingDTO.title}</td>
             <td>{fund.fundingDTO.writer}</td>
             <td>{fund.fundingDTO.email}</td>
             <td>{fund.fundingDTO.content}</td>
             <td>{fund.fundingDTO.targetAmount}</td>
             <td>{fund.fundingDTO.totalAmount}</td>
-            <td>{fund.fundingDTO.targetAmount/fund.fundingDTO.totalAmount}%달성</td>
+            <td>{(fund.fundingDTO.totalAmount / fund.fundingDTO.targetAmount * 100).toFixed(2)}%달성</td>
             <td>{fund.fundingDTO.success ? "🟢" : "🔴"}</td>
             <td>{fund.fundingDTO.removed ? "🟢" : "🔴"}</td>
             <td>{fund.fundingDTO.dueDate}</td>
@@ -107,7 +102,7 @@ const FundingTable = () => {
                         </p>
                     </Card.Header>
                     <Card.Body className="table-full-width table-responsive px-20">
-                        <Table className="table-hover table-striped" style={{textAlign:"center"}}>
+                        <Table className="table-hover table-striped" style={{textAlign: "center"}}>
                             <thead>
                             <tr>
                                 <th className="border-0">제목</th>
@@ -127,17 +122,7 @@ const FundingTable = () => {
                             {list}
                             </tbody>
                         </Table>
-                        <div style={{textAlign: "center"}}>
-                            {/*{fundings.pageMaker.page !== 1 ?*/}
-                            {/*    <span onClick={() => prevPage()}>Prev</span> : false}*/}
-                            {funding.pageMaker.pageList.map(page => page === funding.pageMaker.page ?
-                                <span key={page}><b>{page}</b></span> :
-                                <span key={page} onClick={() => movePage(page)}>{page}</span>)}
-                            {/*{members.pageMaker.next === false ? null :*/}
-                            {/*    members.memberList.length === members.pageMaker.size ?*/}
-                            {/*        <span onClick={() => nextPage()}>Next</span> : false}*/}
-                        </div>
-                        {/*<FundingPagination fundings={fundings} movePage={movePage}/>*/}
+                        <FundingPagination funding={funding} movePage={movePage}/>
                     </Card.Body>
                 </Card>
             </Col>

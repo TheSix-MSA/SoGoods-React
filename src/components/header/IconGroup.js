@@ -90,6 +90,18 @@ const IconGroup = ({
                     </Link>
                   </li>
               }
+              {login.email === "" ?
+                  <li>
+                    <Link to={process.env.PUBLIC_URL + "/admin"}>
+                      admin
+                    </Link>
+                  </li> :
+                  <li>
+                    <Link to={process.env.PUBLIC_URL + "/admin"}>
+                      admin
+                    </Link>
+                  </li>
+              }
             </ul>
           </div>
         </div>

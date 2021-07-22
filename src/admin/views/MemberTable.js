@@ -1,19 +1,16 @@
 import React, {useEffect, useState, Fragment} from "react";
 
-// react-bootstrap components
 import {
-    Badge,
-    Button,
     Card,
-    Navbar,
-    Nav,
     Table,
-    Container,
     Row,
     Col,
 } from "react-bootstrap";
 import memberService from "../sevice/memberService";
 import MemberPagination from "../components/member/MemberPagination";
+import getFormatDate from "../../modules/getFormatDate";
+import {useHistory, useLocation} from "react-router-dom";
+import * as queryString from "querystring";
 
 const initState = {
     memberList: [
@@ -54,54 +51,53 @@ const initState = {
     }
 }
 const MemberTable = () => {
+    const history = useHistory();
+    const location = useLocation();
+    const value = queryString.parse(location.search.replace("?", ""));
+    const page = value.page || 1;
 
     const [members, setMembers] = useState(initState);
-    const [role, setRole] = useState("");
-    const [banned, setBanned] = useState(false);
-
+    const [flag, setFlag] = useState(false);
+    const renderPage = () => {
+        setFlag(!flag)
+    }
+    memberService.setRender(renderPage)
 
     useEffect(() => {
-        memberService.getMemberList(members.pageMaker.page).then(res => {
+        memberService.getMemberList(page).then(res => {
             setMembers(res.data.response);
         });
-    }, [members.pageMaker.page, role, banned])
+    }, [page])
 
     const movePage = (num) => {
+        history.push('/admin/member?page=' + num)
         members.pageMaker.page = num;
-        setMembers({...members});
-        memberService.setMovePage(movePage);
+        memberService.getMemberList(num).then(res => {
+            setMembers(res.data.response);
+        });
     }
 
-    const nextPage = () => {
-
-        members.pageMaker.page = members.pageMaker.page + 1;
-
-        setMembers({...members});
-        memberService.setNextPrev(nextPage);
+    const ban = (member) => {
+        memberService.changeBanned(member.email).then(res => {
+            setMembers({
+                ...members, memberList: members.memberList.map(member => {
+                    if (member.email === res.data.response.email) return res.data.response;
+                    return member;
+                })
+            })
+        })
     }
-    const prevPage = () => {
-
-        members.pageMaker.page = members.pageMaker.page - 1;
-
-        setMembers({...members});
-        memberService.setNextPrev(prevPage);
+    const role = (member) => {
+        memberService.changeRole(member.email).then(res => {
+            setMembers({
+                ...members, memberList: members.memberList.map(member => {
+                    if (member.email === res.data.response.email)
+                        return res.data.response;
+                    return member;
+                })
+            })
+        })
     }
-
-    const changeRole = (member) => {
-        if (member.roleSet[2] || member.roleSet[1] || member.roleSet[0] !== "ADMIN") {
-            memberService.changeRole(member.email)
-                .then();
-        }
-    }
-    memberService.setRoleService(setRole)
-
-
-    const changeBanned = (member) => {
-        memberService.changeBanned(member.email)
-            .then();
-
-    }
-    memberService.setBannedService(setBanned)
 
     const list = members.memberList.map(member => {
         return <tr key={member.email}>
@@ -111,10 +107,11 @@ const MemberTable = () => {
             <td>{member.phone}</td>
             <td>{member.address} {member.detailAddress}</td>
             <td>{member.gender}</td>
-            <td onClick={() => changeBanned(member)} style={{textAlign: "center"}}>{member.banned ? "🟢" : "🔴"}</td>
+            <td onClick={() => ban(member)}
+                style={{textAlign: "center"}}>{member.banned ? "🔴" : "🟢"}</td>
             <td>{member.removed ? "삭제" : "정상"}</td>
-            <td onClick={() => changeRole(member)}>{member.roleSet[member.roleSet.length-1]} </td>
-            <td>{member.regDate}</td>
+            <td onClick={() => role(member)}>{member.roleSet[0]} </td>
+            <td>{getFormatDate(new Date(member.regDate))}</td>
         </tr>
     })
 
@@ -145,17 +142,14 @@ const MemberTable = () => {
                             </tr>
                             </thead>
                             <tbody>
-                            {/*<MemberList members={members} changeBanned={changeBanned} changeRole={changeRole} />*/}
                             {list}
                             </tbody>
                         </Table>
-                        <MemberPagination members={members} prevPage={prevPage} movePage={movePage}
-                                          nextPage={nextPage}/>
+                        <MemberPagination members={members} movePage={movePage}/>
                     </Card.Body>
                 </Card>
             </Col>
         </Row>
-
     );
 }
 

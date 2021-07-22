@@ -18,12 +18,10 @@ const initState = {
 const FundingRead = ({location}) => {
 
     const { pathname } = location;
-
     let {fno} = useParams()
-    console.log(fno)
-
     const [funding, setFunding] = useState(initState)
 
+    // 상세 페이지에 필요한 데이터 불러오기
     useEffect(()=>{
         fundingService.getOneFunding(fno).then(res=> {
             console.log(res.response)
@@ -31,8 +29,6 @@ const FundingRead = ({location}) => {
         })
 
     },[])
-
-    //const fundingObj1 = <h1>funding.fundingDTO.title</h1>
 
 
 

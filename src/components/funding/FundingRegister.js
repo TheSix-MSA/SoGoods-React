@@ -28,6 +28,7 @@ const FundingRegister = () => {
         setForm({...initState})
     }
 
+
     return (
         <div>
             <Fragment>

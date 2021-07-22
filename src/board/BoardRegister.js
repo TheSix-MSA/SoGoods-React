@@ -1,28 +1,28 @@
-import React from 'react';
-import useInputs from "../../customHooks/useInputs";
+import React, {useCallback} from 'react';
+import useInputs from "../customHooks/useInputs";
 import {useDispatch} from "react-redux";
-import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import LayoutOne from "../../layouts/LayoutOne";
+import Breadcrumb from "../wrappers/breadcrumb/Breadcrumb";
+import LayoutOne from "../layouts/LayoutOne";
 import Tab from "react-bootstrap/Tab";
-import {registerBoard} from "../../board/boardAsyncService";
 import {useHistory} from "react-router-dom";
+import boardService from "./boardService";
 
 const initState = {
-    title:'',
-    writer:'',
-    email:'',
-    content:''
+    title: '',
+    writer: '',
+    email: '',
+    content: ''
 }
 
 const BoardRegister = () => {
-    const [board, onChange] = useInputs(initState);
+    const [board, onChange, setBoard] = useInputs(initState);
     const history = useHistory()
-    const dispatch = useDispatch()
     const registe = () => {
-        dispatch(registerBoard(board));
-        history.push('/')
+        boardService.registerBoard(board).then(res => {
+            setBoard({...res})
+        })
+        history.push('/board/FREE/list/1')
     }
-
     return (
         <>
             <LayoutOne headerTop="visible">
@@ -37,6 +37,7 @@ const BoardRegister = () => {
                                         <div className="col-lg-7 col-md-12 ml-auto mr-auto">
                                             <div className="login-register-wrapper">
                                                 <Tab.Container>
+                                                    <h3> 글작성 </h3>
                                                     <div className="login-form-container">
                                                         <div className="login-register-form">
                                                             <form>
@@ -68,7 +69,9 @@ const BoardRegister = () => {
                                                                     onChange={onChange}
                                                                 />
                                                                 <div className="col-md-2">
-                                                                    <input type="submit" onClick={()=>{registe()}}/>
+                                                                    <input type="submit" onClick={() => {
+                                                                        registe()
+                                                                    }}/>
                                                                 </div>
                                                             </form>
                                                         </div>

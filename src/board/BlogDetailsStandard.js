@@ -2,13 +2,13 @@ import PropTypes from "prop-types";
 import React, {Fragment, useEffect, useState} from "react";
 import MetaTags from "react-meta-tags";
 import {BreadcrumbsItem} from "react-breadcrumbs-dynamic";
-import LayoutOne from "../../layouts/LayoutOne";
-import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import BlogSidebar from "../../wrappers/blog/BlogSidebar";
-import BlogComment from "../../components/reply/BlogComment";
-import BlogPost from "../../wrappers/blog/BlogPost";
+import LayoutOne from "../layouts/LayoutOne";
+import Breadcrumb from "../wrappers/breadcrumb/Breadcrumb";
+import BlogSidebar from "../wrappers/blog/BlogSidebar";
+import BlogComment from "../components/reply/BlogComment";
+import BlogPost from "./BlogPost";
 import {useDispatch} from "react-redux";
-import {getOneBoard} from "../../board/boardAsyncService";
+import boardService from "./boardService";
 
 const initState = {
     bno: 0,
@@ -30,11 +30,10 @@ const BlogDetailsStandard = ({location, match}) => {
     const {pathname} = location;
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getOneBoard(bno)).unwrap().then(res => {
-            setDetailData({...res})
+        boardService.getOneBoard(bno).then(res => {
+            setDetailData({...res.data.response})
         })
-    }, [bno,dispatch])
-    const data = detailData.response
+    }, [bno, dispatch])
     return (
             <Fragment>
                 <MetaTags>
@@ -56,8 +55,8 @@ const BlogDetailsStandard = ({location, match}) => {
                             <div className="row flex-row-reverse">
                                 <div className="col-lg-9">
                                     <div className="blog-details-wrapper ml-20">
-                                        {data (
-                                        <BlogPost data={data}/>
+                                        {detailData && (
+                                        <BlogPost data={detailData}/>
                                         )}
                                         {/* blog post comment */}
                                         <BlogComment/>

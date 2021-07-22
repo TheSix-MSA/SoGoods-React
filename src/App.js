@@ -9,8 +9,8 @@ import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
 import instance from "./modules/axiosConfig";
 import {useToasts} from "react-toast-notifications";
 import ProductInputList from "./pages/attach-dragNdrop/ProductInputList";
-import BoardRegister from "./pages/blog/BoardRegister";
-import BoardModify from "./pages/blog/BoardModify";
+import BoardRegister from "./board/BoardRegister";
+import BoardModify from "./board/BoardModify";
 import {loggedInUser, signin} from "./redux/member/loginSlice";
 import {refreshToken} from "./modules/refreshToken";
 
@@ -88,16 +88,15 @@ const ProductFixedImage = lazy(() =>
 
 // blog pages
 const BlogStandard = lazy(() => import("./pages/blog/BlogStandard"));
-const BlogNoSidebar = lazy(() => import("./pages/blog/BlogNoSidebar"));
+const BlogNoSidebar = lazy(() => import("./board/BlogNoSidebar"));
 const BlogRightSidebar = lazy(() => import("./pages/blog/BlogRightSidebar"));
 const BlogDetailsStandard = lazy(() =>
-  import("./pages/blog/BlogDetailsStandard")
+  import("./board/BlogDetailsStandard")
 );
 
 // other pages
 const About = lazy(() => import("./pages/other/About"));
 const Contact = lazy(() => import("./pages/other/Contact"));
-// const MyAccount = lazy(() => import("./member/MyAccount));"));
 const MyAccount = lazy(() => import("./member/MyAccount"));
 const LoginRegister = lazy(() => import("./member/LoginRegister"));
 
@@ -386,13 +385,14 @@ const App = (props) => {
                   component={BlogStandard}
                 />
                 <Route
-                  path={process.env.PUBLIC_URL + "/blog-no-sidebar"}
-                  component={BlogNoSidebar}
-                />
-                <Route
                   path={process.env.PUBLIC_URL + "/blog-right-sidebar"}
                   component={BlogRightSidebar}
                 />
+
+                <Route
+                    path={"/board/FREE/list/:currentPage"}
+                    component={BlogNoSidebar}
+                />{/* 재연 - Board 목록 컴포넌트로 사용 */}
 
                 <Route
                     exact
@@ -401,11 +401,11 @@ const App = (props) => {
                 /> {/* 재연 - Board 작성 컴포넌트로 사용 */}
 
                 <Route
-                  path={`/board/FREE/:bno/:currentPage`}
+                  path={`/board/FREE/:bno`}
                   component={BlogDetailsStandard}
                 /> {/* 재연 - Board 상세보기 컴포넌트로 사용 */}
                 <Route
-                  path={`/board/modify/FREE/:bno/:currentPage`}
+                  path={`/board/modify/FREE/:bno`}
                   component={BoardModify}
                 /> {/* 재연 - Board 수정 컴포넌트로 사용 */}
 

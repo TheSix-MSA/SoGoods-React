@@ -1,20 +1,21 @@
-import React, {Fragment} from "react";
-import getFormatDate from "../../modules/getFormatDate";
+import React, {Fragment, useState} from "react";
+import getFormatDate from "../modules/getFormatDate";
 import {useHistory} from "react-router-dom";
-import {useDispatch} from "react-redux";
-import {removeBoard} from "../../board/boardAsyncService";
+import boardService from "./boardService";
 
 const BlogPost = ({data}) => {
     const history = useHistory()
-    const dispatch = useDispatch
-    console.log(1111111, data, history)
     const modify = (bno) => {
-        history.push(`/board/modify/FREE/${bno}/:currentPage`)
+        history.push(`/board/modify/FREE/${bno}`)
     }
     const remove = (bno) => {
-        dispatch(removeBoard(bno))
-        history.push(process.env.PUBLIC_URL + 'blog-no-sidebar')
+        if(window.confirm("삭제하시겠습니끼?")) {
+            boardService.removeBoard(bno).then(res => {
+            history.push(`/board/FREE/list/1`)
+            })
+        }
     }
+
     return (
         data && (
             <Fragment>

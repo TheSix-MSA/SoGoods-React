@@ -65,7 +65,9 @@ const img = {
 
 const PictureAttach = () => {
 
-    const [files, setFiles] = useState([]);
+
+
+    const [files, setFiles] = useState(productService.getProduct().pictures);
     const maxFiles = 6
     const {
         getRootProps,
@@ -77,16 +79,20 @@ const PictureAttach = () => {
         accept: 'image/*',
         maxFiles:maxFiles,
         onDrop: acceptedFiles => {
+            console.log('acceptedFiles: ', acceptedFiles)
             const max = maxFiles;
-            const inFiles = acceptedFiles.map(file => Object.assign(file, {
-                preview: URL.createObjectURL(file)
-            }))
+            const inFiles = acceptedFiles.map(file =>
+                Object.assign(file, {
+                    preview: URL.createObjectURL(file)
+                })
+            )
+
+            console.log('inFiles: ', inFiles)
+
             const newFiles = [...files, ...inFiles]
 
             if(newFiles.length <= max){
                 setFiles(newFiles)
-                console.log("newFiles: " , newFiles)
-                productService.getProduct().pictures = newFiles
             }else{
                 console.log(`파일갯수 ${max} 초과`)
             }
@@ -104,14 +110,22 @@ const PictureAttach = () => {
         isDragAccept
     ]);
 
+    const removeImg = (idx) => {
+        console.log('click remove')
+        files.splice(idx, 1)
+        setFiles([...files])
+    }
+
+
+
     const thumbs = files.map((file, idx)=> (
         <div style={thumb} key={file.name}>
             <div style={thumbInner}>
                 <img
                     src={file.preview}
-
                     style={img}
                     alt={'미리보기'}
+                    onClick={()=>{removeImg(idx)}}
                 />
             </div>
         </div>
@@ -121,6 +135,8 @@ const PictureAttach = () => {
         // Make sure to revoke the data uris to avoid memory leaks
         files.forEach(file => URL.revokeObjectURL(file.preview));
     }, [files]);
+
+    productService.setPictures(files)
 
     return (
         <section className="container">

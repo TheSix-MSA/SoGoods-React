@@ -23,6 +23,13 @@ const ProductRegister = () => {
 
     const [spacing, setSpacing] = React.useState(2);
     const classes = useStyles();
+    const [flag, setFlag] = useState(false)
+
+    const changeState = ()=>{
+        setFlag(!flag);
+    }
+
+
 
     return (
         <>

@@ -7,20 +7,28 @@ const initState = {
 }
 
 const ProductText = ({}) => {
+    console.log('ProductText 랜더링')
 
-    const [form, changeForm] = useInputs(initState);
+    //안좋은 코드
+    // const product = productService.getProduct()
+    // let state = null;
+    // if(product.text.title === '' && product.text.content===''){
+    //     state = initState
+    // }else{
+    //     state = product.text
+    // }
+    // const [form, changeForm] = useInputs(state);
 
-    const changeValue = (e)=>{
-        changeForm(e)
-        productService.setText(form)
+    //Before
+    const [form, changeForm] = useInputs(productService.getProduct().text);
 
-        productService.getProduct().text = form
-    }
+    productService.setText(form)
+
 
     return (
         <div>
-            <div>상품명<input type="text" name='title'   onChange={changeValue}/></div>
-            <div>내용<textarea           name='content' onChange={changeValue}/></div>
+            <div>상품명<input  name='title'   value={form.title}    onChange={changeForm}/></div>
+            <div>내용<textarea name='content' value={form.content} onChange={changeForm}/></div>
         </div>
     )
 }

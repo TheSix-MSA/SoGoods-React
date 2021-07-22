@@ -477,7 +477,7 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
                 </Link>
               </li>
               <li>
-                <Link to={process.env.PUBLIC_URL + "/blog-no-sidebar"}>
+                <Link to={"/board/FREE/list/1"}>
                   {strings["blog_no_sidebar"]}
                 </Link>
               </li>

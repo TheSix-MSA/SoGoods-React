@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {getBoardData, getOneBoard, registerBoard} from "./boardAsyncService";
+import {getBoardData, getSearchData} from "./boardAsyncService";
 
 const initState = {
     boardDtoList: [{
@@ -53,7 +53,7 @@ const boardSlice = createSlice({
                 return {...state}
             })
             .addCase(getBoardData.fulfilled, (state, action) => {
-                return action.payload.response
+                return {...action.payload.response}
             })
     },
 

@@ -1,10 +1,12 @@
 import React, {Fragment} from "react";
-import {Link, useHistory} from "react-router-dom";
-import getFormatDate from "../../modules/getFormatDate";
+import {useHistory} from "react-router-dom";
+import getFormatDate from "../modules/getFormatDate";
 
-const BlogPostsNoSidebar = ({boardData, currentPage}) => {
+const BlogPostsNoSidebar = ({boardData}) => {
     const history = useHistory();
-
+    const moveDetail = (bno) => {
+        history.push(`/board/FREE/${bno}`)
+    }
     return (
         <Fragment>
             {boardData?.map((data, idx) => (
@@ -22,7 +24,7 @@ const BlogPostsNoSidebar = ({boardData, currentPage}) => {
                                 </ul>
                             </div>
                             <h4>
-                                <div onClick={()=>{history.push(`/board/FREE/${data.bno}/${currentPage}`)}}>
+                                <div onClick={()=>{moveDetail(data.bno)}}>
                                     {data.title}
                                 </div>
                             </h4>
@@ -31,7 +33,7 @@ const BlogPostsNoSidebar = ({boardData, currentPage}) => {
                             </p>
                             <div className="blog-share-comment">
                                 <div className="blog-btn-2">
-                                    <div onClick={()=>{history.push(`/board/FREE/${data.bno}/${currentPage}`)}}>
+                                    <div onClick={()=>{moveDetail(data.bno)}}>
                                         더보기
                                     </div>
                                 </div>

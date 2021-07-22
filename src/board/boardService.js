@@ -52,7 +52,7 @@ const boardService = () => {
      */
     const searchBoard = async (type, keyword) => {
         const result = await instance({
-            url: `/board/FREE/list?keyword=${keyword}&&type=${type}`,
+            url: `/board/FREE/list?type=${type}&keyword=${keyword}`,
             method: 'get'
         })
         console.log(result)

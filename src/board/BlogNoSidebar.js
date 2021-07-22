@@ -7,19 +7,41 @@ import BlogPagination from "./BlogPagination";
 import BlogPostsNoSidebar from "./BlogPostsNoSidebar";
 import {useDispatch, useSelector} from "react-redux";
 import {getBoardData} from "../redux/board/boardAsyncService";
-import {useHistory} from "react-router-dom";
-import BoardSearch from "./BoardSearch";
+import {useHistory, useLocation} from "react-router-dom";
+import useInputs from "../customHooks/useInputs";
+import * as queryString from "querystring";
+import boardService from "./boardService";
+
+const initState = {
+    type:'',
+    keyword: ''
+}
 
 const BlogNoSidebar = ({match}) => {
     const {boardDtoList, pageMaker} = useSelector(state => state.board);
+    const location = useLocation()
+    const value = queryString.parse(location.search.replace("?",""));
+    console.log(value)
+    console.log(value.page)
+    console.log(value.keyword)
+    console.log(value.type)
+
     const dispatch = useDispatch()
     const history = useHistory()
     const currentPage = match.params.currentPage
     useEffect(() => {
         dispatch(getBoardData(currentPage))
     }, [currentPage, dispatch])
+
     const boardRegister = () => {
         history.push(`/boardRegister`)
+    }
+    const [search, onChange] = useInputs(initState)
+    const searching = (search) => {
+        boardService.modifyBoard(search.type, search.keyword).then(res => {
+            boardDtoList({...res.data})
+        })
+
     }
     return (
         <Fragment>
@@ -37,7 +59,21 @@ const BlogNoSidebar = ({match}) => {
                         <div style={{display: "block", textAlign: "right", margin: "2rem"}}
                              onClick={boardRegister}> 글쓰기
                         </div>
-                        <BoardSearch data = {boardDtoList} />
+                        <h4 className="pro-sidebar-title">Search </h4>
+                        <div className="pro-sidebar-search mb-55 mt-25">
+                            <form className="pro-sidebar-search-form" action="#">
+                                <select name="type" style={{width:"10%"}} value={search.type} onChange={onChange} name="type">
+                                    <option value="t" selected> 제목 </option>
+                                    <option value="w"> 작성자 </option>
+                                    <option value="c"> 내용 </option>
+                                    <option value="tc"> 제목+내용 </option>
+                                </select>
+                                <input type="text" placeholder="Search here..." name="keyword" value={search.keyword} onChange={onChange}/>
+                                <button style={{top:"70%"}} onClick={()=>{searching()}}>
+                                    <i className="pe-7s-search" />
+                                </button>
+                            </form>
+                        </div>
                         <div className="row">
                             <div className="col-lg-12">
                                 <div className="mr-20">

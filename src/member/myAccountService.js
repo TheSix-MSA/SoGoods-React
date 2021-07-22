@@ -1,4 +1,5 @@
 import instance from "../modules/axiosConfig";
+import axios from "axios";
 
 const myAccountService = () => {
     let loginInfo={
@@ -29,8 +30,22 @@ const myAccountService = () => {
         return result;
     };
 
+    const searchNovelList = async (isbnKey)=> {
+        console.log(isbnKey);
+        console.log(`${process.env.REACT_APP_ALADIN_TTB_KEY}`)
 
-    return {getMyInfo, modifyInfo}
+        const result = await axios.get(
+            `/ttb/api/ItemSearch.aspx?TTBKey=${process.env.REACT_APP_ALADIN_TTB_KEY}&ItemId=${isbnKey}&ItemIdType=ISBN13&Output=JS`
+        ).then(value => {
+            console.log(value)
+        });
+
+        return result;
+    }
+
+
+
+    return {getMyInfo, modifyInfo, searchNovelList}
 };
 
 export default myAccountService();

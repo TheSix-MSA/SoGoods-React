@@ -129,6 +129,10 @@ const MyAccount = ({ location }) => {
   const popupPost = () => {
     codeService.popUpModal();
   };
+  const getNovel = () => {
+    myAccountService.searchNovelList(9788970127248);
+  };
+
 
   console.log(userInfo);
 
@@ -318,7 +322,7 @@ const MyAccount = ({ location }) => {
                                   </div>
                                   <div className="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">
                                     <div className="entries-edit-delete text-center">
-                                      <button className="edit">Edit</button>
+                                      <button className="edit" onClick={getNovel}>Edit</button>
                                       <button>Delete</button>
                                     </div>
                                   </div>

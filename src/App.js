@@ -104,7 +104,7 @@ const LoginRegister = lazy(() => import("./member/LoginRegister"));
 const Cart = lazy(() => import("./pages/other/Cart"));
 const Wishlist = lazy(() => import("./pages/other/Wishlist"));
 const Compare = lazy(() => import("./pages/other/Compare"));
-const Checkout = lazy(() => import("./pages/other/Checkout"));
+const Checkout = lazy(() => import("./pages/order/Checkout"));
 
 const NotFound = lazy(() => import("./pages/other/NotFound"));
 

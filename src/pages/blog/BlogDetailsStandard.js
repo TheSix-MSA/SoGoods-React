@@ -5,7 +5,7 @@ import {BreadcrumbsItem} from "react-breadcrumbs-dynamic";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import BlogSidebar from "../../wrappers/blog/BlogSidebar";
-import BlogComment from "../../wrappers/blog/BlogComment";
+import BlogComment from "../../components/reply/BlogComment";
 import BlogPost from "../../wrappers/blog/BlogPost";
 import {useDispatch} from "react-redux";
 import {getOneBoard} from "../../board/boardAsyncService";

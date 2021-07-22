@@ -3,16 +3,16 @@ import {createSlice} from "@reduxjs/toolkit";
 const initState = {
     email : "",
     roles : [],
+    name: ""
 }
 const loginSlice = createSlice({
     name:"login",
     initialState:initState,
     reducers:{
         signin:(state, action) => {
-            localStorage.setItem("accessToken", action.payload.accessToken);
-            localStorage.setItem("refreshToken", action.payload.refreshToken);
+            localStorage.setItem("userData", action.payload);
             console.log(action.payload);
-            return {email:action.payload.email, roles: action.payload.roles};
+            return {email:action.payload.email, roles: action.payload.roles, name:action.payload.name};
         },
         signout: (state, action) => {
             localStorage.clear();

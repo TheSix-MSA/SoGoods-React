@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, {Fragment, useEffect} from "react";
+import React, {Fragment, useEffect, useRef, useState} from "react";
 import MetaTags from "react-meta-tags";
 import LayoutOne from "../layouts/LayoutOne";
 import Breadcrumb from "../wrappers/breadcrumb/Breadcrumb";
@@ -13,35 +13,33 @@ import * as queryString from "querystring";
 import boardService from "./boardService";
 
 const initState = {
+    page:1,
     type:'',
-    keyword: ''
+    keyword: '',
 }
 
 const BlogNoSidebar = ({match}) => {
-    const {boardDtoList, pageMaker} = useSelector(state => state.board);
+    const {boardDtoList,  boardListRequestDTO ,pageMaker} = useSelector(state => state.board);
     const location = useLocation()
     const value = queryString.parse(location.search.replace("?",""));
-    console.log(value)
-    console.log(value.page)
-    console.log(value.keyword)
-    console.log(value.type)
-
     const dispatch = useDispatch()
     const history = useHistory()
     const currentPage = match.params.currentPage
+    const boardType = useRef(match.params.boardType)
+    const [search, onChange, setSearch] = useInputs(initState)
+    const [ request, setRequest ] = useState(initState)
+    console.log(boardType)
+    const searching = ( value ) => {
+        boardService.searchBoard(value).then(res =>{
+            dispatch(getBoardData(value))
+        })
+    }
     useEffect(() => {
-        dispatch(getBoardData(currentPage))
+        console.log(dispatch(getBoardData(boardListRequestDTO)))
     }, [currentPage, dispatch])
 
     const boardRegister = () => {
         history.push(`/boardRegister`)
-    }
-    const [search, onChange] = useInputs(initState)
-    const searching = (search) => {
-        boardService.modifyBoard(search.type, search.keyword).then(res => {
-            boardDtoList({...res.data})
-        })
-
     }
     return (
         <Fragment>
@@ -62,14 +60,15 @@ const BlogNoSidebar = ({match}) => {
                         <h4 className="pro-sidebar-title">Search </h4>
                         <div className="pro-sidebar-search mb-55 mt-25">
                             <form className="pro-sidebar-search-form" action="#">
-                                <select name="type" style={{width:"10%"}} value={search.type} onChange={onChange} name="type">
-                                    <option value="t" selected> 제목 </option>
+                                <select name="type" style={{width:"10%"}} value={search.type} onChange={onChange} name="type" >
+                                    <option value=''> - 선택 - </option>
+                                    <option value="t"> 제목 </option>
                                     <option value="w"> 작성자 </option>
                                     <option value="c"> 내용 </option>
                                     <option value="tc"> 제목+내용 </option>
                                 </select>
                                 <input type="text" placeholder="Search here..." name="keyword" value={search.keyword} onChange={onChange}/>
-                                <button style={{top:"70%"}} onClick={()=>{searching()}}>
+                                <button style={{top:"70%"}} onClick={()=>{searching(search)}}>
                                     <i className="pe-7s-search" />
                                 </button>
                             </form>
@@ -79,7 +78,9 @@ const BlogNoSidebar = ({match}) => {
                                 <div className="mr-20">
                                     <div className="row">
                                         {/* blog posts */}
+                                        {boardDtoList ? (
                                         <BlogPostsNoSidebar boardData={boardDtoList} page={currentPage}/>
+                                        ) : <p> 일치하는 결과가 없습니다. </p>}
                                     </div>
                                     {/* blog pagination */}
                                     {pageMaker && <BlogPagination pageMaker={pageMaker}/>}

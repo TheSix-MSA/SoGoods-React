@@ -19,7 +19,7 @@ const initState = {
         page: 1,
         size: 0,
         keyword: '',
-        type: ''
+        type: '',
     },
     pageMaker: {
         page: 1,
@@ -30,7 +30,8 @@ const initState = {
         next: false,
         start: 0,
         end: 0
-    }
+    },
+    filterData: [],
 }
 
 const boardSlice = createSlice({
@@ -38,13 +39,13 @@ const boardSlice = createSlice({
     initialState: initState,
     reducers: {
         movePage: ((state, action) => {
-            state.pageMaker.page = action.payload
+            state.boardListRequestDTO.page = action.payload
         }),
         prevPage: ((state, action) => {
-            state.pageMaker.page = action.payload - 1
+            state.boardListRequestDTO.page = action.payload - 1
         }),
         nextPage: ((state, action) => {
-            state.pageMaker.page = action.payload + 1
+            state.boardListRequestDTO.page = action.payload + 1
         })
     },
     extraReducers: builder => {
@@ -53,7 +54,7 @@ const boardSlice = createSlice({
                 return {...state}
             })
             .addCase(getBoardData.fulfilled, (state, action) => {
-                return {...action.payload.response}
+                return action.payload.response
             })
     },
 

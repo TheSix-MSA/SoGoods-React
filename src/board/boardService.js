@@ -1,4 +1,5 @@
 import instance from "../modules/axiosConfig";
+import {getBoardData} from "../redux/board/boardAsyncService";
 
 const boardService = () => {
 
@@ -50,13 +51,14 @@ const boardService = () => {
     /*
         FREE 게시판 글 검색하기
      */
-    const searchBoard = async (type, keyword) => {
+    const searchBoard = async (value) => {
+        console.log(3333, value)
         const result = await instance({
-            url: `/board/FREE/list?type=${type}&keyword=${keyword}`,
+            url: `/board/FREE/list?page=${value.page}&keyword=${value.keyword}&type=${value.type}`,
             method: 'get'
         })
-        console.log(result)
-        return result
+        console.log(4444, result)
+        return { result }
     }
 
     return { registerBoard, getOneBoard, modifyBoard, removeBoard, searchBoard }

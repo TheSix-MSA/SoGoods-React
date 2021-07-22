@@ -1,17 +1,16 @@
 import React from "react";
 
 
-const MemberPagination = ({members, prevPage, movePage, nextPage}) =>{
+const MemberPagination = ({members, movePage}) =>{
     return(
         <div style={{textAlign: "center"}}>
-            {members.pageMaker.page !== 1 ?
-                <span onClick={() => prevPage()}>Prev</span> : false}
+            {members.pageMaker.prev === false ? null :
+                <span onClick={() => movePage(members.pageMaker.startPage-1)}>Prev</span>}
             {members.pageMaker.pageList.map(page => page === members.pageMaker.page ?
                 <span key={page}><b>{page}</b></span> :
                 <span key={page} onClick={() => movePage(page)}>{page}</span>)}
             {members.pageMaker.next === false ? null :
-                members.memberList.length === members.pageMaker.size ?
-                    <span onClick={() => nextPage()}>Next</span> : false}
+                    <span onClick={() => movePage(members.pageMaker.endPage+1)}>Next</span> }
         </div>
     )
 

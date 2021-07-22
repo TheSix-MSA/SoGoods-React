@@ -11,7 +11,7 @@ import {useToasts} from "react-toast-notifications";
 import ProductInputList from "./pages/attach-dragNdrop/ProductInputList";
 import BoardRegister from "./pages/blog/BoardRegister";
 import BoardModify from "./pages/blog/BoardModify";
-import {signin} from "./redux/member/loginSlice";
+import {loggedInUser, signin} from "./redux/member/loginSlice";
 import {refreshToken} from "./modules/refreshToken";
 
 //the six
@@ -130,9 +130,29 @@ const App = (props) => {
   });
 
   useEffect(() => {
+    const userData = localStorage.getItem("userData");
+    if(!email && userData) {
+      dispatch(loggedInUser(userData));
+    }
+  },[]);
+
+  useEffect(() => {
+      if(email && email !== "") {
+        const interval = setInterval(() => {
+          refreshToken().then(res=>{
+            dispatch(signin(res));
+          });
+        }, 1000*60*19);
+        return () => clearInterval(interval);
+      }
+    },[email]);
+
+
+
+  useEffect(() => {
     instance.interceptors.request.use(
         function (config) {
-          //로딩과 알림 호출
+          config.headers.Authorization = `Bearer ${(JSON.parse(localStorage.getItem("userData")))?.accessToken || ""}`;
           return config;
         },
         function (error) {
@@ -142,20 +162,16 @@ const App = (props) => {
     instance.interceptors.response.use(
         (config) => {
           if(!config.data.success){
-            console.log(config.data.error.message);
             addToast(
                 config.data.error.message, {appearance: 'error',autoDismiss: true, id:"errorToast"}
             );
             return Promise.reject(config.data.error.message);
           }
-          console.log(123,config.data);
           return config;
         },
         (error) => {
           if(error.response.data.error.message === "Refresh") {
-            console.log(email,roles)
-            refreshToken(email,roles).then(res=>{
-              console.log(res);
+            refreshToken().then(res=>{
               dispatch(signin(res));
             });
             return Promise.reject();
@@ -163,7 +179,6 @@ const App = (props) => {
           addToast(
               error.response.data.error.message, {appearance: 'error', autoDismiss: true},
           );
-          console.log(error.response.data.error.message);
           return Promise.reject(error.response.data.error.message);
         }
     );

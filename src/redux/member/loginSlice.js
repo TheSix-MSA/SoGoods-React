@@ -10,16 +10,19 @@ const loginSlice = createSlice({
     initialState:initState,
     reducers:{
         signin:(state, action) => {
-            localStorage.setItem("userData", action.payload);
-            console.log(action.payload);
-            return {email:action.payload.email, roles: action.payload.roles, name:action.payload.name};
+            localStorage.removeItem("userData");
+            localStorage.setItem("userData",JSON.stringify(action.payload));
+            return {...state,email:action.payload.email, roles: action.payload.roles, name:action.payload.name};
         },
         signout: (state, action) => {
             localStorage.clear();
             return {...initState}
+        },
+        loggedInUser:(state, action) => {
+            return {...state,email:action.payload.email, roles: action.payload.roles, name:action.payload.name};
         }
     }
 });
 
-export const {signin,signout} = loginSlice.actions;
+export const {signin,signout,loggedInUser} = loginSlice.actions;
 export default loginSlice.reducer;

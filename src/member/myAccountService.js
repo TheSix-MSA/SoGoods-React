@@ -35,9 +35,9 @@ const myAccountService = () => {
         console.log(`${process.env.REACT_APP_ALADIN_TTB_KEY}`)
 
         const result = await axios.get(
-            `/ttb/api/ItemSearch.aspx?TTBKey=${process.env.REACT_APP_ALADIN_TTB_KEY}&ItemId=${isbnKey}&ItemIdType=ISBN13&Output=JS`
+            `/ttb/api/ItemLookUp.aspx?ttbkey=${process.env.REACT_APP_ALADIN_TTB_KEY}&ItemId=${isbnKey}&itemIdType=ISBN13&output=js&Version=20131101`
         ).then(value => {
-            console.log(value)
+            console.log(value);
         });
 
         return result;

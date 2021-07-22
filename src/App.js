@@ -54,8 +54,7 @@ const HomePetFood = lazy(() => import("./pages/home/HomePetFood"));
 const HomeMedicalEquipment = lazy(() =>
   import("./pages/home/HomeMedicalEquipment")
 );
-const HomeBlackFridayTwo = lazy(() =>
-  import("./pages/home/HomeBlackFridayTwo")
+const HomeBlackFridayTwo = lazy(() =>import("./pages/home/HomeBlackFridayTwo")
 );
 const HomeValentinesDay = lazy(() => import("./pages/home/HomeValentinesDay"));
 
@@ -113,6 +112,7 @@ const DashBoard = lazy(() => import("./admin/views/Dashboard"));
 
 
 const App = (props) => {
+  console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
   const {addToast} = useToasts()
   const {email,roles} = useSelector(state=>state.login);
   const dispatch = useDispatch();

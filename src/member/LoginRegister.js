@@ -41,6 +41,8 @@ const initStateVerify = {
 const warningName = {type:""};
 
 const LoginRegister = ({ location }) => {
+
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@");
     const history = useHistory();
     const {addToast} = useToasts();
     const info = useSelector(state=>state.login);
@@ -212,6 +214,7 @@ const LoginRegister = ({ location }) => {
                                                                 placeholder="Username"
                                                                 value={loginForm.email}
                                                                 onChange={onChange}
+                                                                autoFocus
                                                             />
                                                             <input
                                                                 type="password"
@@ -383,7 +386,7 @@ const LoginRegister = ({ location }) => {
                                                                 onChange={signupChange}
                                                                 onClick={popupPost}
                                                             />
-                                                            <CodeDialogSlide addAddress={addAddress}></CodeDialogSlide>
+                                                            <CodeDialogSlide addAddress={addAddress}/>
                                                             <input
                                                                 name="detailAddress"
                                                                 placeholder="Detail Address"
@@ -393,7 +396,7 @@ const LoginRegister = ({ location }) => {
                                                             />
                                                             <div className="button-box">
                                                                 <FormCheckDialog
-                                                                    warningType={warningType}></FormCheckDialog>
+                                                                    warningType={warningType}/>
                                                                 <button onClick={signupBtn}>
                                                                     <span>Register</span>
                                                                 </button>

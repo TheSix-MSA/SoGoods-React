@@ -12,6 +12,7 @@ const myAccountService = () => {
     };
 
     const getMyInfo = async (email) => {
+        if(email==="") email = -1;
         const result = await instance({
             url: `/member/${email}`,
             method: 'GET'
@@ -19,8 +20,17 @@ const myAccountService = () => {
         return result;
     };
 
+    const modifyInfo = async (editInfo) => {
+        const result = await instance({
+            url: `/member/`,
+            method: 'PUT',
+            data: editInfo
+        });
+        return result;
+    };
 
-    return {getMyInfo}
+
+    return {getMyInfo, modifyInfo}
 };
 
 export default myAccountService();

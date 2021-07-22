@@ -4,13 +4,15 @@ import ScrollToTop from "./helpers/scroll-top";
 import {BrowserRouter as Router, Switch, Route, BrowserRouter} from "react-router-dom";
 
 import { multilanguage, loadLanguages } from "redux-multilanguage";
-import { connect } from "react-redux";
+import {connect, useDispatch, useSelector} from "react-redux";
 import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
 import instance from "./modules/axiosConfig";
 import {useToasts} from "react-toast-notifications";
 import ProductInputList from "./pages/attach-dragNdrop/ProductInputList";
 import BoardRegister from "./pages/blog/BoardRegister";
 import BoardModify from "./pages/blog/BoardModify";
+import {signin} from "./redux/member/loginSlice";
+import {refreshToken} from "./modules/refreshToken";
 
 //the six
 const FundingBoard = lazy(()=>import("./components/funding/FundingBoard"));
@@ -112,6 +114,8 @@ const DashBoard = lazy(() => import("./admin/views/Dashboard"));
 
 const App = (props) => {
   const {addToast} = useToasts()
+  const {email,roles} = useSelector(state=>state.login);
+  const dispatch = useDispatch();
   useEffect(() => {
     props.dispatch(
       loadLanguages({
@@ -147,6 +151,14 @@ const App = (props) => {
           return config;
         },
         (error) => {
+          if(error.response.data.error.message === "Refresh") {
+            console.log(email,roles)
+            refreshToken(email,roles).then(res=>{
+              console.log(res);
+              dispatch(signin(res));
+            });
+            return Promise.reject();
+          }
           addToast(
               error.response.data.error.message, {appearance: 'error', autoDismiss: true},
           );

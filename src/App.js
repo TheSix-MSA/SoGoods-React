@@ -13,6 +13,7 @@ import BoardRegister from "./board/BoardRegister";
 import BoardModify from "./board/BoardModify";
 import {loggedInUser, signin} from "./redux/member/loginSlice";
 import {refreshToken} from "./modules/refreshToken";
+import Confirmation from "./pages/order/Confirmation";
 
 //the six
 const FundingBoard = lazy(()=>import("./components/funding/FundingBoard"));
@@ -434,6 +435,10 @@ const App = (props) => {
                 <Route
                   path={process.env.PUBLIC_URL + "/wishlist"}
                   component={Wishlist}
+                />
+                <Route
+                  path={process.env.PUBLIC_URL + "/confirmOrder"}
+                  component={Confirmation}
                 />
                 <Route
                   path={process.env.PUBLIC_URL + "/compare"}

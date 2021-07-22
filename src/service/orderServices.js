@@ -21,7 +21,6 @@ const orderServices = () => {
     }
 
     const callKakaoPay = async (params) => {
-        console.log(params)
         const data = await axios.post("/v1/payment/ready", null, {
             params,
             headers: {

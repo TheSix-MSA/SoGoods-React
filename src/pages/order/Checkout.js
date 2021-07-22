@@ -10,7 +10,6 @@ import codeService from "../../member/codeService";
 import CodeDialogSlide from "../../member/CodeDialog";
 import useInputs from "../../customHooks/useInputs";
 import orderServices from "../../service/orderServices";
-import axios from "axios";
 
 const initStateForServer =  {
     buyer: "이메일", //현재 구매자 정보는 리덕스를 이용해 가져와야 할듯
@@ -31,19 +30,17 @@ const Checkout = ({ location }) => {
     });
 
   const [kpParams, setKpParams] = useState({
-      // params: {
-        cid: "TC0ONETIME",
-        partner_order_id: "partner_order_id", // 서버에 있는 값중 최신 값을 가져와야 한다.
-        partner_user_id: "partner_user_id", //결제하는 놈 이메일
-        item_name: "설마..?",
-        quantity: 1,
-        total_amount: 10,
-        vat_amount: 0,
-        tax_free_amount: 0,
-        approval_url: "http://localhost:3000/checkout",
-        fail_url: "http://localhost:3000/checkout",
-        cancel_url: "http://localhost:3000/checkout"
-      // }
+    cid: "TC0ONETIME",
+    partner_order_id: "partner_order_id", // 서버에 있는 값중 최신 값을 가져와야 한다.
+    partner_user_id: "partner_user_id", //결제하는 놈 이메일
+    item_name: "설마..?",
+    quantity: 1,
+    total_amount: 10,
+    vat_amount: 0,
+    tax_free_amount: 0,
+    approval_url: "http://localhost:3000/wishlist",
+    fail_url: "http://localhost:3000/checkout",
+    cancel_url: "http://localhost:3000/checkout"
     });
 
   const cartItems = [
@@ -74,7 +71,6 @@ const Checkout = ({ location }) => {
 
     const checkOut = async () => {
         const res = await orderServices.callKakaoPay(kpParams);
-        console.log(res)
         window.open(res.data.next_redirect_pc_url, "_blank")
     }
 

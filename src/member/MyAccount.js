@@ -14,8 +14,6 @@ import codeService from "./codeService";
 import {useToasts} from "react-toast-notifications";
 import {useHistory} from "react-router-dom";
 
-
-
 const initUserInfo = {
   email:"",
   name: "",
@@ -27,18 +25,17 @@ const initUserInfo = {
 };
 
 const initPassword = {
-  email:"",
+    email:"",
   password:"",
   passwordCheck:""
 };
-
 
 
 const MyAccount = ({ location }) => {
   const { pathname } = location;
   const userSelector = useSelector(state => state.login);
   const [userInfo, setUserInfo, setInfo] = useInputs(initUserInfo);
-  const [passInfo, setPassInfo, setPass] = useInputs(initPassword);
+  const [passInfo, setPassInfo, setPass] = useInputs({...initPassword,email:userSelector.email});
   const [editFlag, setEditFlag] = useState(false);
   const [passEditFlag, setPassEditFlag] = useState(false);
   const {addToast} = useToasts();
@@ -47,17 +44,14 @@ const MyAccount = ({ location }) => {
   useEffect(() => {
     myAccountService.getMyInfo(userSelector.email)
         .then(value => {
-          passInfo.email = userSelector.email;
-          setInfo({...value.data.response, passwordCheck: value.data.response.password});
+          setInfo({...value.data.response});
         });
 
     if(userSelector.email===""){
       history.push('/');
     }
 
-  },[]);
-  console.log(1, userInfo);
-
+  },[userSelector]);
 
   /**
    * 유저 수정 글쓰기기능 활성화

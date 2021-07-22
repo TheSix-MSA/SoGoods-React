@@ -1,25 +1,11 @@
 import PropTypes from "prop-types";
-import React, {Fragment, useState, useEffect, useCallback} from "react";
+import React, {Fragment, useState, useEffect} from "react";
 import MetaTags from "react-meta-tags";
-import Paginator from "react-hooks-paginator";
-import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import { connect } from "react-redux";
 import LayoutOne from "../../layouts/LayoutOne";
-import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import ShopTopbar from "../../wrappers/product/ShopTopbar";
-import ShopProducts from "../../wrappers/product/ShopProducts";
 import Nav from "react-bootstrap/Nav";
-import ShopSearch from "../../components/product/ShopSearch";
-import ShopSidebar from "../../wrappers/product/ShopSidebar";
 import * as queryString from "query-string";
 import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link,
-    useLocation,
-    useParams,
-    useRouteMatch,
     useHistory
 } from "react-router-dom";
 import fundingService from "./fundingService";
@@ -36,6 +22,8 @@ const initState= {
         prev: false,
         next: false,
         totalCount:0,
+        start:0,
+        end:0
     }
 }
 
@@ -45,12 +33,9 @@ const param = {
     type:''
 }
 
-const FundingList = ({ location, products, productTabClass}) => {
-    const [layout, setLayout] = useState("grid three-column");
-    const [currentData, setCurrentData] = useState([]);
+const FundingList = ({ location, productTabClass}) => {
     const value = queryString.parse(location.search);	// 문자열의 쿼리스트링을 Object로 변환
     const [searchInput, searchOnChange ,setSearchInput] = useInputs({...param, page:value.page||1});
-    const [flag, setFlag] = useState(false);
 
     // 파라미터로 넘어가는 값
     const page = value.page||1;
@@ -122,9 +107,6 @@ const FundingList = ({ location, products, productTabClass}) => {
                     <div>
                         <h3>진행중인 펀딩</h3>
                     </div>
-                    {/*<div>*/}
-                    {/*    <h4>마감된 펀딩</h4>*/}
-                    {/*</div>*/}
                 </Nav>
                 <div className="container">
                     <div className="row">
@@ -147,9 +129,6 @@ const FundingList = ({ location, products, productTabClass}) => {
                                     <button onClick={()=>toRegister()} style={{height:"45px" ,backgroundColor:"#EEE", borderColor:"#EEE"}}>펀딩 등록하기</button>
                                 </div>
                             </div>
-
-                            {/* shop page content default */}
-                            <ShopProducts layout={layout} products={currentData} />
                             <div style={{display:"grid", gridTemplateColumns: "1fr 1fr 1fr" ,gridTemplateRows: "1fr 1fr 1fr"}}>
                                 {list}
                             </div>

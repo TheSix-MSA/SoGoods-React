@@ -21,8 +21,6 @@ const initStateLogin = {
 
 const initStateSignUp = {
     email:"",
-    password:"",
-    passwordCheck:"",
     name:"",
     birth:"",
     gender:"남자",
@@ -180,7 +178,6 @@ const LoginRegister = ({ location }) => {
             codeService.popUpWarningModal();
         }
     };
-    console.log(signupForm);
     const dispatch = useDispatch();
 
     return (

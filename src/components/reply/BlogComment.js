@@ -44,11 +44,6 @@ const BlogComment = () => {
   const deleteReply = (rno) => {
     repliesService.deleteReply(rno, replies.pageMaker.page)
         .then()
-        .catch();
-    /***
-     * Toastify need for successful deletion
-     * + need to take care of catch
-     */
   }
 
   const movePage = (num) => {

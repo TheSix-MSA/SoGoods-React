@@ -2,9 +2,7 @@ import instance from "../../modules/axiosConfig";
 
 
 const memberService = () => {
-    let movePage;
-    let setRole;
-    let setBanned =false;
+    let render;
 
     const getMemberList = async (page) => {
         console.log(" getMemberList started");
@@ -14,48 +12,40 @@ const memberService = () => {
         })
     }
 
+    const getMemberApprovalList = async (page) => {
+        console.log(" getMemberList started");
+         const res = await instance({
+            url: `member/list?approval=true&page=${page}`,
+            method: 'get'
+        })
+        return res;
+    }
+
     const changeRole =  async (email) => {
         console.log(" changeRole started");
         const res = await instance({
             url: `member/role/${email}`,
             method: 'post'
-        });
-        console.log(res)
-        setRole(res.data.response.roleSet[res.data.response.roleSet.length-1])
-        console.log(res.data.response.roleSet[res.data.response.roleSet.length-1])
+        })
+        render()
         return res;
-    }
-
-    const setRoleService =(func)=>{
-        setRole = func
     }
 
     const changeBanned =  async (email) => {
         console.log(" changeBanned started");
-        const res = await instance({
+        const result =await instance({
             url: `member/ban/${email}`,
             method: 'post'
         })
-        // console.log("changeBanneds content",res.data.response.banned)
-        setBanned(res.data.response.banned)
-        return res;
+        render()
+        return result;
     }
 
-    const setBannedService =(func)=>{
-        setBanned = func
+    const setRender = (func) => {
+        render = func;
     }
 
-
-    const setMovePage = (func) => {
-        movePage = func;
-    }
-
-    const setNextPrev = (func) => {
-        movePage = func;
-    }
-
-
-    return {getMemberList,setMovePage,setNextPrev,changeRole,setRoleService,changeBanned, setBannedService}
+    return {setRender,getMemberList,changeRole,changeBanned, getMemberApprovalList}
 
 }
 export default memberService();

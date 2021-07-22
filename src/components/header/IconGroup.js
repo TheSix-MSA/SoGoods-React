@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { Link } from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {connect, useDispatch, useSelector} from "react-redux";
 import MenuCart from "./sub-components/MenuCart";
 import {signout} from "../../redux/member/loginSlice";
@@ -17,6 +17,8 @@ const IconGroup = ({
     e.currentTarget.nextSibling.classList.toggle("active");
   };
 
+  const history = useHistory();
+
   const triggerMobileMenu = () => {
     const offcanvasMobileMenu = document.querySelector(
       "#offcanvas-mobile-menu"
@@ -32,7 +34,7 @@ const IconGroup = ({
   const logout = () => {
     console.log("ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ");
     dispatch(signout());
-    console.log(login);
+    history.push("/");
   };
 
 
@@ -87,6 +89,18 @@ const IconGroup = ({
                   <li>
                     <Link to={process.env.PUBLIC_URL + "/my-account"}>
                       my account
+                    </Link>
+                  </li>
+              }
+              {login.email === "" ?
+                  <li>
+                    <Link to={process.env.PUBLIC_URL + "/admin"}>
+                      admin
+                    </Link>
+                  </li> :
+                  <li>
+                    <Link to={process.env.PUBLIC_URL + "/admin"}>
+                      admin
                     </Link>
                   </li>
               }

@@ -4,13 +4,15 @@ import ScrollToTop from "./helpers/scroll-top";
 import {BrowserRouter as Router, Switch, Route, BrowserRouter} from "react-router-dom";
 
 import { multilanguage, loadLanguages } from "redux-multilanguage";
-import { connect } from "react-redux";
+import {connect, useDispatch, useSelector} from "react-redux";
 import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
 import instance from "./modules/axiosConfig";
 import {useToasts} from "react-toast-notifications";
 import ProductInputList from "./pages/attach-dragNdrop/ProductInputList";
-import BoardRegister from "./pages/blog/BoardRegister";
-import BoardModify from "./pages/blog/BoardModify";
+import BoardRegister from "./board/BoardRegister";
+import BoardModify from "./board/BoardModify";
+import {loggedInUser, signin} from "./redux/member/loginSlice";
+import {refreshToken} from "./modules/refreshToken";
 
 //the six
 const FundingBoard = lazy(()=>import("./components/funding/FundingBoard"));
@@ -86,22 +88,22 @@ const ProductFixedImage = lazy(() =>
 
 // blog pages
 const BlogStandard = lazy(() => import("./pages/blog/BlogStandard"));
-const BlogNoSidebar = lazy(() => import("./pages/blog/BlogNoSidebar"));
+const BlogNoSidebar = lazy(() => import("./board/BlogNoSidebar"));
 const BlogRightSidebar = lazy(() => import("./pages/blog/BlogRightSidebar"));
 const BlogDetailsStandard = lazy(() =>
-  import("./pages/blog/BlogDetailsStandard")
+  import("./board/BlogDetailsStandard")
 );
 
 // other pages
 const About = lazy(() => import("./pages/other/About"));
 const Contact = lazy(() => import("./pages/other/Contact"));
-const MyAccount = lazy(() => import("./pages/other/MyAccount"));
+const MyAccount = lazy(() => import("./member/MyAccount"));
 const LoginRegister = lazy(() => import("./member/LoginRegister"));
 
 const Cart = lazy(() => import("./pages/other/Cart"));
 const Wishlist = lazy(() => import("./pages/other/Wishlist"));
 const Compare = lazy(() => import("./pages/other/Compare"));
-const Checkout = lazy(() => import("./pages/other/Checkout"));
+const Checkout = lazy(() => import("./pages/order/Checkout"));
 
 const NotFound = lazy(() => import("./pages/other/NotFound"));
 
@@ -112,6 +114,8 @@ const DashBoard = lazy(() => import("./admin/views/Dashboard"));
 
 const App = (props) => {
   const {addToast} = useToasts()
+  const {email,roles} = useSelector(state=>state.login);
+  const dispatch = useDispatch();
   useEffect(() => {
     props.dispatch(
       loadLanguages({
@@ -125,9 +129,29 @@ const App = (props) => {
   });
 
   useEffect(() => {
+    const userData = localStorage.getItem("userData");
+    if(!email && userData) {
+      dispatch(loggedInUser(userData));
+    }
+  },[]);
+
+  useEffect(() => {
+      if(email && email !== "") {
+        const interval = setInterval(() => {
+          refreshToken().then(res=>{
+            dispatch(signin(res));
+          });
+        }, 1000*60*19);
+        return () => clearInterval(interval);
+      }
+    },[email]);
+
+
+
+  useEffect(() => {
     instance.interceptors.request.use(
         function (config) {
-          //로딩과 알림 호출
+          config.headers.Authorization = `Bearer ${(JSON.parse(localStorage.getItem("userData")))?.accessToken || ""}`;
           return config;
         },
         function (error) {
@@ -137,20 +161,23 @@ const App = (props) => {
     instance.interceptors.response.use(
         (config) => {
           if(!config.data.success){
-            console.log(config.data.error.message);
             addToast(
                 config.data.error.message, {appearance: 'error',autoDismiss: true, id:"errorToast"}
             );
             return Promise.reject(config.data.error.message);
           }
-          console.log(123,config.data);
           return config;
         },
         (error) => {
+          if(error.response.data.error.message === "Refresh") {
+            refreshToken().then(res=>{
+              dispatch(signin(res));
+            });
+            return Promise.reject();
+          }
           addToast(
               error.response.data.error.message, {appearance: 'error', autoDismiss: true},
           );
-          console.log(error.response.data.error.message);
           return Promise.reject(error.response.data.error.message);
         }
     );
@@ -358,13 +385,14 @@ const App = (props) => {
                   component={BlogStandard}
                 />
                 <Route
-                  path={process.env.PUBLIC_URL + "/blog-no-sidebar"}
-                  component={BlogNoSidebar}
-                />
-                <Route
                   path={process.env.PUBLIC_URL + "/blog-right-sidebar"}
                   component={BlogRightSidebar}
                 />
+
+                <Route
+                    path={"/board/FREE/list/:currentPage"}
+                    component={BlogNoSidebar}
+                />{/* 재연 - Board 목록 컴포넌트로 사용 */}
 
                 <Route
                     exact
@@ -373,11 +401,11 @@ const App = (props) => {
                 /> {/* 재연 - Board 작성 컴포넌트로 사용 */}
 
                 <Route
-                  path={`/board/FREE/:bno/:currentPage`}
+                  path={`/board/FREE/:bno`}
                   component={BlogDetailsStandard}
                 /> {/* 재연 - Board 상세보기 컴포넌트로 사용 */}
                 <Route
-                  path={`/board/modify/FREE/:bno/:currentPage`}
+                  path={`/board/modify/FREE/:bno`}
                   component={BoardModify}
                 /> {/* 재연 - Board 수정 컴포넌트로 사용 */}
 

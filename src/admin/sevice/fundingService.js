@@ -13,19 +13,23 @@ const fundingService = () => {
         })
     }
 
-    const setAuthorized =  async (fno,page) => {
+    const setAuthorized =  async (fno) => {
         console.log(" setAuthorized started");
         const res = await instance({
             url: `funding/req/${fno}`,
             method: 'put'
         });
-        console.log(res)
-        movePage(page)
         return res;
     }
-    // const setAuthorizedService =(func) =>{
-    //     setAuth = func
-    // }
+
+    const requestFundingList = async () =>{
+        console.log("requestFundingList started");
+
+        return await instance({
+            url: `funding/false/list`,
+            method: 'get'
+        })
+    }
 
     const setMovePage = (func) => {
         movePage = func;
@@ -35,7 +39,7 @@ const fundingService = () => {
     }
 
 
-    return {getFundingList,setMovePage,setNextPrev,setAuthorized}
+    return {getFundingList,setMovePage,setNextPrev,setAuthorized,requestFundingList}
 
 }
 export default fundingService();

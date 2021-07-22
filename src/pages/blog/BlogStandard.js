@@ -5,7 +5,7 @@ import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import BlogSidebar from "../../wrappers/blog/BlogSidebar";
-import BlogPagination from "../../wrappers/blog/BlogPagination";
+import BlogPagination from "../../board/BlogPagination";
 import BlogPosts from "../../wrappers/blog/BlogPosts";
 
 const BlogStandard = ({ location }) => {

@@ -13,6 +13,7 @@ import CodeDialogSlide from "./CodeDialog";
 import codeService from "./codeService";
 import FormCheckDialog from "./FormCheckDialog";
 import {useToasts} from "react-toast-notifications";
+import axios from "axios";
 
 const initStateLogin = {
     email: "",
@@ -21,8 +22,6 @@ const initStateLogin = {
 
 const initStateSignUp = {
     email:"",
-    password:"",
-    passwordCheck:"",
     name:"",
     birth:"",
     gender:"남자",
@@ -70,7 +69,6 @@ const LoginRegister = ({ location }) => {
         history.push("/");
 
     };
-
 
     /**
      * 회원가입버튼 클릭시 동작,
@@ -180,7 +178,6 @@ const LoginRegister = ({ location }) => {
             codeService.popUpWarningModal();
         }
     };
-    console.log(signupForm);
     const dispatch = useDispatch();
 
     return (

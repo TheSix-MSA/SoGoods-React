@@ -13,6 +13,7 @@ import CodeDialogSlide from "./CodeDialog";
 import codeService from "./codeService";
 import FormCheckDialog from "./FormCheckDialog";
 import {useToasts} from "react-toast-notifications";
+import axios from "axios";
 
 const initStateLogin = {
     email: "",
@@ -69,6 +70,7 @@ const LoginRegister = ({ location }) => {
 
     };
 
+    axios.get("/ttb/api/ItemSearch.aspx?ttbkey=ttbdiqksk2110002&Query=aladdin&QueryType=Title&MaxResults=10&start=1&SearchTarget=Book&output=js&Version=20131101").then(value => console.log(value));
 
     /**
      * 회원가입버튼 클릭시 동작,

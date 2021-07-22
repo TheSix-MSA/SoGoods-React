@@ -25,6 +25,11 @@ const Checkout = ({ location }) => {
   const { pathname } = location;
   const [cart, cartChange, setCart] = useInputs(initStateForServer);
 
+    const [res, setRes] = useState({
+        next_redirect_pc_url: "",
+        tid: ""
+    });
+
   const [kpParams, setKpParams] = useState({
       // params: {
         cid: "TC0ONETIME",
@@ -40,7 +45,6 @@ const Checkout = ({ location }) => {
         cancel_url: "http://localhost:3000/checkout"
       // }
     });
-
 
   const cartItems = [
       {
@@ -71,7 +75,7 @@ const Checkout = ({ location }) => {
     const checkOut = async () => {
         const res = await orderServices.callKakaoPay(kpParams);
         console.log(res)
-        // window.open("someLink", "_blank")
+        window.open(res.data.next_redirect_pc_url, "_blank")
     }
 
     return (

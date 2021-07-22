@@ -52,7 +52,7 @@ const FundingRead = ({location}) => {
                             </div>
                             <div className="col-lg-3">
                                 {/* blog sidebar */}
-                                <FundingSideBar {...funding}/>
+                                {funding.productDTOs.length>0&&<FundingSideBar {...funding}/>}
                             </div>
                         </div>
                     </div>

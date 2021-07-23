@@ -42,7 +42,6 @@ const warningName = {type:""};
 
 const LoginRegister = ({ location }) => {
 
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@");
     const history = useHistory();
     const {addToast} = useToasts();
     const info = useSelector(state=>state.login);

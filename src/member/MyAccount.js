@@ -15,8 +15,6 @@ import {useToasts} from "react-toast-notifications";
 import {useHistory} from "react-router-dom";
 import NovelRegisterDialog from "./NovelRegisterDialog";
 
-
-
 const initUserInfo = {
   email:"",
   name: "",
@@ -33,6 +31,7 @@ const initPassword = {
   passwordCheck:""
 };
 
+
 const initSearchBook = {
   isbn:""
 };
@@ -41,7 +40,7 @@ const MyAccount = ({ location }) => {
   const { pathname } = location;
   const userSelector = useSelector(state => state.login);
   const [userInfo, setUserInfo, setInfo] = useInputs(initUserInfo);
-  const [passInfo, setPassInfo, setPass] = useInputs(initPassword);
+  const [passInfo, setPassInfo, setPass] = useInputs({...initPassword,email:userSelector.email});
   const [searchBook, setSearchBook, setBook] = useInputs(initSearchBook);
   const [editFlag, setEditFlag] = useState(false);
   const [passEditFlag, setPassEditFlag] = useState(false);
@@ -51,17 +50,14 @@ const MyAccount = ({ location }) => {
   useEffect(() => {
     myAccountService.getMyInfo(userSelector.email)
         .then(value => {
-          passInfo.email = userSelector.email;
-          setInfo({...value.data.response, passwordCheck: value.data.response.password});
+          setInfo({...value.data.response});
         });
 
     if(userSelector.email===""){
       history.push('/');
     }
 
-  },[]);
-  console.log(1, userInfo);
-
+  },[userSelector]);
 
   /**
    * 유저 수정 글쓰기기능 활성화

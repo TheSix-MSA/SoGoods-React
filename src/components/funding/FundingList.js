@@ -52,6 +52,7 @@ const FundingList = ({ location, productTabClass}) => {
         })
     }, [page])
 
+
     // 페이지 이동처리
     const movePage = (page) => {
         const url = '/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type;

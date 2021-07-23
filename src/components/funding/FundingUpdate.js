@@ -1,49 +1,72 @@
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment, useEffect, useMemo, useRef, useState} from 'react';
 import LayoutOne from "../layouts/header/LayoutOne";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import getFormatDate from "../../modules/getFormatDate";
 import useInputs from "../../customHooks/useInputs";
 import fundingService from "./fundingService";
-import {useParams} from "react-router-dom";
-import codeService from "../../member/codeService";
-import FormCheckDialog from "../../member/FormCheckDialog";
+import {useHistory, useLocation, useParams} from "react-router-dom";
+import {useSelector} from "react-redux";
 
-
-const initState = {
-    fundingDTO:{},
-    productDTOs:[],
-    favoriteCount:0
+const inputStyle = {
+    margin:"10px"
+}
+const textStyle = {
+    margin:"0 10px"
+}
+const underInputStyle = {
+    margin:"0 10px",
 }
 
-const warningName = {type:""};
+const initForm = {
+    title:'',
+    content:'',
+    writer:'',
+    email:'',
+    dueDate:"",
+    targetAmount:0
+}
+
+const productDTOs = []
+
+// const initForm = {
+//     fundingDTO:{},
+//     productDTOs:[],
+//     favoriteCount:0
+// }
 
 const FundingUpdate = () => {
+   const info = useSelector(state=>state.login);
+   const history = useHistory();
+   let {fno} = useParams();
+   const [form, changeForm, setForm] = useInputs({...initForm});
+   const [productForm, changeProductForm, setProductForm] = useInputs(productDTOs);
 
-    let {fno} = useParams()
-    const [form, changeForm, setForm] = useInputs({...initState});
-    const [funding, setFunding] = useState(initState)
-    const [warningType, setWarningType] = useState(warningName);
+   const contentRef = useRef();
+   const refArray = useMemo(
+       ()=>[
+           contentRef
+   ]
+   ,[])
 
     useEffect(()=>{
         fundingService.getOneFunding(fno).then(res=> {
             console.log(res.response)
-            setFunding(res.response)
+            setForm({...res.response.fundingDTO})
+            setProductForm(res.response.productDTOs)
         })
-    },[])
+    },[fno])
+
+    console.log(form);
 
     const sendFormData = async () => {
         console.log(form);
         const result = await fundingService.updateFunding(fno, {...form});
         console.log(result)
-        setForm({...initState})
+        setForm({...initForm})
+        history.push("/funding/list");
     }
 
-        if(form.title === ''){
-            setWarningType({...warningType,type:"empty"})
-            codeService.popUpWarningModal();
-            return;
-        }
 
 
     return (
@@ -65,70 +88,84 @@ const FundingUpdate = () => {
                                                             </Nav.Link>
                                                         </Nav.Item>
                                                     </Nav>
+                                                    <div style={textStyle}>제목</div>
                                                     <input
-                                                        required
+                                                        style={inputStyle}
                                                         type="title"
                                                         name="title"
-                                                        value={form.title}
-                                                        placeholder={funding.fundingDTO.title}
+                                                        value={form.title||""}
                                                         onChange={changeForm}
                                                     />
+                                                    <div style={textStyle}>내용</div>
                                                     <input
+                                                        readOnly
+                                                        style={inputStyle}
                                                         type="hidden"
                                                         name="writer"
-                                                        value={form.writer}
-                                                        placeholder={funding.fundingDTO.writer}
+                                                        value={form.writer||""}
                                                         onChange={changeForm}
                                                     />
                                                     <input
+                                                        readOnly
+                                                        style={inputStyle}
                                                         type="hidden"
                                                         name="email"
-                                                        value={form.email}
-                                                        placeholder={funding.fundingDTO.email}
+                                                        value={form.email ||""}
                                                         onChange={changeForm}
                                                     />
                                                     <textarea
-                                                        required
+                                                        style={inputStyle}
                                                         type="text"
                                                         name="content"
-                                                        value={form.content}
-                                                        placeholder={funding.fundingDTO.content}
+                                                        value={form.content ||""}
+                                                        ref={contentRef}
                                                         onChange={changeForm}
                                                     />
-                                                    메인 이미지
+                                                    <h5 style={textStyle}>메인 이미지</h5>
                                                     <input
+                                                        style={inputStyle}
                                                         type="file"
                                                         name="mainImage"
                                                         onChange={changeForm}
-                                                        required
                                                     />
-                                                    <button>상품등록</button>
+                                                    <h5 style={textStyle}>상품등록</h5>
+                                                        <img src={""} alt={"상품 추가 아이콘"}/>
                                                     <div style={{display:"flex"}}>
-                                                        <input
-                                                            readOnly
-                                                            name="dueDate"
-                                                            placeholder={funding.fundingDTO.dueDate}
-                                                            value={form.dueDate}
-                                                            type="text"
-                                                            onChange={changeForm}
-                                                            onBlur={(e) => (e.currentTarget.type = "text")}
-                                                            min={getFormatDate(new Date())}
-                                                        />
-                                                        <input
-                                                            readOnly
-                                                            name="targetAmount"
-                                                            value={form.targetAmount}
-                                                            placeholder={funding.fundingDTO.targetAmount}
-                                                            type="text"
-                                                            onChange={changeForm}
-                                                            onInput={({ target }) => {
-                                                                target.value = target.value.replace(/[^0-9]/g, "");
-                                                                target.value = target.value.replace(/,/g, "");
-                                                            }}
-                                                        />
+                                                    <div style={{display:"flex" ,flexWrap:"wrap"}}>
+                                                    <h5 style={textStyle}>펀딩 만기일</h5>
+                                                    <input
+                                                        style={inputStyle}
+                                                        readOnly
+                                                        name="dueDate"
+                                                        //placeholder={form.fundingDTO.dueDate}
+                                                        value={form.dueDate ||""}
+                                                        type="text"
+                                                        onChange={changeForm}
+                                                        onBlur={(e) => (e.currentTarget.type = "text")}
+                                                        min={getFormatDate(new Date())}
+                                                    />
+                                                    </div>
+                                                    <div style={{display:"flex", flexWrap:"wrap"}}>
+                                                    <h5 style={textStyle}>펀딩 목표금액</h5>
+                                                    <input
+                                                        style={inputStyle}
+                                                        readOnly
+                                                        name="targetAmount"
+                                                        value={form.targetAmount ||""}
+                                                        //placeholder={form.fundingDTO.targetAmount}
+                                                        type="text"
+                                                        onChange={changeForm}
+                                                        onInput={({ target }) => {
+                                                            target.value = target.value.replace(/[^0-9]/g, "");
+                                                            target.value = target.value.replace(/,/g, "");
+                                                        }}
+                                                    />
+                                                    </div>
                                                     </div>
                                                     <div className="button-box">
-                                                        <button type="button" onClick={()=>sendFormData()}>
+                                                        <button type="button"
+                                                                onClick={()=>sendFormData()}
+                                                                style={inputStyle}>
                                                             <span>펀딩 등록하기</span>
                                                         </button>
                                                     </div>

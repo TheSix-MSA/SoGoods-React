@@ -4,6 +4,7 @@ import fundingService from "./fundingService";
 import {useParams} from "react-router-dom";
 import FundingSideBar from "./FundingSideBar";
 import FundingPost from "./FundingPost";
+import {useSelector} from "react-redux";
 
 
 const initState = {
@@ -14,6 +15,7 @@ const initState = {
 
 const FundingRead = ({location}) => {
 
+    const info = useSelector(state=>state.login);
     const { pathname } = location;
     let {fno} = useParams()
     const [funding, setFunding] = useState(initState)

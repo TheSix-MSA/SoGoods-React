@@ -15,6 +15,16 @@ const myAccountService = () => {
     let dialogFn;
     let closeDialogFn;
     let clearInputFn;
+    let listFlagFn;
+
+    const setListFlag = (func) => {
+        listFlagFn = func
+    };
+
+    const changeFlag = () => {
+        listFlagFn();
+    };
+
 
     const setClearInputFn = (func) =>{
         clearInputFn = func;
@@ -90,7 +100,7 @@ const myAccountService = () => {
 
 
     return {getMyInfo, modifyInfo, searchNovelList, popUpDialogFn, setDialogFn, setCloseDialogFn, registerNovel,clearInput,
-        setClearInputFn, getNovelList}
+        setClearInputFn, getNovelList, setListFlag, changeFlag}
 };
 
 export default myAccountService();

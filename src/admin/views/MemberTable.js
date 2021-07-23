@@ -88,7 +88,7 @@ const MemberTable = () => {
         })
     }
     const role = (member) => {
-        memberService.changeRole(member.email).then(res => {
+        memberService.changeAuth(member.email).then(res => {
             setMembers({
                 ...members, memberList: members.memberList.map(member => {
                     if (member.email === res.data.response.email)
@@ -98,6 +98,7 @@ const MemberTable = () => {
             })
         })
     }
+
 
     const list = members.memberList.map(member => {
         return <tr key={member.email}>

@@ -6,9 +6,9 @@ const fundingService = () => {
     let render;
 
     // 펀딩 전체 리스트
-    const getFundingList = async (page) => {
+    const getFundingList = async (page,keyword,type) => {
         return await instance({
-            url: `funding/list?page=${page}`,
+            url: `funding/list?page=${page}&keyword=${keyword}&type=${type}`,
             method: 'get'
         })
     }

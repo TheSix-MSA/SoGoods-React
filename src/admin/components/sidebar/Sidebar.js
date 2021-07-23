@@ -16,7 +16,7 @@ function Sidebar({ color, image, routes }) {
   return (
     <div className="sidebar" >
       <div
-        className="sidebar-background"
+        // className="sidebar-background"
         // style={{
         //   backgroundImage: "url(" + image + ")",
         // }}
@@ -34,8 +34,8 @@ function Sidebar({ color, image, routes }) {
               />
             </div>
           </a>
-          <a className="simple-text" href="http://www.naver.com">
-            Creative Tim
+          <a className="simple-text" href="">
+            The Six Management
           </a>
         </div>
         <Nav>

@@ -8,9 +8,8 @@ import {
 } from "react-bootstrap";
 import fundingService from "../sevice/fundingService";
 import {useHistory, useLocation} from "react-router-dom";
-import FundingPagination from "../components/Funding/FundingPagination";
-import queryString from "querystring";
-import memberService from "../sevice/memberService";
+import FundingPagination from "../components/funding/FundingPagination";
+import * as queryString from "querystring";
 
 const initState = {
     dtoList: [
@@ -59,44 +58,28 @@ const FundingTable = () => {
 
     const [funding, setFunding] = useState(initState);
     const [flag, setFlag] = useState(false);
-    const renderPage = () => {
-        setFlag(!flag)
-    }
-    memberService.setRender(renderPage)
 
     useEffect(() => {
-        fundingService.getFundingList(page)
-            .then(res => {
-                setFunding(res.data.response);
-        console.log(res.data.response)
-            });
-    }, [page])
+        fundingService.getFundingList(page).then(res => {
+            setFunding(res.data.response);
+        });
+    }, [page, flag])
 
 
     const movePage = (num) => {
         history.push('/admin/funding?page=' + num)
         funding.pageMaker.page = num;
-        fundingService.getFundingList(num)
-            .then(res => {
-                setFunding(res.data.response);
-            });
+        setFunding({...funding});
+        setFlag(!flag)
     }
+    fundingService.setMovePage(movePage)
 
     const toFunding = (fno) => {
         history.push("/funding/read/" + fno)
     }
-
     const setAuthorized = (fund) => {
-        console.log("fund",fund)
-        fundingService.setAuthorized(fund.fno).then(res => {
-            setFunding({...funding, dtoList: funding.dtoList.map(fund => {
-                    if (fund.fundingDTO.fno === res.data.response.fno)
-                        return res.data.response;
-                    console.log(2141254235235,res.data.response)
-                    return fund;
-                })
-            })
-        })
+        fundingService.setAuthorized(fund.fundingDTO.fno, funding.pageMaker.page)
+            .then();
     }
 
     const list = funding.dtoList.map(fund => {
@@ -112,7 +95,7 @@ const FundingTable = () => {
             <td>{fund.fundingDTO.removed ? "🟢" : "🔴"}</td>
             <td>{fund.fundingDTO.dueDate}</td>
             <td>{fund.fundingDTO.regDate}</td>
-            <td onClick={() => setAuthorized(fund.fundingDTO)}>{fund.fundingDTO.authorized ? "🟢" : "🔴"}</td>
+            <td onClick={() => setAuthorized(fund)}>{fund.fundingDTO.authorized ? "true🟢" : "🔴"}</td>
         </tr>
     })
 
@@ -158,5 +141,3 @@ const FundingTable = () => {
 }
 
 export default FundingTable;
-
-

@@ -2,33 +2,32 @@ import instance from "../../modules/axiosConfig";
 
 
 const fundingService = () => {
-    // let movePage;
+    let movePage;
     let render;
 
+    // 펀딩 전체 리스트
     const getFundingList = async (page) => {
-        console.log("getFundingList started");
         return await instance({
             url: `funding/list?page=${page}`,
             method: 'get'
         })
     }
 
-    const setAuthorized = async (fno) => {
-        console.log(" setAuthorized started");
+    // 승인 요청온 펀딩 리스트
+    const requestFundingList = async (page) => {
+        const res = await instance({
+            url: `funding/false/list?page=${page}`,
+            method: 'get'
+        })
+        return res;
+    }
+
+    const setAuthorized = async (fno, page) => {
         const res = await instance({
             url: `funding/req/${fno}`,
             method: 'put'
         });
-        render()
-        return res;
-    }
-
-    const requestFundingList = async (email, page) => {
-        console.log("requestFundingList started");
-        const res = await instance({
-            url: `funding/false/list`,
-            method: 'get'
-        })
+        movePage(page)
         return res;
     }
 
@@ -36,12 +35,12 @@ const fundingService = () => {
         render = func;
     }
 
-    // const setMovePage = (func) => {
-    //     movePage = func;
-    // }
+    const setMovePage = (func) => {
+        movePage = func;
+    }
 
 
-    return {getFundingList, setRender, setAuthorized, requestFundingList}
+    return {getFundingList, setRender, setAuthorized, requestFundingList, setMovePage}
 
 }
 export default fundingService();

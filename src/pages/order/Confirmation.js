@@ -2,9 +2,9 @@ import PropTypes from "prop-types";
 import React, { Fragment } from "react";
 import MetaTags from "react-meta-tags";
 import {connect, useSelector} from "react-redux";
-import LayoutOne from "../../layouts/LayoutOne";
 import queryString from "querystring";
 import orderServices from "../../service/orderServices";
+import LayoutOne from "../../components/layouts/header/LayoutOne";
 
 const Confirmation = ({location}) => {
   const { search } = location

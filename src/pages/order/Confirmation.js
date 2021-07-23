@@ -15,14 +15,26 @@ const Confirmation = ({location}) => {
   const tid = localStorage.getItem("transactionId")!==null?
       JSON.parse(localStorage.getItem("transactionId")).tid:null;
 
-  const finalCheckOut = () => {
-    console.log({...queryObj, buyer:user, tid:tid})
-    //const res = orderServices.orderConfirmedSave({...queryObj, buyer:user, tid:tid});
-    const kakaoPayApprove = orderServices.kakaoPayApprovePayment({
-      cid: process.env.REACT_APP_KAKAO_PAY_TID,
-      tid: queryObj.tid
-    })
-    localStorage.removeItem("transactionId");
+  const orderId = localStorage.getItem("transactionId")!==null?
+      JSON.parse(localStorage.getItem("transactionId")).orderId:null;
+
+  const products = localStorage.getItem("transactionId")!==null?
+      JSON.parse(localStorage.getItem("transactionId")).cartList:null;
+
+  const finalCheckOut = async () => {
+    const params = new URLSearchParams()
+    params.append('cid', process.env.REACT_APP_KAKAO_PAY_CID)
+    params.append('tid', tid)
+    params.append('partner_order_id', orderId)
+    params.append('partner_user_id', user)
+    params.append('pg_token', queryObj.pg_token)
+
+    console.log({...queryObj, orderId: orderId,buyer:user, tid:tid, products:products});
+
+    const sendToKakao = await orderServices.kakaoPayApprovePayment(params);
+    const sendToDB = orderServices.orderConfirmedSave({...queryObj, orderId: orderId,buyer:user, tid:tid,products:products});
+
+    // localStorage.removeItem("transactionId");
   }
 
   return (
@@ -53,7 +65,6 @@ const Confirmation = ({location}) => {
                   </div>
                 </div>
               </div>
-            )}
           </div>
         </div>
       </LayoutOne>

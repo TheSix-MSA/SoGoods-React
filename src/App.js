@@ -5,10 +5,8 @@ import {BrowserRouter as Router, Switch, Route, BrowserRouter} from "react-route
 
 import { multilanguage, loadLanguages } from "redux-multilanguage";
 import {connect, useDispatch, useSelector} from "react-redux";
-import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
 import instance from "./modules/axiosConfig";
 import {useToasts} from "react-toast-notifications";
-import ProductInputList from "./pages/attach-dragNdrop/ProductInputList";
 import BoardRegister from "./board/BoardRegister";
 import BoardModify from "./board/BoardModify";
 import {loggedInUser, signin} from "./redux/member/loginSlice";
@@ -60,7 +58,6 @@ const App = (props) => {
   });
 
   useEffect(() => {
-    console.log("asdasdasd")
     const userData = JSON.parse(localStorage.getItem("userData"));
     console.log(userData);
     if(!email && userData) {
@@ -162,13 +159,14 @@ const App = (props) => {
                 /> {/* 재연 - Board 작성 컴포넌트로 사용 */}
 
                 <Route
+                    path={`/board/modify/:boardType/:bno`}
+                    component={BoardModify}
+                /> {/* 재연 - Board 수정 컴포넌트로 사용 */}
+
+                <Route
                   path={`/board/:boardType/:bno`}
                   component={BlogDetailsStandard}
                 /> {/* 재연 - Board 상세보기 컴포넌트로 사용 */}
-                <Route
-                  path={`/board/modify/:boardType/:bno`}
-                  component={BoardModify}
-                /> {/* 재연 - Board 수정 컴포넌트로 사용 */}
 
                 {/* Other pages */}
 

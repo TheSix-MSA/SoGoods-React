@@ -183,6 +183,9 @@ const LoginRegister = ({ location }) => {
 
     return (
         <Fragment>
+            <div>
+                <button></button>
+            </div>
             <LayoutOne headerTop="visible">
                 <div className="login-register-area pt-100 pb-100">
                     <div className="container">

@@ -14,6 +14,16 @@ const myAccountService = () => {
 
     let dialogFn;
     let closeDialogFn;
+    let clearInputFn;
+
+    const setClearInputFn = (func) =>{
+        clearInputFn = func;
+    }
+
+    const clearInput = ()=>{
+        console.log(123, clearInputFn);
+        clearInputFn();
+    }
 
     const setDialogFn = (func) => {
         dialogFn = func;
@@ -57,8 +67,30 @@ const myAccountService = () => {
     }
 
 
+    const registerNovel = async (novels) => {
 
-    return {getMyInfo, modifyInfo, searchNovelList, popUpDialogFn, setDialogFn, setCloseDialogFn}
+        const result = await instance({
+            url: '/member/novels',
+            method: 'POST',
+            data: novels
+        });
+
+        return result.data;
+    };
+    
+    const getNovelList = async (pageInfo)=>{
+        const result = await instance({
+            url: `/member/novels?email=${pageInfo.email}&page=${pageInfo.page}`,
+            method: 'GET'
+        });
+        console.log("서비스에서 찍히는 리스트",result);
+
+        return result;
+    }
+
+
+    return {getMyInfo, modifyInfo, searchNovelList, popUpDialogFn, setDialogFn, setCloseDialogFn, registerNovel,clearInput,
+        setClearInputFn, getNovelList}
 };
 
 export default myAccountService();

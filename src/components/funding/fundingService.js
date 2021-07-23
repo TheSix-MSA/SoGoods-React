@@ -19,6 +19,38 @@ const fundingService = () => {
             method: 'post',
             data : form
         });
+        console.log(result)
+    }
+
+    //사진 업로드하기 - 개발중
+    const registerAttach = async(product, tableName, keyValue, mainIdx) => {
+
+        const form = new FormData();
+        product.pictures.forEach(ele=>{
+            form.append('files', ele)
+        })
+
+        console.log('요청데이터',form)
+
+        const config = {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                "Authorization": `Bearer ${(JSON.parse(localStorage.getItem("userData")))?.accessToken || ""}`,
+            },
+        }
+        const result = await axios.post(`${process.env.REACT_APP_API_DEV_URL}/attach/upload?tableName=${tableName}&keyValue=${keyValue}&mainIdx=${mainIdx}`,
+            form, config)
+
+        console.log('첨부파일 등록완료', result)
+    }
+
+    //펀딩 글 등록시 관련된 상품들 등록처리하기
+    const registerProduct = async (fno, productList) => {
+        const result = await instance({
+            url : `/`,
+            method: 'post',
+            data : {fno, productList}
+        });
         return result.data;
     }
 
@@ -85,7 +117,7 @@ const fundingService = () => {
 
 
 
-    return {getList, registerFunding, getOneFunding, insertFavorite, getMyFundingList, getMyFavFundingList, updateFunding, removedFunding}
+    return {getList, registerFunding, getOneFunding, insertFavorite, getMyFundingList, getMyFavFundingList, updateFunding, removedFunding, registerAttach}
 }
 
 export default fundingService()

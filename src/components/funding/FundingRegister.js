@@ -23,15 +23,6 @@ const underInputStyle = {
     margin:"0 10px",
 }
 
-const imgStyle = {
-    display: 'block',
-    width: 100,
-    height: 50,
-};
-
-const btn ={
-    float: 'none',
-}
 
 const initState = {
     title:'',
@@ -150,25 +141,21 @@ const FundingRegister = () => {
                                                             name="mainImage"
                                                             onChange={changeForm}
                                                         />
-                                                        <ul>
-                                                            {list}
-                                                        </ul>
-                                                        <Button style={btn} variant="outlined" color="primary" onClick={productService.openDialog}>
-                                                            상품 등록
-                                                        </Button>
-                                                        <div style={{display:"flex"}}>
-                                                        <div style={{display:"flex" ,flexWrap:"wrap"}}>
-                                                        <h5 style={textStyle}>펀딩 만기일</h5>
-                                                        <input
-                                                            style={inputStyle}
-                                                            name="dueDate"
-                                                            placeholder="date"
-                                                            value={form.dueDate}
-                                                            type="date"
-                                                            onChange={changeForm}
-                                                            min={getFormatDate(new Date())}
-                                                        />
-                                                        </div>
+                                                        <h5 style={textStyle}>상품등록</h5>
+                                                            <img src={""} alt={"상품 추가 아이콘"}/>
+                                                                <div style={{display:"flex"}}>
+                                                                    <div style={{display:"flex" ,flexWrap:"wrap"}}>
+                                                                        <h5 style={textStyle}>펀딩 만기일</h5>
+                                                                        <input
+                                                                            style={inputStyle}
+                                                                            name="dueDate"
+                                                                            placeholder="date"
+                                                                            value={form.dueDate}
+                                                                            type="date"
+                                                                            onChange={changeForm}
+                                                                            min={getFormatDate(new Date())}
+                                                                        />
+                                                                    </div>
                                                         <div style={{display:"flex", flexWrap:"wrap"}}>
                                                         <h5 style={textStyle}>펀딩 목표금액</h5>
                                                         <input

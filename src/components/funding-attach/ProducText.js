@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import useInputs from "../../customHooks/useInputs";
 import productService from "./productService";
-const initState = {
-    title: '',
-    content: '',
-}
+// const initState = {
+//     title: '',
+//     content: '',
+// }
 
 const ProductText = ({}) => {
     console.log('3-1 랜더링')
@@ -27,8 +27,9 @@ const ProductText = ({}) => {
 
     return (
         <div>
-            <div>상품명<input  name='title'   value={form.title}    onChange={changeForm}/></div>
-            <div>내용<textarea name='content' value={form.content} onChange={changeForm}/></div>
+            <div>상품이름<input  name='name'   value={form.title}    onChange={changeForm}/></div>
+            <div>상품설명<textarea name='desc' value={form.content} onChange={changeForm}/></div>
+            <div>가격<input type='number' name='price'   value={form.price}    onChange={changeForm}/></div>
         </div>
     )
 }

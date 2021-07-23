@@ -13,7 +13,6 @@ const memberService = () => {
     }
 
     const getMemberApprovalList = async (page) => {
-        console.log(" getMemberList started");
         const res = await instance({
             url: `member/list?approval=true&page=${page}`,
             method: 'get'
@@ -23,7 +22,6 @@ const memberService = () => {
 
     // 전체 렌더링 (MemberTableApproval)
     const changeRole = async (email, page) => {
-        console.log(" changeRole started");
         const res = await instance({
             url: `member/role/${email}`,
             method: 'post'
@@ -34,7 +32,6 @@ const memberService = () => {
 
     // 리스트만 렌더링 (MemberTable)
     const changeAuth = async (email) => {
-        console.log(" changeRole started");
         const res = await instance({
             url: `member/role/${email}`,
             method: 'post'
@@ -44,7 +41,6 @@ const memberService = () => {
     }
 
     const changeBanned = async (email) => {
-        console.log(" changeBanned started");
         const result = await instance({
             url: `member/ban/${email}`,
             method: 'post'

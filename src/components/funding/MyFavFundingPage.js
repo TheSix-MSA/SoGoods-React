@@ -3,7 +3,7 @@ import {useHistory} from "react-router-dom";
 import {useSelector} from "react-redux";
 import fundingService from "./fundingService";
 import MetaTags from "react-meta-tags";
-import LayoutOne from "../../layouts/LayoutOne";
+import LayoutOne from "../layouts/header/LayoutOne";
 import Nav from "react-bootstrap/Nav";
 
 const initList = [{

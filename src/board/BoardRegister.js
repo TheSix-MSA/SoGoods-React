@@ -1,8 +1,7 @@
 import React, {useCallback} from 'react';
 import useInputs from "../customHooks/useInputs";
 import {useDispatch} from "react-redux";
-import Breadcrumb from "../wrappers/breadcrumb/Breadcrumb";
-import LayoutOne from "../layouts/LayoutOne";
+import LayoutOne from "../components/layouts/header/LayoutOne";
 import Tab from "react-bootstrap/Tab";
 import {useHistory} from "react-router-dom";
 import boardService from "./boardService";
@@ -27,7 +26,6 @@ const BoardRegister = () => {
         <>
             <LayoutOne headerTop="visible">
                 {/* breadcrumb */}
-                <Breadcrumb/>
                 <div className="blog-area pt-100 pb-100 blog-no-sidebar">
                     <div className="container">
                         <div className="row">

@@ -43,7 +43,6 @@ export default function FormCheckDialog({warningType}) {
                     </DialogContentText>
                 </DialogContent>
             </Dialog>
-
         </div>
     );
 }

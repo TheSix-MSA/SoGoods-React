@@ -3,7 +3,7 @@ import React, {Fragment, useState} from "react";
 import { Link } from "react-router-dom";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
-import LayoutOne from "../layouts/LayoutOne";
+import LayoutOne from "../components/layouts/header/LayoutOne";
 import useInputs from "../customHooks/useInputs";
 import {useDispatch, useSelector} from "react-redux";
 import {signin} from "../redux/member/loginSlice";
@@ -41,6 +41,7 @@ const initStateVerify = {
 const warningName = {type:""};
 
 const LoginRegister = ({ location }) => {
+
     const history = useHistory();
     const {addToast} = useToasts();
     const info = useSelector(state=>state.login);
@@ -212,6 +213,7 @@ const LoginRegister = ({ location }) => {
                                                                 placeholder="Username"
                                                                 value={loginForm.email}
                                                                 onChange={onChange}
+                                                                autoFocus
                                                             />
                                                             <input
                                                                 type="password"
@@ -383,7 +385,7 @@ const LoginRegister = ({ location }) => {
                                                                 onChange={signupChange}
                                                                 onClick={popupPost}
                                                             />
-                                                            <CodeDialogSlide addAddress={addAddress}></CodeDialogSlide>
+                                                            <CodeDialogSlide addAddress={addAddress}/>
                                                             <input
                                                                 name="detailAddress"
                                                                 placeholder="Detail Address"
@@ -393,7 +395,7 @@ const LoginRegister = ({ location }) => {
                                                             />
                                                             <div className="button-box">
                                                                 <FormCheckDialog
-                                                                    warningType={warningType}></FormCheckDialog>
+                                                                    warningType={warningType}/>
                                                                 <button onClick={signupBtn}>
                                                                     <span>Register</span>
                                                                 </button>

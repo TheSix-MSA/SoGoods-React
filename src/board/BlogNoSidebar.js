@@ -1,8 +1,7 @@
 import PropTypes from "prop-types";
 import React, {Fragment, useEffect, useRef, useState} from "react";
 import MetaTags from "react-meta-tags";
-import LayoutOne from "../layouts/LayoutOne";
-import Breadcrumb from "../wrappers/breadcrumb/Breadcrumb";
+import LayoutOne from "../components/layouts/header/LayoutOne";
 import BlogPagination from "./BlogPagination";
 import BlogPostsNoSidebar from "./BlogPostsNoSidebar";
 import {useDispatch, useSelector} from "react-redux";
@@ -19,25 +18,30 @@ const initState = {
 }
 const BlogNoSidebar = ({match}) => {
     const currentPage = match.params.currentPage
-    const {boardListRequestDTO} = useSelector(state => state.board);
     const location = useLocation()
     const [ boardData, setBoardData ] = useState({})
     const value = queryString.parse(location.search.replace("?",""));
+    console.log(value)
     const dispatch = useDispatch()
     const history = useHistory()
     const boardType = useRef(match.params.boardType)
     const [search, onChange, setSearch] = useInputs(initState)
-    const searching = ( value ) => {
-        boardService.searchBoard(value).then(res =>{
-            setBoardData(res.result.data.response)
-        })
-    }
 
     useEffect(() => {
         dispatch(getBoardData(search)).unwrap().then(res =>{
             setBoardData(res.response)
         })
-    }, [currentPage, dispatch, search.keyword, search.page])
+    }, [currentPage, dispatch])
+
+    const searching = (e) => {
+        e.preventDefault();
+        history.push(`/board/FREE/list?page=1&keyword=${search.keyword}&type=${search.type}`)
+        dispatch(getBoardData(search)).unwrap().then(res =>{
+            setBoardData(res.response)
+        })
+    }
+    console.log(boardData)
+
     console.log(boardData)
     const boardRegister = () => {
         history.push(`/boardRegister`)
@@ -52,7 +56,6 @@ const BlogNoSidebar = ({match}) => {
             </MetaTags>
             <LayoutOne headerTop="visible">
                 {/* breadcrumb */}
-                <Breadcrumb/>
                 <div className="blog-area pt-100 pb-100 blog-no-sidebar">
                     <div className="container">
                         <div style={{display: "block", textAlign: "right", margin: "2rem"}}
@@ -69,7 +72,7 @@ const BlogNoSidebar = ({match}) => {
                                     <option value="tc"> 제목+내용 </option>
                                 </select>
                                 <input type="text" placeholder="Search here..." name="keyword" value={search.keyword} onChange={onChange}/>
-                                <button style={{top:"70%"}} onClick={()=>{searching(search)}}>
+                                <button style={{top:"70%"}} onClick={searching}>
                                     <i className="pe-7s-search" />
                                 </button>
                             </form>
@@ -84,7 +87,7 @@ const BlogNoSidebar = ({match}) => {
                                         ) : <p> 일치하는 결과가 없습니다. </p>}
                                     </div>
                                     {/* blog pagination */}
-                                    {boardData.pageMaker && <BlogPagination pageMaker={boardData.pageMaker}/>}
+                                    {boardData && <BlogPagination pageMaker={boardData.pageMaker} request={boardData.boardListRequestDTO}/>}
                                 </div>
                             </div>
                         </div>

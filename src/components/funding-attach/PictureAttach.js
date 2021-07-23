@@ -98,7 +98,7 @@ const PictureAttach = () => {
     ]);
 
     const removeImg = (idx) => {
-        console.log('click remove')
+
         files.splice(idx, 1)
         setFiles([...files])
     }
@@ -118,7 +118,6 @@ const PictureAttach = () => {
     }, [files]);
 
 
-    console.log('files length2: ', files.length)
     const thumbs = files.map((file, idx)=> (
         <div style={thumb} key={file.name}>
             <div style={thumbInner}>

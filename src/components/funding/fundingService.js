@@ -19,28 +19,28 @@ const fundingService = () => {
             method: 'post',
             data : form
         });
-
         console.log(result)
     }
 
     //사진 업로드하기 - 개발중
     const registerAttach = async(product, tableName, keyValue, mainIdx) => {
-        const req = {
-            files:[],
-        }
 
-        product.pictures.forEach(file=>{
-            req.files.push(file)
+        const form = new FormData();
+        product.pictures.forEach(ele=>{
+            form.append('files', ele)
         })
-        req.tableName = tableName
-        req.keyValue = keyValue
-        req.mainIdx = mainIdx
-        console.log('요청데이터',req)
-        const result = await instance({
-            url : `/attach`,
-            method: 'post',
-            data : req
-        });
+
+        console.log('요청데이터',form)
+
+        const config = {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                "Authorization": `Bearer ${(JSON.parse(localStorage.getItem("userData")))?.accessToken || ""}`,
+            },
+        }
+        const result = await axios.post(`${process.env.REACT_APP_API_DEV_URL}/attach/upload?tableName=${tableName}&keyValue=${keyValue}&mainIdx=${mainIdx}`,
+            form, config)
+
         console.log('첨부파일 등록완료', result)
     }
 

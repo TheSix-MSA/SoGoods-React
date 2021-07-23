@@ -17,27 +17,28 @@ const initState = {
     type:'',
     keyword: '',
 }
-
 const BlogNoSidebar = ({match}) => {
-    const {boardDtoList,  boardListRequestDTO ,pageMaker} = useSelector(state => state.board);
+    const currentPage = match.params.currentPage
+    const {boardListRequestDTO} = useSelector(state => state.board);
     const location = useLocation()
+    const [ boardData, setBoardData ] = useState({})
     const value = queryString.parse(location.search.replace("?",""));
     const dispatch = useDispatch()
     const history = useHistory()
-    const currentPage = match.params.currentPage
     const boardType = useRef(match.params.boardType)
     const [search, onChange, setSearch] = useInputs(initState)
-    const [ request, setRequest ] = useState(initState)
-    console.log(boardType)
     const searching = ( value ) => {
         boardService.searchBoard(value).then(res =>{
-            dispatch(getBoardData(value))
+            setBoardData(res.result.data.response)
         })
     }
-    useEffect(() => {
-        console.log(dispatch(getBoardData(boardListRequestDTO)))
-    }, [currentPage, dispatch])
 
+    useEffect(() => {
+        dispatch(getBoardData(search)).unwrap().then(res =>{
+            setBoardData(res.response)
+        })
+    }, [currentPage, dispatch, search.keyword, search.page])
+    console.log(boardData)
     const boardRegister = () => {
         history.push(`/boardRegister`)
     }
@@ -78,12 +79,12 @@ const BlogNoSidebar = ({match}) => {
                                 <div className="mr-20">
                                     <div className="row">
                                         {/* blog posts */}
-                                        {boardDtoList ? (
-                                        <BlogPostsNoSidebar boardData={boardDtoList} page={currentPage}/>
+                                        {boardData.boardDtoList !== null ? (
+                                        <BlogPostsNoSidebar boardData={boardData.boardDtoList} page={currentPage}/>
                                         ) : <p> 일치하는 결과가 없습니다. </p>}
                                     </div>
                                     {/* blog pagination */}
-                                    {pageMaker && <BlogPagination pageMaker={pageMaker}/>}
+                                    {boardData.pageMaker && <BlogPagination pageMaker={boardData.pageMaker}/>}
                                 </div>
                             </div>
                         </div>

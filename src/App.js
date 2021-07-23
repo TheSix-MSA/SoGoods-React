@@ -151,7 +151,7 @@ const App = (props) => {
                 />
 
                 <Route
-                    path={"/board/:boardType/list/:currentPage"}
+                    path={"/board/:boardType/list/"}
                     component={BlogNoSidebar}
                 />{/* 재연 - Board 목록 컴포넌트로 사용 */}
 

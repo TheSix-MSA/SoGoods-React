@@ -4,7 +4,6 @@ import getFormatDate from "../modules/getFormatDate";
 
 const BlogPostsNoSidebar = ({boardData, boardType}) => {
     const history = useHistory();
-    console.log(boardType)
     const moveDetail = (bno) => {
         history.push(`/board/${boardType}/${bno}`)
     }

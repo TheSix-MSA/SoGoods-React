@@ -10,31 +10,34 @@ import {useHistory, useLocation} from "react-router-dom";
 import useInputs from "../customHooks/useInputs";
 import * as queryString from "querystring";
 import boardService from "./boardService";
+import {Button, FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
 
 const initState = {
-    page:1,
-    type:'',
+    page: 1,
+    type: '',
     keyword: '',
 }
 const BlogNoSidebar = ({match}) => {
+    const classes = useStyles();
     const location = useLocation()
-    const [ boardData, setBoardData ] = useState({})
-    const value = queryString.parse(location.search.replace("?",""));
+    const [boardData, setBoardData] = useState({})
+    const value = queryString.parse(location.search.replace("?", ""));
     const dispatch = useDispatch()
     const history = useHistory()
     const boardType = useRef(match.params.boardType?.toUpperCase())
-    const [search, onChange, setSearch] = useInputs({...initState, page:value.page||1})
+    const [search, onChange, setSearch] = useInputs({...initState, page: value.page || 1})
     useEffect(() => {
         boardType.current = match.params.boardType.toUpperCase()
-        dispatch(getBoardData({...search, page:value.page, boardType:boardType.current})).unwrap().then(res =>{
+        dispatch(getBoardData({...search, page: value.page, boardType: boardType.current})).unwrap().then(res => {
             setBoardData(res.response)
         })
-    }, [ dispatch, value.page, match.params.boardType ])
+    }, [dispatch, value.page, match.params.boardType])
 
     const searching = (e) => {
         e.preventDefault();
         history.push(`/board/${boardType.current}/list?page=1&keyword=${search.keyword}&type=${search.type}`)
-        dispatch(getBoardData({...search, boardType:boardType.current})).unwrap().then(res =>{
+        dispatch(getBoardData({...search, boardType: boardType.current})).unwrap().then(res => {
             setBoardData(res.response)
         })
     }
@@ -54,24 +57,36 @@ const BlogNoSidebar = ({match}) => {
                 {/* breadcrumb */}
                 <div className="blog-area pt-100 pb-100 blog-no-sidebar">
                     <div className="container">
-                        <div style={{display: "block", textAlign: "right", margin: "2rem"}}
-                             onClick={boardRegister}> 글쓰기
+                        <div style={{textAlign: "right"}}>
+                            <Button variant="contained" size="small" color="primary" className={classes.margin}
+                                    onClick={boardRegister}> 글쓰기 </Button>
                         </div>
-                        <h4 className="pro-sidebar-title">Search </h4>
                         <div className="pro-sidebar-search mb-55 mt-25">
-                            <form className="pro-sidebar-search-form" action="#">
-                                <select name="type" style={{width:"10%"}} value={search.type} onChange={onChange} name="type" >
-                                    <option value=''> - 선택 - </option>
-                                    <option value="t"> 제목 </option>
-                                    <option value="w"> 작성자 </option>
-                                    <option value="c"> 내용 </option>
-                                    <option value="tc"> 제목+내용 </option>
-                                </select>
-                                <input type="text" placeholder="Search here..." name="keyword" value={search.keyword} onChange={onChange}/>
-                                <button style={{top:"70%"}} onClick={searching}>
-                                    <i className="pe-7s-search" />
-                                </button>
-                            </form>
+                            <FormControl className={classes.formControl}>
+                                <InputLabel shrink id="demo-simple-select-placeholder-label-label">
+                                    선택
+                                </InputLabel>
+                                <Select labelId="demo-simple-select-placeholder-label-label"
+                                        id="demo-simple-select-placeholder-label"
+                                        displayEmpty
+                                        className={classes.selectEmpty}
+                                        name="type" value={search.type} onChange={onChange}>
+                                    <MenuItem value="t"> 제목</MenuItem>
+                                    <MenuItem value="w"> 작성자</MenuItem>
+                                    <MenuItem value="c"> 내용</MenuItem>
+                                    <MenuItem value="tc"> 제목+내용</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <TextField
+                                style={{width: "40%", margin: "8px"}}
+                                id="standard-basic"
+                                label="검색어"
+                                name="keyword"
+                                value={search.keyword}
+                                onChange={onChange}/>
+                            <Button variant="outlined" onClick={searching} style={{marginTop:"15px", padding:"15px 15px"}}>
+                                <i className="pe-7s-search" />
+                            </Button>
                         </div>
                         <div className="row">
                             <div className="col-lg-12">
@@ -79,11 +94,14 @@ const BlogNoSidebar = ({match}) => {
                                     <div className="row">
                                         {/* blog posts */}
                                         {boardData.boardDtoList !== null ? (
-                                        <BlogPostsNoSidebar boardData={boardData.boardDtoList} boardType={boardType.current}/>
+                                            <BlogPostsNoSidebar boardData={boardData.boardDtoList}
+                                                                boardType={boardType.current}/>
                                         ) : <p> 일치하는 결과가 없습니다. </p>}
                                     </div>
                                     {/* blog pagination */}
-                                    {boardData && <BlogPagination boardType={boardType.current} pageMaker={boardData.pageMaker} request={boardData.boardListRequestDTO}/>}
+                                    {boardData &&
+                                    <BlogPagination boardType={boardType.current} pageMaker={boardData.pageMaker}
+                                                    request={boardData.boardListRequestDTO}/>}
                                 </div>
                             </div>
                         </div>
@@ -93,6 +111,27 @@ const BlogNoSidebar = ({match}) => {
         </Fragment>
     );
 };
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& > *': {
+            margin: theme.spacing(1),
+        },
+    },
+    margin: {
+        margin: theme.spacing(1),
+    },
+    extendedIcon: {
+        marginRight: theme.spacing(1),
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
+    },
+}));
 
 
 BlogNoSidebar.propTypes = {

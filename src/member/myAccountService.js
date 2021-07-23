@@ -12,6 +12,21 @@ const myAccountService = () => {
         address: "",
     };
 
+    let dialogFn;
+    let closeDialogFn;
+
+    const setDialogFn = (func) => {
+        dialogFn = func;
+    };
+
+    const setCloseDialogFn = (func) =>{
+        closeDialogFn = func;
+    }
+
+    const popUpDialogFn = () => {
+        dialogFn();
+    };
+
     const getMyInfo = async (email) => {
         if(email==="") email = -1;
         const result = await instance({
@@ -36,16 +51,14 @@ const myAccountService = () => {
 
         const result = await axios.get(
             `/ttb/api/ItemLookUp.aspx?ttbkey=${process.env.REACT_APP_ALADIN_TTB_KEY}&ItemId=${isbnKey}&itemIdType=ISBN13&output=js&Version=20131101`
-        ).then(value => {
-            console.log(value);
-        });
+        )
 
-        return result;
+        return result.data;
     }
 
 
 
-    return {getMyInfo, modifyInfo, searchNovelList}
+    return {getMyInfo, modifyInfo, searchNovelList, popUpDialogFn, setDialogFn, setCloseDialogFn}
 };
 
 export default myAccountService();

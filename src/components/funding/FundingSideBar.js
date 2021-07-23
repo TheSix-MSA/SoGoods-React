@@ -15,6 +15,7 @@ const FundingSideBar = (funding) => {
 
     // 유저 정보
     const userInfo = useSelector(state=> state.login);
+    console.log(userInfo.email);
     // 주고 받을 찜 데이터
     const [favorite, setFavorite] = useState(initFavorite);
     // 화면에서 관리할 찜 count
@@ -24,26 +25,24 @@ const FundingSideBar = (funding) => {
     const [cartList, setCartList] = useState(funding.productDTOs?.map(item=>{
         return {...item,count:0}}));
 
-
     /**
      * 펀딩 종료일 까지 남은 날짜를 구해 화면에 뿌려주기
      * @type {string}
      */
     const dueDate = funding.fundingDTO.dueDate;
-    //console.log(getLeftDate(dueDate),"일 남음"); // 남은 일 계산
+
 
     /**
      * 장바구니 배열에 상품추가, 일치하는 값이 있으면 개수만 추가
      * @param product
      */
     const addCart = (product) => {
-        console.log(cartList);
         setCartList(cartList.map(p=>{
             if(p.pno === product.pno) return {...p,count:(p.count||0)+1}
             return p;
         }));
-        console.log(cartList);
     }
+    console.log(cartList);
 
     /**
      * 장바구니 배열에서 일치하는 데이터를 삭제, count=0
@@ -57,13 +56,12 @@ const FundingSideBar = (funding) => {
         }))
     }
 
-
     /**
      * 게시글 찜하기 기능
      */
     const clickFavorite = () => {
         favorite.fno = funding.fundingDTO.fno
-        favorite.email = "user00@aaa.com"
+        favorite.email = userInfo.email
         setFavorite(favorite);
         fundingService.insertFavorite(favorite).then(res=> {
             setFavCount(res.response.favoriteCnt)
@@ -129,25 +127,32 @@ const FundingSideBar = (funding) => {
          </div>
     );
 
-
     // 제품 수정 삭제 버튼
     const update = (
         <div style={{ height:"42px", display:"flex"}}>
             <button style={{width:"100%", margin:"5px 10px"}} onClick={()=>toUpdate(funding.fundingDTO.fno)}>수정</button>
-            <button style={{width:"100%", margin:"5px 10px"}}>삭제</button>
+            <button style={{width:"100%", margin:"5px 10px"}} onClick={()=> deleteFunding(funding.fundingDTO.fno)}>삭제</button>
+            <hr/>
         </div>
     );
 
-    const deleteFunding = () => {
-
+    // 펀딩 글 삭제 기능
+    const deleteFunding = (fno) => {
+        const result = window.confirm("정말 삭제하시겠습니까?");
+        if(result){
+            fundingService.removedFunding(fno).then(res=> {
+                console.log(res);
+                console.log(result);
+                history.push("/funding/list");
+            })
+        }
     }
 
     return (
         <div className="sidebar-style">
             <div className="sidebar-widget mt-35">
                 {selectReward}
-                {userInfo && update}
-                <hr/>
+                {update}
             </div>
             <div className="sidebar-widget">
                 <h4 className="pro-sidebar-title"> 리워드 선택</h4>

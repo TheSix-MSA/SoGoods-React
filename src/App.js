@@ -393,22 +393,22 @@ const App = (props) => {
                 />
 
                 <Route
-                    path={"/board/FREE/list/:currentPage"}
+                    path={"/board/:boardType/list/:currentPage"}
                     component={BlogNoSidebar}
                 />{/* 재연 - Board 목록 컴포넌트로 사용 */}
 
                 <Route
                     exact
-                    path={process.env.PUBLIC_URL + "/boardRegister"}
+                    path={process.env.PUBLIC_URL + "/:boardType/boardRegister"}
                     component={BoardRegister}
                 /> {/* 재연 - Board 작성 컴포넌트로 사용 */}
 
                 <Route
-                  path={`/board/FREE/:bno`}
+                  path={`/board/:boardType/:bno`}
                   component={BlogDetailsStandard}
                 /> {/* 재연 - Board 상세보기 컴포넌트로 사용 */}
                 <Route
-                  path={`/board/modify/FREE/:bno`}
+                  path={`/board/modify/:boardType/:bno`}
                   component={BoardModify}
                 /> {/* 재연 - Board 수정 컴포넌트로 사용 */}
 

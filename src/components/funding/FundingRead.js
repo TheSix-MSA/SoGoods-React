@@ -1,8 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import PropTypes from "prop-types";
-import LayoutOne from "../../layouts/LayoutOne";
-import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import BlogRightSidebar from "../../pages/blog/BlogRightSidebar";
+import LayoutOne from "../layouts/header/LayoutOne";
 import fundingService from "./fundingService";
 import {useParams} from "react-router-dom";
 import FundingSideBar from "./FundingSideBar";
@@ -36,7 +33,6 @@ const FundingRead = ({location}) => {
         <Fragment>
             <LayoutOne headerTop="visible">
                 {/* breadcrumb */}
-                <Breadcrumb />
                 <div className="blog-area pt-100 pb-100">
                     <div className="container">
                         <div className="row flex">
@@ -56,10 +52,6 @@ const FundingRead = ({location}) => {
             </LayoutOne>
         </Fragment>
     );
-};
-
-BlogRightSidebar.propTypes = {
-    location: PropTypes.object
 };
 
 

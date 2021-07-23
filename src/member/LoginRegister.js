@@ -3,7 +3,7 @@ import React, {Fragment, useState} from "react";
 import { Link } from "react-router-dom";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
-import LayoutOne from "../layouts/LayoutOne";
+import LayoutOne from "../components/layouts/header/LayoutOne";
 import useInputs from "../customHooks/useInputs";
 import {useDispatch, useSelector} from "react-redux";
 import {signin} from "../redux/member/loginSlice";

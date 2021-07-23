@@ -1,11 +1,9 @@
 import PropTypes from "prop-types";
 import React, {Fragment, useEffect, useState} from "react";
 import MetaTags from "react-meta-tags";
-import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
-import LayoutOne from "../layouts/LayoutOne";
-import Breadcrumb from "../wrappers/breadcrumb/Breadcrumb";
+import LayoutOne from "../components/layouts/header/LayoutOne";
 import {useSelector} from "react-redux";
 import myAccountService from "./myAccountService";
 import useInputs from "../customHooks/useInputs";
@@ -145,13 +143,9 @@ const MyAccount = ({ location }) => {
               content="Compare page of flone react minimalist eCommerce template."
           />
         </MetaTags>
-        <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-        <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
           My Account
-        </BreadcrumbsItem>
         <LayoutOne headerTop="visible">
           {/* breadcrumb */}
-          <Breadcrumb/>
           <div className="myaccount-area pb-80 pt-100">
             <div className="container">
               <div className="row">

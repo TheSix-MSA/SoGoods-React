@@ -1,8 +1,7 @@
 import PropTypes from "prop-types";
 import React, {Fragment, useEffect} from "react";
 import MetaTags from "react-meta-tags";
-import LayoutOne from "../layouts/LayoutOne";
-import Breadcrumb from "../wrappers/breadcrumb/Breadcrumb";
+import LayoutOne from "../components/layouts/header/LayoutOne";
 import BlogPagination from "./BlogPagination";
 import BlogPostsNoSidebar from "./BlogPostsNoSidebar";
 import {useDispatch, useSelector} from "react-redux";
@@ -31,7 +30,6 @@ const BlogNoSidebar = ({match}) => {
             </MetaTags>
             <LayoutOne headerTop="visible">
                 {/* breadcrumb */}
-                <Breadcrumb/>
                 <div className="blog-area pt-100 pb-100 blog-no-sidebar">
                     <div className="container">
                         <div style={{display: "block", textAlign: "right", margin: "2rem"}}

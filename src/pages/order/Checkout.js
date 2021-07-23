@@ -3,9 +3,7 @@ import React, {Fragment, useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import MetaTags from "react-meta-tags";
 import { connect } from "react-redux";
-import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
-import LayoutOne from "../../layouts/LayoutOne";
-import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
+import LayoutOne from "../../components/layouts/header/LayoutOne";
 import codeService from "../../member/codeService";
 import CodeDialogSlide from "../../member/CodeDialog";
 import useInputs from "../../customHooks/useInputs";
@@ -87,12 +85,7 @@ const Checkout = ({ location }) => {
           content="Checkout page of flone react minimalist eCommerce template."
         />
       </MetaTags>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
-        Checkout
-      </BreadcrumbsItem>
       <LayoutOne headerTop="visible">
-        <Breadcrumb />
         <div className="checkout-area pt-95 pb-100">
           <div className="container">
             {cartItems && cartItems.length >= 1 ? (

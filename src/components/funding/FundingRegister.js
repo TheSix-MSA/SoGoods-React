@@ -1,6 +1,6 @@
 import React, {Fragment, useEffect, useState} from "react";
 import Tab from "react-bootstrap/Tab";
-import LayoutOne from "../../layouts/LayoutOne";
+import LayoutOne from "../layouts/header/LayoutOne";
 import Nav from "react-bootstrap/Nav";
 import fundingService from "./fundingService";
 import useInputs from "../../customHooks/useInputs";

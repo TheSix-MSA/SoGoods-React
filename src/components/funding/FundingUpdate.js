@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import LayoutOne from "../../layouts/LayoutOne";
+import LayoutOne from "../layouts/header/LayoutOne";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import getFormatDate from "../../modules/getFormatDate";

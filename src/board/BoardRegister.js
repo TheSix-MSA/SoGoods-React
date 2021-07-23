@@ -18,7 +18,7 @@ const BoardRegister = () => {
     const history = useHistory()
     const registe = () => {
         boardService.registerBoard(board).then(res => {
-            setBoard({...res})
+            setBoard(res.data)
         })
         history.push('/board/FREE/list/1')
     }

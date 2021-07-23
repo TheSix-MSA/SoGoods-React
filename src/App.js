@@ -13,6 +13,7 @@ import BoardRegister from "./board/BoardRegister";
 import BoardModify from "./board/BoardModify";
 import {loggedInUser, signin} from "./redux/member/loginSlice";
 import {refreshToken} from "./modules/refreshToken";
+import Confirmation from "./pages/order/Confirmation";
 
 //the six
 const FundingBoard = lazy(()=>import("./components/funding/FundingBoard"));
@@ -150,23 +151,22 @@ const App = (props) => {
                 />
 
                 <Route
-                    path={"/board/FREE/list/:currentPage"}
+                    path={"/board/:boardType/list/:currentPage"}
                     component={BlogNoSidebar}
                 />{/* 재연 - Board 목록 컴포넌트로 사용 */}
 
                 <Route
                     exact
-                    path={process.env.PUBLIC_URL + "/boardRegister"}
+                    path={process.env.PUBLIC_URL + "/:boardType/boardRegister"}
                     component={BoardRegister}
                 /> {/* 재연 - Board 작성 컴포넌트로 사용 */}
 
                 <Route
-                  path={`/board/FREE/:bno`}
+                  path={`/board/:boardType/:bno`}
                   component={BlogDetailsStandard}
                 /> {/* 재연 - Board 상세보기 컴포넌트로 사용 */}
-
                 <Route
-                  path={`/board/modify/FREE/:bno`}
+                  path={`/board/modify/:boardType/:bno`}
                   component={BoardModify}
                 /> {/* 재연 - Board 수정 컴포넌트로 사용 */}
 
@@ -176,7 +176,6 @@ const App = (props) => {
                   path={process.env.PUBLIC_URL + "/my-account"}
                   component={MyAccount}
                 />
-
                 <Route
                   path={process.env.PUBLIC_URL + "/login-register"}
                   component={LoginRegister}
@@ -186,6 +185,10 @@ const App = (props) => {
                 <Route
                   path={process.env.PUBLIC_URL + "/wishlist"}
                   component={Wishlist}
+                />
+                <Route
+                  path={process.env.PUBLIC_URL + "/confirmOrder"}
+                  component={Confirmation}
                 />
 
                 <Route
@@ -201,6 +204,7 @@ const App = (props) => {
                     path={process.env.PUBLIC_URL + "/admin"}
                     component={Admin}
                 />
+
 
                 <Route exact component={NotFound} />
               </Switch>

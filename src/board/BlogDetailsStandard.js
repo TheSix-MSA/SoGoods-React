@@ -51,7 +51,7 @@ const BlogDetailsStandard = ({location, match}) => {
                                         <BlogPost data={detailData}/>
                                         )}
                                         {/* blog post comment */}
-                                        <BlogComment/>
+                                        <BlogComment bno={bno}/>
                                     </div>
                                 </div>
                             </div>

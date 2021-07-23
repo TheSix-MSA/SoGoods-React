@@ -80,9 +80,6 @@ const PictureAttach = () => {
 
                 if(newFiles.length <= max){
                     setFiles(newFiles)
-                    setTimeout(()=>{
-                        console.log('files-setTimeout',files)
-                    },5000)
                 }else{
                     console.log(`파일갯수 ${max} 초과`)
                 }

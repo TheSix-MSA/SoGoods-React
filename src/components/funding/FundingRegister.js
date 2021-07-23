@@ -52,18 +52,23 @@ const FundingRegister = () => {
 
     productService.setOpenFn(setOpen)
 
-    console.log(productService.getProductList())
+
+    const productList = productService.getProductList()
+    const productDTOs = productList.map(product=>{
+        return product.text
+    })
+    const req = {...form, productDTOs: productDTOs}
 
     const sendFormData = async () => {
-        const productList = productService.getProductList()
-        const result = await fundingService.registerFunding({...form});
-        const fno = result.response.fno
+         const result = await fundingService.registerFunding(req);
 
-        const result_product= await fundingService.registerProduct(fno, [...productList])
+        // productList.reduce((prevP, product)=>{
+        //     prevP.then(async res=>{
+        //         await fundingService.registerAttach(product, 'PRODUCT',123, 0 )
+        //     })
+        // })
 
 
-
-        setForm({...initState})
     }
 
     const list = productService.getProductList().map((product, i)=>{
@@ -74,7 +79,10 @@ const FundingRegister = () => {
         return (
             <>
                 <li key={i}>
-                    <p onClick={()=>{productService.openDialogForEdit(i)}}>{product.text.name} : {product.text.desc}</p>
+                    <p onClick={()=>{productService.openDialogForEdit(i)}}>
+                        {product.text.name} :
+                        {product.text.desc}
+                    </p>
                     <div>
                         {product.pictures.map((picture ,j)=>
                             <img key={j} src={picture.preview} style={imgStyle}/>)}

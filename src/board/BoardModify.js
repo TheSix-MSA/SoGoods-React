@@ -1,9 +1,6 @@
 import React, {Fragment} from "react";
 import MetaTags from "react-meta-tags";
-import {BreadcrumbsItem} from "react-breadcrumbs-dynamic";
-import Breadcrumb from "../wrappers/breadcrumb/Breadcrumb";
-import BlogSidebar from "../wrappers/blog/BlogSidebar";
-import LayoutOne from "../layouts/LayoutOne";
+import LayoutOne from "../components/layouts/header/LayoutOne";
 import useInputs from "../customHooks/useInputs";
 import {useHistory} from "react-router-dom";
 import boardService from "./boardService";
@@ -33,10 +30,8 @@ const BoardModify = ({match}) => {
                     content="Blog post page of flone react minimalist eCommerce template."
                 />
             </MetaTags>
-            <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
             <LayoutOne headerTop="visible">
                 {/* breadcrumb */}
-                <Breadcrumb/>
                 <div className="blog-area pt-100 pb-100">
                     <div className="container">
                         <div className="row flex-row-reverse">
@@ -71,10 +66,6 @@ const BoardModify = ({match}) => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="col-lg-3">
-                                {/* blog sidebar */}
-                                <BlogSidebar/>
                             </div>
                         </div>
                     </div>

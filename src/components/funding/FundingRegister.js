@@ -1,11 +1,37 @@
 import React, {Fragment, useEffect, useState} from "react";
 import Tab from "react-bootstrap/Tab";
-import LayoutOne from "../../layouts/LayoutOne";
+import LayoutOne from "../layouts/header/LayoutOne";
 import Nav from "react-bootstrap/Nav";
 import fundingService from "./fundingService";
 import useInputs from "../../customHooks/useInputs";
 import getFormatDate from "../../modules/getFormatDate";
+import productService from "../funding-attach/productService";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import ProductRegister from "../funding-attach/ProductRegister";
+import Dialog from "@material-ui/core/Dialog";
+import Button from "@material-ui/core/Button";
+import {useSelector} from "react-redux";
 
+const inputStyle = {
+    margin:"10px"
+}
+const textStyle = {
+    margin:"0 10px"
+}
+const underInputStyle = {
+    margin:"0 10px",
+}
+
+const imgStyle = {
+    display: 'block',
+    width: 100,
+    height: 50,
+};
+
+const btn ={
+    float: 'none',
+}
 
 const initState = {
     title:'',
@@ -20,14 +46,41 @@ const initState = {
 const FundingRegister = () => {
 
     const [form, changeForm, setForm] = useInputs({...initState});
+    const userInfo = useSelector(state=> state.login);
+
+    const [open, setOpen] = useState(false);
+
+    productService.setOpenFn(setOpen)
+
+    console.log(productService.getProductList())
 
     const sendFormData = async () => {
-        console.log(form);
+        productService.getProductList()
         const result = await fundingService.registerFunding({...form});
-        console.log(result)
+        const fno = result.response.fno
+
+        const result_product= await
+
         setForm({...initState})
     }
 
+    const list = productService.getProductList().map((product, i)=>{
+        console.log(product)
+        product.pictures.map((picture )=> Object.assign(picture, {
+            preview: URL.createObjectURL(picture)
+        }))
+        return (
+            <>
+                <li key={i}>
+                    <p onClick={()=>{productService.openDialogForEdit(i)}}>{product.text.name} : {product.text.desc}</p>
+                    <div>
+                        {product.pictures.map((picture ,j)=>
+                            <img key={j} src={picture.preview} style={imgStyle}/>)}
+                    </div>
+                </li>
+            </>
+        )
+    })
 
     return (
         <div>
@@ -48,17 +101,20 @@ const FundingRegister = () => {
                                                         </Nav.Link>
                                                     </Nav.Item>
                                                     </Nav>
+                                                        <div style={textStyle}>제목</div>
                                                         <input
+                                                            style={inputStyle}
                                                             type="title"
                                                             name="title"
                                                             value={form.title}
                                                             placeholder="제목"
                                                             onChange={changeForm}
                                                         />
+                                                        <div style={textStyle}>내용</div>
                                                         <input
                                                             type="hidden"
                                                             name="writer"
-                                                            value={form.writer}
+                                                            value={form.name}
                                                             placeholder="작성자"
                                                             onChange={changeForm}
                                                         />
@@ -70,21 +126,31 @@ const FundingRegister = () => {
                                                             onChange={changeForm}
                                                         />
                                                         <textarea
+                                                            style={inputStyle}
                                                             type="text"
                                                             name="content"
                                                             value={form.content}
                                                             placeholder="내용을 입력하세요."
                                                             onChange={changeForm}
                                                         />
-                                                        메인 이미지
+                                                         <h5 style={textStyle}>메인 이미지</h5>
                                                         <input
+                                                            style={inputStyle}
                                                             type="file"
                                                             name="mainImage"
                                                             onChange={changeForm}
                                                         />
-                                                        <button>상품등록</button>
+                                                        <ul>
+                                                            {list}
+                                                        </ul>
+                                                        <Button style={btn} variant="outlined" color="primary" onClick={productService.openDialog}>
+                                                            상품 등록
+                                                        </Button>
                                                         <div style={{display:"flex"}}>
+                                                        <div style={{display:"flex" ,flexWrap:"wrap"}}>
+                                                        <h5 style={textStyle}>펀딩 만기일</h5>
                                                         <input
+                                                            style={inputStyle}
                                                             name="dueDate"
                                                             placeholder="date"
                                                             value={form.dueDate}
@@ -92,20 +158,25 @@ const FundingRegister = () => {
                                                             onChange={changeForm}
                                                             min={getFormatDate(new Date())}
                                                         />
+                                                        </div>
+                                                        <div style={{display:"flex", flexWrap:"wrap"}}>
+                                                        <h5 style={textStyle}>펀딩 목표금액</h5>
                                                         <input
+                                                            style={inputStyle}
                                                             name="targetAmount"
                                                             value={form.targetAmount}
                                                             placeholder="목표금액"
                                                             type="text"
                                                             onChange={changeForm}
                                                             onInput={({ target }) => {
-                                                                          target.value = target.value.replace(/[^0-9]/g, "");
-                                                                          target.value = target.value.replace(/,/g, "");
-                                                                        }}
+                                                              target.value = target.value.replace(/[^0-9]/g, "");
+                                                              target.value = target.value.replace(/,/g, "");
+                                                            }}
                                                         />
                                                         </div>
+                                                        </div>
                                                         <div className="button-box">
-                                                            <button type="button" onClick={()=>sendFormData()}>
+                                                            <button type="button" onClick={()=>sendFormData()} style={inputStyle}>
                                                                 <span>펀딩 등록하기</span>
                                                             </button>
                                                         </div>
@@ -119,6 +190,17 @@ const FundingRegister = () => {
                     </div>
                 </LayoutOne>
             </Fragment>
+            <Dialog
+                open={open}
+                onClose={productService.closeDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth='lg'>
+                <DialogTitle id="alert-dialog-title">{'상품 등록/수정'}</DialogTitle>
+                <DialogContent>
+                    <ProductRegister></ProductRegister>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 };

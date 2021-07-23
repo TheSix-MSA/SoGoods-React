@@ -4,7 +4,7 @@ import {
     Card,
     Table,
     Row,
-    Col,
+    Col, Form, Button,
 } from "react-bootstrap";
 import memberService from "../sevice/memberService";
 import MemberPagination from "../components/member/MemberPagination";
@@ -88,16 +88,19 @@ const MemberTable = () => {
         })
     }
     const role = (member) => {
-        memberService.changeRole(member.email).then(res => {
+        memberService.changeAuth(member.email).then(res => {
             setMembers({
                 ...members, memberList: members.memberList.map(member => {
+
                     if (member.email === res.data.response.email)
                         return res.data.response;
+
                     return member;
                 })
             })
         })
     }
+
 
     const list = members.memberList.map(member => {
         return <tr key={member.email}>
@@ -124,6 +127,29 @@ const MemberTable = () => {
                         <p className="card-category">
                             회원정보
                         </p>
+
+
+                        <div className="shop-top-bar mb-35">
+                            <div className="select-shoing-wrap" >
+                                <div className="shop-select">
+                                    <select >
+                                        <option value="">선택</option>
+                                        <option value="n">이름</option>
+                                        <option value="e">이메일</option>
+                                        <option value="a">주소</option>
+                                    </select>
+                                </div>
+                                <div className="pro-sidebar-search mb-50 mt-25">
+                                    <form className="pro-sidebar-search-form">
+                                        <input type="text" placeholder="Search here..." />
+                                        <button>
+                                            <i className="pe-7s-search" />
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                     </Card.Header>
                     <Card.Body className="table-full-width table-responsive px-0">
                         <Table className="table-hover table-striped" style={{textAlign: "center"}}>
@@ -132,8 +158,7 @@ const MemberTable = () => {
                                 <th className="border-0">이메일</th>
                                 <th className="border-0">이름</th>
                                 <th className="border-0">생년월일</th>
-                                <th className="border-0">전화번호</th>
-                                <th className="border-0">주소</th>
+                                <th className="border-0">전화번호</th>                                <th className="border-0">주소</th>
                                 <th className="border-0">성별</th>
                                 <th className="border-0">밴 여부</th>
                                 <th className="border-0">삭제 여부</th>

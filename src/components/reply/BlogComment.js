@@ -28,8 +28,8 @@ const initState = {
   bno: 1
 };
 
-const BlogComment = () => {
-  const [replies, setReplies] = useState(initState);
+const BlogComment = ({bno}) => {
+  const [replies, setReplies] = useState({...initState, bno:bno});
   const [flag, setFlag] = useState(false);
 
   useEffect(() => {

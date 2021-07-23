@@ -7,8 +7,9 @@ import {
     Col,
 } from "react-bootstrap";
 import fundingService from "../sevice/fundingService";
-import {useHistory} from "react-router-dom";
-import FundingPagination from "../components/Funding/FundingPagination";
+import {useHistory, useLocation} from "react-router-dom";
+import FundingPagination from "../components/funding/FundingPagination";
+import * as queryString from "querystring";
 
 const initState = {
     dtoList: [
@@ -50,34 +51,40 @@ const initState = {
     }
 }
 const FundingTable = () => {
+    const location = useLocation();
     const history = useHistory();
+    const value = queryString.parse(location.search.replace("?", ""));
+    const page = value.page || 1;
+
     const [funding, setFunding] = useState(initState);
     const [flag, setFlag] = useState(false);
 
     useEffect(() => {
-        fundingService.getFundingList(funding.pageMaker.page)
-            .then(res => {
-                setFunding(res.data.response);
-            });
-    }, [funding.pageMaker.page, flag])
+        fundingService.getFundingList(page).then(res => {
+            setFunding(res.data.response);
+        });
+    }, [page, flag])
 
 
     const movePage = (num) => {
-
+        history.push('/admin/funding?page=' + num)
         funding.pageMaker.page = num;
         setFunding({...funding});
-        setFlag(!flag);
-        fundingService.setMovePage(movePage);
+        setFlag(!flag)
     }
+    fundingService.setMovePage(movePage)
 
-
-    const goToTable = (fno) => {
+    const toFunding = (fno) => {
         history.push("/funding/read/" + fno)
+    }
+    const setAuthorized = (fund) => {
+        fundingService.setAuthorized(fund.fundingDTO.fno, funding.pageMaker.page)
+            .then();
     }
 
     const list = funding.dtoList.map(fund => {
         return <tr key={fund.fundingDTO.fno}>
-            <td onClick={() => goToTable(fund.fundingDTO.fno)}>{fund.fundingDTO.title}</td>
+            <td onClick={() => toFunding(fund.fundingDTO.fno)}>{fund.fundingDTO.title}</td>
             <td>{fund.fundingDTO.writer}</td>
             <td>{fund.fundingDTO.email}</td>
             <td>{fund.fundingDTO.content}</td>
@@ -88,6 +95,7 @@ const FundingTable = () => {
             <td>{fund.fundingDTO.removed ? "🟢" : "🔴"}</td>
             <td>{fund.fundingDTO.dueDate}</td>
             <td>{fund.fundingDTO.regDate}</td>
+            <td onClick={() => setAuthorized(fund)}>{fund.fundingDTO.authorized ? "true🟢" : "🔴"}</td>
         </tr>
     })
 
@@ -116,6 +124,7 @@ const FundingTable = () => {
                                 <th className="border-0">삭제 여부</th>
                                 <th className="border-0">펀딩기한</th>
                                 <th className="border-0">신청날짜</th>
+                                <th className="border-0">펀딩 신청 여부</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -132,5 +141,3 @@ const FundingTable = () => {
 }
 
 export default FundingTable;
-
-

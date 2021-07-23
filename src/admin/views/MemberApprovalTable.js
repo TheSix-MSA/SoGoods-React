@@ -9,6 +9,8 @@ import {
 } from "react-bootstrap";
 import memberService from "../sevice/memberService";
 import MemberPagination from "../components/member/MemberPagination";
+import {useHistory, useLocation} from "react-router-dom";
+import * as queryString from "querystring";
 
 const initState = {
     memberList: [
@@ -49,48 +51,46 @@ const initState = {
     }
 }
 const MemberApprovalTable = () => {
+    const history = useHistory();
+    const location = useLocation();
+    const value = queryString.parse(location.search.replace("?", ""));
+    const page = value.page || 1;
 
     const [members, setMembers] = useState(initState);
-    const [role, setRole] = useState("");
-
+    const [flag, setFlag] = useState(false);
 
     useEffect(() => {
-        memberService.getMemberApprovalList(members.pageMaker.page).then(res => {
+        memberService.getMemberApprovalList(page).then(res => {
             setMembers(res.data.response);
         });
-    }, [members.pageMaker.page, role])
-
+    }, [page, flag])
 
     const movePage = (num) => {
+        history.push('/admin/approval?page=' + num)
         members.pageMaker.page = num;
         setMembers({...members});
-        memberService.setMovePage(movePage);
+        setFlag(!flag)
     }
+    memberService.setMovePage(movePage);
 
     const changeRole = (member) => {
         if (!member.roleSet.includes("ADMIN")) {
-            memberService.changeRole(member.email)
+            memberService.changeRole(member.email, members.pageMaker.page)
                 .then();
         }
     }
-    memberService.setRoleService(setRole)
-
 
     const list = members.memberList.map(member => {
-
-        return (member.roleSet[member.roleSet.length-1]==="GENERAL"?
-                <tr key={member.email}>
-                    <td>{member.email}</td>
-                    <td>{member.name}</td>
-                    <td>{member.birth}</td>
-                    <td>{member.phone}</td>
-                    <td>{member.address} {member.detailAddress}</td>
-                    <td>{member.gender}</td>
-                    <td onClick={() => changeRole(member)} style={{textAlign: "center"}}>{member.approval ? "✔" : ""}</td>
-                    <td style={{textAlign: "center"}}>{member.approval ? "❌" : ""}</td>
-                </tr>:null
-
-        )
+        return <tr key={member.email}>
+            <td>{member.email}</td>
+            <td>{member.name}</td>
+            <td>{member.birth}</td>
+            <td>{member.phone}</td>
+            <td>{member.address} {member.detailAddress}</td>
+            <td>{member.gender}</td>
+            <td onClick={() => changeRole(member)} style={{textAlign: "center"}}>{member.approval ? "✔" : ""}</td>
+            <td style={{textAlign: "center"}}>{member.approval ? "❌" : ""}</td>
+        </tr>
     })
 
     return (
@@ -120,17 +120,14 @@ const MemberApprovalTable = () => {
                                 </thead>
                                 <tbody>
                                 {list}
-
                                 </tbody>
                             </Table>
-                            <MemberPagination members={members} prevPage={prevPage} movePage={movePage}
-                                              nextPage={nextPage}/>
+                            <MemberPagination members={members} movePage={movePage}/>
                         </Card.Body>
                     </Card>
                 </Col>
             </Row>
         </Container>
-
     );
 }
 

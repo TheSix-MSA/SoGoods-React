@@ -7,6 +7,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import myAccountService from "./myAccountService";
 import axios from "axios";
+import {useSelector} from "react-redux";
+import {useToasts} from "react-toast-notifications";
 
 const initNovelState = {
     isbn:"",
@@ -22,7 +24,9 @@ const initNovelState = {
 export default function NovelRegisterDialog({searchBook}) {
     const [open, setOpen] = React.useState(false);
     const [bookInfo, setBook] = useState(initNovelState);
-    const [errorFlag, setErrorFlag] = useState(false);
+    const [errorFlag, setErrorFlag] = useState(false    );
+    const userInfo = useSelector(state => state.login)
+    const {addToast} = useToasts();
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -35,6 +39,7 @@ export default function NovelRegisterDialog({searchBook}) {
     useEffect(() => {
 
         if (open) {
+            setErrorFlag(false);
             myAccountService.searchNovelList(searchBook.isbn)
                 .then(novel => {
                     if (novel.errorCode) {
@@ -47,13 +52,27 @@ export default function NovelRegisterDialog({searchBook}) {
                 });
         }
 
-    }, [open]);
+    }, [open,searchBook.isbn]);
 
 
+    const registerNovel = () => {
+        myAccountService.registerNovel({
+            isbn: bookInfo.isbn13,
+            title: bookInfo.title,
+            image: bookInfo.cover,
+            publisher: bookInfo.publisher,
+            email: userInfo.email
+        }).then(value => {
+            addToast("작품이 등록되었습니다.", {appearance: 'info', autoDismiss: true});
+            handleClose();
+            myAccountService.clearInput();
+        });
+    }
 
 
     myAccountService.setDialogFn(handleClickOpen);
     myAccountService.setCloseDialogFn(handleClose);
+
 
     return (
         <div>
@@ -63,16 +82,22 @@ export default function NovelRegisterDialog({searchBook}) {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                {errorFlag === false ? <DialogTitle id="alert-dialog-title" style={{fontWeight:"bold"}}>{bookInfo.title}</DialogTitle> :
+                {errorFlag === false ?
+                    <DialogTitle id="alert-dialog-title" style={{fontWeight: "bold"}}>{bookInfo.title}</DialogTitle> :
                     <DialogTitle id="alert-dialog-title">{"책 정보가 없습니다."}</DialogTitle>}
                 <DialogContent>
                     {errorFlag === false ?
                         <DialogContentText id="alert-dialog-description" style={{width: "35vw"}}>
                             <div style={{display: "flex", justifyContent: "space-evenly"}}>
-                                <div style={{height:"100%", textAlign:"center", padding:"3px", background:"lightgray"}}>
+                                <div style={{
+                                    height: "100%",
+                                    textAlign: "center",
+                                    padding: "3px",
+                                    background: "lightgray"
+                                }}>
                                     <img src={bookInfo.cover} style={{objectFit: "contain"}} alt=""/>
                                 </div>
-                                <div style={{display:"flex", flexDirection:"column",justifyContent:"space-evenly"}}>
+                                <div style={{display: "flex", flexDirection: "column", justifyContent: "space-evenly"}}>
                                     <p><strong>Title : </strong><span>{bookInfo.title}</span></p>
                                     <p><strong>ISBN : </strong><span>{bookInfo.isbn13}</span></p>
                                     <p><strong>Publisher : </strong><span>{bookInfo.publisher}</span></p>
@@ -81,9 +106,11 @@ export default function NovelRegisterDialog({searchBook}) {
                         </DialogContentText> : null}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary" autoFocus>
-                        Register
-                    </Button>
+                    {errorFlag === false ?
+                        <Button onClick={registerNovel} color="primary" autoFocus>
+                            Register
+                        </Button>
+                        : null}
                 </DialogActions>
             </Dialog>
         </div>

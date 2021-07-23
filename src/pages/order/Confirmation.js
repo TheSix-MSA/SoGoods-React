@@ -20,9 +20,15 @@ const Confirmation = ({location}) => {
     //const res = orderServices.orderConfirmedSave({...queryObj, buyer:user, tid:tid});
     const kakaoPayApprove = orderServices.kakaoPayApprovePayment({
       cid: process.env.REACT_APP_KAKAO_PAY_TID,
-      tid: queryObj.tid
+      tid: queryObj.tid,
+      partner_order_id: queryObj.partner_order_id,
+
     })
     localStorage.removeItem("transactionId");
+  }
+
+  const randIGen = () => {
+    console.log("sads")
   }
 
   return (
@@ -48,6 +54,7 @@ const Confirmation = ({location}) => {
                       No items found in wishlist <br />{" "}
                       <div className="place-order mt-25">
                         <button className="btn-hover" onClick={() => finalCheckOut()}>결제 승인</button>
+                        <button onClick={() => randIGen()}> 시간 제너레이션 </button>
                       </div>
                     </div>
                   </div>

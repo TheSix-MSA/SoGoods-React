@@ -67,7 +67,15 @@ const Checkout = ({ location, history }) => {
         });
 
         console.log(res)
-        orderServices.setTid(res.data);
+        localStorage.setItem("transactionId",JSON.stringify({
+            tid: res.data.tid,
+            url: res.data.next_redirect_pc_url
+        }));
+
+        localStorage.setItem("dataFromKP",JSON.stringify({
+            all: res.data
+        }));
+
         window.location.href=res.data.next_redirect_pc_url;
         /***
          * 페이지 이동이 발생하는데 이걸 어떻게 처리해야하는가

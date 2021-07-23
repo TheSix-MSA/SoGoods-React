@@ -15,6 +15,18 @@ const orderServices = () => {
         return data;
     }
 
+    const kakaoPayApprovePayment = async (params) => {
+        const data = await axios.post("/v1/payment/approve", null, {
+            params,
+            headers: {
+                Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_ADMIN_KEY}`,
+                "Content-type" : "application/x-www-form-urlencoded;charset=utf-8"
+            }
+        });
+        return data;
+    }
+
+
     const orderConfirmedSave = async (params) => {
         const res =  await instance({
             url: "/order/",
@@ -24,7 +36,7 @@ const orderServices = () => {
         return res;
     }
 
-    return {callKakaoPay, orderConfirmedSave}
+    return {callKakaoPay, orderConfirmedSave, kakaoPayApprovePayment}
 }
 
 export default orderServices();

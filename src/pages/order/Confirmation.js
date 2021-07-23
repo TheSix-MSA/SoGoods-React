@@ -1,28 +1,28 @@
 import PropTypes from "prop-types";
 import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
 import MetaTags from "react-meta-tags";
-import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import {connect, useSelector} from "react-redux";
 import LayoutOne from "../../layouts/LayoutOne";
-import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import queryString from "querystring";
 import orderServices from "../../service/orderServices";
 
 const Confirmation = ({location}) => {
-  const { search } = location	// 문자열 형식으로 결과값이 반환된다.
+  const { search } = location
   const queryObj = queryString.parse(search.replace("?",""));
 
   const user = useSelector((state) => state.login.email);
 
-  console.log("User Info: ", user);
-
-  console.log({...queryObj, buyer:user});
+  const tid = localStorage.getItem("transactionId")!==null?
+      JSON.parse(localStorage.getItem("transactionId")).tid:null;
 
   const finalCheckOut = () => {
-    console.log("TID 넘어오니?!?!?!",orderServices.getTid());
-    //const res = orderServices.orderConfirmedSave({...queryObj, buyer:user});
-    //console.log(res)
+    console.log({...queryObj, buyer:user, tid:tid})
+    //const res = orderServices.orderConfirmedSave({...queryObj, buyer:user, tid:tid});
+    const kakaoPayApprove = orderServices.kakaoPayApprovePayment({
+      cid: process.env.REACT_APP_KAKAO_PAY_TID,
+      tid: queryObj.tid
+    })
+    localStorage.removeItem("transactionId");
   }
 
   return (

@@ -75,6 +75,7 @@ const fundingService = () => {
 
     // 게시글 수정하기
     const updateFunding = async(fno, form) => {
+        console.log(form)
         const result = await instance({
             url:`/funding/`+fno+`/`,
             method:'put',
@@ -83,11 +84,19 @@ const fundingService = () => {
         return result.data;
     }
 
+    const removedFunding = async(fno) => {
+        const result = await instance({
+            url:`/funding/`+fno+`/`,
+            method: 'delete'
+        })
+        return result.data;
+    }
 
 
 
 
-    return {getList, registerFunding, getOneFunding, insertFavorite, getMyFundingList, getMyFavFundingList, updateFunding}
+
+    return {getList, registerFunding, getOneFunding, insertFavorite, getMyFundingList, getMyFavFundingList, updateFunding, removedFunding}
 }
 
 export default fundingService()

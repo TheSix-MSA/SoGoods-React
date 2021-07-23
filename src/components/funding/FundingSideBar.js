@@ -96,7 +96,7 @@ const FundingSideBar = (funding) => {
                         <h6>{p.des}</h6>
                         <div style={{display:"flex"}}>
                             <button onClick={()=> deleteCart(p)}> - </button>
-                            <div>{p.count}개</div>
+                                <div>{p.count}개</div>
                             <button onClick={()=> addCart(p)}> + </button>
                         </div>
                     </div>
@@ -117,21 +117,29 @@ const FundingSideBar = (funding) => {
                  <br/>
                  <div style={{width:"100%"}}>
                      <div style={{fontSize:"30px", lineHeight:"150%", cursor:"pointer",display:"flex"}} onClick={clickFavorite}> {favList.indexOf(funding.fundingDTO.email) ? '💜':'♡'}
-                     <div style={{fontSize:"20px", margin:"0 10px"}}>{favCount}</div>
-                     </div>
-                     <div>
-                     <button style={{height:"42px",width:"100%", backgroundColor:"snow"}}>펀딩하기</button>
+                        <div style={{fontSize:"20px", margin:"0 10px"}}>{favCount}</div>
                      </div>
                  </div>
+                 <form className={"searchform"}>
+                     <button className={"searchform__submit"} style={{height:"50px", width:"100%" ,position:"relative"}}>펀딩하기</button>
+                 </form>
              </div>
          </div>
     );
 
     // 제품 수정 삭제 버튼
     const update = (
-        <div style={{ height:"42px", display:"flex"}}>
-            <button style={{width:"100%", margin:"5px 10px"}} onClick={()=>toUpdate(funding.fundingDTO.fno)}>수정</button>
-            <button style={{width:"100%", margin:"5px 10px"}} onClick={()=> deleteFunding(funding.fundingDTO.fno)}>삭제</button>
+        <div style={{ height:"42px", display:"flex", flexWrap:"wrap",flexDirection:"column"}}>
+            <form className={"searchform"}>
+                <button className={"searchform__submit"} style={{height:"50px" ,position:"relative", margin:"5px 5px"}}
+                        onClick={()=>toUpdate(funding.fundingDTO.fno)}>수정
+                </button>
+            </form>
+            <form className={"searchform"} >
+                <button className={"searchform__submit"} style={{height:"50px",position:"relative", margin:"5px 5px"}}
+                        onClick={()=> deleteFunding(funding.fundingDTO.fno)}>삭제
+                </button>
+            </form>
             <hr/>
         </div>
     );
@@ -152,9 +160,9 @@ const FundingSideBar = (funding) => {
         <div className="sidebar-style">
             <div className="sidebar-widget mt-35">
                 {selectReward}
-                {update}
+                { userInfo.email !== "" && update}
             </div>
-            <div className="sidebar-widget">
+            <div className="sidebar-widget mt-40" >
                 <h4 className="pro-sidebar-title"> 리워드 선택</h4>
                 <div className="sidebar-project-wrap mt-30">
                     {productList}

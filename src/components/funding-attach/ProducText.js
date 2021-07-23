@@ -28,7 +28,7 @@ const ProductText = ({}) => {
     return (
         <div>
             <div>상품이름<input  name='name'   value={form.title}    onChange={changeForm}/></div>
-            <div>상품설명<textarea name='desc' value={form.content} onChange={changeForm}/></div>
+            <div>상품설명<textarea name='des' value={form.content} onChange={changeForm}/></div>
             <div>가격<input type='number' name='price'   value={form.price}    onChange={changeForm}/></div>
         </div>
     )

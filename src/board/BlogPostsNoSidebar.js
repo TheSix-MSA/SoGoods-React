@@ -2,10 +2,11 @@ import React, {Fragment} from "react";
 import {useHistory} from "react-router-dom";
 import getFormatDate from "../modules/getFormatDate";
 
-const BlogPostsNoSidebar = ({boardData}) => {
+const BlogPostsNoSidebar = ({boardData, boardType}) => {
     const history = useHistory();
+    console.log(boardType)
     const moveDetail = (bno) => {
-        history.push(`/board/FREE/${bno}`)
+        history.push(`/board/${boardType}/${bno}`)
     }
     return (
         <Fragment>

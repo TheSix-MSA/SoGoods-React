@@ -18,9 +18,9 @@ const boardService = () => {
     /*
         FREE 게시판 글 상세보기
      */
-    const getOneBoard = async (bno) => {
+    const getOneBoard = async (bno, boardType) => {
         return await instance({
-            url: `/board/FREE/${bno}`,
+            url: `/board/${boardType}/${bno}`,
             method: 'get'
         })
     }

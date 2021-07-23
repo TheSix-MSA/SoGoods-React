@@ -79,7 +79,7 @@ const BlogNoSidebar = ({match}) => {
                                     <div className="row">
                                         {/* blog posts */}
                                         {boardData.boardDtoList !== null ? (
-                                        <BlogPostsNoSidebar boardData={boardData.boardDtoList}/>
+                                        <BlogPostsNoSidebar boardData={boardData.boardDtoList} boardType={boardType.current}/>
                                         ) : <p> 일치하는 결과가 없습니다. </p>}
                                     </div>
                                     {/* blog pagination */}

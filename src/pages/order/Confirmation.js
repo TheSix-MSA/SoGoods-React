@@ -3,20 +3,27 @@ import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import MetaTags from "react-meta-tags";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
-import { connect } from "react-redux";
+import {connect, useSelector} from "react-redux";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
+import queryString from "querystring";
+import orderServices from "../../service/orderServices";
 
-const Wishlist = ({
-  location,
-  cartItems,
-  currency,
-  addToCart,
-  wishlistItems,
-  deleteFromWishlist,
-  deleteAllFromWishlist
-}) => {
-  const { pathname } = location;
+const Confirmation = ({location}) => {
+  const { search } = location	// 문자열 형식으로 결과값이 반환된다.
+  const queryObj = queryString.parse(search.replace("?",""));
+
+  const user = useSelector((state) => state.login.email);
+
+  console.log("User Info: ", user);
+
+  console.log({...queryObj, buyer:user});
+
+  const finalCheckOut = () => {
+    console.log("TID 넘어오니?!?!?!",orderServices.getTid());
+    //const res = orderServices.orderConfirmedSave({...queryObj, buyer:user});
+    //console.log(res)
+  }
 
   return (
     <Fragment>
@@ -28,14 +35,7 @@ const Wishlist = ({
         />
       </MetaTags>
 
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
-        Wishlist
-      </BreadcrumbsItem>
-
       <LayoutOne headerTop="visible">
-        {/* breadcrumb */}
-        <Breadcrumb />
         <div className="cart-main-area pt-90 pb-100">
           <div className="container">
               <div className="row">
@@ -46,9 +46,9 @@ const Wishlist = ({
                     </div>
                     <div className="item-empty-area__text">
                       No items found in wishlist <br />{" "}
-                      <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
-                        Add Items
-                      </Link>
+                      <div className="place-order mt-25">
+                        <button className="btn-hover" onClick={() => finalCheckOut()}>결제 승인</button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -61,7 +61,7 @@ const Wishlist = ({
   );
 };
 
-Wishlist.propTypes = {
+Confirmation.propTypes = {
   addToCart: PropTypes.func,
   cartItems: PropTypes.array,
   currency: PropTypes.object,
@@ -71,4 +71,4 @@ Wishlist.propTypes = {
   wishlistItems: PropTypes.array
 };
 
-export default connect()(Wishlist);
+export default connect()(Confirmation);

@@ -1,24 +1,8 @@
 import axios from "axios";
+import instance from "../modules/axiosConfig";
 
 
 const orderServices = () => {
-    let openKakaoDigalog;
-    let closeKakaoDialog;
-
-    const setOpenKakaoDigalog = (func) => {
-        openKakaoDigalog = func;
-    }
-    const setCloseKakaoDialog = (func) => {
-        closeKakaoDialog = func;
-    }
-
-    const openKakaoPay = () => {
-        openKakaoDigalog();
-    }
-
-    const closeKakaoPay = () => {
-        closeKakaoDialog();
-    }
 
     const callKakaoPay = async (params) => {
         const data = await axios.post("/v1/payment/ready", null, {
@@ -28,11 +12,19 @@ const orderServices = () => {
                 "Content-type" : "application/x-www-form-urlencoded;charset=utf-8"
             }
         });
-
         return data;
     }
 
-    return {setCloseKakaoDialog, setOpenKakaoDigalog, callKakaoPay}
+    const orderConfirmedSave = async (params) => {
+        const res =  await instance({
+            url: "/order/",
+            method: 'post',
+            data: params
+        });
+        return res;
+    }
+
+    return {callKakaoPay, orderConfirmedSave}
 }
 
 export default orderServices();

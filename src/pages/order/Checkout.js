@@ -20,28 +20,9 @@ const initStateForServer =  {
     receiverRequest: ""
 }
 
-const Checkout = ({ location }) => {
+const Checkout = ({ location, history }) => {
   const { pathname } = location;
   const [cart, cartChange, setCart] = useInputs(initStateForServer);
-
-    const [res, setRes] = useState({
-        next_redirect_pc_url: "",
-        tid: ""
-    });
-
-  const [kpParams, setKpParams] = useState({
-    cid: "TC0ONETIME",
-    partner_order_id: "partner_order_id", // 서버에 있는 값중 최신 값을 가져와야 한다.
-    partner_user_id: "partner_user_id", //결제하는 놈 이메일
-    item_name: "설마..?",
-    quantity: 1,
-    total_amount: 10,
-    vat_amount: 0,
-    tax_free_amount: 0,
-    approval_url: "http://localhost:3000/wishlist",
-    fail_url: "http://localhost:3000/checkout",
-    cancel_url: "http://localhost:3000/checkout"
-    });
 
   const cartItems = [
       {
@@ -70,8 +51,27 @@ const Checkout = ({ location }) => {
     };
 
     const checkOut = async () => {
-        const res = await orderServices.callKakaoPay(kpParams);
-        window.open(res.data.next_redirect_pc_url, "_blank")
+        const res = await orderServices.callKakaoPay({
+            cid: "TC0ONETIME",
+            partner_order_id: "partner_order_id", // 서버에 있는 값중 최신 값을 가져와야 한다.
+            partner_user_id: "partner_user_id", //결제하는 놈 이메일
+            item_name: "설마..?",
+            quantity: 1,
+            total_amount: 10,
+            vat_amount: 0,
+            tax_free_amount: 0,
+            approval_url: "http://localhost:3000/confirmOrder?receiverName="+cart.receiverName+"&receiverAddress="+cart.receiverAddress
+                +"&receiverDetailedAddress="+cart.receiverDetailedAddress+"&receiverPhone="+cart.receiverPhone+"&receiverRequest="+cart.receiverRequest,
+            fail_url: "http://localhost:3000/checkout",
+            cancel_url: "http://localhost:3000/checkout"
+        });
+
+        console.log(res)
+        orderServices.setTid(res.data);
+        window.location.href=res.data.next_redirect_pc_url;
+        /***
+         * 페이지 이동이 발생하는데 이걸 어떻게 처리해야하는가
+         */
     }
 
     return (
@@ -83,12 +83,7 @@ const Checkout = ({ location }) => {
           content="Checkout page of flone react minimalist eCommerce template."
         />
       </MetaTags>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
-        Checkout
-      </BreadcrumbsItem>
       <LayoutOne headerTop="visible">
-        <Breadcrumb />
         <div className="checkout-area pt-95 pb-100">
           <div className="container">
             {cartItems && cartItems.length >= 1 ? (

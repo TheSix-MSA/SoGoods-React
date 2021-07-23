@@ -11,8 +11,7 @@ import CodeDialogSlide from "./CodeDialog";
 import codeService from "./codeService";
 import {useToasts} from "react-toast-notifications";
 import {useHistory} from "react-router-dom";
-
-
+import NovelRegisterDialog from "./NovelRegisterDialog";
 
 const initUserInfo = {
   email:"",
@@ -31,12 +30,16 @@ const initPassword = {
 };
 
 
+const initSearchBook = {
+  isbn:""
+};
 
 const MyAccount = ({ location }) => {
   const { pathname } = location;
   const userSelector = useSelector(state => state.login);
   const [userInfo, setUserInfo, setInfo] = useInputs(initUserInfo);
-  const [passInfo, setPassInfo, setPass] = useInputs(initPassword);
+  const [passInfo, setPassInfo, setPass] = useInputs({...initPassword,email:userSelector.email});
+  const [searchBook, setSearchBook, setBook] = useInputs(initSearchBook);
   const [editFlag, setEditFlag] = useState(false);
   const [passEditFlag, setPassEditFlag] = useState(false);
   const {addToast} = useToasts();
@@ -45,17 +48,14 @@ const MyAccount = ({ location }) => {
   useEffect(() => {
     myAccountService.getMyInfo(userSelector.email)
         .then(value => {
-          passInfo.email = userSelector.email;
-          setInfo({...value.data.response, passwordCheck: value.data.response.password});
+          setInfo({...value.data.response});
         });
 
     if(userSelector.email===""){
       history.push('/');
     }
 
-  },[]);
-  console.log(1, userInfo);
-
+  },[userSelector]);
 
   /**
    * 유저 수정 글쓰기기능 활성화
@@ -131,6 +131,14 @@ const MyAccount = ({ location }) => {
     myAccountService.searchNovelList(9788970127248);
   };
 
+
+  /**
+   * 검색팝업을 올림.
+   */
+  const searchIsbn = () =>{
+    console.log("팝업해라");
+    myAccountService.popUpDialogFn();
+  }
 
   console.log(userInfo);
 
@@ -303,33 +311,25 @@ const MyAccount = ({ location }) => {
                               <div className="account-info-wrapper">
                                 <h4>Address Book Entries</h4>
                               </div>
-                              <div className="entries-wrapper" style={{marginBottom:"15px"}}>
-                                <div className="row">
-                                  <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
-                                    <div className="entries-info text-center">
-                                      <p>John Doe</p>
-                                      <p>Paul Park </p>
-                                      <p>Lorem ipsum dolor set amet</p>
-                                      <p>NYC</p>
-                                      <p>New York</p>
+                              <NovelRegisterDialog searchBook={searchBook}/>
+                              <div className="align-items-center justify-content-center entries-wrapper">
+                                <div className="billing-info  entries-edit-delete text-center">
+                                    <label>Register Book</label>
+                                    <div style={{display:"flex"}}>
+                                      <input type="text" name="isbn" onChange={setSearchBook} minLength={13}/>
+                                      <button className="edit" onClick={()=>searchIsbn(searchBook)}>SEARCH</button>
                                     </div>
-                                  </div>
-                                  <div className="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">
-                                    <div className="entries-edit-delete text-center">
-                                      <button className="edit" onClick={getNovel}>Edit</button>
-                                      <button>Delete</button>
-                                    </div>
-                                  </div>
-                                  <div className="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">
-                                    <div className="entries-edit-delete text-center">
-                                      <button className="edit">Edit</button>
-                                      <button>Delete</button>
-                                    </div>
-                                  </div>
                                 </div>
                               </div>
-                              <div className="entries-wrapper" style={{marginBottom:"15px"}}>
+
+                              <div className="entries-wrapper" style={{marginBottom: "15px"}}>
                                 <div className="row">
+                                  <div className="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">
+                                    <div className="entries-edit-delete text-center">
+                                      <img src="https://image.aladin.co.kr/product/61/50/coversum/8970127240_2.jpg"
+                                           alt=""/>
+                                    </div>
+                                  </div>
                                   <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
                                     <div className="entries-info text-center">
                                       <p>John Doe</p>
@@ -337,12 +337,6 @@ const MyAccount = ({ location }) => {
                                       <p>Lorem ipsum dolor set amet</p>
                                       <p>NYC</p>
                                       <p>New York</p>
-                                    </div>
-                                  </div>
-                                  <div className="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">
-                                    <div className="entries-edit-delete text-center">
-                                      <button className="edit">Edit</button>
-                                      <button>Delete</button>
                                     </div>
                                   </div>
                                   <div className="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">

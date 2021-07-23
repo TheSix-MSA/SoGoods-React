@@ -4,8 +4,8 @@ import {Card, Col, Row, Table} from "react-bootstrap";
 import MemberPagination from "../components/member/MemberPagination";
 import getFormatDate from "../../modules/getFormatDate";
 
-const initState={
-    boardListRequestDTO:{},
+const initState = {
+    boardListRequestDTO: {},
     boardDtoList: [{
         bno: 0,
         title: "",
@@ -17,36 +17,35 @@ const initState={
         modDate: "",
         private: false
     }],
-    pageMaker:{
-        page:1,
-        size:0,
-        totalCount:0,
-        pageList:[],
-        prev:false,
-        next:false,
-        start:0,
-        end:0
+    pageMaker: {
+        page: 1,
+        size: 0,
+        totalCount: 0,
+        pageList: [],
+        prev: false,
+        next: false,
+        start: 0,
+        end: 0
     }
 }
-
-const NoticeTable = ()=>{
+const NoticeTable = () => {
     const [notices, setNotices] = useState(initState);
 
-    useEffect(() =>{
-        noticeService.getNoticeList(notices.pageMaker.page).then(result=>{
+    useEffect(() => {
+        noticeService.getNoticeList(notices.pageMaker.page).then(result => {
             setNotices(result.response);
         })
-    },[])
+    }, [])
 
-    const list = notices.boardDtoList.map(notice=>{
+    const list = notices.boardDtoList.map(notice => {
         return <tr key={notice.bno}>
             <td>{notice.title}</td>
             <td>{notice.writer}</td>
             <td>{notice.content}</td>
-            <td>{notice.removed ? "⭕":"❌"}</td>
+            <td>{notice.removed ? "⭕" : "❌"}</td>
             <td>{getFormatDate(new Date(notice.regDate))}</td>
             <td>{getFormatDate(new Date(notice.modDate))}</td>
-            <td>{notice.private ? "⭕":"❌"}</td>
+            <td>{notice.private ? "⭕" : "❌"}</td>
         </tr>
 
     })
@@ -101,10 +100,6 @@ const NoticeTable = ()=>{
             </Col>
         </Row>
     );
-
-
-
-
 
 
 }

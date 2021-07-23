@@ -39,13 +39,13 @@ const boardSlice = createSlice({
     initialState: initState,
     reducers: {
         movePage: ((state, action) => {
-            state.boardListRequestDTO.page = action.payload
+            state.pageMaker.page = action.payload
         }),
         prevPage: ((state, action) => {
-            state.boardListRequestDTO.page = action.payload - 1
+            state.pageMaker.page = action.payload - 1
         }),
         nextPage: ((state, action) => {
-            state.boardListRequestDTO.page = action.payload + 1
+            state.pageMaker.page = action.payload + 1
         })
     },
     extraReducers: builder => {

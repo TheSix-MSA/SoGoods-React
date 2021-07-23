@@ -52,16 +52,26 @@ const FundingRegister = () => {
 
     productService.setOpenFn(setOpen)
 
-    console.log(productService.getProductList())
+
+    const productList = productService.getProductList()
+    const productDTOs = productList.map(product=>{
+        return product.text
+    })
+    const req = {...form, productDTOs: productDTOs, writer:userInfo.name, email:userInfo.email}
 
     const sendFormData = async () => {
-        productService.getProductList()
-        const result = await fundingService.registerFunding({...form});
-        const fno = result.response.fno
+         const result = await fundingService.registerFunding(req);
 
-        const result_product= await
 
-        setForm({...initState})
+        await fundingService.registerAttach(productList[0], 'PRODUCT',123, 0 )
+
+        // productList.reduce((prevP, product)=>{
+        //     prevP.then(async res=>{
+        //         await fundingService.registerAttach(product, 'PRODUCT',123, 0 )
+        //     })
+        // })
+
+
     }
 
     const list = productService.getProductList().map((product, i)=>{
@@ -72,7 +82,10 @@ const FundingRegister = () => {
         return (
             <>
                 <li key={i}>
-                    <p onClick={()=>{productService.openDialogForEdit(i)}}>{product.text.name} : {product.text.desc}</p>
+                    <p onClick={()=>{productService.openDialogForEdit(i)}}>
+                        {product.text.name} :
+                        {product.text.desc}
+                    </p>
                     <div>
                         {product.pictures.map((picture ,j)=>
                             <img key={j} src={picture.preview} style={imgStyle}/>)}
@@ -140,46 +153,46 @@ const FundingRegister = () => {
                                                             name="mainImage"
                                                             onChange={changeForm}
                                                         />
-                                                        <ul>
-                                                            {list}
-                                                        </ul>
-                                                        <Button style={btn} variant="outlined" color="primary" onClick={productService.openDialog}>
-                                                            상품 등록
-                                                        </Button>
-                                                        <div style={{display:"flex"}}>
+                                                    <ul>
+                                                        {list}
+                                                    </ul>
+                                                    <Button style={btn} variant="outlined" color="primary" onClick={productService.openDialog}>
+                                                        상품 등록
+                                                    </Button>
+                                                    <div style={{display:"flex"}}>
                                                         <div style={{display:"flex" ,flexWrap:"wrap"}}>
-                                                        <h5 style={textStyle}>펀딩 만기일</h5>
-                                                        <input
-                                                            style={inputStyle}
-                                                            name="dueDate"
-                                                            placeholder="date"
-                                                            value={form.dueDate}
-                                                            type="date"
-                                                            onChange={changeForm}
-                                                            min={getFormatDate(new Date())}
-                                                        />
+                                                            <h5 style={textStyle}>펀딩 만기일</h5>
+                                                            <input
+                                                                style={inputStyle}
+                                                                name="dueDate"
+                                                                placeholder="date"
+                                                                value={form.dueDate}
+                                                                type="date"
+                                                                onChange={changeForm}
+                                                                min={getFormatDate(new Date())}
+                                                            />
                                                         </div>
                                                         <div style={{display:"flex", flexWrap:"wrap"}}>
-                                                        <h5 style={textStyle}>펀딩 목표금액</h5>
-                                                        <input
-                                                            style={inputStyle}
-                                                            name="targetAmount"
-                                                            value={form.targetAmount}
-                                                            placeholder="목표금액"
-                                                            type="text"
-                                                            onChange={changeForm}
-                                                            onInput={({ target }) => {
-                                                              target.value = target.value.replace(/[^0-9]/g, "");
-                                                              target.value = target.value.replace(/,/g, "");
-                                                            }}
-                                                        />
+                                                            <h5 style={textStyle}>펀딩 목표금액</h5>
+                                                            <input
+                                                                style={inputStyle}
+                                                                name="targetAmount"
+                                                                value={form.targetAmount}
+                                                                placeholder="목표금액"
+                                                                type="number"
+                                                                onChange={changeForm}
+                                                                onInput={({ target }) => {
+                                                                    target.value = target.value.replace(/[^0-9]/g, "");
+                                                                    target.value = target.value.replace(/,/g, "");
+                                                                }}
+                                                            />
                                                         </div>
-                                                        </div>
-                                                        <div className="button-box">
-                                                            <button type="button" onClick={()=>sendFormData()} style={inputStyle}>
-                                                                <span>펀딩 등록하기</span>
-                                                            </button>
-                                                        </div>
+                                                    </div>
+                                                    <div className="button-box">
+                                                        <button type="button" onClick={()=>sendFormData()} style={inputStyle}>
+                                                            <span>펀딩 등록하기</span>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </Tab.Pane>

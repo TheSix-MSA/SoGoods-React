@@ -7,8 +7,9 @@ const productService = ()=>{
 
     // {
     //     text:{
-    //         title: 'aaa',
-    //         content: 'ㄱㄱㄱ'
+    //         name: 'aaa',
+    //         desc: 'ㄱㄱㄱ',
+    //         price: ''
     //     },
     //     pictures: []
     // },
@@ -29,8 +30,9 @@ const productService = ()=>{
     const initProduct = () => {
         product = {
             text:{
-                title: '',
-                content: ''
+                name: '',
+                desc: '',
+                price: ''
             },
             pictures: []
         }

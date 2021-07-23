@@ -19,6 +19,17 @@ const fundingService = () => {
             method: 'post',
             data : form
         });
+
+        return result.data;
+    }
+
+    //펀딩 글 등록시 관련된 상품들 등록처리하기
+    const registerProduct = async (fno, productList) => {
+        const result = await instance({
+            url : `/`,
+            method: 'post',
+            data : {fno, productList}
+        });
         return result.data;
     }
 

@@ -43,11 +43,13 @@ const FundingRegister = () => {
     console.log(productService.getProductList())
 
     const sendFormData = async () => {
-        productService.getProductList()
+        const productList = productService.getProductList()
         const result = await fundingService.registerFunding({...form});
         const fno = result.response.fno
 
-        const result_product= await
+        const result_product= await fundingService.registerProduct(fno, [...productList])
+
+
 
         setForm({...initState})
     }

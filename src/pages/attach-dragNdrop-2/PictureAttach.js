@@ -66,37 +66,27 @@ const img = {
 const PictureAttach = () => {
 
 
-
     const [files, setFiles] = useState(productService.getProduct().pictures);
     const maxFiles = 6
     const {
-        getRootProps,
-        getInputProps,
-        isDragActive,
-        isDragAccept,
-        isDragReject
+        getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject
     } = useDropzone({
-        accept: 'image/*',
-        maxFiles:maxFiles,
-        onDrop: acceptedFiles => {
-            console.log('acceptedFiles: ', acceptedFiles)
-            const max = maxFiles;
-            const inFiles = acceptedFiles.map(file =>
-                Object.assign(file, {
-                    preview: URL.createObjectURL(file)
-                })
-            )
+            accept: 'image/*',
+            maxFiles:maxFiles,
+            onDrop: acceptedFiles => {
+                const max = maxFiles;
 
-            console.log('inFiles: ', inFiles)
+                const newFiles = [...files, ...acceptedFiles]
 
-            const newFiles = [...files, ...inFiles]
-
-            if(newFiles.length <= max){
-                setFiles(newFiles)
-            }else{
-                console.log(`파일갯수 ${max} 초과`)
+                if(newFiles.length <= max){
+                    setFiles(newFiles)
+                    setTimeout(()=>{
+                        console.log('files-setTimeout',files)
+                    },5000)
+                }else{
+                    console.log(`파일갯수 ${max} 초과`)
+                }
             }
-        }
     });
 
     const style = useMemo(() => ({
@@ -116,8 +106,22 @@ const PictureAttach = () => {
         setFiles([...files])
     }
 
+    productService.setPictures(files)
+    files.map(file =>
+        Object.assign(file, {
+            preview: URL.createObjectURL(file)
+        })
+    )
+
+    useEffect(() => () => {
+        // Make sure to revoke the data uris to avoid memory leaks
+        files.forEach(file => {
+            return URL.revokeObjectURL(file.preview)
+        });
+    }, [files]);
 
 
+    console.log('files length2: ', files.length)
     const thumbs = files.map((file, idx)=> (
         <div style={thumb} key={file.name}>
             <div style={thumbInner}>
@@ -130,13 +134,6 @@ const PictureAttach = () => {
             </div>
         </div>
     ));
-
-    useEffect(() => () => {
-        // Make sure to revoke the data uris to avoid memory leaks
-        files.forEach(file => URL.revokeObjectURL(file.preview));
-    }, [files]);
-
-    productService.setPictures(files)
 
     return (
         <section className="container">

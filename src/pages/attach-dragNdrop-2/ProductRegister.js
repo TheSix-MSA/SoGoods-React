@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProductRegister = () => {
-
     const [spacing, setSpacing] = React.useState(2);
     const classes = useStyles();
     const [flag, setFlag] = useState(false)
@@ -39,7 +38,11 @@ const ProductRegister = () => {
                         <Grid container justifyContent="center" spacing={spacing}>
                             <Grid item>
                                 <ProductText></ProductText>
-                                <button onClick={productService.addProduct}>확인</button>
+                                {productService.getMode() === 'update'?
+                                    <button onClick={productService.editProduct}>{'수정'}</button>:
+                                    <button onClick={productService.addProduct}>{'등록'}</button>
+                                }
+
                             </Grid>
                         </Grid>
                     </Paper>

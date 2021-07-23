@@ -7,7 +7,7 @@ const initState = {
 }
 
 const ProductText = ({}) => {
-    console.log('ProductText 랜더링')
+    console.log('3-1 랜더링')
 
     //안좋은 코드
     // const product = productService.getProduct()

@@ -3,16 +3,6 @@ const productService = ()=>{
     let openFn;
     let mode;
     let prodIdx;
-    // let registerFn;
-
-    // {
-    //     text:{
-    //         name: 'aaa',
-    //         desc: 'ㄱㄱㄱ',
-    //         price: ''
-    //     },
-    //     pictures: []
-    // },
 
     const productList = [
     ]
@@ -31,7 +21,7 @@ const productService = ()=>{
         product = {
             text:{
                 name: '',
-                desc: '',
+                des: '',
                 price: ''
             },
             pictures: []
@@ -105,7 +95,7 @@ const productService = ()=>{
         prodIdx = idx
         setMode('update')
         product = getProductByIdx(idx)
-        console.log(product)
+        console.log("수정할 product: ", product)
 
         //랜더링
         openFn(true)

@@ -12,6 +12,7 @@ import codeService from "./codeService";
 import {useToasts} from "react-toast-notifications";
 import {useHistory} from "react-router-dom";
 import NovelRegisterDialog from "./NovelRegisterDialog";
+import MyNovel from "./MyNovel";
 
 const initUserInfo = {
   email:"",
@@ -34,12 +35,11 @@ const initSearchBook = {
   isbn:""
 };
 
-const MyAccount = ({ location }) => {
-  const { pathname } = location;
+const MyAccount = () => {
   const userSelector = useSelector(state => state.login);
   const [userInfo, setUserInfo, setInfo] = useInputs(initUserInfo);
   const [passInfo, setPassInfo, setPass] = useInputs({...initPassword,email:userSelector.email});
-  const [searchBook, setSearchBook, setBook] = useInputs(initSearchBook);
+  const [searchBook, setSearchBook, setBook] = useInputs({...initSearchBook});
   const [editFlag, setEditFlag] = useState(false);
   const [passEditFlag, setPassEditFlag] = useState(false);
   const {addToast} = useToasts();
@@ -136,9 +136,14 @@ const MyAccount = ({ location }) => {
    * 검색팝업을 올림.
    */
   const searchIsbn = () =>{
-    console.log("팝업해라");
     myAccountService.popUpDialogFn();
   }
+
+  const clearInput = () => {
+    setBook({...initSearchBook});
+  };
+
+  myAccountService.setClearInputFn(clearInput);
 
   console.log(userInfo);
 
@@ -297,7 +302,7 @@ const MyAccount = ({ location }) => {
                           </Card.Body>
                         </Accordion.Collapse>
                       </Card>
-                      <Card className="single-my-account mb-20">
+                      <Card className="single-my-account mb-20" >
                         <Card.Header className="panel-heading">
                           <Accordion.Toggle variant="link" eventKey="2">
                             <h3 className="panel-title">
@@ -316,8 +321,8 @@ const MyAccount = ({ location }) => {
                                 <div className="billing-info  entries-edit-delete text-center">
                                     <label>Register Book</label>
                                     <div style={{display:"flex"}}>
-                                      <input type="text" name="isbn" onChange={setSearchBook} minLength={13}/>
-                                      <button className="edit" onClick={()=>searchIsbn(searchBook)}>SEARCH</button>
+                                      <input type="text" name="isbn" placeholder={"ISBN (13자리)"} onChange={setSearchBook} minLength={13} value={searchBook.isbn}/>
+                                      <button className="edit" onClick={searchIsbn}>SEARCH</button>
                                     </div>
                                 </div>
                               </div>
@@ -341,12 +346,12 @@ const MyAccount = ({ location }) => {
                                   </div>
                                   <div className="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">
                                     <div className="entries-edit-delete text-center">
-                                      <button className="edit">Edit</button>
                                       <button>Delete</button>
                                     </div>
                                   </div>
                                 </div>
                               </div>
+                              <MyNovel></MyNovel>
                               <div className="billing-back-btn">
                                 <div className="billing-btn">
                                   <button type="submit">Continue</button>

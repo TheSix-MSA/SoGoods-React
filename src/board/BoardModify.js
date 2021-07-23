@@ -19,7 +19,11 @@ const BoardModify = ({match}) => {
         boardService.modifyBoard(bno.current, board, boardType.current).then(res => {
             setBoard({...res})
         })
+        if (boardType.current.includes("NOTICE")) {
+            history.push(`/admin/dashboard`)
+        } else {
         history.push(`/board/${boardType.current}/${bno.current}`)
+        }
     }
     useEffect(() => {
         boardService.getOneBoard(bno.current).then(res => {

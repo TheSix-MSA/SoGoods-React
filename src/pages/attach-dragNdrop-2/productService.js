@@ -1,6 +1,8 @@
 const productService = ()=>{
 
     let openFn;
+    let mode;
+    let prodIdx;
     // let registerFn;
 
     // {
@@ -15,6 +17,14 @@ const productService = ()=>{
     ]
 
     let product;
+
+    const fileObjList = []
+
+    const setMode = (mod) => {
+        mode = mod
+    }
+
+    const getMode = ()=>mode
 
     const initProduct = () => {
         product = {
@@ -35,14 +45,13 @@ const productService = ()=>{
     // }
 
     const getProductList = () => {
-        console.log(productList)
         return productList
     }
 
     const getProduct = () => product
 
     const getProductByIdx = (idx) => {
-        return productList[idx]
+        return {...productList[idx]}
     }
 
     //새 상품 apply눌렀을 떄
@@ -52,6 +61,11 @@ const productService = ()=>{
 
         //다이얼로그 닫기 -> 최상위 부모컴포넌트 랜더링
         closeDialog()
+    }
+
+    const editProduct = () => {
+        productList[prodIdx] = {...product}
+        openFn(false)
     }
 
     const setText = (form) => {
@@ -77,7 +91,7 @@ const productService = ()=>{
 
     //새 상품등록버튼 클릭시
     const openDialog = () => {
-
+        setMode('register')
         initProduct()
 
         //랜더링
@@ -86,7 +100,8 @@ const productService = ()=>{
 
     //등록된 상품 수정을 위해 클릭시
     const openDialogForEdit = (idx) => {
-        console.log(idx)
+        prodIdx = idx
+        setMode('update')
         product = getProductByIdx(idx)
         console.log(product)
 
@@ -94,12 +109,19 @@ const productService = ()=>{
         openFn(true)
     }
 
+    const addFileObj = (file) => {
+        fileObjList.push(file)
+    }
+
+    const getFileObj = () => fileObjList
+
     return {
         setOpenFn,
 
         getProductList,
         getProduct,
         addProduct,
+        editProduct,
 
         openDialog,
         closeDialog,
@@ -108,6 +130,12 @@ const productService = ()=>{
 
         setText,
         setPictures,
+
+        getMode,
+
+        addFileObj,
+        getFileObj,
+
     }
 }
 export default productService()

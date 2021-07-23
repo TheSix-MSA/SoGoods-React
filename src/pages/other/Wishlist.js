@@ -3,10 +3,8 @@ import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import MetaTags from "react-meta-tags";
-import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import { connect } from "react-redux";
-import LayoutOne from "../../layouts/LayoutOne";
-import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
+import LayoutOne from "../../components/layouts/header/LayoutOne";
 
 const Wishlist = ({
   location,
@@ -30,14 +28,9 @@ const Wishlist = ({
         />
       </MetaTags>
 
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
-        Wishlist
-      </BreadcrumbsItem>
 
       <LayoutOne headerTop="visible">
         {/* breadcrumb */}
-        <Breadcrumb />
         <div className="cart-main-area pt-90 pb-100">
           <div className="container">
             {wishlistItems && wishlistItems.length >= 1 ? (

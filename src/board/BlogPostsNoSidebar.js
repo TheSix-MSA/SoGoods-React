@@ -9,7 +9,7 @@ const BlogPostsNoSidebar = ({boardData}) => {
     }
     return (
         <Fragment>
-            {boardData?.map((data, idx) => (
+            {boardData && boardData?.map((data, idx) => (
                 <div className="col-lg-4 col-md-6 col-sm-12">
                     <div className="blog-wrap-2 mb-30">
                         <div className="blog-content-2">

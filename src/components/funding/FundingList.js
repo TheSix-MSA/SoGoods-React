@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React, {Fragment, useState, useEffect} from "react";
 import MetaTags from "react-meta-tags";
 import { connect } from "react-redux";
-import LayoutOne from "../../layouts/LayoutOne";
+import LayoutOne from "../layouts/header/LayoutOne";
 import Nav from "react-bootstrap/Nav";
 import * as queryString from "query-string";
 import {

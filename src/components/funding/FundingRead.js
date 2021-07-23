@@ -1,6 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import LayoutOne from "../../layouts/LayoutOne";
-import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
+import LayoutOne from "../layouts/header/LayoutOne";
 import fundingService from "./fundingService";
 import {useParams} from "react-router-dom";
 import FundingSideBar from "./FundingSideBar";
@@ -36,7 +35,6 @@ const FundingRead = ({location}) => {
         <Fragment>
             <LayoutOne headerTop="visible">
                 {/* breadcrumb */}
-                <Breadcrumb />
                 <div className="blog-area pt-100 pb-100">
                     <div className="container">
                         <div className="row flex">

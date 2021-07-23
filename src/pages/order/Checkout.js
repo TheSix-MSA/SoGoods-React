@@ -3,14 +3,11 @@ import React, {Fragment, useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import MetaTags from "react-meta-tags";
 import { connect } from "react-redux";
-import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
-import LayoutOne from "../../layouts/LayoutOne";
-import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
+import LayoutOne from "../../components/layouts/header/LayoutOne";
 import codeService from "../../member/codeService";
 import CodeDialogSlide from "../../member/CodeDialog";
 import useInputs from "../../customHooks/useInputs";
 import orderServices from "../../service/orderServices";
-import axios from "axios";
 
 const initStateForServer =  {
     buyer: "이메일", //현재 구매자 정보는 리덕스를 이용해 가져와야 할듯
@@ -21,30 +18,9 @@ const initStateForServer =  {
     receiverRequest: ""
 }
 
-const Checkout = ({ location }) => {
+const Checkout = ({ location, history }) => {
   const { pathname } = location;
   const [cart, cartChange, setCart] = useInputs(initStateForServer);
-
-    const [res, setRes] = useState({
-        next_redirect_pc_url: "",
-        tid: ""
-    });
-
-  const [kpParams, setKpParams] = useState({
-      // params: {
-        cid: "TC0ONETIME",
-        partner_order_id: "partner_order_id", // 서버에 있는 값중 최신 값을 가져와야 한다.
-        partner_user_id: "partner_user_id", //결제하는 놈 이메일
-        item_name: "설마..?",
-        quantity: 1,
-        total_amount: 10,
-        vat_amount: 0,
-        tax_free_amount: 0,
-        approval_url: "http://localhost:3000/checkout",
-        fail_url: "http://localhost:3000/checkout",
-        cancel_url: "http://localhost:3000/checkout"
-      // }
-    });
 
   const cartItems = [
       {
@@ -73,9 +49,35 @@ const Checkout = ({ location }) => {
     };
 
     const checkOut = async () => {
-        const res = await orderServices.callKakaoPay(kpParams);
+        const res = await orderServices.callKakaoPay({
+            cid: "TC0ONETIME",
+            partner_order_id: "partner_order_id", // 서버에 있는 값중 최신 값을 가져와야 한다.
+            partner_user_id: "partner_user_id", //결제하는 놈 이메일
+            item_name: "설마..?",
+            quantity: 1,
+            total_amount: 10,
+            vat_amount: 0,
+            tax_free_amount: 0,
+            approval_url: "http://localhost:3000/confirmOrder?receiverName="+cart.receiverName+"&receiverAddress="+cart.receiverAddress
+                +"&receiverDetailedAddress="+cart.receiverDetailedAddress+"&receiverPhone="+cart.receiverPhone+"&receiverRequest="+cart.receiverRequest,
+            fail_url: "http://localhost:3000/checkout",
+            cancel_url: "http://localhost:3000/checkout"
+        });
+
         console.log(res)
-        window.open(res.data.next_redirect_pc_url, "_blank")
+        localStorage.setItem("transactionId",JSON.stringify({
+            tid: res.data.tid,
+            url: res.data.next_redirect_pc_url
+        }));
+
+        localStorage.setItem("dataFromKP",JSON.stringify({
+            all: res.data
+        }));
+
+        window.location.href=res.data.next_redirect_pc_url;
+        /***
+         * 페이지 이동이 발생하는데 이걸 어떻게 처리해야하는가
+         */
     }
 
     return (
@@ -87,12 +89,7 @@ const Checkout = ({ location }) => {
           content="Checkout page of flone react minimalist eCommerce template."
         />
       </MetaTags>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
-        Checkout
-      </BreadcrumbsItem>
       <LayoutOne headerTop="visible">
-        <Breadcrumb />
         <div className="checkout-area pt-95 pb-100">
           <div className="container">
             {cartItems && cartItems.length >= 1 ? (

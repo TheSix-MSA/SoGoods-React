@@ -1,10 +1,16 @@
 import React, {Fragment, useEffect, useState} from "react";
 import Tab from "react-bootstrap/Tab";
-import LayoutOne from "../../layouts/LayoutOne";
+import LayoutOne from "../layouts/header/LayoutOne";
 import Nav from "react-bootstrap/Nav";
 import fundingService from "./fundingService";
 import useInputs from "../../customHooks/useInputs";
 import getFormatDate from "../../modules/getFormatDate";
+import productService from "../funding-attach/productService";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import ProductRegister from "../funding-attach/ProductRegister";
+import Dialog from "@material-ui/core/Dialog";
+import Button from "@material-ui/core/Button";
 import {useSelector} from "react-redux";
 
 const inputStyle = {
@@ -17,6 +23,15 @@ const underInputStyle = {
     margin:"0 10px",
 }
 
+const imgStyle = {
+    display: 'block',
+    width: 100,
+    height: 50,
+};
+
+const btn ={
+    float: 'none',
+}
 
 const initState = {
     title:'',
@@ -33,13 +48,39 @@ const FundingRegister = () => {
     const [form, changeForm, setForm] = useInputs({...initState});
     const userInfo = useSelector(state=> state.login);
 
+    const [open, setOpen] = useState(false);
+
+    productService.setOpenFn(setOpen)
+
+    console.log(productService.getProductList())
+
     const sendFormData = async () => {
-        console.log(form);
-        const result = await fundingService.registerFunding({...form, writer:userInfo.name, email:userInfo.email});
-        console.log(result)
+        productService.getProductList()
+        const result = await fundingService.registerFunding({...form});
+        const fno = result.response.fno
+
+        const result_product= await
+
         setForm({...initState})
     }
 
+    const list = productService.getProductList().map((product, i)=>{
+        console.log(product)
+        product.pictures.map((picture )=> Object.assign(picture, {
+            preview: URL.createObjectURL(picture)
+        }))
+        return (
+            <>
+                <li key={i}>
+                    <p onClick={()=>{productService.openDialogForEdit(i)}}>{product.text.name} : {product.text.desc}</p>
+                    <div>
+                        {product.pictures.map((picture ,j)=>
+                            <img key={j} src={picture.preview} style={imgStyle}/>)}
+                    </div>
+                </li>
+            </>
+        )
+    })
 
     return (
         <div>
@@ -99,8 +140,12 @@ const FundingRegister = () => {
                                                             name="mainImage"
                                                             onChange={changeForm}
                                                         />
-                                                        <h5 style={textStyle}>상품등록</h5>
-                                                        <img src={""} alt={"상품 추가 아이콘"}/>
+                                                        <ul>
+                                                            {list}
+                                                        </ul>
+                                                        <Button style={btn} variant="outlined" color="primary" onClick={productService.openDialog}>
+                                                            상품 등록
+                                                        </Button>
                                                         <div style={{display:"flex"}}>
                                                         <div style={{display:"flex" ,flexWrap:"wrap"}}>
                                                         <h5 style={textStyle}>펀딩 만기일</h5>
@@ -145,6 +190,17 @@ const FundingRegister = () => {
                     </div>
                 </LayoutOne>
             </Fragment>
+            <Dialog
+                open={open}
+                onClose={productService.closeDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth='lg'>
+                <DialogTitle id="alert-dialog-title">{'상품 등록/수정'}</DialogTitle>
+                <DialogContent>
+                    <ProductRegister></ProductRegister>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 };

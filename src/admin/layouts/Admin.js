@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from "react";
 import { useLocation, Route, Switch } from "react-router-dom";
-import Sidebar from "../components/Sidebar/Sidebar";
-import AdminNavbar from "../components/Navbars/AdminNavbar";
+import Sidebar from "../components/sidebar/Sidebar";
+import AdminNavbar from "../components/navbars/AdminNavbar";
 import FooterOne from "../../components/layouts/footer/FooterOne";
-// import AdminNavbar from "components/Navbars/AdminNavbar";
+// import AdminNavbar from "components/navbars/AdminNavbar";
 // import Footer from "components/Footer/Footer";
 
 

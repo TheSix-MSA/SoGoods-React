@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useEffect, useRef} from "react";
 import MetaTags from "react-meta-tags";
 import LayoutOne from "../components/layouts/header/LayoutOne";
 import useInputs from "../customHooks/useInputs";
@@ -12,15 +12,21 @@ const initState = {
 
 const BoardModify = ({match}) => {
     const [board, onChange, setBoard] = useInputs(initState)
-    const bno = match.params.bno
+    const bno = useRef(match.params.bno)
+    const boardType = useRef(match.params.boardType?.toUpperCase())
     const history = useHistory();
     const modify = () => {
-        boardService.modifyBoard(bno, board).then(res => {
+        boardService.modifyBoard(bno.current, board, boardType.current).then(res => {
             setBoard({...res})
         })
-        history.push(`/board/FREE/${bno}`)
+        history.push(`/board/${boardType.current}/${bno.current}`)
     }
-     console.log(board)
+    useEffect(() => {
+        boardService.getOneBoard(bno.current).then(res => {
+            setBoard(res.data.response)
+        })
+    },[])
+    console.log(board)
     return (
         <Fragment>
             <MetaTags>
@@ -46,13 +52,13 @@ const BoardModify = ({match}) => {
                                                             type={"text"}
                                                             name={"title"}
                                                             placeholder="Title"
-                                                            value={board.title}
+                                                            value={board.title || ""}
                                                             onChange={onChange}
                                                         />
                                                         <textarea
                                                             name={"content"}
                                                             placeholder="Content"
-                                                            value={board.content}
+                                                            value={board.content || ""}
                                                             onChange={onChange}
                                                         />
                                                         <div className="col-md-2">

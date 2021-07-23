@@ -4,10 +4,10 @@ const memberService = () => {
     let render;
     let movePage;
 
-    const getMemberList = async (page) => {
-        console.log(" getMemberList started");
+    const getMemberList = async (page, keyword, type) => {
+        console.log(" getMemberList started", type);
         return await instance({
-            url: `member/list?page=${page}`,
+            url: `member/list?page=${page}&keyword=${keyword}&type=${type}`,
             method: 'get'
         })
     }

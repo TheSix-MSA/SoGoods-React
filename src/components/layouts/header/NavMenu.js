@@ -146,11 +146,15 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
             <ul className="submenu">
 
               <li>
-                <Link to={"/board/FREE/list/1"}>
-                  {strings["blog_no_sidebar"]}
+                <Link to={"/board/free/list"}>
+                  자유게시판
                 </Link>
               </li>
-
+              <li>
+                <Link to={"/board/novelist/list"}>
+                  작가게시판
+                </Link>
+              </li>
             </ul>
           </li>
         </ul>

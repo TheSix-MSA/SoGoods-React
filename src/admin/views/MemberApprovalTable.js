@@ -94,7 +94,6 @@ const MemberApprovalTable = () => {
     })
 
     return (
-        <Container fluid>
             <Row>
                 <Col md="12">
                     <Card className="strpied-tabled-with-hover">
@@ -127,7 +126,6 @@ const MemberApprovalTable = () => {
                     </Card>
                 </Col>
             </Row>
-        </Container>
     );
 }
 

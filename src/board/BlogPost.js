@@ -1,17 +1,21 @@
-import React, {Fragment, useState} from "react";
+import React, {Fragment, useRef, useState} from "react";
 import getFormatDate from "../modules/getFormatDate";
-import {useHistory} from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
 import boardService from "./boardService";
 
-const BlogPost = ({data}) => {
+const BlogPost = ({data, boardType}) => {
     const history = useHistory()
-    const modify = (bno) => {
-        history.push(`/board/modify/FREE/${bno}`)
+    const location = useLocation()
+    const goList = () => {
+        history.push(`/board/${boardType}/list/1`)
     }
-    const remove = (bno) => {
+    const modify = () => {
+        history.push(`/board/modify/${boardType}/${data.bno}`)
+    }
+    const remove = () => {
         if(window.confirm("삭제하시겠습니끼?")) {
-            boardService.removeBoard(bno).then(res => {
-            history.push(`/board/FREE/list/1`)
+            boardService.removeBoard(data.bno, boardType).then(res => {
+            history.push(`/board/${boardType}/list/1`)
             })
         }
     }
@@ -22,10 +26,13 @@ const BlogPost = ({data}) => {
                 <div className="blog-details-top">
                     <div className="blog-details-content">
                         <ul style={{textAlign: "right"}}>
-                            <li onClick={()=>{modify(data.bno)}}>
+                            <li onClick={()=>{goList()}}>
+                                목록가기
+                            </li>
+                            <li onClick={()=>{modify()}}>
                                 수정하기
                             </li>
-                            <li onClick={()=>{remove(data.bno)}}>
+                            <li onClick={()=>{remove()}}>
                                 삭제하기
                             </li>
                         </ul>

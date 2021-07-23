@@ -162,13 +162,14 @@ const App = (props) => {
                 /> {/* 재연 - Board 작성 컴포넌트로 사용 */}
 
                 <Route
+                    path={`/board/modify/:boardType/:bno`}
+                    component={BoardModify}
+                /> {/* 재연 - Board 수정 컴포넌트로 사용 */}
+
+                <Route
                   path={`/board/:boardType/:bno`}
                   component={BlogDetailsStandard}
                 /> {/* 재연 - Board 상세보기 컴포넌트로 사용 */}
-                <Route
-                  path={`/board/modify/:boardType/:bno`}
-                  component={BoardModify}
-                /> {/* 재연 - Board 수정 컴포넌트로 사용 */}
 
                 {/* Other pages */}
 

@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, {Fragment, useEffect, useState} from "react";
+import React, {Fragment, useEffect, useRef, useState} from "react";
 import MetaTags from "react-meta-tags";
 import LayoutOne from "../components/layouts/header/LayoutOne";
 import BlogComment from "../components/reply/BlogComment";
@@ -23,11 +23,12 @@ const initState = {
 
 const BlogDetailsStandard = ({location, match}) => {
     const [detailData, setDetailData]  = useState(initState)
-    const bno = match.params.bno
+    const bno = useRef(match.params.bno)
+    const boardType = useRef(match.params.boardType?.toUpperCase())
     const {pathname} = location;
     const dispatch = useDispatch();
     useEffect(() => {
-        boardService.getOneBoard(bno).then(res => {
+        boardService.getOneBoard(bno.current).then(res => {
             setDetailData({...res.data.response})
         })
     }, [bno, dispatch])
@@ -48,10 +49,10 @@ const BlogDetailsStandard = ({location, match}) => {
                                 <div className="col-lg-9">
                                     <div className="blog-details-wrapper ml-20">
                                         {detailData && (
-                                        <BlogPost data={detailData}/>
+                                        <BlogPost data={detailData} boardType={boardType.current}/>
                                         )}
                                         {/* blog post comment */}
-                                        <BlogComment bno={bno}/>
+                                        <BlogComment bno={bno.current}/>
                                     </div>
                                 </div>
                             </div>

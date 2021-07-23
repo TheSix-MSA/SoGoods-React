@@ -1,6 +1,6 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useRef} from 'react';
 import useInputs from "../customHooks/useInputs";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import LayoutOne from "../components/layouts/header/LayoutOne";
 import Tab from "react-bootstrap/Tab";
 import {useHistory} from "react-router-dom";
@@ -13,14 +13,15 @@ const initState = {
     content: ''
 }
 
-const BoardRegister = () => {
+const BoardRegister = ({match}) => {
+    const boardType = useRef(match.params.boardType?.toUpperCase())
     const [board, onChange, setBoard] = useInputs(initState);
     const history = useHistory()
+    const { email, name } = useSelector(state => state.login)
     const registe = () => {
-        boardService.registerBoard(board).then(res => {
-            setBoard(res.data)
+        boardService.registerBoard({...board, email:email, writer: name, boardType:boardType.current}).then(res => {
+            history.push(`/board/${boardType.current}/${res.data.response.bno}`)
         })
-        history.push('/board/FREE/list/1')
     }
     return (
         <>
@@ -38,7 +39,6 @@ const BoardRegister = () => {
                                                     <h3> 글작성 </h3>
                                                     <div className="login-form-container">
                                                         <div className="login-register-form">
-                                                            <form>
                                                                 <input
                                                                     type={"text"}
                                                                     name={"title"}
@@ -46,20 +46,7 @@ const BoardRegister = () => {
                                                                     value={board.title}
                                                                     onChange={onChange}
                                                                 />
-                                                                <input
-                                                                    type={"text"}
-                                                                    name={"writer"}
-                                                                    placeholder="Writer"
-                                                                    value={board.writer}
-                                                                    onChange={onChange}
-                                                                />
-                                                                <input
-                                                                    type={"text"}
-                                                                    name={"email"}
-                                                                    placeholder="Email"
-                                                                    value={board.email}
-                                                                    onChange={onChange}
-                                                                />
+
                                                                 <textarea
                                                                     name={"content"}
                                                                     placeholder="Content"
@@ -67,11 +54,10 @@ const BoardRegister = () => {
                                                                     onChange={onChange}
                                                                 />
                                                                 <div className="col-md-2">
-                                                                    <input type="submit" onClick={() => {
+                                                                    <input type="button" value="작성" onClick={() => {
                                                                         registe()
                                                                     }}/>
                                                                 </div>
-                                                            </form>
                                                         </div>
                                                     </div>
                                                 </Tab.Container>

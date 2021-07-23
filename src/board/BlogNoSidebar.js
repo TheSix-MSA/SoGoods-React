@@ -17,34 +17,30 @@ const initState = {
     keyword: '',
 }
 const BlogNoSidebar = ({match}) => {
-    const currentPage = match.params.currentPage
     const location = useLocation()
     const [ boardData, setBoardData ] = useState({})
     const value = queryString.parse(location.search.replace("?",""));
-    console.log(value)
     const dispatch = useDispatch()
     const history = useHistory()
-    const boardType = useRef(match.params.boardType)
-    const [search, onChange, setSearch] = useInputs(initState)
-
+    const boardType = useRef(match.params.boardType?.toUpperCase())
+    const [search, onChange, setSearch] = useInputs({...initState, page:value.page||1})
     useEffect(() => {
-        dispatch(getBoardData(search)).unwrap().then(res =>{
+        boardType.current = match.params.boardType.toUpperCase()
+        dispatch(getBoardData({...search, page:value.page, boardType:boardType.current})).unwrap().then(res =>{
             setBoardData(res.response)
         })
-    }, [currentPage, dispatch])
+    }, [ dispatch, value.page, match.params.boardType ])
 
     const searching = (e) => {
         e.preventDefault();
-        history.push(`/board/FREE/list?page=1&keyword=${search.keyword}&type=${search.type}`)
-        dispatch(getBoardData(search)).unwrap().then(res =>{
+        history.push(`/board/${boardType.current}/list?page=1&keyword=${search.keyword}&type=${search.type}`)
+        dispatch(getBoardData({...search, boardType:boardType.current})).unwrap().then(res =>{
             setBoardData(res.response)
         })
     }
-    console.log(boardData)
 
-    console.log(boardData)
     const boardRegister = () => {
-        history.push(`/boardRegister`)
+        history.push(`/${boardType.current}/boardRegister`)
     }
     return (
         <Fragment>
@@ -83,11 +79,11 @@ const BlogNoSidebar = ({match}) => {
                                     <div className="row">
                                         {/* blog posts */}
                                         {boardData.boardDtoList !== null ? (
-                                        <BlogPostsNoSidebar boardData={boardData.boardDtoList} page={currentPage}/>
+                                        <BlogPostsNoSidebar boardData={boardData.boardDtoList}/>
                                         ) : <p> 일치하는 결과가 없습니다. </p>}
                                     </div>
                                     {/* blog pagination */}
-                                    {boardData && <BlogPagination pageMaker={boardData.pageMaker} request={boardData.boardListRequestDTO}/>}
+                                    {boardData && <BlogPagination boardType={boardType.current} pageMaker={boardData.pageMaker} request={boardData.boardListRequestDTO}/>}
                                 </div>
                             </div>
                         </div>

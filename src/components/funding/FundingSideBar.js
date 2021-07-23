@@ -122,6 +122,12 @@ const FundingSideBar = (funding) => {
                  </div>
                  <form className={"searchform"}>
                      <button className={"searchform__submit"} style={{height:"50px", width:"100%" ,position:"relative"}}>펀딩하기</button>
+                     <Link to={{
+                         pathname: "/checkout",
+                         state: {
+                             cartList
+                         }
+                     }}>Check Out!</Link>
                  </form>
              </div>
          </div>

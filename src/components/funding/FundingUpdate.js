@@ -18,7 +18,7 @@ const underInputStyle = {
     margin:"0 10px",
 }
 
-const initForm = {
+const initFundingForm = {
     title:'',
     content:'',
     writer:'',
@@ -29,41 +29,34 @@ const initForm = {
 
 const productDTOs = []
 
-// const initForm = {
-//     fundingDTO:{},
-//     productDTOs:[],
-//     favoriteCount:0
-// }
-
 const FundingUpdate = () => {
    const info = useSelector(state=>state.login);
    const history = useHistory();
    let {fno} = useParams();
-   const [form, changeForm, setForm] = useInputs({...initForm});
+   const [fundingForm, changeFundingForm, setFundingForm] = useInputs({...initFundingForm});
    const [productForm, changeProductForm, setProductForm] = useInputs(productDTOs);
 
-   const contentRef = useRef();
-   const refArray = useMemo(
-       ()=>[
-           contentRef
-   ]
-   ,[])
+   // const contentRef = useRef();
+   // const refArray = useMemo(
+   //     ()=>[
+   //         contentRef
+   // ]
+   // ,[])
 
     useEffect(()=>{
         fundingService.getOneFunding(fno).then(res=> {
             console.log(res.response)
-            setForm({...res.response.fundingDTO})
-            setProductForm(res.response.productDTOs)
+            setFundingForm({...res.response.fundingDTO})
+            setProductForm([...res.response.productDTOs])
         })
     },[fno])
 
-    console.log(form);
+    console.log(fundingForm);
 
     const sendFormData = async () => {
-        console.log(form);
-        const result = await fundingService.updateFunding(fno, {...form});
+        console.log(fundingForm);
+        const result = await fundingService.updateFunding(fno, {...fundingForm});
         console.log(result)
-        setForm({...initForm})
         history.push("/funding/list");
     }
 
@@ -93,8 +86,8 @@ const FundingUpdate = () => {
                                                         style={inputStyle}
                                                         type="title"
                                                         name="title"
-                                                        value={form.title||""}
-                                                        onChange={changeForm}
+                                                        value={fundingForm.title||""}
+                                                        onChange={changeFundingForm}
                                                     />
                                                     <div style={textStyle}>내용</div>
                                                     <input
@@ -102,31 +95,30 @@ const FundingUpdate = () => {
                                                         style={inputStyle}
                                                         type="hidden"
                                                         name="writer"
-                                                        value={form.writer||""}
-                                                        onChange={changeForm}
+                                                        value={fundingForm.writer||""}
+                                                        onChange={changeFundingForm}
                                                     />
                                                     <input
                                                         readOnly
                                                         style={inputStyle}
                                                         type="hidden"
                                                         name="email"
-                                                        value={form.email ||""}
-                                                        onChange={changeForm}
+                                                        value={fundingForm.email ||""}
+                                                        onChange={changeFundingForm}
                                                     />
                                                     <textarea
                                                         style={inputStyle}
                                                         type="text"
                                                         name="content"
-                                                        value={form.content ||""}
-                                                        ref={contentRef}
-                                                        onChange={changeForm}
+                                                        value={fundingForm.content ||""}
+                                                        onChange={changeFundingForm}
                                                     />
                                                     <h5 style={textStyle}>메인 이미지</h5>
                                                     <input
                                                         style={inputStyle}
                                                         type="file"
                                                         name="mainImage"
-                                                        onChange={changeForm}
+                                                        onChange={changeFundingForm}
                                                     />
                                                     <h5 style={textStyle}>상품등록</h5>
                                                         <img src={""} alt={"상품 추가 아이콘"}/>
@@ -138,9 +130,9 @@ const FundingUpdate = () => {
                                                         readOnly
                                                         name="dueDate"
                                                         //placeholder={form.fundingDTO.dueDate}
-                                                        value={form.dueDate ||""}
+                                                        value={fundingForm.dueDate ||""}
                                                         type="text"
-                                                        onChange={changeForm}
+                                                        onChange={changeFundingForm}
                                                         onBlur={(e) => (e.currentTarget.type = "text")}
                                                         min={getFormatDate(new Date())}
                                                     />
@@ -151,10 +143,10 @@ const FundingUpdate = () => {
                                                         style={inputStyle}
                                                         readOnly
                                                         name="targetAmount"
-                                                        value={form.targetAmount ||""}
+                                                        value={fundingForm.targetAmount ||""}
                                                         //placeholder={form.fundingDTO.targetAmount}
                                                         type="text"
-                                                        onChange={changeForm}
+                                                        onChange={changeFundingForm}
                                                         onInput={({ target }) => {
                                                             target.value = target.value.replace(/[^0-9]/g, "");
                                                             target.value = target.value.replace(/,/g, "");

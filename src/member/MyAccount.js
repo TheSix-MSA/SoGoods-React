@@ -140,8 +140,6 @@ const MyAccount = () => {
 
   myAccountService.setClearInputFn(clearInput);
 
-  console.log(userInfo);
-
   return (
       <Fragment>
         <MetaTags>
@@ -312,11 +310,11 @@ const MyAccount = () => {
                               </div>
                               <NovelRegisterDialog searchBook={searchBook}/>
                               <div className="align-items-center justify-content-center entries-wrapper">
-                                <div className="billing-info  entries-edit-delete">
+                                <div className="billing-info  entries-edit-delete text-center" style={{padding:"15px"}}>
                                     <label>Register Book</label>
                                     <div style={{display:"flex"}}>
                                       <input type="text" name="isbn" placeholder={"ISBN (13자리)"} onChange={setSearchBook} minLength={13} value={searchBook.isbn}/>
-                                      <button className="edit" onClick={searchIsbn}>SEARCH</button>
+                                      <button className="edit" onClick={searchIsbn} style={{marginLeft:"15px"}}>SEARCH</button>
                                     </div>
                                 </div>
                               </div>

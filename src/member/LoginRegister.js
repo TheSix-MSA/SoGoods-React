@@ -67,6 +67,7 @@ const LoginRegister = ({ location }) => {
             "✨😘어서오세요 Sogoods입니다! 😘😘😘✨", {appearance: 'info', autoDismiss: true},
         );
         history.goBack();
+
     };
 
     /**
@@ -99,7 +100,6 @@ const LoginRegister = ({ location }) => {
 
         for(let formObj in signupForm) {
             if (signupForm[formObj] === "") {
-                console.log(formObj);
                 setWarningType({...warningType,type:formObj});
                 codeService.popUpWarningModal();
                 return;
@@ -146,7 +146,6 @@ const LoginRegister = ({ location }) => {
         if(verifyForm.verifyCode === signupForm.code){
             verifyForm['verify'] = true;
             verifyForm['verifyBtn'] = "2";
-            console.log(verifyForm);
             setVerifyForm({...verifyForm});
         }
     }

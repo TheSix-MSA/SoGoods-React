@@ -43,10 +43,8 @@ export default function NovelRegisterDialog({searchBook}) {
             myAccountService.searchNovelList(searchBook.isbn)
                 .then(novel => {
                     if (novel.errorCode) {
-                        console.log(novel);
                         setErrorFlag(true);
                     } else {
-                        console.log(novel.item[0]);
                         setBook({...novel.item[0]});
                     }
                 });

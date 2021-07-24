@@ -47,8 +47,16 @@ const FundingList = ({ location, productTabClass}) => {
 
     // 리스트 데이터 불러오기
     useEffect(()=> {
-        fundingService.getList(page, keyword, type).then(res=>{
-            setData(res.response);
+        fundingService.getList(page, keyword, type)
+            .then(res1=>{
+                let fnoList = res1.response.dtoList.map(dto=>dto.fundingDTO.fno)
+                fundingService.getA3src('FUNDING', fnoList)
+                    .then(res2=>{
+                        res2.data.response.forEach((ele,i)=>{
+                            res1.response.dtoList[i].fundingDTO.imgSrc = ele.thumbSrc
+                        })
+                        setData(res1.response);
+                    })
         })
     }, [page])
 
@@ -81,7 +89,7 @@ const FundingList = ({ location, productTabClass}) => {
     const list = data.dtoList.map((dto, idx)=>
         <div key={idx} onClick={()=> readTodo(dto.fundingDTO.fno)} style={{cursor:"pointer"}}>
             <h5>{dto.fundingDTO.fno}번 게시글</h5>
-            <img alt={"이미지"} src="https://i.imgur.com/WCySTkp.jpeg" height={"200px"}/>
+            <img alt={"이미지"} src={dto.fundingDTO.imgSrc} height={"200px"}/>
             <h5>{dto.fundingDTO.title}</h5>
             <h5>마감일자 : {dto.fundingDTO.dueDate}</h5>
             <h5>펀딩금액 : {dto.fundingDTO.totalAmount}</h5>

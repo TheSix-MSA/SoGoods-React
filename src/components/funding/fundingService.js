@@ -37,18 +37,30 @@ const fundingService = () => {
         }
 
         const result = await axios.post(
-            `${process.env.REACT_APP_API_DEV_URL}/attach/upload?tableName=${tableName}&keyValue=${keyValue}&mainIdx=${mainIdx}`,
+            // `${process.env.REACT_APP_API_DEV_URL}/attach/upload?tableName=${tableName}&keyValue=${keyValue}&mainIdx=${mainIdx}`,
+            `${process.env.REACT_APP_API_URL}/attach/upload?tableName=${tableName}&keyValue=${keyValue}&mainIdx=${mainIdx}`,
             form,
             config)
     }
 
+    //1:1매칭관계인 사진 이미지
     const getA3src = async(type, keyValues) => {
-
-        let str = keyValues.map(v=>'&keyValues=' + v)
+        let keyStr = keyValues.map(v=>'&keyValues=' + v)
 
         const result = await axios.get(
-            `${process.env.REACT_APP_API_DEV_URL}/attach/list/uuid?type=${type}` + str)
+            // `${process.env.REACT_APP_API_DEV_URL}/attach/list/uuid?type=${type}` + keyStr.join(''))
+            `${process.env.REACT_APP_API_URL}/attach/list/uuid?type=${type}` + keyStr.join(''))
+        return result
+    }
 
+    //1:N 매칭관계인 사진 이미지
+    const getA3srcList = async(type, keyValues, mainList) => {
+        let keyStr = keyValues.map(v=>'&keyValues=' + v)
+        let mainListStr = mainList.map(m=>'&mainList=' + m)
+
+        const result = await axios.get(
+            // `${process.env.REACT_APP_API_DEV_URL}/attach/list/uuidlist?type=${type}` + keyStr.join('') + mainListStr.join(''))
+            `${process.env.REACT_APP_API_URL}/attach/list/uuid?type=${type}` + keyStr.join('') + mainListStr.join(''))
         return result
     }
 
@@ -130,6 +142,7 @@ const fundingService = () => {
         registerFunding,
         registerAttach,
         getA3src,
+        getA3srcList,
         getOneFunding,
         insertFavorite,
         getMyFundingList,

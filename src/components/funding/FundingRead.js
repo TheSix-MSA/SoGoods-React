@@ -23,21 +23,29 @@ const FundingRead = ({location}) => {
     // 상세 페이지에 필요한 데이터 불러오기
     useEffect(()=>{
         fundingService.getOneFunding(fno)
-            .then(res=> {
-                console.log(res)
-                setFunding(res.response)
-                const productList = res.response.productDTOs
+            .then(res1=> {
+                const fno     = [res1.response.fundingDTO.fno]
+                const pnoList = res1.response.productDTOs.map(product=>product.pno)
 
-                fundingService.getA3src('PRODUCT', productList.map(product=>product.pno))
-            })
-            .then(res=>{
-                console.log('product src')
-                console.log(res)
-                let imgSrc = res.response[0].imgSrc
-                funding.fundingDTO.imgSrc = imgSrc
-                setFunding({...funding})
-            })
+                //펀딩의 메인이미지
+                fundingService.getA3src('FUNDING', fno)
+                    .then(res2=>{
+                        let src = res2.data.response[0].imgSrc
+                        res1.response.fundingDTO.imgSrc = src
+                        setFunding({...res1.response})
+                })
 
+                fundingService.getA3srcList('PRODUCT', pnoList, [0,1])
+                    .then(res1=>{
+                        console.log('================PRODUCT==========')
+
+                        // let src = res2.data.response[0].imgSrc
+                        // res1.response.fundingDTO.imgSrc = src
+                        // setFunding({...res1.response})
+                    })
+
+
+            })
 
     },[])
 

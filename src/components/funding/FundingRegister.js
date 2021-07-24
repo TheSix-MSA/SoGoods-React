@@ -88,7 +88,7 @@ const FundingRegister = () => {
 
         const productNums = result.data.response.productNums
 
-        await fundingService.registerAttach([fundingMainFile], 'FUNDING', fno, 1);
+        await fundingService.registerAttach([fundingMainFile], 'FUNDING', fno, 0);
 
         for (const num of productNums) {
             const idx = productNums.indexOf(num);

@@ -9,7 +9,7 @@ const FundingPost = (funding) => {
                     <div className="blog-details-img">
                         <img
                             alt=""
-                            src={process.env.PUBLIC_URL + "/assets/img/blog/blog-5.jpg"}
+                            src={funding.fundingDTO.imgSrc}
                         />
                     </div>
                     <div className="blog-details-content">

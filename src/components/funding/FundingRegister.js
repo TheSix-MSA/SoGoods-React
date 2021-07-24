@@ -102,6 +102,10 @@ const FundingRegister = () => {
 
     }
 
+    const setProductMainImage = (e, productIdx, pictureIdx)=>{
+        productService.getProductList()[productIdx].mainIdx = pictureIdx
+    }
+
     const list = productService.getProductList().map((product, i)=>{
         console.log(product)
         product.pictures.map((file)=> Object.assign(file, {

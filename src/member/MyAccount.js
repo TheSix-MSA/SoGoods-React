@@ -50,11 +50,6 @@ const MyAccount = () => {
         .then(value => {
           setInfo({...value.data.response});
         });
-
-    if(userSelector.email===""){
-      history.push('/');
-    }
-
   },[userSelector]);
 
   /**

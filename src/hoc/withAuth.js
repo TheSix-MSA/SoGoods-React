@@ -12,10 +12,14 @@ import {useToasts} from "react-toast-notifications";
  */
 const withAuth = (WrappedComponents,accept=[]) => {
     return (props) => {
-        const {roles} = useSelector(state=>state.login);
         const history = useHistory();
         const {pathname} = useLocation();
         const {addToast} = useToasts()
+        const userData = localStorage.getItem("userData");
+        let roles = [];
+        if(userData) {
+            roles = JSON.parse(userData).roles;
+        }
         useEffect(() => {
             if(accept.includes("ANONYMOUS") && roles.length>0) {
                 return history.push("/");

@@ -4,9 +4,9 @@ import instance from "../../modules/axiosConfig";
 const fundingService = () => {
 
     // 펀딩 리스트 얻어오기
-    const getList = async (page, keyword="", type="") => {
+    const getList = async (page, keyword="", type="", state) => {
         const list = await instance({
-            url: `/funding/list?page=${page}&keyword=${keyword}&type=${type}`,
+            url: `/funding/list?page=${page}&keyword=${keyword}&type=${type}&state=${state}`,
             method: 'get'
         });
        return list.data;
@@ -77,7 +77,16 @@ const fundingService = () => {
     // 펀딩 게시글 한개만 가져오기
     const getOneFunding = async (fno) => {
         const result = await instance({
-            url:`/funding/`+ fno +`/`,
+            url:`/funding/${fno}/`,
+            method:'get'
+        })
+        return result.data;
+    }
+
+    // 게시글의 찜 리스트 가져오기
+    const getFavList = async (fno) => {
+        const result = await instance({
+            url:`/funding/fav/${fno}`,
             method:'get'
         })
         return result.data;
@@ -97,7 +106,7 @@ const fundingService = () => {
     // 내가 쓴 펀딩 게시글 가져오기
     const getMyFundingList = async (email) => {
         const result = await instance({
-            url:`/funding/user/list/`+ email+`/`,
+            url:`/funding/user/list/${email}/`,
             method:'get'
         })
         console.log(result.data)
@@ -107,7 +116,7 @@ const fundingService = () => {
     // 내가 찜한 펀딩 게시글 가져오기
     const getMyFavFundingList = async (email) => {
         const result = await instance({
-            url:`/funding/fav/list/`+ email+`/`,
+            url:`/funding/fav/list/${email}/`,
             method:'get'
         })
         console.log(result.data)
@@ -118,7 +127,7 @@ const fundingService = () => {
     const updateFunding = async(fno, form) => {
         console.log(form)
         const result = await instance({
-            url:`/funding/`+fno+`/`,
+            url:`/funding/${fno}/`,
             method:'put',
             data:form
         })
@@ -149,6 +158,7 @@ const fundingService = () => {
         getMyFavFundingList,
         updateFunding,
         removedFunding,
+        getFavList
     }
 }
 

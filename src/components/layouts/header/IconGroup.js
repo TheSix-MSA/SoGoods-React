@@ -50,45 +50,34 @@ const IconGroup = ({
           <div className="account-dropdown">
             <ul>
               {login.email === "" ?
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/login-register"}>Login</Link>
-                  </li> :
-                  <li>
-                    <Link onClick={() => logout()}>Logout</Link>
-                  </li>
-              }
-              {login.email === "" ?
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/login-register"}>
-                      Register
-                    </Link>
-                  </li> :
-                  null
-              }
-              {login.email === "" ?
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/login-register"}>
+                  (<>
+                    <li>
+                      <Link to={process.env.PUBLIC_URL + "/login-register"}>Login</Link>
+                    </li>
+                    <li>
+                      <Link to={process.env.PUBLIC_URL + "/login-register"}>
+                        Register
+                      </Link>
+                    </li>
+                  </>) :
+                  (<>
+                    <li>
+                      <Link onClick={() => logout()}>Logout</Link>
+                    </li>
+                    <li>
+                      <Link to={process.env.PUBLIC_URL + "/my-account"}>
                       my account
-                    </Link>
-                  </li> :
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/my-account"}>
-                      my account
-                    </Link>
-                  </li>
+                      </Link>
+                    </li>
+                  </>)
               }
-              {login.email === "" ?
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/admin"}>
-                      admin
-                    </Link>
-                  </li> :
+              {login.email !== "" && (
                   <li>
                     <Link to={process.env.PUBLIC_URL + "/admin"}>
                       admin
                     </Link>
                   </li>
-              }
+              )}
             </ul>
           </div>
         </div>

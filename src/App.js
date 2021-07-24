@@ -60,7 +60,6 @@ const App = (props) => {
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("userData"));
-    console.log(userData);
     if(!email && userData) {
       dispatch(loggedInUser(userData));
     }
@@ -173,12 +172,11 @@ const App = (props) => {
 
                 <Route
                   path={process.env.PUBLIC_URL + "/my-account"}
-                  // component={withAuth(MyAccount,"GENERAL")}
-                  component={MyAccount}
+                  component={withAuth(MyAccount,["GENERAL","AUTHOR"])}
                 />
                 <Route
                   path={process.env.PUBLIC_URL + "/login-register"}
-                  component={LoginRegister}
+                  component={withAuth(LoginRegister,["ANONYMOUS"])}
                 />
 
 

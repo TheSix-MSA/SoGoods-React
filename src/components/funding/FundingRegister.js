@@ -21,13 +21,21 @@ const inputStyle = {
 const textStyle = {
     margin:"0 10px"
 }
+const underInputStyle = {
+    margin:"0 10px",
+}
 
 const imgStyle = {
     display: 'block',
     width: 100,
     height: 50,
+    float: 'left',
+
 };
 
+const btn ={
+    float: 'none',
+}
 
 const initState = {
     title:'',
@@ -43,6 +51,7 @@ const FundingRegister = () => {
 
     const {addToast} = useToasts();
     const [form, changeForm, setForm] = useInputs({...initState});
+    const [fundingMainFile, setFundingMainFile] = useState(null);
     const userInfo = useSelector(state=> state.login);
     const [open, setOpen] = useState(false);
 
@@ -74,24 +83,37 @@ const FundingRegister = () => {
             return;
         }
 
-        console.log(form);
         const result = await fundingService.registerFunding(req);
+        console.log('=========게시물 등록 결과=============')
+        console.log('result', result)
+        const fno = result.data.response.fundingDTO.fno
+
+        const productNums = result.data.response.productNums
+
+        await fundingService.registerAttach([fundingMainFile], 'FUNDING', fno, 1);
+
+        for (const num of productNums) {
+            const idx = productNums.indexOf(num);
+            const productList = productService.getProductList()
+            await fundingService.registerAttach(productList[idx].pictures, 'PRODUCT', num, productList[idx].mainIdx);
+        }
+
         setForm({...initState})
         if(result){
             history.push("/funding/list");
         }
+    }
 
-        // productList.reduce((prevP, product)=>{
-        //     prevP.then(async res=>{
-        //         await fundingService.registerAttach(product, 'PRODUCT',123, 0 )
-        //     })
-        // })
+
+
+    const setProductMainImage = (e, productIdx, pictureIdx)=>{
+        productService.getProductList()[productIdx].mainIdx = pictureIdx
     }
 
     const list = productService.getProductList().map((product, i)=>{
         console.log(product)
-        product.pictures.map((picture )=> Object.assign(picture, {
-            preview: URL.createObjectURL(picture)
+        product.pictures.map((file)=> Object.assign(file, {
+            preview: URL.createObjectURL(file)
         }))
         return (
             <>
@@ -101,8 +123,19 @@ const FundingRegister = () => {
                         {product.text.desc}
                     </p>
                     <div>
-                        {product.pictures.map((picture ,j)=>
-                            <img key={j} src={picture.preview} style={imgStyle}/>)}
+                        {product.pictures.map((file ,j)=>
+                            <div>
+                                <img key={j} data-idx={j}
+                                     src={file.preview}
+                                     style={imgStyle}/>
+                                <input type="radio"
+                                       name={`mainIdx_${i}`}
+                                       value={j}
+                                       onClick={(e)=>{setProductMainImage(e,i,j)}}
+                                       style={{flaot: 'left'}}/>
+                            </div>
+                        )}
+
                     </div>
                 </li>
             </>
@@ -165,23 +198,27 @@ const FundingRegister = () => {
                                                             style={inputStyle}
                                                             type="file"
                                                             name="mainImage"
-                                                            onChange={changeForm}
+                                                            onChange={(e)=>{setFundingMainFile(e.target.files[0])}}
                                                         />
-                                                        <h5 style={textStyle}>상품등록</h5>
-                                                            <img src={""} alt={"상품 추가 아이콘"}/>
-                                                                <div style={{display:"flex"}}>
-                                                                    <div style={{display:"flex" ,flexWrap:"wrap"}}>
-                                                                        <h5 style={textStyle}>펀딩 만기일</h5>
-                                                                        <input
-                                                                            style={inputStyle}
-                                                                            name="dueDate"
-                                                                            placeholder="date"
-                                                                            value={form.dueDate}
-                                                                            type="date"
-                                                                            onChange={changeForm}
-                                                                            min={getFormatDate(new Date())}
-                                                                        />
-                                                                    </div>
+                                                    <ul>
+                                                        {list}
+                                                    </ul>
+                                                    <Button style={btn} variant="outlined" color="primary" onClick={productService.openDialog}>
+                                                        상품 등록
+                                                    </Button>
+                                                    <div style={{display:"flex"}}>
+                                                        <div style={{display:"flex" ,flexWrap:"wrap"}}>
+                                                            <h5 style={textStyle}>펀딩 만기일</h5>
+                                                            <input
+                                                                style={inputStyle}
+                                                                name="dueDate"
+                                                                placeholder="date"
+                                                                value={form.dueDate}
+                                                                type="date"
+                                                                onChange={changeForm}
+                                                                min={getFormatDate(new Date())}
+                                                            />
+                                                        </div>
                                                         <div style={{display:"flex", flexWrap:"wrap"}}>
                                                         <h5 style={textStyle}>펀딩 목표금액</h5>
                                                         <input

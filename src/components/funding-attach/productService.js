@@ -24,7 +24,10 @@ const productService = ()=>{
                 des: '',
                 price: ''
             },
-            pictures: []
+            pictures: [
+                //{file: null, main: 0}
+            ],
+            mainIdx: 0,
         }
     }
 
@@ -95,7 +98,7 @@ const productService = ()=>{
         prodIdx = idx
         setMode('update')
         product = getProductByIdx(idx)
-        console.log(product)
+        console.log("수정할 product: ", product)
 
         //랜더링
         openFn(true)

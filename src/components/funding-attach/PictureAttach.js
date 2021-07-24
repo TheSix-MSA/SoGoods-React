@@ -76,6 +76,12 @@ const PictureAttach = () => {
             onDrop: acceptedFiles => {
                 const max = maxFiles;
 
+                acceptedFiles.map(file =>
+                    Object.assign(file, {
+                        preview: URL.createObjectURL(file)
+                    })
+                )
+
                 const newFiles = [...files, ...acceptedFiles]
 
                 if(newFiles.length <= max){
@@ -98,17 +104,14 @@ const PictureAttach = () => {
     ]);
 
     const removeImg = (idx) => {
-        console.log('click remove')
+
         files.splice(idx, 1)
         setFiles([...files])
     }
 
     productService.setPictures(files)
-    files.map(file =>
-        Object.assign(file, {
-            preview: URL.createObjectURL(file)
-        })
-    )
+
+
 
     useEffect(() => () => {
         // Make sure to revoke the data uris to avoid memory leaks
@@ -118,7 +121,6 @@ const PictureAttach = () => {
     }, [files]);
 
 
-    console.log('files length2: ', files.length)
     const thumbs = files.map((file, idx)=> (
         <div style={thumb} key={file.name}>
             <div style={thumbInner}>

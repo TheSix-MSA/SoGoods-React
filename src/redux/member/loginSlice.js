@@ -1,4 +1,4 @@
-import {createSlice} from "@reduxjs/toolkit";
+    import {createSlice} from "@reduxjs/toolkit";
 
 const initState = {
     email : "",
@@ -12,6 +12,7 @@ const loginSlice = createSlice({
         signin:(state, action) => {
             localStorage.removeItem("userData");
             localStorage.setItem("userData",JSON.stringify(action.payload));
+            localStorage.setItem("lastActiveTime",JSON.stringify(new Date()));
             return {...state,email:action.payload.email, roles: action.payload.roles, name:action.payload.name};
         },
         signout: (state, action) => {
@@ -19,6 +20,7 @@ const loginSlice = createSlice({
             return {...initState}
         },
         loggedInUser:(state, action) => {
+            localStorage.setItem("lastActiveTime",JSON.stringify(new Date()));
             return {...state,email:action.payload.email, roles: action.payload.roles, name:action.payload.name};
         }
     }

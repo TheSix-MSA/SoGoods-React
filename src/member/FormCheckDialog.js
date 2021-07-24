@@ -2,7 +2,6 @@ import React from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import Slide from '@material-ui/core/Slide';
-import Postcode from "./Postcode";
 import codeService from "./codeService";
 import DialogContentText from "@material-ui/core/DialogContentText";
 
@@ -13,10 +12,16 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function FormCheckDialog({warningType}) {
     const [open, setOpen] = React.useState(false);
 
+    /**
+     * 팝업열기
+     */
     const handleClickOpen = () => {
         setOpen(true);
     };
 
+    /**
+     * 팝업닫기
+     */
     const handleClose = () => {
         setOpen(false);
     };

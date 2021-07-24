@@ -6,7 +6,7 @@ import instance from "../../modules/axiosConfig";
  */
 export const getBoardData = createAsyncThunk('async/boardAsyncService', async (request) => {
     const result = await instance({
-        url: `/board/FREE/list?page=${request.page||1}&keyword=${request.keyword||""}&type=${request.type||""}`,
+        url: `/board/${request.boardType}/list?page=${request.page||1}&keyword=${request.keyword||""}&type=${request.type||""}`,
         method: 'get'
     });
     return result.data

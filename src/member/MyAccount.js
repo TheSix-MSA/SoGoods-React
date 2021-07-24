@@ -12,6 +12,7 @@ import codeService from "./codeService";
 import {useToasts} from "react-toast-notifications";
 import {useHistory} from "react-router-dom";
 import NovelRegisterDialog from "./NovelRegisterDialog";
+import MyNovel from "./MyNovel";
 
 const initUserInfo = {
   email:"",
@@ -34,27 +35,24 @@ const initSearchBook = {
   isbn:""
 };
 
-const MyAccount = ({ location }) => {
-  const { pathname } = location;
+const MyAccount = () => {
   const userSelector = useSelector(state => state.login);
   const [userInfo, setUserInfo, setInfo] = useInputs(initUserInfo);
   const [passInfo, setPassInfo, setPass] = useInputs({...initPassword,email:userSelector.email});
-  const [searchBook, setSearchBook, setBook] = useInputs(initSearchBook);
+  const [searchBook, setSearchBook, setBook] = useInputs({...initSearchBook});
   const [editFlag, setEditFlag] = useState(false);
   const [passEditFlag, setPassEditFlag] = useState(false);
   const {addToast} = useToasts();
-  const history = useHistory();
 
   useEffect(() => {
+    let isSubscribed = true;
     myAccountService.getMyInfo(userSelector.email)
         .then(value => {
-          setInfo({...value.data.response});
+          if(isSubscribed) setInfo({...value.data.response});
         });
-
-    if(userSelector.email===""){
-      history.push('/');
+    return () => {
+      isSubscribed = false
     }
-
   },[userSelector]);
 
   /**
@@ -85,12 +83,17 @@ const MyAccount = ({ location }) => {
     };
 
     myAccountService.modifyInfo(userInfo).then(value => {
-      addToast("회원정보가 수정되었습니다", {appearance: 'warning', autoDismiss: true});
+      addToast("회원정보가 수정되었습니다", {appearance: 'success', autoDismiss: true});
     });
 
     setEditFlag(false);
   };
 
+  /**
+   * 카카오 주소APi에서 받은 주소를 상태에 추가.
+   *
+   * @param address
+   */
   const addAddress = (address) => {
     setInfo({...userInfo,address:address});
   };
@@ -114,7 +117,7 @@ const MyAccount = ({ location }) => {
       }//end of for loop
 
       myAccountService.modifyInfo(passInfo).then(value => {
-        addToast("회원정보가 수정되었습니다", {appearance: 'info', autoDismiss: true});
+        addToast("회원정보가 수정되었습니다", {appearance: 'success', autoDismiss: true});
       });
 
       setPassEditFlag(false);
@@ -136,11 +139,14 @@ const MyAccount = ({ location }) => {
    * 검색팝업을 올림.
    */
   const searchIsbn = () =>{
-    console.log("팝업해라");
     myAccountService.popUpDialogFn();
   }
 
-  console.log(userInfo);
+  const clearInput = () => {
+    setBook({...initSearchBook});
+  };
+
+  myAccountService.setClearInputFn(clearInput);
 
   return (
       <Fragment>
@@ -151,7 +157,6 @@ const MyAccount = ({ location }) => {
               content="Compare page of flone react minimalist eCommerce template."
           />
         </MetaTags>
-          My Account
         <LayoutOne headerTop="visible">
           {/* breadcrumb */}
           <div className="myaccount-area pb-80 pt-100">
@@ -301,7 +306,7 @@ const MyAccount = ({ location }) => {
                         <Card.Header className="panel-heading">
                           <Accordion.Toggle variant="link" eventKey="2">
                             <h3 className="panel-title">
-                              <span>3 .</span> Modify your address book entries{" "}
+                              <span>3 .</span> Your Board List
                             </h3>
                           </Accordion.Toggle>
                         </Card.Header>
@@ -309,49 +314,131 @@ const MyAccount = ({ location }) => {
                           <Card.Body>
                             <div className="myaccount-info-wrapper">
                               <div className="account-info-wrapper">
-                                <h4>Address Book Entries</h4>
+                                <h4>Change Password</h4>
+                                <h5>Your Password</h5>
                               </div>
-                              <NovelRegisterDialog searchBook={searchBook}/>
-                              <div className="align-items-center justify-content-center entries-wrapper">
-                                <div className="billing-info  entries-edit-delete text-center">
-                                    <label>Register Book</label>
-                                    <div style={{display:"flex"}}>
-                                      <input type="text" name="isbn" onChange={setSearchBook} minLength={13}/>
-                                      <button className="edit" onClick={()=>searchIsbn(searchBook)}>SEARCH</button>
-                                    </div>
+                              <div className="row">
+                                <div className="col-lg-6 col-md-6">
+                                  <div className="billing-info">
+                                    <label>password</label>
+                                    {
+                                      passEditFlag === false ?
+                                          <input type="password" name="password" style={{background: "lightgray"}}
+                                                 disabled={true}/> :
+                                          <input type="password" name="password" onChange={setPassInfo}
+                                                 minLength={8}
+                                          />
+                                    }
+                                  </div>
                                 </div>
-                              </div>
-
-                              <div className="entries-wrapper" style={{marginBottom: "15px"}}>
-                                <div className="row">
-                                  <div className="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">
-                                    <div className="entries-edit-delete text-center">
-                                      <img src="https://image.aladin.co.kr/product/61/50/coversum/8970127240_2.jpg"
-                                           alt=""/>
-                                    </div>
-                                  </div>
-                                  <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
-                                    <div className="entries-info text-center">
-                                      <p>John Doe</p>
-                                      <p>Paul Park </p>
-                                      <p>Lorem ipsum dolor set amet</p>
-                                      <p>NYC</p>
-                                      <p>New York</p>
-                                    </div>
-                                  </div>
-                                  <div className="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">
-                                    <div className="entries-edit-delete text-center">
-                                      <button className="edit">Edit</button>
-                                      <button>Delete</button>
-                                    </div>
+                                <div className="col-lg-6 col-md-6">
+                                  <div className="billing-info">
+                                    <label>password check</label>
+                                    {
+                                      passEditFlag === false ?
+                                          <input type="password" name="passwordCheck" disabled={true}
+                                                 style={{background: "lightgray"}}/> :
+                                          <input type="password" name="passwordCheck" onChange={setPassInfo}
+                                                 minLength={8}
+                                          />
+                                    }
                                   </div>
                                 </div>
                               </div>
                               <div className="billing-back-btn">
                                 <div className="billing-btn">
-                                  <button type="submit">Continue</button>
+                                  {
+                                    passEditFlag === false ?
+                                        <button onClick={passEditInfo}>Edit</button> :
+                                        <button onClick={passApplyInfo}>apply</button>
+                                  }
                                 </div>
                               </div>
+                            </div>
+                          </Card.Body>
+                        </Accordion.Collapse>
+                      </Card>
+                      <Card className="single-my-account mb-20">
+                        <Card.Header className="panel-heading">
+                          <Accordion.Toggle variant="link" eventKey="3">
+                            <h3 className="panel-title">
+                              <span>4 .</span> Show your funding
+                            </h3>
+                          </Accordion.Toggle>
+                        </Card.Header>
+                        <Accordion.Collapse eventKey="3">
+                          <Card.Body>
+                            <div className="myaccount-info-wrapper">
+                              <div className="account-info-wrapper">
+                                <h4>Change Password</h4>
+                                <h5>Your Password</h5>
+                              </div>
+                              <div className="row">
+                                <div className="col-lg-6 col-md-6">
+                                  <div className="billing-info">
+                                    <label>password</label>
+                                    {
+                                      passEditFlag === false ?
+                                          <input type="password" name="password" style={{background: "lightgray"}}
+                                                 disabled={true}/> :
+                                          <input type="password" name="password" onChange={setPassInfo}
+                                                 minLength={8}
+                                          />
+                                    }
+                                  </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6">
+                                  <div className="billing-info">
+                                    <label>password check</label>
+                                    {
+                                      passEditFlag === false ?
+                                          <input type="password" name="passwordCheck" disabled={true}
+                                                 style={{background: "lightgray"}}/> :
+                                          <input type="password" name="passwordCheck" onChange={setPassInfo}
+                                                 minLength={8}
+                                          />
+                                    }
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="billing-back-btn">
+                                <div className="billing-btn">
+                                  {
+                                    passEditFlag === false ?
+                                        <button onClick={passEditInfo}>Edit</button> :
+                                        <button onClick={passApplyInfo}>apply</button>
+                                  }
+                                </div>
+                              </div>
+                            </div>
+                          </Card.Body>
+                        </Accordion.Collapse>
+                      </Card>
+                      <Card className="single-my-account mb-20" >
+                        <Card.Header className="panel-heading">
+                          <Accordion.Toggle variant="link" eventKey="4">
+                            <h3 className="panel-title">
+                              <span>5 .</span> Modify your address book entries{" "}
+                            </h3>
+                          </Accordion.Toggle>
+                        </Card.Header>
+                        <Accordion.Collapse eventKey="4">
+                          <Card.Body>
+                            <div className="myaccount-info-wrapper">
+                              <div className="account-info-wrapper">
+                                <h4>Address Book Entries</h4>
+                              </div>
+                              <NovelRegisterDialog searchBook={searchBook}/>
+                              <div className="align-items-center justify-content-center entries-wrapper">
+                                <div className="billing-info  entries-edit-delete text-center" style={{padding:"15px"}}>
+                                    <label>Register Book</label>
+                                    <div style={{display:"flex"}}>
+                                      <input type="text" name="isbn" placeholder={"ISBN (13자리)"} onChange={setSearchBook} minLength={13} value={searchBook.isbn}/>
+                                      <button className="edit" onClick={searchIsbn} style={{marginLeft:"15px"}}>SEARCH</button>
+                                    </div>
+                                </div>
+                              </div>
+                              <MyNovel></MyNovel>
                             </div>
                           </Card.Body>
                         </Accordion.Collapse>

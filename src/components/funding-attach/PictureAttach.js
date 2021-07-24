@@ -76,6 +76,12 @@ const PictureAttach = () => {
             onDrop: acceptedFiles => {
                 const max = maxFiles;
 
+                acceptedFiles.map(file =>
+                    Object.assign(file, {
+                        preview: URL.createObjectURL(file)
+                    })
+                )
+
                 const newFiles = [...files, ...acceptedFiles]
 
                 if(newFiles.length <= max){
@@ -104,11 +110,8 @@ const PictureAttach = () => {
     }
 
     productService.setPictures(files)
-    files.map(file =>
-        Object.assign(file, {
-            preview: URL.createObjectURL(file)
-        })
-    )
+
+
 
     useEffect(() => () => {
         // Make sure to revoke the data uris to avoid memory leaks

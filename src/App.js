@@ -205,7 +205,7 @@ const App = (props) => {
                 />
                 <Route
                     path={process.env.PUBLIC_URL + "/author-application"}
-                    component={withAuth(AuthorApplication["GENERAL"])}
+                    component={withAuth(AuthorApplication,["GENERAL"])}
                 />
 
 

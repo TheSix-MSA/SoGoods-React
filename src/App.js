@@ -12,6 +12,7 @@ import BoardModify from "./board/BoardModify";
 import {loggedInUser, signin} from "./redux/member/loginSlice";
 import {refreshToken} from "./modules/refreshToken";
 import Confirmation from "./pages/order/Confirmation";
+import withAuth from "./hoc/withAuth";
 
 //the six
 const FundingBoard = lazy(()=>import("./components/funding/FundingBoard"));
@@ -172,7 +173,7 @@ const App = (props) => {
 
                 <Route
                   path={process.env.PUBLIC_URL + "/my-account"}
-                  component={MyAccount}
+                  component={withAuth(MyAccount,"GENERAL")}
                 />
                 <Route
                   path={process.env.PUBLIC_URL + "/login-register"}

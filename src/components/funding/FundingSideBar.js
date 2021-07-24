@@ -118,7 +118,7 @@ const FundingSideBar = (funding) => {
                  <br/>
                  {/* funding favorite */}
                  <div style={{width:"100%"}}>
-                     <div style={{fontSize:"25px", lineHeight:"150%", cursor:"pointer",display:"flex"}} onClick={clickFavorite}> {favList.indexOf(funding.fundingDTO.email) ? '💜':'♡'}
+                     <div style={{fontSize:"25px", lineHeight:"150%", cursor:"pointer",display:"flex"}} onClick={clickFavorite}> {favList.includes(funding.fundingDTO.email) ? '💜':'♡'}
                         <div style={{fontSize:"20px", margin:"0 10px"}}>{favCount}</div>
                      </div>
                  </div>

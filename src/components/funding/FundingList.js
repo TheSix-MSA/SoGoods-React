@@ -35,32 +35,36 @@ const initState= {
 const param = {
     page:1,
     keyword:'',
-    type:''
+    type:'',
+    state:''
 }
 
 const FundingList = ({ location, productTabClass}) => {
     const value = queryString.parse(location.search);	// 문자열의 쿼리스트링을 Object로 변환
-    const [searchInput, searchOnChange ,setSearchInput] = useInputs({...param, page:value.page||1});
+    const [searchInput, searchOnChange ,setSearchInput] = useInputs({...param, page:value.page||1, state:value.state||"open"});
 
     // 파라미터로 넘어가는 값
     const page = value.page||1;
     const keyword = value.keyword||"";
     const type = value.type||"";
+    const state = value.state||"open";
 
     const history = useHistory()
     const [data, setData] = useState(initState)
 
     // 리스트 데이터 불러오기
     useEffect(()=> {
-        fundingService.getList(page, keyword, type).then(res=>{
+        console.log("useEffect=====>")
+        console.log(searchInput);
+        fundingService.getList(page, keyword, type, state).then(res=>{
             setData(res.response);
         })
-    }, [page])
+    }, [page, state])
 
 
     // 페이지 이동처리
     const movePage = (page) => {
-        const url = '/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type;
+        const url = '/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type + '&state='+searchInput.state;
         history.push(url);
     }
 
@@ -75,13 +79,17 @@ const FundingList = ({ location, productTabClass}) => {
     }
 
     // 검색 처리
-    const search = async (e) => {
-        e.preventDefault();
-        const result = await fundingService.getList(1, searchInput.keyword, searchInput.type);
+    const search = async () => {
+        //e.preventDefault();
+        console.log(searchInput);
+        const result = await fundingService.getList(1, searchInput.keyword, searchInput.type, searchInput.state);
         setData(result.response)
-        const url = '/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type;
+        const url = '/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type + '&state=' +searchInput.state;
         history.push(url);
     }
+
+
+    console.log(searchInput);
 
     // 진행중인 펀딩 리스트 불러오기
     const list = data.dtoList.map((dto, idx)=>
@@ -109,8 +117,8 @@ const FundingList = ({ location, productTabClass}) => {
                     <div className="row">
                         <div className="col-lg-12">
                             <div style={{textAlign:"center"}}>
-                                <span style={menuStyle}>진행중인 펀딩</span>
-                                <span style={menuStyle}>종료된 펀딩</span>
+                                <span style={menuStyle} onClick={()=>history.push('/funding/list?page='+page+'&keyword='+searchInput.keyword+'&type='+searchInput.type +'&state=open')}>진행중인 펀딩</span>
+                                <span style={menuStyle} onClick={()=>history.push('/funding/list?page='+page+'&keyword='+searchInput.keyword+'&type='+searchInput.type +'&state=close')}>종료된 펀딩</span>
                             </div>
                             <div style={{display:"flex"}}>
                                 {/* select option */}

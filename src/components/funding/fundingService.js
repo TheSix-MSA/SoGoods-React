@@ -4,11 +4,12 @@ import instance from "../../modules/axiosConfig";
 const fundingService = () => {
 
     // 펀딩 리스트 얻어오기
-    const getList = async (page, keyword="", type="") => {
+    const getList = async (page, keyword="", type="", state) => {
         const list = await instance({
-            url: `/funding/list?page=${page}&keyword=${keyword}&type=${type}`,
+            url: `/funding/list?page=${page}&keyword=${keyword}&type=${type}&state=${state}`,
             method: 'get'
         });
+        console.log(list.data);
        return list.data;
     }
 

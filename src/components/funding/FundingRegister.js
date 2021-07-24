@@ -11,7 +11,9 @@ import DialogContent from "@material-ui/core/DialogContent";
 import ProductRegister from "../funding-attach/ProductRegister";
 import Dialog from "@material-ui/core/Dialog";
 import Button from "@material-ui/core/Button";
-import {useSelector} from "react-redux";
+import {useSelector, } from "react-redux";
+import {useToasts} from "react-toast-notifications";
+import {useHistory} from "react-router-dom";
 
 const inputStyle = {
     margin:"10px"
@@ -47,26 +49,44 @@ const initState = {
 
 const FundingRegister = () => {
 
+    const {addToast} = useToasts();
     const [form, changeForm, setForm] = useInputs({...initState});
     const [fundingMainFile, setFundingMainFile] = useState(null);
     const userInfo = useSelector(state=> state.login);
-
     const [open, setOpen] = useState(false);
 
-    productService.setOpenFn(setOpen)
+    const history = useHistory();
 
+    productService.setOpenFn(setOpen)
 
     const productList = productService.getProductList()
     const productDTOs = productList.map(product=>{
         return product.text
     })
-    const req = {...form, productDTOs: productDTOs, writer:userInfo.name, email:userInfo.email}
 
-    const sendFormData = async () => {
-         const result = await fundingService.registerFunding(req);
+    const req = {...form, writer:userInfo.name, email:userInfo.email, productDTOs: productDTOs}
+
+    const sendFormData = async (e) => {
+        e.preventDefault();
+
+        if(form.title===""){
+            addToast("제목은 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
+            return;
+        } else if (form.content===""){
+            addToast("내용은 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
+            return;
+        } else if (!form.dueDate){
+            addToast("만기일은 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
+            return;
+        } else if (form.targetAmount===null || form.targetAmount === 0){
+            addToast("목표금액은 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
+            return;
+        }
+
+        const result = await fundingService.registerFunding(req);
         console.log('=========게시물 등록 결과=============')
-         console.log('result', result)
-         const fno = result.data.response.fundingDTO.fno
+        console.log('result', result)
+        const fno = result.data.response.fundingDTO.fno
 
         const productNums = result.data.response.productNums
 
@@ -77,11 +97,9 @@ const FundingRegister = () => {
             const productList = productService.getProductList()
             await fundingService.registerAttach(productList[idx].pictures, 'PRODUCT', num, productList[idx].mainIdx);
         }
-    }
 
-    const setProductMainImage = (e,productIdx, pictureIdx)=>{
-        productService.getProductList()[productIdx].mainIdx = pictureIdx
-        console.log(productService.getProductList()[productIdx])
+        history.push("/funding/list");
+
     }
 
     const list = productService.getProductList().map((product, i)=>{
@@ -194,26 +212,29 @@ const FundingRegister = () => {
                                                             />
                                                         </div>
                                                         <div style={{display:"flex", flexWrap:"wrap"}}>
-                                                            <h5 style={textStyle}>펀딩 목표금액</h5>
-                                                            <input
-                                                                style={inputStyle}
-                                                                name="targetAmount"
-                                                                value={form.targetAmount}
-                                                                placeholder="목표금액"
-                                                                type="number"
-                                                                onChange={changeForm}
-                                                                onInput={({ target }) => {
-                                                                    target.value = target.value.replace(/[^0-9]/g, "");
-                                                                    target.value = target.value.replace(/,/g, "");
-                                                                }}
-                                                            />
+                                                        <h5 style={textStyle}>펀딩 목표금액</h5>
+                                                        <input
+                                                            style={inputStyle}
+                                                            name="targetAmount"
+                                                            value={form.targetAmount}
+                                                            placeholder="목표금액"
+                                                            type="text"
+                                                            onChange={changeForm}
+                                                            onInput={({ target }) => {
+                                                              target.value = target.value.replace(/[^0-9]/g, "");
+                                                              target.value = target.value.replace(/,/g, "");
+                                                            }}
+                                                        />
                                                         </div>
-                                                    </div>
-                                                    <div className="button-box">
-                                                        <button type="button" onClick={()=>sendFormData()} style={inputStyle}>
-                                                            <span>펀딩 등록하기</span>
-                                                        </button>
-                                                    </div>
+                                                        </div>
+                                                        <div className="button-box">
+                                                            <form className={"searchform"}>
+                                                                <button className={"searchform__submit"}
+                                                                        onClick={sendFormData}
+                                                                        style={{height:"40px", position:"relative", margin:"10px", float:"right"}}> 등록
+                                                                </button>
+                                                            </form>
+                                                        </div>
                                                 </div>
                                             </div>
                                         </Tab.Pane>

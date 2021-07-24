@@ -26,7 +26,6 @@ const FundingRead = ({location}) => {
             console.log(res.response)
             setFunding(res.response)
         })
-
     },[])
 
 

@@ -8,7 +8,7 @@ const boardService = () => {
      */
     const registerBoard = async (board) => {
         const result =  await instance({
-            url: `/board/FREE`,
+            url: `/board/${board.boardType}`,
             method: 'post',
             data: board
         })
@@ -18,9 +18,9 @@ const boardService = () => {
     /*
         FREE 게시판 글 상세보기
      */
-    const getOneBoard = async (bno) => {
+    const getOneBoard = async (bno, boardType) => {
         return await instance({
-            url: `/board/FREE/${bno}`,
+            url: `/board/${boardType}/${bno}`,
             method: 'get'
         })
     }
@@ -28,9 +28,9 @@ const boardService = () => {
     /*
         FREE 게시판 글 수정하기
      */
-    const modifyBoard = async (bno, board) => {
+    const modifyBoard = async (bno, board, boardType) => {
         const result = await instance({
-            url: `/board/FREE/${bno}`,
+            url: `/board/${boardType}/${bno}`,
             method: 'put',
             data: board
         })
@@ -40,9 +40,9 @@ const boardService = () => {
     /*
         FREE 게시판 글 삭제하기
      */
-    const removeBoard = async (bno) => {
+    const removeBoard = async (bno, boardType) => {
         const result = await instance({
-            url: `/board/FREE/${bno}`,
+            url: `/board/${boardType}/${bno}`,
             method: 'delete'
         })
         return result
@@ -52,12 +52,10 @@ const boardService = () => {
         FREE 게시판 글 검색하기
      */
     const searchBoard = async (value) => {
-        console.log(3333, value)
         const result = await instance({
             url: `/board/FREE/list?page=${value.page}&keyword=${value.keyword}&type=${value.type}`,
             method: 'get'
         })
-        console.log(4444, result)
         return { result }
     }
 

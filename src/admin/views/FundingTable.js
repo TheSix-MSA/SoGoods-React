@@ -10,6 +10,7 @@ import fundingService from "../sevice/fundingService";
 import {useHistory, useLocation} from "react-router-dom";
 import FundingPagination from "../components/funding/FundingPagination";
 import * as queryString from "querystring";
+import useInputs from "../../customHooks/useInputs";
 
 const initState = {
     dtoList: [
@@ -50,29 +51,44 @@ const initState = {
         type: ""
     }
 }
+const param = {
+    page:1,
+    keyword:'',
+    type:''
+}
+
 const FundingTable = () => {
     const location = useLocation();
     const history = useHistory();
     const value = queryString.parse(location.search.replace("?", ""));
     const page = value.page || 1;
+    const type = value.type || "";
+    const keyword = value.keyword || "";
 
     const [funding, setFunding] = useState(initState);
     const [flag, setFlag] = useState(false);
+    const [searchInput, searchOnChange] = useInputs({...param, page: value.page || 1});
 
     useEffect(() => {
-        fundingService.getFundingList(page).then(res => {
+        fundingService.getFundingList(page, keyword, type).then(res => {
             setFunding(res.data.response);
         });
     }, [page, flag])
 
-
     const movePage = (num) => {
-        history.push('/admin/funding?page=' + num)
-        funding.pageMaker.page = num;
+        history.push('/admin/funding?page='+num+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type)
+        // funding.pageMaker.page = num;
         setFunding({...funding});
         setFlag(!flag)
     }
     fundingService.setMovePage(movePage)
+
+    const search = async () => {
+        const result = await fundingService.getFundingList(1, searchInput.keyword, searchInput.type);
+        setFunding(result.data.response)
+        const url = '/admin/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type;
+        history.push(url);
+    }
 
     const toFunding = (fno) => {
         history.push("/funding/read/" + fno)
@@ -105,9 +121,27 @@ const FundingTable = () => {
                 <Card className="strpied-tabled-with-hover">
                     <Card.Header>
                         <Card.Title as="h4">펀딩 리스트</Card.Title>
+
+                        <div className="pro-sidebar-search mb-55 mt-25">
+                            <form className="pro-sidebar-search-form" action="#">
+                                <select name="type" style={{width:"10%"}} onChange={searchOnChange}>
+                                    <option value=''>선택</option>
+                                    <option value='w'>작성자</option>
+                                    <option value='t'>제목</option>
+                                    <option value='c'>내용</option>
+                                </select>
+                                <input value={searchInput.keyword} onChange={searchOnChange} type="text"
+                                       name="keyword" placeholder="검색"/>
+                                <button style={{top:"70%"}} onClick={search}>
+                                    <i className="pe-7s-search" />
+                                </button>
+                            </form>
+                        </div>
                         <p className="card-category">
                             펀딩정보
                         </p>
+
+
                     </Card.Header>
                     <Card.Body className="table-full-width table-responsive px-20">
                         <Table className="table-hover table-striped" style={{textAlign: "center"}}>

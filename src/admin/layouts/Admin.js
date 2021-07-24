@@ -2,20 +2,15 @@ import React, { Component, Fragment } from "react";
 import { useLocation, Route, Switch } from "react-router-dom";
 import Sidebar from "../components/sidebar/Sidebar";
 import FooterOne from "../../components/layouts/footer/FooterOne";
-// import AdminNavbar from "components/navbars/AdminNavbar";
-// import Footer from "components/Footer/Footer";
+
 
 
 import routes from "./routes.js";
 import AdminNavbar from "../components/navbars/AdminNavbar";
 
-// import sidebarImage from "../../assets/img/sidebar-3.jpg";
 
 function Admin(){
 
-  // const [image, setImage] = React.useState(sidebarImage);
-  // const [color, setColor] = React.useState("black");
-  // const [hasImage, setHasImage] = React.useState(true);
   const location = useLocation();
 
   const mainPanel = React.useRef(null);

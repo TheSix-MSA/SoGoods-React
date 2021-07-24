@@ -10,12 +10,15 @@ import fundingService from "./fundingService";
 import PageList from "./PageList";
 import useInputs from "../../customHooks/useInputs";
 import LinearWithValueLabel from "./LinearProgressWithLabel";
+import {makeStyles} from "@material-ui/core";
 
 const menuStyle = {
-    fontSize:"25px",
-    margin:"10px",
-    cursor:"pointer",
+    fontSize: '25px',
+    margin: "10px",
+    cursor: "pointer",
+    color: "#727A8C",
 }
+
 
 const initState= {
     listRequestDTO:{},
@@ -79,8 +82,8 @@ const FundingList = ({ location, productTabClass}) => {
     }
 
     // 검색 처리
-    const search = async () => {
-        //e.preventDefault();
+    const search = async (e) => {
+        e.preventDefault();
         console.log(searchInput);
         const result = await fundingService.getList(1, searchInput.keyword, searchInput.type, searchInput.state);
         setData(result.response)
@@ -113,13 +116,23 @@ const FundingList = ({ location, productTabClass}) => {
                     }`}
                 >
                 </Nav>
+                <div className="login-register-wrapper">
+                    <Nav variant="pills" className="login-register-tab-list">
+                        <Nav.Item>
+                            <Nav.Link eventKey="login">
+                                <h4 onClick={()=>history.push(`/funding/list?page=${page}&keyword=${searchInput.keyword}&type=${searchInput.type}&state=open`)}>진행중인 펀딩</h4>
+                            </Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link eventKey="register">
+                                <h4 onClick={()=>history.push(`/funding/list?page=${page}&keyword=${searchInput.keyword}&type=${searchInput.type}&state=close`)}>마감된 펀딩</h4>
+                            </Nav.Link>
+                        </Nav.Item>
+                    </Nav>
+                </div>
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-12">
-                            <div style={{textAlign:"center"}}>
-                                <span style={menuStyle} onClick={()=>history.push('/funding/list?page='+page+'&keyword='+searchInput.keyword+'&type='+searchInput.type +'&state=open')}>진행중인 펀딩</span>
-                                <span style={menuStyle} onClick={()=>history.push('/funding/list?page='+page+'&keyword='+searchInput.keyword+'&type='+searchInput.type +'&state=close')}>종료된 펀딩</span>
-                            </div>
                             <div style={{display:"flex"}}>
                                 {/* select option */}
                                 <select name='type' onChange={searchOnChange} style={{width:"100px",border:"1px solid #EEE", borderRadius:"15px 0 0 15px"}}>
@@ -155,7 +168,9 @@ const FundingList = ({ location, productTabClass}) => {
                                 {list}
                             </div>
                             {/* pagination */}
-                            <PageList data={data} movePage={movePage}></PageList>
+                            <div style={{marginBottom:"25px"}}>
+                                <PageList data={data} movePage={movePage}></PageList>
+                            </div>
                         </div>
                     </div>
                 </div>

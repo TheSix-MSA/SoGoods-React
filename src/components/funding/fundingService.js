@@ -37,7 +37,7 @@ const fundingService = () => {
             },
         }
 
-        const result = await axios.post(`${process.env.REACT_APP_API_DEV_URL}/attach/upload?tableName=${tableName}&keyValue=${keyValue}&mainIdx=${mainIdx}`,
+        const result = await axios.post(`${process.env.REACT_APP_API_URL}/attach/upload?tableName=${tableName}&keyValue=${keyValue}&mainIdx=${mainIdx}`,
             form, config)
     }
 
@@ -54,7 +54,16 @@ const fundingService = () => {
     // 펀딩 게시글 한개만 가져오기
     const getOneFunding = async (fno) => {
         const result = await instance({
-            url:`/funding/`+ fno +`/`,
+            url:`/funding/${fno}/`,
+            method:'get'
+        })
+        return result.data;
+    }
+
+    // 게시글의 찜 리스트 가져오기
+    const getFavList = async (fno) => {
+        const result = await instance({
+            url:`/funding/fav/${fno}`,
             method:'get'
         })
         return result.data;
@@ -74,7 +83,7 @@ const fundingService = () => {
     // 내가 쓴 펀딩 게시글 가져오기
     const getMyFundingList = async (email) => {
         const result = await instance({
-            url:`/funding/user/list/`+ email+`/`,
+            url:`/funding/user/list/${email}/`,
             method:'get'
         })
         console.log(result.data)
@@ -84,7 +93,7 @@ const fundingService = () => {
     // 내가 찜한 펀딩 게시글 가져오기
     const getMyFavFundingList = async (email) => {
         const result = await instance({
-            url:`/funding/fav/list/`+ email+`/`,
+            url:`/funding/fav/list/${email}/`,
             method:'get'
         })
         console.log(result.data)
@@ -95,7 +104,7 @@ const fundingService = () => {
     const updateFunding = async(fno, form) => {
         console.log(form)
         const result = await instance({
-            url:`/funding/`+fno+`/`,
+            url:`/funding/${fno}/`,
             method:'put',
             data:form
         })
@@ -113,7 +122,6 @@ const fundingService = () => {
 
 
 
-
     return {
         getList,
         registerFunding,
@@ -124,6 +132,7 @@ const fundingService = () => {
         updateFunding,
         removedFunding,
         registerAttach,
+        getFavList
     }
 }
 

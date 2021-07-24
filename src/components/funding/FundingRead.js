@@ -4,8 +4,6 @@ import fundingService from "./fundingService";
 import {useParams} from "react-router-dom";
 import FundingSideBar from "./FundingSideBar";
 import FundingPost from "./FundingPost";
-import {useSelector} from "react-redux";
-
 
 const initState = {
     fundingDTO:{},
@@ -13,10 +11,8 @@ const initState = {
     favoriteCount:0
 }
 
-const FundingRead = ({location}) => {
+const FundingRead = () => {
 
-    const info = useSelector(state=>state.login);
-    const { pathname } = location;
     let {fno} = useParams()
     const [funding, setFunding] = useState(initState)
 
@@ -39,13 +35,14 @@ const FundingRead = ({location}) => {
                         <div className="row flex">
                             <div className="col-lg-9">
                                 <div className="blog-details-wrapper ml-20">
-                                    {/* blog post */}
+                                    {/* funding post */}
                                     <FundingPost {...funding}/>
                                 </div>
                             </div>
                             <div className="col-lg-3">
-                                {/* blog sidebar */}
-                                {funding.productDTOs.length>0&&<FundingSideBar {...funding}/>}
+                                {/* funding side bar
+                                 펀딩 객체에 데이터가 있을 때 전송*/}
+                                {funding.productDTOs.length>0 && <FundingSideBar {...funding}/>}
                             </div>
                         </div>
                     </div>

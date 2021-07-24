@@ -22,10 +22,23 @@ const FundingRead = ({location}) => {
 
     // 상세 페이지에 필요한 데이터 불러오기
     useEffect(()=>{
-        fundingService.getOneFunding(fno).then(res=> {
-            console.log(res.response)
-            setFunding(res.response)
-        })
+        fundingService.getOneFunding(fno)
+            .then(res=> {
+                console.log(res)
+                setFunding(res.response)
+                const productList = res.response.productDTOs
+
+                fundingService.getA3src('PRODUCT', productList.map(product=>product.pno))
+            })
+            .then(res=>{
+                console.log('product src')
+                console.log(res)
+                let imgSrc = res.response[0].imgSrc
+                funding.fundingDTO.imgSrc = imgSrc
+                setFunding({...funding})
+            })
+
+
     },[])
 
 

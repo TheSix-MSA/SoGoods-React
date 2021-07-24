@@ -22,7 +22,7 @@ const fundingService = () => {
         return result;
     }
 
-    //사진 업로드하기 - 개발중
+    //사진 업로드하기
     const registerAttach = async(files, tableName, keyValue, mainIdx) => {
         const form = new FormData();
         files.forEach(ele=>{
@@ -36,8 +36,20 @@ const fundingService = () => {
             },
         }
 
-        const result = await axios.post(`${process.env.REACT_APP_API_DEV_URL}/attach/upload?tableName=${tableName}&keyValue=${keyValue}&mainIdx=${mainIdx}`,
-            form, config)
+        const result = await axios.post(
+            `${process.env.REACT_APP_API_DEV_URL}/attach/upload?tableName=${tableName}&keyValue=${keyValue}&mainIdx=${mainIdx}`,
+            form,
+            config)
+    }
+
+    const getA3src = async(type, keyValues) => {
+
+        let str = keyValues.map(v=>'&keyValues=' + v)
+
+        const result = await axios.get(
+            `${process.env.REACT_APP_API_DEV_URL}/attach/list/uuid?type=${type}` + str)
+
+        return result
     }
 
     //펀딩 글 등록시 관련된 상품들 등록처리하기
@@ -116,13 +128,14 @@ const fundingService = () => {
     return {
         getList,
         registerFunding,
+        registerAttach,
+        getA3src,
         getOneFunding,
         insertFavorite,
         getMyFundingList,
         getMyFavFundingList,
         updateFunding,
         removedFunding,
-        registerAttach,
     }
 }
 

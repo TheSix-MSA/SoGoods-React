@@ -84,8 +84,6 @@ const FundingRegister = () => {
         }
 
         const result = await fundingService.registerFunding(req);
-        console.log('=========게시물 등록 결과=============')
-        console.log('result', result)
         const fno = result.data.response.fundingDTO.fno
 
         const productNums = result.data.response.productNums

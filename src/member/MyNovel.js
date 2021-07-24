@@ -6,23 +6,42 @@ const initState = {
     size:10,
     email:""
 }
-const initNovelList = []
+const initNovelList =
+    [
+        {
+            isbn:"",
+            title:"",
+            image:"",
+            publisher:"",
+            email:"",
+            nno:""
+        }
+    ]
 const MyNovel = () => {
     const user = useSelector(state => state.login);
     const [pager, setPager] = useState({...initState,email:user.email});
-    const [novelList,setNovelList] = useState({...initNovelList})
+    const [novelList, setNovelList] = useState([...initNovelList]);
+    const [flag, setFlag] = useState(false);
+
+
+    const changeFlag = () => {
+        setFlag(!flag);
+    };
+
+    myAccountService.setListFlag(changeFlag);
+
 
     useEffect(() => {
         myAccountService.getNovelList(pager).then(value => {
-            console.log(value.data);
-            // setNovelList(value.data.response.novelsDTO)
+            console.log(value.data.response.novelsDTO);
+            setNovelList(value.data.response.novelsDTO);
         });
 
-    },[pager.page])
+    }, [pager.page, flag]);
 
 
-    return (
-        <div className="entries-wrapper" style={{marginBottom: "15px"}}>
+    const novels = novelList.map((novel,idx) =>
+        <div key={idx} className="entries-wrapper" style={{marginBottom: "15px"}}>
             <div className="row">
                 <div className="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">
                     <div className="entries-edit-delete text-center">
@@ -32,11 +51,9 @@ const MyNovel = () => {
                 </div>
                 <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
                     <div className="entries-info text-center">
-                        <p><strong>ISBN</strong></p>
-                        <p>Paul Park </p>
-                        <p>Lorem ipsum dolor set amet</p>
-                        <p>NYC</p>
-                        <p>New York</p>
+                        <p><strong>ISBN :</strong>{novel.isbn}</p>
+                        <p><strong>Title :</strong>{novel.title}</p>
+                        <p><strong>Publisher :</strong>{novel.publisher}</p>
                     </div>
                 </div>
                 <div className="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">
@@ -45,7 +62,13 @@ const MyNovel = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div>)
+
+
+    return (
+       <>
+           {novels}
+       </>
     );
 };
 

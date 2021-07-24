@@ -66,6 +66,7 @@ export default function NovelRegisterDialog({searchBook}) {
             addToast("작품이 등록되었습니다.", {appearance: 'info', autoDismiss: true});
             handleClose();
             myAccountService.clearInput();
+            myAccountService.changeFlag();
         });
     }
 

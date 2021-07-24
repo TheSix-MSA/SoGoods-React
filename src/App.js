@@ -13,6 +13,7 @@ import {loggedInUser, signin} from "./redux/member/loginSlice";
 import {refreshToken} from "./modules/refreshToken";
 import Confirmation from "./pages/order/Confirmation";
 import withAuth from "./hoc/withAuth";
+import getLeftDate from "./modules/dateCalc";
 
 const AuthorApplication = lazy(()=>import( "./member/AuthorApplication"));
 //the six
@@ -59,13 +60,21 @@ const App = (props) => {
     );
   });
 
+// 새로고침시 자동 로그인
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem("userData"));
-    if(!email && userData) {
-      dispatch(loggedInUser(userData));
+    const lastActiveTime = JSON.parse(localStorage.getItem("lastActiveTime"));
+    const time = Math.abs(new Date()-new Date(lastActiveTime));
+    if(time/(1000*60*60)>2) {
+      localStorage.clear();
+    } else {
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      if(!email && userData) {
+        dispatch(loggedInUser(userData));
+      }
     }
   },[]);
 
+  // 사일런스 리프레시
   useEffect(() => {
       if(email && email !== "") {
         const interval = setInterval(() => {
@@ -78,10 +87,11 @@ const App = (props) => {
     },[email]);
 
 
-
+  // axios 인터셉터
   useEffect(() => {
     instance.interceptors.request.use(
         function (config) {
+          localStorage.setItem("lastActiveTime",JSON.stringify(new Date()));
           config.headers.Authorization = `Bearer ${(JSON.parse(localStorage.getItem("userData")))?.accessToken || ""}`;
           return config;
         },
@@ -113,7 +123,6 @@ const App = (props) => {
         }
     );
   }, []);
-  /* 로딩 끝 */
 
   return (
         <Router>

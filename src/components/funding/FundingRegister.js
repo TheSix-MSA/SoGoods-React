@@ -76,7 +76,6 @@ const FundingRegister = () => {
 
         console.log(form);
         const result = await fundingService.registerFunding(req);
-        console.log(result)
         setForm({...initState})
         if(result){
             history.push("/funding/list");

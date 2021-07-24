@@ -5,12 +5,11 @@ import { connect } from "react-redux";
 import LayoutOne from "../layouts/header/LayoutOne";
 import Nav from "react-bootstrap/Nav";
 import * as queryString from "query-string";
-import {
-    useHistory
-} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import fundingService from "./fundingService";
 import PageList from "./PageList";
 import useInputs from "../../customHooks/useInputs";
+import LinearWithValueLabel from "./LinearProgressWithLabel";
 
 const initState= {
     listRequestDTO:{},
@@ -79,25 +78,18 @@ const FundingList = ({ location, productTabClass}) => {
 
     // 진행중인 펀딩 리스트 불러오기
     const list = data.dtoList.map((dto, idx)=>
-        <div key={idx} onClick={()=> readTodo(dto.fundingDTO.fno)} style={{cursor:"pointer"}}>
+        <div key={idx} onClick={()=> readTodo(dto.fundingDTO.fno)} style={{cursor:"pointer", margin:"10px"}}>
             <h5>{dto.fundingDTO.fno}번 게시글</h5>
             <img alt={"이미지"} src="https://i.imgur.com/WCySTkp.jpeg" height={"200px"}/>
-            <h5>{dto.fundingDTO.title}</h5>
-            <h5>마감일자 : {dto.fundingDTO.dueDate}</h5>
-            <h5>펀딩금액 : {dto.fundingDTO.totalAmount}</h5>
+            <h5 style={{marginTop:"5px"}}>{dto.fundingDTO.title}</h5>
+            <LinearWithValueLabel dto={dto}></LinearWithValueLabel>
+            <h5>마감일 : {dto.fundingDTO.dueDate}  |  펀딩금액 : {dto.fundingDTO.totalAmount}원</h5>
         </div>
     )
 
 
     return (
         <Fragment>
-            <MetaTags>
-                <title>Flone | Furniture Home</title>
-                <meta
-                    name="description"
-                    content="Furniture home of flone react minimalist eCommerce template."
-                />
-            </MetaTags>
             <LayoutOne headerTop="visible">
                 <Nav
                     variant="pills"
@@ -113,29 +105,35 @@ const FundingList = ({ location, productTabClass}) => {
                     <div className="row">
                         <div className="col-lg-12">
                             <div style={{display:"flex"}}>
-                            {/* shop topbar default */}
-                                <select name='type' onChange={searchOnChange} style={{width:"100px",border:"1px solid #EEE"}}>
+                                {/* select option */}
+                                <select name='type' onChange={searchOnChange} style={{width:"100px",border:"1px solid #EEE", borderRadius:"15px 0 0 15px"}}>
                                     <option value=''>선택</option>
                                     <option value='w'>작성자</option>
                                     <option value='t'>제목</option>
                                     <option value='c'>내용</option>
                                 </select>
-                            <div className="pro-sidebar-search" style={{display:"flex"}}>
-                                    <input type="text" name="keyword" value={searchInput.keyword} placeholder="Search here..." onChange={searchOnChange} style={{backgroundColor:"#FFF",border:"1px solid #EEE"}}/>
-                                    <button onClick={search} style={{backgroundColor:"#EEE", borderColor:"#EEE"}}>
-                                        <i className="pe-7s-search" />
-                                    </button>
-                            </div>
+                                {/* search input*/}
+                                <div className="pro-sidebar-search" style={{display:"flex"}}>
+                                        <input type="text" name="keyword" value={searchInput.keyword} placeholder="Search here..."
+                                               onChange={searchOnChange}
+                                               style={{backgroundColor:"#FFF",border:"1px solid #EEE"}}/>
+                                        <button onClick={search} style={{backgroundColor:"#EEE", borderColor:"#EEE", borderRadius:" 0 15px 15px 0"}}>
+                                            <i className="pe-7s-search" />
+                                        </button>
+                                </div>
+                                {/* search button */}
                                 <div style={{marginLeft:"auto"}}>
-                                    <button onClick={()=>toRegister()} style={{height:"45px" ,backgroundColor:"#EEE", borderColor:"#EEE"}}>펀딩 등록하기</button>
+                                    <button onClick={()=>toRegister()} style={{height:"45px" ,backgroundColor:"#EEE", borderColor:"#EEE", marginRight:"100px"}}>
+                                        펀딩 등록하기
+                                    </button>
                                 </div>
                             </div>
+                            {/* funding List */}
                             <div style={{display:"grid", gridTemplateColumns: "1fr 1fr 1fr" ,gridTemplateRows: "1fr 1fr 1fr"}}>
                                 {list}
                             </div>
+                            {/* pagination */}
                             <PageList data={data} movePage={movePage}></PageList>
-                            {/* shop product pagination */}
-
                         </div>
                     </div>
                 </div>

@@ -94,6 +94,7 @@ const FundingSideBar = (funding) => {
                         <h4>{p.name}</h4>
                         <h6>[ 상세 설명 ]</h6>
                         <h6>{p.des}</h6>
+                        {/* cart count button */}
                         <div style={{display:"flex"}}>
                             <button onClick={()=> deleteCart(p)}> - </button>
                                 <div>{p.count}개</div>
@@ -115,19 +116,24 @@ const FundingSideBar = (funding) => {
                  <br/>
                  <h4>총 펀딩액 {funding.fundingDTO.totalAmount}원 </h4>
                  <br/>
+                 {/* funding favorite */}
                  <div style={{width:"100%"}}>
-                     <div style={{fontSize:"30px", lineHeight:"150%", cursor:"pointer",display:"flex"}} onClick={clickFavorite}> {favList.indexOf(funding.fundingDTO.email) ? '💜':'♡'}
+                     <div style={{fontSize:"25px", lineHeight:"150%", cursor:"pointer",display:"flex"}} onClick={clickFavorite}> {favList.indexOf(funding.fundingDTO.email) ? '💜':'♡'}
                         <div style={{fontSize:"20px", margin:"0 10px"}}>{favCount}</div>
                      </div>
                  </div>
+                 {/* funding button */}
                  <form className={"searchform"}>
-                     <button className={"searchform__submit"} style={{height:"50px", width:"100%" ,position:"relative"}}>펀딩하기</button>
                      <Link to={{
                          pathname: "/checkout",
                          state: {
                              cartList
                          }
-                     }}>Check Out!</Link>
+                     }}>
+                         <button className={"searchform__submit"} style={{height:"50px", width:"100%", position:"relative", marginTop:"10px"}}>
+                             펀딩 참여하기
+                         </button>
+                     </Link>
                  </form>
              </div>
          </div>

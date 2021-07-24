@@ -5,6 +5,7 @@ import LayoutOne from "../components/layouts/header/LayoutOne";
 import Tab from "react-bootstrap/Tab";
 import {useHistory} from "react-router-dom";
 import boardService from "./boardService";
+import {useToasts} from "react-toast-notifications";
 
 const initState = {
     title: '',
@@ -14,12 +15,24 @@ const initState = {
 }
 
 const BoardRegister = ({match}) => {
+    const { addToast } = useToasts()
     const boardType = useRef(match.params.boardType?.toUpperCase())
-    const [board, onChange, setBoard] = useInputs(initState);
+    const [ board, onChange, setBoard ] = useInputs( initState );
     const history = useHistory()
-    const {email, name} = useSelector(state => state.login)
-    console.log(history)
+    const { email, name } = useSelector( state => state.login )
+
+    const titleRef = useRef();
+    const contentRef = useRef();
+
     const register = () => {
+        if(board.title === "" || board.title === undefined || board.title === null){
+            addToast("내용을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
+            return;
+        } else if(board.content === "" || board.content === undefined || board.content === null){
+            addToast("내용을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
+            return;
+        }
+
         boardService.registerBoard({...board, email: email, writer: name, boardType: boardType.current}).then(res => {
             if (boardType.current.includes("NOTICE")) {
                 history.push(`/admin/dashboard`)
@@ -47,16 +60,18 @@ const BoardRegister = ({match}) => {
                                                             <input
                                                                 type={"text"}
                                                                 name={"title"}
-                                                                placeholder="Title"
+                                                                placeholder="제목"
                                                                 value={board.title}
                                                                 onChange={onChange}
+                                                                ref={titleRef}
                                                             />
 
                                                             <textarea
                                                                 name={"content"}
-                                                                placeholder="Content"
+                                                                placeholder="내용"
                                                                 value={board.content}
                                                                 onChange={onChange}
+                                                                ref={contentRef}
                                                             />
                                                             <div className="col-md-2">
                                                                 <input type="button" value="작성" onClick={() => {

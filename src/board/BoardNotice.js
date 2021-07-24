@@ -1,21 +1,23 @@
-import React, {Fragment} from "react";
-import {useHistory} from "react-router-dom";
+import React, {Fragment} from 'react';
 import getFormatDate from "../modules/getFormatDate";
-import BoardNotice from "./BoardNotice";
+import {useHistory} from "react-router-dom";
 
-const BlogPostsNoSidebar = ({boardData, boardType}) => {
-    const history = useHistory();
+const BoardNotice = ({notice, page}) => {
+    console.log(1111, notice)
+    console.log(2222, page)
+    const history = useHistory()
     const moveDetail = (bno) => {
-        history.push(`/board/${boardType}/${bno}`)
+        history.push(`/board/NOTICE/${bno}`)
     }
     return (
         <Fragment>
-            {boardData && boardData?.map((data, idx) => (
+            {notice && notice?.map((data, idx) => (
                 <div className="col-lg-4 col-md-6 col-sm-12">
-                    <div className="blog-wrap-2 mb-30">
+                    <div className="blog-wrap-2 mb-30" style={{backgroundColor:"#c60bc61c"}}>
                         <div className="blog-content-2">
                             <div className="blog-meta-2">
-                                <ul key={idx}>
+                                <ul key={idx} >
+                                    <div style={{fontSize:"25px"}}> 공지사항 </div>
                                     {data.private === false &&
                                     <li>
                                         {getFormatDate(new Date(data.modDate))}
@@ -49,4 +51,4 @@ const BlogPostsNoSidebar = ({boardData, boardType}) => {
     );
 };
 
-export default BlogPostsNoSidebar;
+export default BoardNotice;

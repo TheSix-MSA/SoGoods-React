@@ -77,6 +77,11 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
                   작가게시판
                 </Link>
               </li>
+              <li>
+                <Link to={"/board/notice/list"}>
+                  공지사항
+                </Link>
+              </li>
             </ul>
           </li>
         </ul>

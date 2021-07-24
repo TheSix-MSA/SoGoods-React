@@ -12,6 +12,15 @@ const noticeService = () => {
         return list.data;
     }
 
-    return{getNoticeList}
+    const registerBoard = async (board) => {
+        const result =  await instance({
+            url: `/board/NOTICE`,
+            method: 'post',
+            data: board
+        })
+        return result
+    }
+
+    return{getNoticeList, registerBoard}
 }
 export default noticeService();

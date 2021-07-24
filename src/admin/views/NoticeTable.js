@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
 import noticeService from "../sevice/noticeService";
 import {Card, Col, Row, Table} from "react-bootstrap";
-import MemberPagination from "../components/member/MemberPagination";
 import getFormatDate from "../../modules/getFormatDate";
+import {useHistory} from "react-router-dom";
+import Register from "../modal/Register";
 
 const initState = {
     boardListRequestDTO: {},
@@ -30,16 +31,20 @@ const initState = {
 }
 const NoticeTable = () => {
     const [notices, setNotices] = useState(initState);
-
+    const history = useHistory()
+    const [handleClose, setHandleClose] = useState(false);
     useEffect(() => {
         noticeService.getNoticeList(notices.pageMaker.page).then(result => {
             setNotices(result.response);
         })
     }, [])
 
+    const toNotice = (bno) => {
+        history.push("/board/NOTICE/"+bno)
+    }
     const list = notices.boardDtoList.map(notice => {
         return <tr key={notice.bno}>
-            <td>{notice.title}</td>
+            <td onClick={()=> toNotice(notice.bno)}>{notice.title}</td>
             <td>{notice.writer}</td>
             <td>{notice.content}</td>
             <td>{notice.removed ? "⭕" : "❌"}</td>
@@ -56,6 +61,11 @@ const NoticeTable = () => {
                 <Card className="strpied-tabled-with-hover">
                     <Card.Header>
                         <Card.Title as="h4">공지 리스트</Card.Title>
+
+                        <Register
+                            handleClose={handleClose}
+                            setHandleClose={setHandleClose}
+                        />
 
                         {/*<div className="pro-sidebar-search mb-55 mt-25">*/}
                         {/*    <form className="pro-sidebar-search-form" action="#">*/}

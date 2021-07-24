@@ -54,7 +54,10 @@ const boardService = () => {
     const searchBoard = async (value) => {
         const result = await instance({
             url: `/board/FREE/list?page=${value.page}&keyword=${value.keyword}&type=${value.type}`,
-            method: 'get'
+            method: 'get',
+            headers: {
+                "Content-Type" : "multi-part",
+            }
         })
         return { result }
     }

@@ -12,10 +12,16 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function FormCheckDialog({warningType}) {
     const [open, setOpen] = React.useState(false);
 
+    /**
+     * 팝업열기
+     */
     const handleClickOpen = () => {
         setOpen(true);
     };
 
+    /**
+     * 팝업닫기
+     */
     const handleClose = () => {
         setOpen(false);
     };

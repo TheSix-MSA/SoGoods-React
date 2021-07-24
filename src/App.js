@@ -14,6 +14,7 @@ import {refreshToken} from "./modules/refreshToken";
 import Confirmation from "./pages/order/Confirmation";
 import withAuth from "./hoc/withAuth";
 
+const AuthorApplication = lazy(()=>import( "./member/AuthorApplication"));
 //the six
 const FundingBoard = lazy(()=>import("./components/funding/FundingBoard"));
 const ProductInput = lazy(()=>import("./pages/attach-dragNdrop-2/ProductInputList"));
@@ -203,6 +204,10 @@ const App = (props) => {
                 <Route
                     path={process.env.PUBLIC_URL + "/admin"}
                     component={Admin}
+                />
+                <Route
+                    path={process.env.PUBLIC_URL + "/author-application"}
+                    component={AuthorApplication}
                 />
 
 

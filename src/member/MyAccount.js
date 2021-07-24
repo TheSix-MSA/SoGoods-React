@@ -80,12 +80,17 @@ const MyAccount = () => {
     };
 
     myAccountService.modifyInfo(userInfo).then(value => {
-      addToast("회원정보가 수정되었습니다", {appearance: 'warning', autoDismiss: true});
+      addToast("회원정보가 수정되었습니다", {appearance: 'success', autoDismiss: true});
     });
 
     setEditFlag(false);
   };
 
+  /**
+   * 카카오 주소APi에서 받은 주소를 상태에 추가.
+   *
+   * @param address
+   */
   const addAddress = (address) => {
     setInfo({...userInfo,address:address});
   };
@@ -109,7 +114,7 @@ const MyAccount = () => {
       }//end of for loop
 
       myAccountService.modifyInfo(passInfo).then(value => {
-        addToast("회원정보가 수정되었습니다", {appearance: 'info', autoDismiss: true});
+        addToast("회원정보가 수정되었습니다", {appearance: 'success', autoDismiss: true});
       });
 
       setPassEditFlag(false);
@@ -294,15 +299,127 @@ const MyAccount = () => {
                           </Card.Body>
                         </Accordion.Collapse>
                       </Card>
-                      <Card className="single-my-account mb-20" >
+                      <Card className="single-my-account mb-20">
                         <Card.Header className="panel-heading">
                           <Accordion.Toggle variant="link" eventKey="2">
                             <h3 className="panel-title">
-                              <span>3 .</span> Modify your address book entries{" "}
+                              <span>3 .</span> Your Board List
                             </h3>
                           </Accordion.Toggle>
                         </Card.Header>
                         <Accordion.Collapse eventKey="2">
+                          <Card.Body>
+                            <div className="myaccount-info-wrapper">
+                              <div className="account-info-wrapper">
+                                <h4>Change Password</h4>
+                                <h5>Your Password</h5>
+                              </div>
+                              <div className="row">
+                                <div className="col-lg-6 col-md-6">
+                                  <div className="billing-info">
+                                    <label>password</label>
+                                    {
+                                      passEditFlag === false ?
+                                          <input type="password" name="password" style={{background: "lightgray"}}
+                                                 disabled={true}/> :
+                                          <input type="password" name="password" onChange={setPassInfo}
+                                                 minLength={8}
+                                          />
+                                    }
+                                  </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6">
+                                  <div className="billing-info">
+                                    <label>password check</label>
+                                    {
+                                      passEditFlag === false ?
+                                          <input type="password" name="passwordCheck" disabled={true}
+                                                 style={{background: "lightgray"}}/> :
+                                          <input type="password" name="passwordCheck" onChange={setPassInfo}
+                                                 minLength={8}
+                                          />
+                                    }
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="billing-back-btn">
+                                <div className="billing-btn">
+                                  {
+                                    passEditFlag === false ?
+                                        <button onClick={passEditInfo}>Edit</button> :
+                                        <button onClick={passApplyInfo}>apply</button>
+                                  }
+                                </div>
+                              </div>
+                            </div>
+                          </Card.Body>
+                        </Accordion.Collapse>
+                      </Card>
+                      <Card className="single-my-account mb-20">
+                        <Card.Header className="panel-heading">
+                          <Accordion.Toggle variant="link" eventKey="3">
+                            <h3 className="panel-title">
+                              <span>4 .</span> Show your funding
+                            </h3>
+                          </Accordion.Toggle>
+                        </Card.Header>
+                        <Accordion.Collapse eventKey="3">
+                          <Card.Body>
+                            <div className="myaccount-info-wrapper">
+                              <div className="account-info-wrapper">
+                                <h4>Change Password</h4>
+                                <h5>Your Password</h5>
+                              </div>
+                              <div className="row">
+                                <div className="col-lg-6 col-md-6">
+                                  <div className="billing-info">
+                                    <label>password</label>
+                                    {
+                                      passEditFlag === false ?
+                                          <input type="password" name="password" style={{background: "lightgray"}}
+                                                 disabled={true}/> :
+                                          <input type="password" name="password" onChange={setPassInfo}
+                                                 minLength={8}
+                                          />
+                                    }
+                                  </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6">
+                                  <div className="billing-info">
+                                    <label>password check</label>
+                                    {
+                                      passEditFlag === false ?
+                                          <input type="password" name="passwordCheck" disabled={true}
+                                                 style={{background: "lightgray"}}/> :
+                                          <input type="password" name="passwordCheck" onChange={setPassInfo}
+                                                 minLength={8}
+                                          />
+                                    }
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="billing-back-btn">
+                                <div className="billing-btn">
+                                  {
+                                    passEditFlag === false ?
+                                        <button onClick={passEditInfo}>Edit</button> :
+                                        <button onClick={passApplyInfo}>apply</button>
+                                  }
+                                </div>
+                              </div>
+                            </div>
+                          </Card.Body>
+                        </Accordion.Collapse>
+                      </Card>
+                      <Card className="single-my-account mb-20" >
+                        <Card.Header className="panel-heading">
+                          <Accordion.Toggle variant="link" eventKey="4">
+                            <h3 className="panel-title">
+                              <span>5 .</span> Modify your address book entries{" "}
+                            </h3>
+                          </Accordion.Toggle>
+                        </Card.Header>
+                        <Accordion.Collapse eventKey="4">
                           <Card.Body>
                             <div className="myaccount-info-wrapper">
                               <div className="account-info-wrapper">

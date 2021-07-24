@@ -26,6 +26,9 @@ const MyNovel = () => {
     const [novelList, setNovelList] = useState([...initNovelList]);
     const [flag, setFlag] = useState(false);
 
+    /**
+     * 화면전환용 Flag
+     */
     const changeFlag = () => {
         setFlag(!flag);
     };
@@ -33,6 +36,9 @@ const MyNovel = () => {
     myAccountService.setListFlag(changeFlag);
 
 
+    /**
+     * 리스트 가져오기
+     */
     useEffect(() => {
         myAccountService.getNovelList(pager).then(value => {
             setNovelList(value.data.response.novelsDTO);
@@ -41,17 +47,30 @@ const MyNovel = () => {
 
     }, [flag,pager.page]);
 
+    /**
+     * 소설의 삭제정보를 삭제로 바꾼다.
+     *
+     * @param novel
+     */
     const removeNovel = (novel) => {
         myAccountService.removeNovel(novel).then(value => {
             setFlag(!flag);
         });
     };
 
+    /**
+     * 페이지 이동.
+     * @param moveNum
+     */
     const movePages = (moveNum) => {
         setPager({...pager, page: pager.page + moveNum})
     };
 
 
+    /**
+     * 랜더링 될 novel 한개.
+     * @type {unknown[]}
+     */
     const novels = novelList.map((novel,idx) =>
         <div key={idx} className="entries-wrapper" style={{marginBottom: "15px"}}>
             <div className="row">
@@ -90,7 +109,7 @@ const MyNovel = () => {
                     {
                         pager.page !== pager.endPage && pager.endPage > 1 ?
                         <button style={{marginLeft: "10px"}} onClick={() => {movePages(1);}}>Next</button> :
-                        <button disabled style={{background: "lightgray"}}>Next</button>
+                        <button  disabled style={{background: "lightgray", marginLeft: "10px"}}>Next</button>
                     }
                 </div>
             </div>

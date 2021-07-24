@@ -36,8 +36,10 @@ export default function NovelRegisterDialog({searchBook}) {
         setOpen(false);
     };
 
+    /**
+     * 소설정보 가져오기.
+     */
     useEffect(() => {
-
         if (open) {
             setErrorFlag(false);
             myAccountService.searchNovelList(searchBook.isbn)
@@ -53,6 +55,9 @@ export default function NovelRegisterDialog({searchBook}) {
     }, [open,searchBook.isbn]);
 
 
+    /**
+     * 소설등록
+     */
     const registerNovel = () => {
         myAccountService.registerNovel({
             isbn: bookInfo.isbn13,

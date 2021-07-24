@@ -25,7 +25,6 @@ const myAccountService = () => {
         listFlagFn();
     };
 
-
     const setClearInputFn = (func) =>{
         clearInputFn = func;
     }
@@ -46,6 +45,12 @@ const myAccountService = () => {
         dialogFn();
     };
 
+    /**
+     * 로그인한 유저의 정보를 가져온다.
+     *
+     * @param email
+     * @returns {Promise<*>}
+     */
     const getMyInfo = async (email) => {
         if(email==="") email = -1;
         const result = await instance({
@@ -55,6 +60,12 @@ const myAccountService = () => {
         return result;
     };
 
+    /**
+     * member의 정보를 수정요청.
+     *
+     * @param editInfo
+     * @returns {Promise<*>}
+     */
     const modifyInfo = async (editInfo) => {
         const result = await instance({
             url: `/member/`,
@@ -64,16 +75,27 @@ const myAccountService = () => {
         return result;
     };
 
+    /**
+     * 알라딘 API를 이용해서 ISBN에 해당하는 작품을 가져온다.
+     *
+     * @param isbnKey
+     * @returns {Promise<any>}
+     */
     const searchNovelList = async (isbnKey)=> {
 
         const result = await axios.get(
             `/ttb/api/ItemLookUp.aspx?ttbkey=${process.env.REACT_APP_ALADIN_TTB_KEY}&ItemId=${isbnKey}&itemIdType=ISBN13&output=js&Version=20131101`
         )
-
         return result.data;
     }
 
 
+    /**
+     * 작품 등록하기.
+     *
+     * @param novels
+     * @returns {Promise<*>}
+     */
     const registerNovel = async (novels) => {
 
         const result = await instance({
@@ -84,7 +106,13 @@ const myAccountService = () => {
 
         return result.data;
     };
-    
+
+    /**
+     * 사용자의 작품리스트 불러오기.
+     *
+     * @param pageInfo
+     * @returns {Promise<*>}
+     */
     const getNovelList = async (pageInfo)=>{
         const result = await instance({
             url: `/member/novels?email=${pageInfo.email}&page=${pageInfo.page}`,
@@ -94,6 +122,12 @@ const myAccountService = () => {
         return result;
     }
 
+    /**
+     * 소설의 삭제.
+     *
+     * @param novel
+     * @returns {Promise<*>}
+     */
     const removeNovel = async (novel) => {
         const result = await instance({
             url: '/member/novels',

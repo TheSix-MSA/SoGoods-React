@@ -151,7 +151,6 @@ const MyAccount = () => {
               content="Compare page of flone react minimalist eCommerce template."
           />
         </MetaTags>
-          My Account
         <LayoutOne headerTop="visible">
           {/* breadcrumb */}
           <div className="myaccount-area pb-80 pt-100">
@@ -313,7 +312,7 @@ const MyAccount = () => {
                               </div>
                               <NovelRegisterDialog searchBook={searchBook}/>
                               <div className="align-items-center justify-content-center entries-wrapper">
-                                <div className="billing-info  entries-edit-delete text-center">
+                                <div className="billing-info  entries-edit-delete">
                                     <label>Register Book</label>
                                     <div style={{display:"flex"}}>
                                       <input type="text" name="isbn" placeholder={"ISBN (13자리)"} onChange={setSearchBook} minLength={13} value={searchBook.isbn}/>
@@ -321,37 +320,7 @@ const MyAccount = () => {
                                     </div>
                                 </div>
                               </div>
-
-                              <div className="entries-wrapper" style={{marginBottom: "15px"}}>
-                                <div className="row">
-                                  <div className="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">
-                                    <div className="entries-edit-delete text-center">
-                                      <img src="https://image.aladin.co.kr/product/61/50/coversum/8970127240_2.jpg"
-                                           alt=""/>
-                                    </div>
-                                  </div>
-                                  <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
-                                    <div className="entries-info text-center">
-                                      <p>John Doe</p>
-                                      <p>Paul Park </p>
-                                      <p>Lorem ipsum dolor set amet</p>
-                                      <p>NYC</p>
-                                      <p>New York</p>
-                                    </div>
-                                  </div>
-                                  <div className="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">
-                                    <div className="entries-edit-delete text-center">
-                                      <button>Delete</button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
                               <MyNovel></MyNovel>
-                              <div className="billing-back-btn">
-                                <div className="billing-btn">
-                                  <button type="submit">Continue</button>
-                                </div>
-                              </div>
                             </div>
                           </Card.Body>
                         </Accordion.Collapse>

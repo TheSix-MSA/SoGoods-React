@@ -11,6 +11,12 @@ import PageList from "./PageList";
 import useInputs from "../../customHooks/useInputs";
 import LinearWithValueLabel from "./LinearProgressWithLabel";
 
+const menuStyle = {
+    fontSize:"25px",
+    margin:"10px",
+    cursor:"pointer",
+}
+
 const initState= {
     listRequestDTO:{},
     dtoList:[],
@@ -69,7 +75,8 @@ const FundingList = ({ location, productTabClass}) => {
     }
 
     // 검색 처리
-    const search = async () => {
+    const search = async (e) => {
+        e.preventDefault();
         const result = await fundingService.getList(1, searchInput.keyword, searchInput.type);
         setData(result.response)
         const url = '/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type;
@@ -97,13 +104,14 @@ const FundingList = ({ location, productTabClass}) => {
                         productTabClass ? productTabClass : ""
                     }`}
                 >
-                    <div>
-                        <h3>진행중인 펀딩</h3>
-                    </div>
                 </Nav>
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-12">
+                            <div style={{textAlign:"center"}}>
+                                <span style={menuStyle}>진행중인 펀딩</span>
+                                <span style={menuStyle}>종료된 펀딩</span>
+                            </div>
                             <div style={{display:"flex"}}>
                                 {/* select option */}
                                 <select name='type' onChange={searchOnChange} style={{width:"100px",border:"1px solid #EEE", borderRadius:"15px 0 0 15px"}}>
@@ -112,22 +120,28 @@ const FundingList = ({ location, productTabClass}) => {
                                     <option value='t'>제목</option>
                                     <option value='c'>내용</option>
                                 </select>
-                                {/* search input*/}
                                 <div className="pro-sidebar-search" style={{display:"flex"}}>
-                                        <input type="text" name="keyword" value={searchInput.keyword} placeholder="Search here..."
-                                               onChange={searchOnChange}
-                                               style={{backgroundColor:"#FFF",border:"1px solid #EEE"}}/>
-                                        <button onClick={search} style={{backgroundColor:"#EEE", borderColor:"#EEE", borderRadius:" 0 15px 15px 0"}}>
+                                    {/* search input*/}
+                                    <input type="text" name="keyword" value={searchInput.keyword} placeholder="Search here..."
+                                           onChange={searchOnChange}
+                                           style={{backgroundColor:"#FFF",border:"1px solid #EEE"}}/>
+                                    {/* search button */}
+                                    <form className={"searchform"} >
+                                        <button className={"searchform__submit"} style={{height:"45px", position:"relative", width:"50px", borderRadius:" 0 15px 15px 0"}}
+                                                onClick={search}>
                                             <i className="pe-7s-search" />
                                         </button>
+                                    </form>
                                 </div>
-                                {/* search button */}
-                                <div style={{marginLeft:"auto"}}>
-                                    <button onClick={()=>toRegister()} style={{height:"45px" ,backgroundColor:"#EEE", borderColor:"#EEE", marginRight:"100px"}}>
-                                        펀딩 등록하기
-                                    </button>
-                                </div>
-                            </div>
+                                    {/* funding register button */}
+                                    <div style={{marginLeft:"auto"}}>
+                                        <form className={"searchform"} >
+                                            <button className={"searchform__submit"} style={{height:"45px", position:"relative", width:"130px", marginRight:"100px"}}
+                                                    onClick={()=>toRegister()}>펀딩 등록하기
+                                            </button>
+                                        </form>
+                                    </div>
+                             </div>
                             {/* funding List */}
                             <div style={{display:"grid", gridTemplateColumns: "1fr 1fr 1fr" ,gridTemplateRows: "1fr 1fr 1fr"}}>
                                 {list}

@@ -32,8 +32,8 @@ LinearProgressWithLabel.propTypes = {
 
 const useStyles = makeStyles({
     root: {
-        width: '75%',
-    },
+        width: '100%',
+    }
 });
 
 export default function LinearWithValueLabel({dto}) {

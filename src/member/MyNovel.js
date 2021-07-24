@@ -1,11 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import myAccountService from "./myAccountService";
 import {useSelector} from "react-redux";
-const initState = {
-    page:1,
-    size:5,
-    email:"",
-}
 
 const initNovelList = {
     novelsDTO: [{
@@ -26,7 +21,6 @@ const initNovelList = {
 };
 const MyNovel = () => {
     const user = useSelector(state => state.login);
-    const [pager, setPage] = useState(initState);
     const [novelList, setNovelList] = useState({...initNovelList});
     const [flag, setFlag] = useState(false);
 
@@ -66,8 +60,12 @@ const MyNovel = () => {
      * @param moveNum
      */
     const movePages = (moveNum) => {
-        // setNovelList({...novelList, pageMaker: {...novelList.pageMaker, page: novelList.pageMaker.page + moveNum}});
-        myAccountService.getNovelList({...novelList.pageMaker,email:user.email,page:novelList.pageMaker.page + moveNum}).then(value => {
+        myAccountService.getNovelList(
+            {...novelList.pageMaker,
+            email: user.email,
+            page:novelList.pageMaker.page + moveNum
+        })
+            .then(value => {
             console.log(value);
             setNovelList(value.data.response);
         });

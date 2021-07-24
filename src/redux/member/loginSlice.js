@@ -13,7 +13,7 @@ const loginSlice = createSlice({
             localStorage.removeItem("userData");
             localStorage.setItem("userData",JSON.stringify(action.payload));
             localStorage.setItem("lastActiveTime",JSON.stringify(new Date()));
-            return {...state,email:action.payload.email, roles: action.payload.roles, name:action.payload.name};
+            return {...state,email:action.payload.email, roles: action.payload.roles, name:action.payload.name, approval:action.payload.approval};
         },
         signout: (state, action) => {
             localStorage.clear();

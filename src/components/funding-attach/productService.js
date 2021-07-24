@@ -24,7 +24,10 @@ const productService = ()=>{
                 des: '',
                 price: ''
             },
-            pictures: []
+            pictures: [
+                //{file: null, main: 0}
+            ],
+            mainIdx: 0,
         }
     }
 

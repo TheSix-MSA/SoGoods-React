@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import React, {Fragment, useState, useEffect} from "react";
-import MetaTags from "react-meta-tags";
 import { connect } from "react-redux";
 import LayoutOne from "../layouts/header/LayoutOne";
 import Nav from "react-bootstrap/Nav";
@@ -10,15 +9,6 @@ import fundingService from "./fundingService";
 import PageList from "./PageList";
 import useInputs from "../../customHooks/useInputs";
 import LinearWithValueLabel from "./LinearProgressWithLabel";
-import {makeStyles} from "@material-ui/core";
-
-const menuStyle = {
-    fontSize: '25px',
-    margin: "10px",
-    cursor: "pointer",
-    color: "#727A8C",
-}
-
 
 const initState= {
     listRequestDTO:{},
@@ -97,17 +87,26 @@ const FundingList = ({ location, productTabClass}) => {
         history.push(url);
     }
 
+    // 펀딩 상태에 따라 리스트 불러오기 (open or close)
+    const setState = async (state) => {
+        setSearchInput({...searchInput, state:state});
+        const result = await fundingService.getList(1, searchInput.keyword, searchInput.type, searchInput.state)
+        setData(result.response);
+        const url = '/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type + '&state=' +state;
+        history.push(url);
+    }
+
+
     // 진행중인 펀딩 리스트 불러오기
     const list = data.dtoList.map((dto, idx)=>
-        <div key={idx} onClick={()=> readTodo(dto.fundingDTO.fno)} style={{cursor:"pointer", margin:"10px"}}>
+        <div key={idx} onClick={()=> readTodo(dto.fundingDTO.fno)} style={{cursor:"pointer", margin:"10px", height:"300px", width:"380px"}}>
             <h5>{dto.fundingDTO.fno}번 게시글</h5>
-            <img alt={"이미지"} src={dto.fundingDTO.imgSrc} height={"200px"}/>
+            <img alt={"이미지"} src={dto.fundingDTO.imgSrc} height={"230px"} width={"350px"} style={{objectFit:"cover"}}/>
             <h5 style={{marginTop:"5px"}}>{dto.fundingDTO.title}</h5>
             <LinearWithValueLabel dto={dto}></LinearWithValueLabel>
             <h5>마감일 : {dto.fundingDTO.dueDate}  |  펀딩금액 : {dto.fundingDTO.totalAmount}원</h5>
         </div>
     )
-
 
     return (
         <Fragment>
@@ -123,12 +122,12 @@ const FundingList = ({ location, productTabClass}) => {
                     <Nav variant="pills" className="login-register-tab-list">
                         <Nav.Item>
                             <Nav.Link eventKey="login">
-                                <h4 onClick={()=>history.push(`/funding/list?page=${page}&keyword=${searchInput.keyword}&type=${searchInput.type}&state=open`)}>진행중인 펀딩</h4>
+                               <h4 onClick={()=>setState("open")}>진행중인 펀딩</h4>
                             </Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link eventKey="register">
-                                <h4 onClick={()=>history.push(`/funding/list?page=${page}&keyword=${searchInput.keyword}&type=${searchInput.type}&state=close`)}>마감된 펀딩</h4>
+                                <h4 onClick={()=>setState("close")}>마감된 펀딩</h4>
                             </Nav.Link>
                         </Nav.Item>
                     </Nav>
@@ -160,18 +159,18 @@ const FundingList = ({ location, productTabClass}) => {
                                     {/* funding register button */}
                                     <div style={{marginLeft:"auto"}}>
                                         <form className={"searchform"} >
-                                            <button className={"searchform__submit"} style={{height:"45px", position:"relative", width:"130px", marginRight:"100px"}}
+                                            <button className={"searchform__submit"} style={{height:"45px", position:"relative", width:"130px", marginRight:"10px"}}
                                                     onClick={()=>toRegister()}>펀딩 등록하기
                                             </button>
                                         </form>
                                     </div>
                              </div>
                             {/* funding List */}
-                            <div style={{display:"grid", gridTemplateColumns: "1fr 1fr 1fr" ,gridTemplateRows: "1fr 1fr 1fr"}}>
+                            <div style={{display:"grid", gridTemplateColumns: "1fr 1fr 1fr" ,gridTemplateRows: "1fr 1fr 1fr", marginTop:"20px"}}>
                                 {list}
                             </div>
                             {/* pagination */}
-                            <div style={{marginBottom:"25px"}}>
+                            <div style={{margin:"25px"}}>
                                 <PageList data={data} movePage={movePage}></PageList>
                             </div>
                         </div>

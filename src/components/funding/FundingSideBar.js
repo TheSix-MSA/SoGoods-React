@@ -3,6 +3,7 @@ import {Link, useHistory} from "react-router-dom";
 import fundingService from "./fundingService";
 import getLeftDate from "../../modules/dateCalc";
 import {useSelector} from "react-redux";
+import ImgCarousel from "./ImgCarousel";
 
 const initFavorite = {
     fno:0,
@@ -95,14 +96,15 @@ const FundingSideBar = (funding) => {
     const productList = cartList.map((p, idx)=>
             <div className="single-sidebar-blog" key={idx}>
                 <div>{idx+1}번 리워드 </div>
+                <ImgCarousel></ImgCarousel>
                  <div className="sidebar-blog-img">
                     <div to={process.env.PUBLIC_URL + "/blog-details-standard"}>
-
                         <img
-                            src={p.imgArr[0].imgSrc}
+                            src={
+                                process.env.PUBLIC_URL + "/assets/img/blog/sidebar-1.jpg"
+                            }
                             alt=""
                         />
-
                     </div>
                     <div className="sidebar-blog-content" >
                         <h4>{p.name}</h4>
@@ -124,7 +126,7 @@ const FundingSideBar = (funding) => {
     const selectReward = (
          <div className="single-sidebar-blog" >
              <div>
-                 <h2>마감까지 {getLeftDate(funding.fundingDTO.dueDate)}일 남음</h2>
+                 <h3>마감까지 {getLeftDate(funding.fundingDTO.dueDate)}일 남음</h3>
                  <br/>
                  <h4>{Math.ceil(funding.fundingDTO.totalAmount/funding.fundingDTO.targetAmount*100)}% 달성</h4>
                  <br/>

@@ -24,10 +24,11 @@ const FundingPost = (funding) => {
             <Fragment>
                 <div className="blog-details-top">
                     <h3 style={{textAlign:"center"}}>{funding.fundingDTO.title}</h3>
-                    <div className="blog-details-img">
+                    <div className="blog-details-img" >
                         <img
                             alt=""
                             src={funding.fundingDTO.imgSrc}
+                            style={{objectFit:"cover"}}
                         />
                     </div>
                     <div className="blog-details-content">

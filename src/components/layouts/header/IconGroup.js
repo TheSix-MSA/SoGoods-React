@@ -135,11 +135,7 @@ const IconGroup = ({
                       author application
                     </Link>
                   </li> :
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/author-application"}>
-                      my account
-                    </Link>
-                  </li>
+                  null
               }
               {login.roles.indexOf("ADMIN") === 1 ?
                   <li>

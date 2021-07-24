@@ -16,6 +16,10 @@ const AuthorApplication = () => {
     const {addToast} = useToasts();
     const info = useSelector(state=>state.login);
 
+    const clickFile = () => {
+        document.getElementById("input-file").click();
+    };
+
     return (
         <Fragment>
             <div>
@@ -29,7 +33,7 @@ const AuthorApplication = () => {
                                     <Tab.Container defaultActiveKey="login">
                                         <Nav variant="pills" className="login-register-tab-list">
                                             <Nav.Item>
-                                                    <h4>Author Application</h4>
+                                                    <h3>Author Application</h3>
                                             </Nav.Item>
                                         </Nav>
                                         <Tab.Content>
@@ -38,10 +42,16 @@ const AuthorApplication = () => {
                                                     <div className="login-register-form">
                                                         <form>
                                                             <input
-                                                                type="email"
-                                                                name="email"
-                                                                placeholder="Username"
+                                                                type="text"
+                                                                name="nickName"
+                                                                placeholder="작가명 (필명)"
                                                                 autoFocus
+                                                            />
+                                                            <input
+                                                                type="text"
+                                                                name="introduce"
+                                                                placeholder="introduce"
+                                                                minLength={8}
                                                             />
                                                             <input
                                                                 type="password"
@@ -49,17 +59,14 @@ const AuthorApplication = () => {
                                                                 placeholder="Password"
                                                                 minLength={8}
                                                             />
+                                                            <div className="button-box" htmlFor="input-file">
+                                                                <button onClick={clickFile}>file</button>
+                                                                <input type="file" style={{display:"none"}} id={"input-file"}/>
+                                                            </div>
                                                             <div className="button-box">
-                                                                <div className="login-toggle-btn">
-                                                                    <input type="checkbox"/>
-                                                                    <label className="ml-10">Remember me</label>
-                                                                    <Link to={process.env.PUBLIC_URL + "/"}>
-                                                                        Forgot Password?
-                                                                    </Link>
-                                                                </div>
                                                                 <div>
                                                                     <button>
-                                                                        <span>Login</span>
+                                                                        <span>Submit</span>
                                                                     </button>
                                                                 </div>
                                                             </div>

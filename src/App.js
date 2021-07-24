@@ -187,7 +187,7 @@ const App = (props) => {
                 />
                 <Route
                   path={process.env.PUBLIC_URL + "/confirmOrder"}
-                  component={withAuth(Confirmation,["GENERAL","AUTHOR"])}
+                  component={Confirmation}
                 />
 
                 <Route

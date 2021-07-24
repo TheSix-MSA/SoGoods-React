@@ -13,6 +13,7 @@ import {useToasts} from "react-toast-notifications";
 import {useHistory} from "react-router-dom";
 import NovelRegisterDialog from "./NovelRegisterDialog";
 import MyNovel from "./MyNovel";
+import MyOrders from "../pages/order/MyOrders";
 
 const initUserInfo = {
   email:"",
@@ -358,11 +359,11 @@ const MyAccount = () => {
                           </Card.Body>
                         </Accordion.Collapse>
                       </Card>
-                      <Card className="single-my-account mb-20">
+                      <Card className="single-my-account mb-20" >
                         <Card.Header className="panel-heading">
                           <Accordion.Toggle variant="link" eventKey="3">
                             <h3 className="panel-title">
-                              <span>4 .</span> Show your funding
+                              <span>4 .</span> orders you've made{" "}
                             </h3>
                           </Accordion.Toggle>
                         </Card.Header>
@@ -370,46 +371,13 @@ const MyAccount = () => {
                           <Card.Body>
                             <div className="myaccount-info-wrapper">
                               <div className="account-info-wrapper">
-                                <h4>Change Password</h4>
-                                <h5>Your Password</h5>
+                                <h4>Your Orders</h4>
                               </div>
-                              <div className="row">
-                                <div className="col-lg-6 col-md-6">
-                                  <div className="billing-info">
-                                    <label>password</label>
-                                    {
-                                      passEditFlag === false ?
-                                          <input type="password" name="password" style={{background: "lightgray"}}
-                                                 disabled={true}/> :
-                                          <input type="password" name="password" onChange={setPassInfo}
-                                                 minLength={8}
-                                          />
-                                    }
-                                  </div>
-                                </div>
-                                <div className="col-lg-6 col-md-6">
-                                  <div className="billing-info">
-                                    <label>password check</label>
-                                    {
-                                      passEditFlag === false ?
-                                          <input type="password" name="passwordCheck" disabled={true}
-                                                 style={{background: "lightgray"}}/> :
-                                          <input type="password" name="passwordCheck" onChange={setPassInfo}
-                                                 minLength={8}
-                                          />
-                                    }
-                                  </div>
+                              <div className="align-items-center justify-content-center entries-wrapper">
+                                <div className="billing-info  entries-edit-delete">
                                 </div>
                               </div>
-                              <div className="billing-back-btn">
-                                <div className="billing-btn">
-                                  {
-                                    passEditFlag === false ?
-                                        <button onClick={passEditInfo}>Edit</button> :
-                                        <button onClick={passApplyInfo}>apply</button>
-                                  }
-                                </div>
-                              </div>
+                              <MyOrders/>
                             </div>
                           </Card.Body>
                         </Accordion.Collapse>

@@ -3,8 +3,11 @@ import myAccountService from "./myAccountService";
 import {useSelector} from "react-redux";
 const initState = {
     page:1,
-    size:10,
-    email:""
+    size:5,
+    email:"",
+    prev:false,
+    next:false,
+    pageList:[]
 }
 const initNovelList =
     [
@@ -22,8 +25,9 @@ const MyNovel = () => {
     const [pager, setPager] = useState({...initState,email:user.email});
     const [novelList, setNovelList] = useState([...initNovelList]);
     const [flag, setFlag] = useState(false);
-
-
+    console.log(pager);
+    console.log("플래그",flag);
+    
     const changeFlag = () => {
         setFlag(!flag);
     };
@@ -35,9 +39,23 @@ const MyNovel = () => {
         myAccountService.getNovelList(pager).then(value => {
             console.log(value.data.response.novelsDTO);
             setNovelList(value.data.response.novelsDTO);
+            setPager({...value.data.response.pageMaker,email:user.email});
         });
 
-    }, [pager.page, flag]);
+        console.log("실행됨")
+    }, [flag,pager.page]);
+
+    const removeNovel = (novel) => {
+        console.log("삭제", novel)
+        myAccountService.removeNovel(novel).then(value => {
+            console.log(value);
+            setFlag(!flag);
+        });
+    };
+
+    const movePages = (moveNum) => {
+        setPager({...pager, page: pager.page + moveNum})
+    };
 
 
     const novels = novelList.map((novel,idx) =>
@@ -45,20 +63,20 @@ const MyNovel = () => {
             <div className="row">
                 <div className="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">
                     <div className="entries-edit-delete text-center">
-                        <img src="https://image.aladin.co.kr/product/61/50/coversum/8970127240_2.jpg"
+                        <img src={novel.image}
                              alt=""/>
                     </div>
                 </div>
                 <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
-                    <div className="entries-info text-center">
-                        <p><strong>ISBN :</strong>{novel.isbn}</p>
-                        <p><strong>Title :</strong>{novel.title}</p>
-                        <p><strong>Publisher :</strong>{novel.publisher}</p>
+                    <div className="entries-info ">
+                        <p style={{fontSize:"12px"}}><strong>ISBN :</strong>{novel.isbn}</p>
+                        <p style={{fontSize:"12px"}}><strong>Title :</strong>{novel.title}</p>
+                        <p style={{fontSize:"12px"}}><strong>Publisher :</strong>{novel.publisher}</p>
                     </div>
                 </div>
                 <div className="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">
                     <div className="entries-edit-delete text-center">
-                        <button >Delete</button>
+                        <button onClick={()=>{removeNovel(novel)}}>Delete</button>
                     </div>
                 </div>
             </div>
@@ -68,6 +86,16 @@ const MyNovel = () => {
     return (
        <>
            {novels}
+           <div className="billing-back-btn">
+               <div className="billing-btn">
+                   {pager.page>1?<button onClick={()=> {
+                       movePages(-1);
+                   }}>Prev</button>:<button disabled style={{background:"lightgray"}}>Prev</button>}
+                   {pager.next<pager.pageList.length?<button style={{marginLeft:"10px"}}  onClick={()=> {
+                       movePages(1);
+                   }}>Next</button>:<button disabled style={{background:"lightgray"}}>Next</button>}
+               </div>
+           </div>
        </>
     );
 };

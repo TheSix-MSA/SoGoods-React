@@ -2,7 +2,6 @@ import React from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import Slide from '@material-ui/core/Slide';
-import Postcode from "./Postcode";
 import codeService from "./codeService";
 import DialogContentText from "@material-ui/core/DialogContentText";
 

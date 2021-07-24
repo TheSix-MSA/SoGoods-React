@@ -31,7 +31,6 @@ const myAccountService = () => {
     }
 
     const clearInput = ()=>{
-        console.log(123, clearInputFn);
         clearInputFn();
     }
 
@@ -89,18 +88,28 @@ const myAccountService = () => {
     };
     
     const getNovelList = async (pageInfo)=>{
+        console.log("서비스에서받은 페이지인포", pageInfo);
         const result = await instance({
             url: `/member/novels?email=${pageInfo.email}&page=${pageInfo.page}`,
             method: 'GET'
         });
-        console.log("서비스에서 찍히는 리스트",result);
 
         return result;
     }
 
+    const removeNovel = async (novel) => {
+        const result = await instance({
+            url: '/member/novels',
+            method: 'DELETE',
+            data: novel
+        });
+
+        return result;
+    };
+
 
     return {getMyInfo, modifyInfo, searchNovelList, popUpDialogFn, setDialogFn, setCloseDialogFn, registerNovel,clearInput,
-        setClearInputFn, getNovelList, setListFlag, changeFlag}
+        setClearInputFn, getNovelList, setListFlag, changeFlag, removeNovel}
 };
 
 export default myAccountService();

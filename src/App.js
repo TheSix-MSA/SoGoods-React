@@ -173,7 +173,8 @@ const App = (props) => {
 
                 <Route
                   path={process.env.PUBLIC_URL + "/my-account"}
-                  component={withAuth(MyAccount,"GENERAL")}
+                  // component={withAuth(MyAccount,"GENERAL")}
+                  component={MyAccount}
                 />
                 <Route
                   path={process.env.PUBLIC_URL + "/login-register"}

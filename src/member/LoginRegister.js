@@ -13,7 +13,6 @@ import CodeDialogSlide from "./CodeDialog";
 import codeService from "./codeService";
 import FormCheckDialog from "./FormCheckDialog";
 import {useToasts} from "react-toast-notifications";
-import axios from "axios";
 
 const initStateLogin = {
     email: "",
@@ -67,8 +66,7 @@ const LoginRegister = ({ location }) => {
         addToast(
             "✨😘어서오세요 Sogoods입니다! 😘😘😘✨", {appearance: 'info', autoDismiss: true},
         );
-        history.push("/");
-
+        history.goBack();
     };
 
     /**

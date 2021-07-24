@@ -1,12 +1,10 @@
 import {useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
-import myAccountService from "../../member/myAccountService";
 import orderServices from "../../service/orderServices";
 
 const initState = {
     page:1,
     size:5,
-    email:"",
     prev:false,
     next:false,
     pageList:[]
@@ -41,46 +39,29 @@ const MyOrders = () => {
     const [prodsList, setProdList] = useState([...initDto]);
     const [flag, setFlag] = useState(false);
 
-    const changeFlag = () => {
-        setFlag(!flag);
-    };
-
-    myAccountService.setListFlag(changeFlag);
-
     useEffect(() => {
-        // myAccountService.getNovelList(pager).then(value => {
-        //     setNovelList(value.data.response.novelsDTO);
-        //     setPager({...value.data.response.pageMaker,email:user.email});
-        // });
-
         orderServices.ordersUserMade({page: pager.page, email: user.email, sortingCond: ""}).then(r => {
-            // setProdList(r.data.response.resDto);
-            console.log(r.data.response.resDto);
+            setProdList(r.data.response.resDto);
+            console.log(r)
+        })
+    }, [flag, pager.page]);
+
+    const cancelOrder = async (prod) => {
+        console.log(process.env.REACT_APP_KAKAO_PAY_CID, prod)
+
+        await orderServices.cancelKakaoPay({
+            tid: prod.dto.tid,
+            amount: prod.totalPrices,
+            taxAmount: 0
         })
 
-    }, []);
-
-    const cancelOrder = (prod) => {
-        // myAccountService.removeNovel(novel).then(value => {
-        //     setFlag(!flag);
-        // });
-
-        const cancelParams = {
-            cid: process.env.REACT_APP_KAKAO_PAY_CID,
-            tid: prod.dto.tid,
-            cancel_amount: prod.totalPrices,
-            cancel_tax_free_amount: 0
-        }
-
-        // orderServices.cancelKakaoPay(cancelParams).then(r => console.log("res: ", r))
-        orderServices.cancelOrdersUserMade(prod.dto.ono).then(r => console.log("server res: "+r))
-
+        // orderServices.cancelOrdersUserMade(prod.dto.ono).then(r =>
+        //     setFlag(!flag))
     };
 
     const movePages = (moveNum) => {
         setPager({...pager, page: pager.page + moveNum})
     };
-
 
     const prods = prodsList.map((prod,idx) =>
         <div key={idx} className="entries-wrapper" style={{marginBottom: "15px"}}>

@@ -36,12 +36,11 @@ const orderServices = () => {
     }
 
     const cancelKakaoPay = async (inputs) => {
-        console.log(inputs)
         const params = new URLSearchParams()
         params.append('cid', process.env.REACT_APP_KAKAO_PAY_CID)
         params.append('tid', inputs.tid)
-        params.append('cancel_tax_free_amount', inputs.cancel_tax_free_amount)
-        params.append('cancel_amount', inputs.cancel_amount)
+        params.append('cancel_tax_free_amount', inputs.taxAmount)
+        params.append('cancel_amount', inputs.amount)
         const data = await axios.post("/v1/payment/cancel", params, {
             headers: {
                 Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_ADMIN_KEY}`,
@@ -69,7 +68,6 @@ const orderServices = () => {
     }
 
     const cancelOrdersUserMade = async (ono) => {
-        console.log(ono)
         const res = await instance({
             url: "/funding/order/cancel/"+ono,
             method: "put"
@@ -77,7 +75,18 @@ const orderServices = () => {
         return res;
     }
 
-    return {callKakaoPay, orderConfirmedSave, kakaoPayApprovePayment, ordersUserMade, cancelKakaoPay, cancelOrdersUserMade}
+    let flag;
+
+    const setFlag = (func) => {
+        flag = func;
+    }
+
+    const getFlag = () => {
+        flag()
+    }
+
+    return {callKakaoPay, orderConfirmedSave, kakaoPayApprovePayment,
+        ordersUserMade, cancelKakaoPay, cancelOrdersUserMade, setFlag, getFlag}
 }
 
 export default orderServices();

@@ -7,6 +7,7 @@ import FooterOne from "../../components/layouts/footer/FooterOne";
 
 import routes from "./routes.js";
 import AdminNavbar from "../components/navbars/AdminNavbar";
+import HeaderOne from "../../components/layouts/header/HeaderOne";
 
 
 function Admin(){
@@ -48,7 +49,7 @@ function Admin(){
       <div className="wrapper">
         <Sidebar routes={routes}  />
         <div className="main-panel" ref={mainPanel}>
-          <AdminNavbar />
+          <HeaderOne />
           <div className="content">
             <Switch>{getRoutes(routes)}</Switch>
           </div>

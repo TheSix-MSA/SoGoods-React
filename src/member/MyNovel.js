@@ -5,25 +5,29 @@ const initState = {
     page:1,
     size:5,
     email:"",
-    prev:false,
-    next:false,
-    pageList:[]
 }
-const initNovelList =
-    [
-        {
-            isbn:"",
-            title:"",
-            image:"",
-            publisher:"",
-            email:"",
-            nno:""
-        }
-    ]
+
+const initNovelList = {
+    novelsDTO: [{
+        isbn: "",
+        title: "",
+        image: "",
+        publisher: "",
+        email: "",
+        nno: ""
+    }],
+    pageMaker: {
+        endPage: 1,
+        page: 1,
+        pageList: [],
+        size: 5,
+        startPage: 1
+    }
+};
 const MyNovel = () => {
     const user = useSelector(state => state.login);
-    const [pager, setPager] = useState({...initState,email:user.email});
-    const [novelList, setNovelList] = useState([...initNovelList]);
+    const [pager, setPage] = useState(initState);
+    const [novelList, setNovelList] = useState({...initNovelList});
     const [flag, setFlag] = useState(false);
 
     /**
@@ -40,12 +44,11 @@ const MyNovel = () => {
      * 리스트 가져오기
      */
     useEffect(() => {
-        myAccountService.getNovelList(pager).then(value => {
-            setNovelList(value.data.response.novelsDTO);
-            setPager({...value.data.response.pageMaker,email:user.email});
+        myAccountService.getNovelList({...novelList.pageMaker, email: user.email,}).then(value => {
+            console.log("useEffect",value);
+            setNovelList(value.data.response);
         });
-
-    }, [flag,pager.page]);
+    }, [flag]);
 
     /**
      * 소설의 삭제정보를 삭제로 바꾼다.
@@ -63,7 +66,11 @@ const MyNovel = () => {
      * @param moveNum
      */
     const movePages = (moveNum) => {
-        setPager({...pager, page: pager.page + moveNum})
+        // setNovelList({...novelList, pageMaker: {...novelList.pageMaker, page: novelList.pageMaker.page + moveNum}});
+        myAccountService.getNovelList({...novelList.pageMaker,email:user.email,page:novelList.pageMaker.page + moveNum}).then(value => {
+            console.log(value);
+            setNovelList(value.data.response);
+        });
     };
 
 
@@ -71,7 +78,7 @@ const MyNovel = () => {
      * 랜더링 될 novel 한개.
      * @type {unknown[]}
      */
-    const novels = novelList.map((novel,idx) =>
+    const novels = novelList.novelsDTO.map((novel,idx) =>
         <div key={idx} className="entries-wrapper" style={{marginBottom: "15px"}}>
             <div className="row">
                 <div className="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">
@@ -101,13 +108,14 @@ const MyNovel = () => {
             {novels}
             <div className="billing-back-btn">
                 <div className="billing-btn">
-                    {pager.page > 1 ?
+                    {
+                        novelList.pageMaker.page > 1 ?
                         <button onClick={() => {movePages(-1);}}>Prev</button>
                         : <button disabled style={{background: "lightgray"}}>Prev</button>
                     }
 
                     {
-                        pager.page !== pager.endPage && pager.endPage > 1 ?
+                        novelList.pageMaker.page !== novelList.pageMaker.endPage && novelList.pageMaker.endPage > 1 ?
                         <button style={{marginLeft: "10px"}} onClick={() => {movePages(1);}}>Next</button> :
                         <button  disabled style={{background: "lightgray", marginLeft: "10px"}}>Next</button>
                     }

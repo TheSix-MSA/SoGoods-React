@@ -114,6 +114,7 @@ const myAccountService = () => {
      * @returns {Promise<*>}
      */
     const getNovelList = async (pageInfo)=>{
+        console.log(pageInfo);
         const result = await instance({
             url: `/member/novels?email=${pageInfo.email}&page=${pageInfo.page}`,
             method: 'GET'
@@ -138,9 +139,22 @@ const myAccountService = () => {
         return result;
     };
 
+    const registerIdentification = async (file) =>{
+
+        const result = await instance({
+            url:"/attach/upload",
+            method:"POST",
+            headers:{
+                "Content-Type": "multipart/form-data"
+            },
+            data:file
+        });
+
+        return result;
+    }
 
     return {getMyInfo, modifyInfo, searchNovelList, popUpDialogFn, setDialogFn, setCloseDialogFn, registerNovel,clearInput,
-        setClearInputFn, getNovelList, setListFlag, changeFlag, removeNovel}
+        setClearInputFn, getNovelList, setListFlag, changeFlag, removeNovel, registerIdentification}
 };
 
 export default myAccountService();

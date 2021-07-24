@@ -78,6 +78,22 @@ const IconGroup = ({
                     </Link>
                   </li>
               )}
+              {login.roles.indexOf("AUTHOR") !== 1 && login.email !== "" ?
+                  <li>
+                    <Link to={process.env.PUBLIC_URL + "/author-application"}>
+                      author application
+                    </Link>
+                  </li> :
+                  null
+              }
+              {login.roles.indexOf("ADMIN") === 1 ?
+                  <li>
+                    <Link to={process.env.PUBLIC_URL + "/admin"}>
+                      admin
+                    </Link>
+                  </li> :
+                  null
+              }
             </ul>
           </div>
         </div>

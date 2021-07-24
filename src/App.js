@@ -156,12 +156,12 @@ const App = (props) => {
                 <Route
                     exact
                     path={process.env.PUBLIC_URL + "/:boardType/boardRegister"}
-                    component={BoardRegister}
+                    component={withAuth(BoardRegister,["GENERAL","AUTHOR"])}
                 /> {/* 재연 - Board 작성 컴포넌트로 사용 */}
 
                 <Route
                     path={`/board/modify/:boardType/:bno`}
-                    component={BoardModify}
+                    component={withAuth(BoardModify,["GENERAL","AUTHOR"])}
                 /> {/* 재연 - Board 수정 컴포넌트로 사용 */}
 
                 <Route
@@ -183,16 +183,16 @@ const App = (props) => {
 
                 <Route
                   path={process.env.PUBLIC_URL + "/wishlist"}
-                  component={Wishlist}
+                  component={withAuth(Wishlist,["GENERAL","AUTHOR"])}
                 />
                 <Route
                   path={process.env.PUBLIC_URL + "/confirmOrder"}
-                  component={Confirmation}
+                  component={withAuth(Confirmation,["GENERAL","AUTHOR"])}
                 />
 
                 <Route
                   path={process.env.PUBLIC_URL + "/checkout"}
-                  component={Checkout}
+                  component={withAuth(Checkout,["GENERAL","AUTHOR"])}
                 />
 
                 <Route
@@ -205,7 +205,7 @@ const App = (props) => {
                 />
                 <Route
                     path={process.env.PUBLIC_URL + "/author-application"}
-                    component={AuthorApplication}
+                    component={withAuth(AuthorApplication["GENERAL"])}
                 />
 
 

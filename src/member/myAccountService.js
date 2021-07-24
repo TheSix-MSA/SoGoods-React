@@ -65,8 +65,6 @@ const myAccountService = () => {
     };
 
     const searchNovelList = async (isbnKey)=> {
-        console.log(isbnKey);
-        console.log(`${process.env.REACT_APP_ALADIN_TTB_KEY}`)
 
         const result = await axios.get(
             `/ttb/api/ItemLookUp.aspx?ttbkey=${process.env.REACT_APP_ALADIN_TTB_KEY}&ItemId=${isbnKey}&itemIdType=ISBN13&output=js&Version=20131101`
@@ -88,7 +86,6 @@ const myAccountService = () => {
     };
     
     const getNovelList = async (pageInfo)=>{
-        console.log("서비스에서받은 페이지인포", pageInfo);
         const result = await instance({
             url: `/member/novels?email=${pageInfo.email}&page=${pageInfo.page}`,
             method: 'GET'

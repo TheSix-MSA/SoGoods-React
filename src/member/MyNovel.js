@@ -25,9 +25,7 @@ const MyNovel = () => {
     const [pager, setPager] = useState({...initState,email:user.email});
     const [novelList, setNovelList] = useState([...initNovelList]);
     const [flag, setFlag] = useState(false);
-    console.log(pager);
-    console.log("플래그",flag);
-    
+
     const changeFlag = () => {
         setFlag(!flag);
     };
@@ -37,18 +35,14 @@ const MyNovel = () => {
 
     useEffect(() => {
         myAccountService.getNovelList(pager).then(value => {
-            console.log(value.data.response.novelsDTO);
             setNovelList(value.data.response.novelsDTO);
             setPager({...value.data.response.pageMaker,email:user.email});
         });
 
-        console.log("실행됨")
     }, [flag,pager.page]);
 
     const removeNovel = (novel) => {
-        console.log("삭제", novel)
         myAccountService.removeNovel(novel).then(value => {
-            console.log(value);
             setFlag(!flag);
         });
     };
@@ -84,19 +78,23 @@ const MyNovel = () => {
 
 
     return (
-       <>
-           {novels}
-           <div className="billing-back-btn">
-               <div className="billing-btn">
-                   {pager.page>1?<button onClick={()=> {
-                       movePages(-1);
-                   }}>Prev</button>:<button disabled style={{background:"lightgray"}}>Prev</button>}
-                   {pager.next<pager.pageList.length?<button style={{marginLeft:"10px"}}  onClick={()=> {
-                       movePages(1);
-                   }}>Next</button>:<button disabled style={{background:"lightgray"}}>Next</button>}
-               </div>
-           </div>
-       </>
+        <>
+            {novels}
+            <div className="billing-back-btn">
+                <div className="billing-btn">
+                    {pager.page > 1 ?
+                        <button onClick={() => {movePages(-1);}}>Prev</button>
+                        : <button disabled style={{background: "lightgray"}}>Prev</button>
+                    }
+
+                    {
+                        pager.page !== pager.endPage && pager.endPage > 1 ?
+                        <button style={{marginLeft: "10px"}} onClick={() => {movePages(1);}}>Next</button> :
+                        <button disabled style={{background: "lightgray"}}>Next</button>
+                    }
+                </div>
+            </div>
+        </>
     );
 };
 

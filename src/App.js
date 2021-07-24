@@ -200,7 +200,7 @@ const App = (props) => {
                 />
                 <Route
                     path={process.env.PUBLIC_URL + "/admin"}
-                    component={Admin}
+                    component={withAuth(Admin,["ADMIN"])}
                 />
 
 

@@ -62,7 +62,7 @@ const IconGroup = ({
                   </>) :
                   (<>
                     <li>
-                      <Link onClick={() => logout()}>Logout</Link>
+                      <Link to={""} onClick={() => logout()}>Logout</Link>
                     </li>
                     <li>
                       <Link to={process.env.PUBLIC_URL + "/my-account"}>
@@ -95,7 +95,7 @@ const IconGroup = ({
                     <Link to={process.env.PUBLIC_URL + "/login-register"}>Login</Link>
                   </li> :
                   <li>
-                    <Link onClick={() => logout()}>Logout</Link>
+                    <Link to={""} onClick={() => logout()}>Logout</Link>
                   </li>
               }
               {login.email === "" ?

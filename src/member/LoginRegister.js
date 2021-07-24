@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, {Fragment, useState} from "react";
-import { Link } from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import LayoutOne from "../components/layouts/header/LayoutOne";
@@ -39,8 +39,8 @@ const initStateVerify = {
 
 const warningName = {type:""};
 
-const LoginRegister = ({ location }) => {
-
+const LoginRegister = () => {
+    const location = useLocation();
     const history = useHistory();
     const {addToast} = useToasts();
     const info = useSelector(state=>state.login);
@@ -66,8 +66,7 @@ const LoginRegister = ({ location }) => {
         addToast(
             "✨😘어서오세요 Sogoods입니다! 😘😘😘✨", {appearance: 'info', autoDismiss: true},
         );
-        history.goBack();
-
+        history.push(location.state?location.state.from:"/");
     };
 
     /**

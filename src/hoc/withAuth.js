@@ -1,7 +1,7 @@
 import React from 'react'
 import {useSelector} from "react-redux";
 import {useEffect} from "react";
-import {useHistory} from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
 import {useToasts} from "react-toast-notifications";
 
 /**
@@ -14,16 +14,18 @@ const withAuth = (WrappedComponents,accept=[]) => {
     return (props) => {
         const {roles} = useSelector(state=>state.login);
         const history = useHistory();
+        const {pathname} = useLocation();
         const {addToast} = useToasts()
         useEffect(() => {
-            console.log(accept)
-            console.log(roles)
             if(accept.includes("ANONYMOUS") && roles.length>0) {
-                console.log(123123, history);
-                history.goBack();
-            }else if(!accept.some((e)=>roles.includes(e))) {
-                console.log("hihi")
-                history.push("/login-register")
+                return history.push("/");
+            }else if(accept.includes("ADMIN") && !roles.includes("ADMIN")) {
+                addToast(
+                    "잘못 된 접근입니다", {appearance: 'error', autoDismiss: true},
+                );
+                return history.push("/")
+            }else if(!accept.includes("ANONYMOUS")&&!accept.some((e)=>roles.includes(e))) {
+                return history.push("/login-register",{from:pathname})
             }
         }, []);
         return <WrappedComponents {...props}/>;

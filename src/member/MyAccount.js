@@ -43,13 +43,16 @@ const MyAccount = () => {
   const [editFlag, setEditFlag] = useState(false);
   const [passEditFlag, setPassEditFlag] = useState(false);
   const {addToast} = useToasts();
-  const history = useHistory();
 
   useEffect(() => {
+    let isSubscribed = true;
     myAccountService.getMyInfo(userSelector.email)
         .then(value => {
-          setInfo({...value.data.response});
+          if(isSubscribed) setInfo({...value.data.response});
         });
+    return () => {
+      isSubscribed = false
+    }
   },[userSelector]);
 
   /**

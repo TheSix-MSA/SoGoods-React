@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, {Fragment, useState} from "react";
-import { Link } from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import LayoutOne from "../components/layouts/header/LayoutOne";
@@ -13,7 +13,6 @@ import CodeDialogSlide from "./CodeDialog";
 import codeService from "./codeService";
 import FormCheckDialog from "./FormCheckDialog";
 import {useToasts} from "react-toast-notifications";
-import axios from "axios";
 
 const initStateLogin = {
     email: "",
@@ -40,8 +39,8 @@ const initStateVerify = {
 
 const warningName = {type:""};
 
-const LoginRegister = ({ location }) => {
-
+const LoginRegister = () => {
+    const location = useLocation();
     const history = useHistory();
     const {addToast} = useToasts();
     const info = useSelector(state=>state.login);
@@ -67,8 +66,7 @@ const LoginRegister = ({ location }) => {
         addToast(
             "✨😘어서오세요 Sogoods입니다! 😘😘😘✨", {appearance: 'info', autoDismiss: true},
         );
-        history.push("/");
-
+        history.push(location.state?location.state.from:"/");
     };
 
     /**
@@ -101,7 +99,6 @@ const LoginRegister = ({ location }) => {
 
         for(let formObj in signupForm) {
             if (signupForm[formObj] === "") {
-                console.log(formObj);
                 setWarningType({...warningType,type:formObj});
                 codeService.popUpWarningModal();
                 return;
@@ -148,7 +145,6 @@ const LoginRegister = ({ location }) => {
         if(verifyForm.verifyCode === signupForm.code){
             verifyForm['verify'] = true;
             verifyForm['verifyBtn'] = "2";
-            console.log(verifyForm);
             setVerifyForm({...verifyForm});
         }
     }
@@ -183,9 +179,6 @@ const LoginRegister = ({ location }) => {
 
     return (
         <Fragment>
-            <div>
-                <button></button>
-            </div>
             <LayoutOne headerTop="visible">
                 <div className="login-register-area pt-100 pb-100">
                     <div className="container">

@@ -50,45 +50,34 @@ const IconGroup = ({
           <div className="account-dropdown">
             <ul>
               {login.email === "" ?
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/login-register"}>Login</Link>
-                  </li> :
-                  <li>
-                    <Link onClick={() => logout()}>Logout</Link>
-                  </li>
-              }
-              {login.email === "" ?
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/login-register"}>
-                      Register
-                    </Link>
-                  </li> :
-                  null
-              }
-              {login.email === "" ?
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/login-register"}>
+                  (<>
+                    <li>
+                      <Link to={process.env.PUBLIC_URL + "/login-register"}>Login</Link>
+                    </li>
+                    <li>
+                      <Link to={process.env.PUBLIC_URL + "/login-register"}>
+                        Register
+                      </Link>
+                    </li>
+                  </>) :
+                  (<>
+                    <li>
+                      <Link to={""} onClick={() => logout()}>Logout</Link>
+                    </li>
+                    <li>
+                      <Link to={process.env.PUBLIC_URL + "/my-account"}>
                       my account
-                    </Link>
-                  </li> :
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/my-account"}>
-                      my account
-                    </Link>
-                  </li>
+                      </Link>
+                    </li>
+                  </>)
               }
-              {login.email === "" ?
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/admin"}>
-                      admin
-                    </Link>
-                  </li> :
+              {login.email !== "" && (
                   <li>
                     <Link to={process.env.PUBLIC_URL + "/admin"}>
                       admin
                     </Link>
                   </li>
-              }
+              )}
             </ul>
           </div>
         </div>
@@ -106,7 +95,7 @@ const IconGroup = ({
                     <Link to={process.env.PUBLIC_URL + "/login-register"}>Login</Link>
                   </li> :
                   <li>
-                    <Link onClick={() => logout()}>Logout</Link>
+                    <Link to={""} onClick={() => logout()}>Logout</Link>
                   </li>
               }
               {login.email === "" ?
@@ -129,17 +118,21 @@ const IconGroup = ({
                     </Link>
                   </li>
               }
-              {login.email === "" ?
+              {login.roles.indexOf("AUTHOR") !== 1 && login.email !== "" ?
+                  <li>
+                    <Link to={process.env.PUBLIC_URL + "/author-application"}>
+                      author application
+                    </Link>
+                  </li> :
+                  null
+              }
+              {login.roles.indexOf("ADMIN") === 1 ?
                   <li>
                     <Link to={process.env.PUBLIC_URL + "/admin"}>
                       admin
                     </Link>
                   </li> :
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/admin"}>
-                      admin
-                    </Link>
-                  </li>
+                  null
               }
             </ul>
           </div>

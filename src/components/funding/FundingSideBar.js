@@ -97,12 +97,12 @@ const FundingSideBar = (funding) => {
                 <div>{idx+1}번 리워드 </div>
                  <div className="sidebar-blog-img">
                     <div to={process.env.PUBLIC_URL + "/blog-details-standard"}>
+
                         <img
-                            src={
-                                process.env.PUBLIC_URL + "/assets/img/blog/sidebar-1.jpg"
-                            }
+                            src={p.imgArr[0].imgSrc}
                             alt=""
                         />
+
                     </div>
                     <div className="sidebar-blog-content" >
                         <h4>{p.name}</h4>

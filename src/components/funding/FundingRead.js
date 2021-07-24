@@ -28,19 +28,19 @@ const FundingRead = () => {
                     .then(res2=>{
                         let src = res2.data.response[0].imgSrc
                         res1.response.fundingDTO.imgSrc = src
-                        setFunding({...res1.response})
-                })
+                        //setFunding({...res1.response})
 
-                fundingService.getA3srcList('PRODUCT', pnoList, [0,1])
-                    .then(res1=>{
-                        console.log('================PRODUCT==========')
+                        fundingService.getA3srcList('PRODUCT', pnoList, [0,1])
+                            .then(res3=>{
 
-                        // let src = res2.data.response[0].imgSrc
-                        // res1.response.fundingDTO.imgSrc = src
-                        // setFunding({...res1.response})
+                                for(let i=0; i<res3.data.response.length; i++){
+                                  //console.log(res1.response.productDTOs[i])
+                                    res1.response.productDTOs[i].imgArr = res3.data.response[i];
+                                }
+                                //console.log(res1.response)
+                                setFunding({...res1.response})
+                            })
                     })
-
-
             })
 
     },[])

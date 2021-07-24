@@ -39,8 +39,6 @@ const FundingRead = () => {
                         // res1.response.fundingDTO.imgSrc = src
                         // setFunding({...res1.response})
                     })
-
-
             })
 
     },[])

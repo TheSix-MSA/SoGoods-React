@@ -53,7 +53,10 @@ const MyOrders = () => {
         //     setPager({...value.data.response.pageMaker,email:user.email});
         // });
 
-        // orderServices.ordersUserMade({page: pager.page, email: user.email, sortingCond: ""}).then()
+        orderServices.ordersUserMade({page: pager.page, email: user.email, sortingCond: ""}).then(r => {
+            // setProdList(r.data.response.resDto);
+            console.log(r.data.response.resDto);
+        })
 
     }, []);
 

@@ -9,6 +9,7 @@ import memberService from "../sevice/memberService";
 import MemberPagination from "../components/member/MemberPagination";
 import {useHistory, useLocation} from "react-router-dom";
 import * as queryString from "querystring";
+import Identification from "../modal/Identification";
 
 const initState = {
     memberList: [
@@ -30,7 +31,8 @@ const initState = {
             loginDate: "",
             roleSet: [],
             identificationUrl: "",
-            introduce: ""
+            introduce: "",
+            nickName: ""
         },],
     pageMaker: {
         page: 1,
@@ -59,9 +61,10 @@ const MemberApprovalTable = () => {
     const [members, setMembers] = useState(initState);
     const [flag, setFlag] = useState(false);
 
+            console.log("23123124124124",members)
     useEffect(() => {
         memberService.getMemberApprovalList(page).then(res => {
-            setMembers(res.data.response);
+           setMembers(res.data.response);
         });
     }, [page, flag])
 
@@ -88,12 +91,13 @@ const MemberApprovalTable = () => {
             <td>{member.phone}</td>
             <td>{member.address} {member.detailAddress}</td>
             <td>{member.gender}</td>
-            <td><img src={member.identificationUrl}/></td>
-            <td> {member.introduce}</td>
+            <td><Identification member={member}/></td>
             <td onClick={() => changeRole(member)} style={{textAlign: "center"}}>
                 <span style={{cursor: "pointer"}}>{member.approval ? "✔" : ""}</span>
             </td>
-            <td style={{textAlign: "center"}}>{member.approval ? "❌" : ""}</td>
+            <td onClick={()=> memberService.reject(member.email, members.pageMaker.page)} style={{textAlign: "center"}}>
+                <span style={{cursor: "pointer"}}>{member.approval ? "❌" : ""}</span>
+            </td>
         </tr>
     })
 
@@ -118,8 +122,7 @@ const MemberApprovalTable = () => {
                                 <th className="border-0">전화번호</th>
                                 <th className="border-0">주소</th>
                                 <th className="border-0">성별</th>
-                                <th className="border-0">check url</th>
-                                <th className="border-0">check introduce</th>
+                                <th className="border-0">작가 정보</th>
                                 <th className="border-0">작가 승인 처리</th>
                                 <th className="border-0">작가 반려 처리</th>
                             </tr>

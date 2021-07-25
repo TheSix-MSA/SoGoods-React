@@ -39,7 +39,7 @@ const initState = {
 }
 const param = {
     page: 1,
-    type: '',
+    type: 'tc',
     keyword: ''
 }
 const NoticeTable = () => {
@@ -120,7 +120,7 @@ const NoticeTable = () => {
                 <span style={{cursor: "pointer"}}>{notice.removed ? "삭제됨" : "정상"}</span>
             </td>
             <td onClick={() => changePrivate(notice)}>
-                <span style={{cursor: "pointer"}}>{notice.private ? "공지중" : "공지 X"}</span>
+                <span style={{cursor: "pointer"}}>{notice.private ? "공지 X" : "공지중"}</span>
             </td>
         </tr>
 
@@ -136,10 +136,10 @@ const NoticeTable = () => {
                         <div className="pro-sidebar-search mb-55 mt-25">
                             <form className="pro-sidebar-search-form" action="#">
                                 <select name="type" style={{width: "10%"}} onChange={searchOnChange}>
+                                    <option value='tc'>제목+내용</option>
                                     <option value='t'>제목</option>
                                     <option value='w'>작성자</option>
                                     <option value='c'>내용</option>
-                                    <option value='tc'>제목+내용</option>
                                 </select>
                                 <input value={searchInput.keyword} onChange={searchOnChange} type="text"
                                        name="keyword" placeholder="검색"/>

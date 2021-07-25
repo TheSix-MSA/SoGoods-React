@@ -213,8 +213,8 @@ function Dashboard() {
                 >
                   <ChartistGraph
                     data={{
-                      labels: ["40%", "20%", "40%"],
-                      series: [40, 20, 40],
+                      labels: ["50%", "10%", "40%"],
+                      series: [50, 10, 40],
                     }}
                     type="Pie"
                   />

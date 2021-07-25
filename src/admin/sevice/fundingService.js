@@ -3,7 +3,6 @@ import instance from "../../modules/axiosConfig";
 
 const fundingService = () => {
     let movePage;
-    let render;
 
     // 펀딩 전체 리스트
     const getFundingList = async (page,keyword,type) => {
@@ -31,8 +30,14 @@ const fundingService = () => {
         return res;
     }
 
-    const setRender = (func) => {
-        render = func;
+    const changeRemoved = async (fno,page) => {
+        console.log("changeRemoved started")
+        const result = await instance({
+            url: `/funding/${fno}`,
+            method: 'delete',
+        })
+        movePage(page)
+        return result.data
     }
 
     const setMovePage = (func) => {
@@ -40,7 +45,7 @@ const fundingService = () => {
     }
 
 
-    return {getFundingList, setRender, setAuthorized, requestFundingList, setMovePage}
+    return {getFundingList, setAuthorized, requestFundingList, setMovePage, changeRemoved}
 
 }
 export default fundingService();

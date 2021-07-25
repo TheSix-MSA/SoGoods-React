@@ -77,7 +77,6 @@ const FundingTable = () => {
 
     const movePage = (num) => {
         history.push('/admin/funding?page='+num+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type)
-        // funding.pageMaker.page = num;
         setFunding({...funding});
         setFlag(!flag)
     }
@@ -93,10 +92,6 @@ const FundingTable = () => {
     const toFunding = (fno) => {
         history.push("/funding/read/" + fno)
     }
-    const setAuthorized = (fund) => {
-        fundingService.setAuthorized(fund.fundingDTO.fno, funding.pageMaker.page)
-            .then();
-    }
 
     const list = funding.dtoList.map(fund => {
         return <tr key={fund.fundingDTO.fno}>
@@ -106,12 +101,13 @@ const FundingTable = () => {
             <td>{fund.fundingDTO.content}</td>
             <td>{fund.fundingDTO.targetAmount}</td>
             <td>{fund.fundingDTO.totalAmount}</td>
-            <td>{(fund.fundingDTO.totalAmount / fund.fundingDTO.targetAmount * 100).toFixed(2)}%달성</td>
+            {(fund.fundingDTO.totalAmount / fund.fundingDTO.targetAmount * 100)>0?
+                <td>{(fund.fundingDTO.totalAmount / fund.fundingDTO.targetAmount * 100).toFixed(2)}%달성</td>:<td>0</td>}
             <td>{fund.fundingDTO.dueDate}</td>
             <td>{fund.fundingDTO.regDate}</td>
             <td>{fund.fundingDTO.success ? "🟢" : "🔴"}</td>
-            <td>{fund.fundingDTO.removed ? "🟢" : "🔴"}</td>
-            <td onClick={() => setAuthorized(fund)}>{fund.fundingDTO.authorized ? "참여중" : "처리중"}</td>
+            <td onClick={() => fundingService.changeRemoved(fund.fundingDTO.fno,funding.pageMaker.page)}>{fund.fundingDTO.removed ? "" : "✔"}</td>
+            <td onClick={() => fundingService.setAuthorized(fund.fundingDTO.fno,funding.pageMaker.page)}>{fund.fundingDTO.authorized ? "참여중" : "처리중"}</td>
         </tr>
     })
 
@@ -157,7 +153,7 @@ const FundingTable = () => {
                                 <th className="border-0">펀딩기한</th>
                                 <th className="border-0">신청날짜</th>
                                 <th className="border-0">펀딩 성공 여부</th>
-                                <th className="border-0">삭제 여부</th>
+                                <th className="border-0">삭제</th>
                                 <th className="border-0">펀딩 신청</th>
                             </tr>
                             </thead>

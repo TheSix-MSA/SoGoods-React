@@ -30,7 +30,9 @@ const initState = {
             approval: false,
             regDate: "",
             loginDate: "",
-            roleSet: []
+            roleSet: [],
+            identificationUrl: "",
+            introduce: ""
         },],
     pageMaker: {
         page: 1,
@@ -88,6 +90,8 @@ const MemberApprovalTable = () => {
             <td>{member.phone}</td>
             <td>{member.address} {member.detailAddress}</td>
             <td>{member.gender}</td>
+            <td><img src={member.identificationUrl}/></td>
+            <td> {member.introduce}</td>
             <td onClick={() => changeRole(member)} style={{textAlign: "center"}}>{member.approval ? "✔" : ""}</td>
             <td style={{textAlign: "center"}}>{member.approval ? "❌" : ""}</td>
         </tr>
@@ -113,6 +117,8 @@ const MemberApprovalTable = () => {
                                     <th className="border-0">전화번호</th>
                                     <th className="border-0">주소</th>
                                     <th className="border-0">성별</th>
+                                    <th className="border-0">check url</th>
+                                    <th className="border-0">check introduce</th>
                                     <th className="border-0">작가 승인 처리</th>
                                     <th className="border-0">작가 반려 처리</th>
                                 </tr>

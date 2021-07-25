@@ -39,8 +39,8 @@ const orderServices = () => {
         const params = new URLSearchParams()
         params.append('cid', process.env.REACT_APP_KAKAO_PAY_CID)
         params.append('tid', inputs.tid)
-        params.append('cancel_tax_free_amount', inputs.taxAmount)
         params.append('cancel_amount', inputs.amount)
+        params.append('cancel_tax_free_amount', inputs.taxAmount)
         const data = await axios.post("/v1/payment/cancel", params, {
             headers: {
                 Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_ADMIN_KEY}`,

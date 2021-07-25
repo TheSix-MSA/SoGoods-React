@@ -31,10 +31,10 @@ const Confirmation = ({location}) => {
 
     console.log({...queryObj, orderId: orderId,buyer:user, tid:tid, products:products});
 
-    // await orderServices.kakaoPayApprovePayment(params);
+    const res = await orderServices.kakaoPayApprovePayment(params);
     const sendToDB = orderServices.orderConfirmedSave({...queryObj, orderId: orderId,buyer:user, tid:tid,products:products});
 
-    // localStorage.removeItem("transactionId");
+    localStorage.removeItem("transactionId");
   }
 
   return (

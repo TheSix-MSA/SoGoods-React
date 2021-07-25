@@ -62,6 +62,7 @@ const LoginRegister = () => {
             data: loginForm
         });
 
+        console.log(result);
         dispatch(signin(result.data.response));
         addToast(
             "✨😘어서오세요 Sogoods입니다! 😘😘😘✨", {appearance: 'info', autoDismiss: true},
@@ -176,6 +177,8 @@ const LoginRegister = () => {
         }
     };
     const dispatch = useDispatch();
+
+    console.log(info);
 
     return (
         <Fragment>

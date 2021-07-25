@@ -170,8 +170,28 @@ const myAccountService = () => {
         return result;
     };
 
+    const getTotalBoardList = async (writer) => {
+        const result = await instance({
+            url: `/board/${writer}`,
+            method: " GET",
+        });
+
+        return result
+    };
+
+    const getOneBoardList = async (boardInfo) => {
+        const result = await instance({
+            url: `/board/member/${boardInfo.type}/${boardInfo.email}?page=${boardInfo.page}`,
+            method: "GET",
+        });
+
+        console.log("가져온 정보목록", result);
+        return result
+    };
+
+
     return {getMyInfo, modifyInfo, searchNovelList, popUpDialogFn, setDialogFn, setCloseDialogFn, registerNovel,clearInput,
-        setClearInputFn, getNovelList, setListFlag, changeFlag, removeNovel, registerIdentification, requestAuthor}
+        setClearInputFn, getNovelList, setListFlag, changeFlag, removeNovel, registerIdentification, getTotalBoardList, getOneBoardList}
 };
 
 export default myAccountService();

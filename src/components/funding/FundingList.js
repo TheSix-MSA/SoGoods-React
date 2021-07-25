@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, {Fragment, useState, useEffect} from "react";
-import { connect } from "react-redux";
+import {connect, useSelector} from "react-redux";
 import LayoutOne from "../layouts/header/LayoutOne";
 import Nav from "react-bootstrap/Nav";
 import * as queryString from "query-string";
@@ -34,7 +34,8 @@ const param = {
 
 const FundingList = ({ location, productTabClass}) => {
     const value = queryString.parse(location.search);	// 문자열의 쿼리스트링을 Object로 변환
-    const [searchInput, searchOnChange ,setSearchInput] = useInputs({...param, page:value.page||1, state:value.state||"open"});
+    console.log(value)
+    const [searchInput, searchOnChange ,setSearchInput] = useInputs({...param, page:value.page||1, type:value.type||"t", state:value.state||"open"});
 
     // 파라미터로 넘어가는 값
     const page = value.page||1;
@@ -42,8 +43,10 @@ const FundingList = ({ location, productTabClass}) => {
     const type = value.type||"t";
     const state = value.state||"open";
 
-    const history = useHistory()
-    const [data, setData] = useState(initState)
+
+    const history = useHistory();
+    const [data, setData] = useState(initState);
+    const userInfo = useSelector(state=> state.login);
 
     // 리스트 데이터 불러오기
     useEffect(()=> {
@@ -157,6 +160,7 @@ const FundingList = ({ location, productTabClass}) => {
                                     </form>
                                 </div>
                                     {/* funding register button */}
+                                {userInfo.roles.includes("AUTHOR") &&
                                     <div style={{marginLeft:"auto"}}>
                                         <form className={"searchform"} >
                                             <button className={"searchform__submit"} style={{height:"45px", position:"relative", width:"130px", marginRight:"10px"}}
@@ -164,6 +168,7 @@ const FundingList = ({ location, productTabClass}) => {
                                             </button>
                                         </form>
                                     </div>
+                                }
                              </div>
                             {/* funding List */}
                             <div style={{display:"grid", gridTemplateColumns: "1fr 1fr 1fr" ,gridTemplateRows: "1fr 1fr 1fr", marginTop:"20px"}}>

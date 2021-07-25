@@ -16,6 +16,7 @@ import ProductRegister from "../funding-attach/add/ProductRegister";
 import Dialog from "@material-ui/core/Dialog";
 import productService from "../funding-attach/add/productService";
 import ProductUpdateRegister from "../funding-attach/update/ProductUpdateRegister";
+import {ToastWarning} from "../../modules/toastModule";
 
 const imgStyle = {
     display: 'block',
@@ -56,11 +57,9 @@ const FundingUpdate = () => {
 
    let {fno} = useParams();
 
-
    const [fundingForm, changeFundingForm, setFundingForm] = useInputs({...initFundingForm});
    const [productForm, changeProductForm, setProductForm] = useInputs([...productDTOs]);
 
-    const {addToast} = useToasts();
     const userInfo = useSelector(state=> state.login);
     const [open, setOpen] = useState(false);
 
@@ -124,6 +123,22 @@ const FundingUpdate = () => {
 
     const sendFormData = async (e) => {
         e.preventDefault();
+
+        // 데이터 유효성 검사
+        // if(fundingForm.title==""){
+        //     ToastWarning(" 제목은 필수입력항목입니다.");
+        //     return;
+        // } else if (fundingForm.content===""){
+        //     ToastWarning("내용은 필수입력항목입니다.");
+        //     return;
+        // } else if (!form.dueDate){
+        //     ToastWarning("만기일은 필수입력항목입니다.");
+        //     return;
+        // } else if (form.targetAmount===null || form.targetAmount === 0){
+        //     ToastWarning("목표금액은 필수입력항목입니다.");
+        //     return;
+        // }
+
         console.log(fundingForm);
         const result = await fundingService.updateFunding(fno, {...fundingForm});
         console.log(result)

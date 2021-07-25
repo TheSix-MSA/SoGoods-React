@@ -11,6 +11,7 @@ const initState = {
     favoriteCount:0
 }
 
+
 const FundingRead = () => {
 
     let {fno} = useParams()

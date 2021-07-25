@@ -1,19 +1,23 @@
 import React, {Fragment} from 'react';
 import ImgCarousel from "./ImgCarousel";
 
+const inputStyle = {
+    marginTop:"5px",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    overflowX: "hidden",
+    maxWidth:"350px"
+}
+
 const FundingPost = (funding) => {
 
     console.log('funding.productDTOs: ', funding.productDTOs)
     const list = funding.productDTOs.map((productDTO, i)=>{
 
-
-
         const part = productDTO.imgArr.map(img=>{
 
             return {imgPath: img.imgSrc}
         })
-
-
 
         return (
 

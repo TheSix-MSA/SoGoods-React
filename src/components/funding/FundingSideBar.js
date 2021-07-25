@@ -99,7 +99,7 @@ const FundingSideBar = (funding) => {
                 <div className="sidebar-blog-img">
                     <div to={process.env.PUBLIC_URL + "/blog-details-standard"}>
                         <img
-                            src={p.imgArr[0].imgSrc}
+                            src={p.imgArr[0] && p.imgArr[0].imgSrc}
                             alt=""
                         />
                     </div>

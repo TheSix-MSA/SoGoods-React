@@ -75,8 +75,8 @@ export default function ImgCarousel({tutorialSteps}) {
         <div className={classes.root}>
             <img
                 className={classes.img}
-                src={tutorialSteps[activeStep].imgPath}
-                alt={tutorialSteps[activeStep].label}
+                src={tutorialSteps[activeStep] && tutorialSteps[activeStep].imgPath}
+                alt={tutorialSteps[activeStep] && tutorialSteps[activeStep].label}
             />
             <MobileStepper
                 steps={maxSteps}

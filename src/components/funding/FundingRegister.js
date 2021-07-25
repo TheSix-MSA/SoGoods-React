@@ -5,15 +5,16 @@ import Nav from "react-bootstrap/Nav";
 import fundingService from "./fundingService";
 import useInputs from "../../customHooks/useInputs";
 import getFormatDate from "../../modules/getFormatDate";
-import productService from "../funding-attach/productService";
+import productService from "../funding-attach/add/productService";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import ProductRegister from "../funding-attach/ProductRegister";
+import ProductRegister from "../funding-attach/add/ProductRegister";
 import Dialog from "@material-ui/core/Dialog";
 import Button from "@material-ui/core/Button";
 import {useSelector, } from "react-redux";
 import {useToasts} from "react-toast-notifications";
 import {useHistory} from "react-router-dom";
+import axios from "axios";
 
 const inputStyle = {
     margin:"10px"
@@ -55,6 +56,9 @@ const FundingRegister = () => {
     productService.setOpenFn(setOpen)
 
     const productList = productService.getProductList()
+
+    console.log(productList)
+
     const productDTOs = productList.map(product=>{
         return product.text
     })
@@ -63,6 +67,9 @@ const FundingRegister = () => {
 
     // 입력 데이터 전송
     const sendFormData = async (e) => {
+
+
+
         e.preventDefault();
 
         // 데이터 유효성 검사
@@ -99,12 +106,13 @@ const FundingRegister = () => {
 
         setForm({...initState})
 
+        productService.initProductList()
+
+
         if(result.data.success){
             history.push("/funding/list");
         }
     }
-
-
 
     const setProductMainImage = (e, productIdx, pictureIdx)=>{
         productService.getProductList()[productIdx].mainIdx = pictureIdx

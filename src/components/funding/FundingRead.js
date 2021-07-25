@@ -4,8 +4,6 @@ import fundingService from "./fundingService";
 import {useParams} from "react-router-dom";
 import FundingSideBar from "./FundingSideBar";
 import FundingPost from "./FundingPost";
-import {useSelector} from "react-redux";
-
 
 const initState = {
     fundingDTO:{},
@@ -13,19 +11,38 @@ const initState = {
     favoriteCount:0
 }
 
-const FundingRead = ({location}) => {
+const FundingRead = () => {
 
-    const info = useSelector(state=>state.login);
-    const { pathname } = location;
     let {fno} = useParams()
     const [funding, setFunding] = useState(initState)
 
     // 상세 페이지에 필요한 데이터 불러오기
     useEffect(()=>{
-        fundingService.getOneFunding(fno).then(res=> {
-            console.log(res.response)
-            setFunding(res.response)
-        })
+        fundingService.getOneFunding(fno)
+            .then(res1=> {
+                const fno     = [res1.response.fundingDTO.fno]
+                const pnoList = res1.response.productDTOs.map(product=>product.pno)
+
+                //펀딩의 메인이미지
+                fundingService.getA3src('FUNDING', fno)
+                    .then(res2=>{
+                        let src = res2.data.response[0].imgSrc
+                        res1.response.fundingDTO.imgSrc = src
+                        //setFunding({...res1.response})
+
+                        fundingService.getA3srcList('PRODUCT', pnoList, [0,1])
+                            .then(res3=>{
+
+                                for(let i=0; i<res3.data.response.length; i++){
+                                  //console.log(res1.response.productDTOs[i])
+                                    res1.response.productDTOs[i].imgArr = res3.data.response[i];
+                                }
+                                //console.log(res1.response)
+                                setFunding({...res1.response})
+                            })
+                    })
+            })
+
     },[])
 
 
@@ -39,13 +56,14 @@ const FundingRead = ({location}) => {
                         <div className="row flex">
                             <div className="col-lg-9">
                                 <div className="blog-details-wrapper ml-20">
-                                    {/* blog post */}
+                                    {/* funding post */}
                                     <FundingPost {...funding}/>
                                 </div>
                             </div>
                             <div className="col-lg-3">
-                                {/* blog sidebar */}
-                                {funding.productDTOs.length>0&&<FundingSideBar {...funding}/>}
+                                {/* funding side bar
+                                 펀딩 객체에 데이터가 있을 때 전송*/}
+                                {funding.productDTOs.length>0 && <FundingSideBar {...funding}/>}
                             </div>
                         </div>
                     </div>

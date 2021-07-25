@@ -148,6 +148,8 @@ const MyAccount = () => {
   };
 
   myAccountService.setClearInputFn(clearInput);
+  const roles = JSON.parse(localStorage.getItem("userData")).roles.includes("AUTHOR");
+
 
   return (
       <Fragment>
@@ -382,7 +384,8 @@ const MyAccount = () => {
                           </Card.Body>
                         </Accordion.Collapse>
                       </Card>
-                      <Card className="single-my-account mb-20" >
+                      {roles?
+                        <Card className="single-my-account mb-20">
                         <Card.Header className="panel-heading">
                           <Accordion.Toggle variant="link" eventKey="4">
                             <h3 className="panel-title">
@@ -398,19 +401,22 @@ const MyAccount = () => {
                               </div>
                               <NovelRegisterDialog searchBook={searchBook}/>
                               <div className="align-items-center justify-content-center entries-wrapper">
-                                <div className="billing-info  entries-edit-delete text-center" style={{padding:"15px"}}>
-                                    <label>Register Book</label>
-                                    <div style={{display:"flex"}}>
-                                      <input type="text" name="isbn" placeholder={"ISBN (13자리)"} onChange={setSearchBook} minLength={13} value={searchBook.isbn}/>
-                                      <button className="edit" onClick={searchIsbn} style={{marginLeft:"15px"}}>SEARCH</button>
-                                    </div>
+                                <div className="billing-info  entries-edit-delete text-center"
+                                     style={{padding: "15px"}}>
+                                  <label>Register Book</label>
+                                  <div style={{display: "flex"}}>
+                                    <input type="text" name="isbn" placeholder={"ISBN (13자리)"} onChange={setSearchBook}
+                                           minLength={13} value={searchBook.isbn}/>
+                                    <button className="edit" onClick={searchIsbn} style={{marginLeft: "15px"}}>SEARCH
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
                               <MyNovel></MyNovel>
                             </div>
                           </Card.Body>
                         </Accordion.Collapse>
-                      </Card>
+                      </Card>:null}
                     </Accordion>
                   </div>
                 </div>

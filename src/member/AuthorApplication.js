@@ -31,22 +31,32 @@ const AuthorApplication = () => {
     const [flag, setFlag] = useState(false);
     const info = useSelector(state=>state.login);
     const [novel, changeNovel ,setNovel] = useInputs({...initNovel,email:info.email});
-    console.log(application);
 
+    if(info.approval !== false ){
+        history.push("/");
+    }
+
+    /**
+     * 영역클릭시 파일업로더 시작
+     */
     const clickFile = () => {
         document.getElementById("input-file").click();
     };
 
+    /**
+     * 파일을 업로드한다.
+     * @param e
+     */
     const uploadFile = (e) =>{
         const file = e.target.files[0]
         const form = new FormData();
         form.append("files", file);
         form.append("tableName", "MEMBER");
         form.append("keyValue", info.email);
+        form.append("mainIdx", 0);
 
         myAccountService.registerIdentification(form).then(value => {
-            console.log(value.data.response[0].imgSrc);
-            setApplication({...application,imgSrc:value.data.response[0].imgSrc});
+            setApplication({...application, identificationUrl:value.data.response[0].imgSrc});
         });
     }
 
@@ -55,11 +65,54 @@ const AuthorApplication = () => {
         setFlag(!flag);
     };
 
-    const searchISBN = () => {
-        myAccountService.searchNovelList(initNovel.isbn).then((novel)=>{
-            console.log(novel);
+    /**
+     * 알라딘 API로 책 검색
+     *
+     * @param e
+     */
+    const searchISBN = (e) => {
+        e.preventDefault();
+
+        myAccountService.searchNovelList(novel.isbn).then((searchNovel)=>{
+            setNovel({
+                ...novel,
+                title: searchNovel.item[0].title,
+                isbn: searchNovel.item[0].isbn13,
+                image: searchNovel.item[0].cover,
+                publisher: searchNovel.item[0].publisher,
+                email: info.email
+            });
         });
     };
+
+    /**
+     * 작가 등록 요청
+     *
+     * @param e
+     */
+    const registerForm = (e) => {
+        e.preventDefault();
+        console.log("소설", novel);
+        console.log("정보", application);
+        for (let Obj in application) {
+            if (application[Obj]==="") {
+                addToast(Obj + "는 필수입력사항입니다.", {appearance: 'warning', autoDismiss: true});
+                return;
+            }
+        } // end of for loop
+
+        for (let Obj in novel) {
+            if (novel[Obj]==="") {
+                addToast(Obj + "는 필수입력사항입니다.", {appearance: 'warning', autoDismiss: true});
+                return;
+            }// end of for loop
+        }
+
+        myAccountService.requestAuthor(application, novel).then(value => {
+            addToast(info + "님의 작가승인요청이 완료되었습니다.", {appearance: 'info', autoDismiss: true});
+            addToast(info + "운영진의 수락후 작가로 임명됩니다.", {appearance: 'info', autoDismiss: true});
+        });
+    }
 
     return (
         <Fragment>
@@ -124,7 +177,7 @@ const AuthorApplication = () => {
                                                                             color: "lightgray",
                                                                             height: "150px",
                                                                             width: "400px",
-                                                                            backgroundImage: `url(${application.imgSrc})`,
+                                                                            backgroundImage: `url(${application.identificationUrl})`,
                                                                             backgroundSize: "contain",
                                                                             backgroundRepeat: "no-repeat",
                                                                             backgroundPosition: "center"
@@ -150,7 +203,7 @@ const AuthorApplication = () => {
                                                     <div className="login-form-container">
                                                         <div className="login-register-form">
                                                             <form>
-                                                                <div style={{display:"flex"}} className="button-box">
+                                                                <div style={{display: "flex"}} className="button-box">
                                                                     <input
                                                                         type="text"
                                                                         name="isbn"
@@ -160,28 +213,67 @@ const AuthorApplication = () => {
                                                                         maxLength={13}
                                                                         minLength={13}
                                                                     />
-                                                                    <button style={{height:"45px", background:"darkorange"}}>done</button>
+                                                                    <button style={{
+                                                                        height: "45px",
+                                                                        background: "darkorange"
+                                                                    }} onClick={searchISBN}>done
+                                                                    </button>
                                                                 </div>
-                                                                <div style={{marginBottom:"15px", padding:"15px", border:"1px solid #ebebeb"}}>
-                                                                    <div style={{display:"flex"}}>
-                                                                        <div >
-                                                                            <div style={{background:"lightgray", height:"125px", width:"85px"}}>
+                                                                {novel.isbn === "" ?
 
+                                                                    <div style={{
+                                                                        marginBottom: "15px",
+                                                                        padding: "15px",
+                                                                        border: "1px solid #ebebeb"
+                                                                    }}>
+                                                                        <div style={{display: "flex"}}>
+                                                                            <div>
+                                                                                <div style={{
+                                                                                    background: "lightgray",
+                                                                                    height: "125px",
+                                                                                    width: "85px"
+                                                                                }}>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div style={{padding: "15px"}}>
+                                                                                <p><strong>ISBN :</strong><span style={{marginLeft: "10px"}}></span></p>
+                                                                                <p><strong>TITLE :</strong><span style={{marginLeft: "10px"}}></span></p>
+                                                                                <p><strong>PUBLISHER :</strong><span style={{marginLeft: "10px"}}></span></p>
                                                                             </div>
                                                                         </div>
-                                                                        <div style={{padding:"15px"}}>
-                                                                            <p><strong>ISBN :</strong><span style={{marginLeft:"10px"}}></span></p>
-                                                                            <p><strong>TITLE :</strong><span style={{marginLeft:"10px"}}></span></p>
-                                                                            <p><strong>PUBLISHER :</strong><span style={{marginLeft:"10px"}}></span></p>
-                                                                        </div>
                                                                     </div>
-                                                                </div>
+                                                                    :
+                                                                    <div style={{
+                                                                        marginBottom: "15px",
+                                                                        padding: "15px",
+                                                                        border: "1px solid #ebebeb"
+                                                                    }}>
+                                                                        <div style={{display: "flex"}}>
+                                                                            <div>
+                                                                                <div style={{
+                                                                                    background: "lightgray",
+                                                                                    height: "125px",
+                                                                                    width: "85px"
+                                                                                }}>
+                                                                                    <img src={novel.image} alt=""/>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div style={{padding: "15px"}}>
+                                                                                <p><strong>ISBN :</strong><span style={{marginLeft: "10px"}}>{novel.isbn}</span></p>
+                                                                                <p><strong>TITLE :</strong><span style={{marginLeft: "10px"}}>{novel.title}</span></p>
+                                                                                <p><strong>PUBLISHER :</strong><span style={{marginLeft: "10px"}}>{novel.publisher}</span></p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>}
                                                                 <div className="button-box">
                                                                     <div style={{textAlign: "right"}}>
                                                                         <button onClick={nextPage}>
                                                                             <span>Prev</span>
                                                                         </button>
-                                                                        <button style={{background: "skyblue", marginLeft:"15px"}} onClick={searchISBN}>
+                                                                        <button onClick={registerForm} style={{
+                                                                            background: "skyblue",
+                                                                            marginLeft: "15px"
+                                                                        }}>
                                                                             <span>Submit</span>
                                                                         </button>
                                                                     </div>
@@ -201,6 +293,7 @@ const AuthorApplication = () => {
             </LayoutOne>
         </Fragment>
     );
+
 };
 
 AuthorApplication.propTypes = {

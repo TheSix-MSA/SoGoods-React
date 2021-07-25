@@ -78,7 +78,7 @@ const IconGroup = ({
                     </Link>
                   </li>
               )}
-              {login.roles.indexOf("AUTHOR") !== 1 && login.email !== "" ?
+              {login.roles.indexOf("AUTHOR") !== 1 && login.email !== "" && login.approval === false ?
                   <li>
                     <Link to={process.env.PUBLIC_URL + "/author-application"}>
                       author application
@@ -134,7 +134,7 @@ const IconGroup = ({
                     </Link>
                   </li>
               }
-              {login.roles.indexOf("AUTHOR") !== 1 && login.email !== "" ?
+              {login.roles.indexOf("AUTHOR") !== 1 && login.email !== ""&& login.approval === false ?
                   <li>
                     <Link to={process.env.PUBLIC_URL + "/author-application"}>
                       author application

@@ -13,6 +13,7 @@ import CodeDialogSlide from "./CodeDialog";
 import codeService from "./codeService";
 import FormCheckDialog from "./FormCheckDialog";
 import {useToasts} from "react-toast-notifications";
+import {ToastInformation} from "../modules/toastModule";
 
 const initStateLogin = {
     email: "",
@@ -42,7 +43,6 @@ const warningName = {type:""};
 const LoginRegister = () => {
     const location = useLocation();
     const history = useHistory();
-    const {addToast} = useToasts();
     const info = useSelector(state=>state.login);
     const [loginForm, onChange] = useInputs(initStateLogin);
     const [signupForm, signupChange, setSignForm] = useInputs(initStateSignUp);
@@ -62,11 +62,8 @@ const LoginRegister = () => {
             data: loginForm
         });
 
-        console.log(result);
         dispatch(signin(result.data.response));
-        addToast(
-            "✨😘어서오세요 Sogoods입니다! 😘😘😘✨", {appearance: 'info', autoDismiss: true},
-        );
+        ToastInformation("어서오세요 Sogoods입니다!");
         history.push(location.state?location.state.from:"/");
     };
 
@@ -111,9 +108,8 @@ const LoginRegister = () => {
             method: 'POST',
             data: signupForm
         });
-        addToast(
-            "회원가입되셨습니다! 🎉", {appearance: 'info', autoDismiss: true},
-        );
+        ToastInformation("회원가입되셨습니다! 🎉");
+
         history.push("/");
     };
 
@@ -143,6 +139,7 @@ const LoginRegister = () => {
      */
     const codeCheck = (e)=>{
         e.preventDefault();
+
         if(verifyForm.verifyCode === signupForm.code){
             verifyForm['verify'] = true;
             verifyForm['verifyBtn'] = "2";
@@ -178,7 +175,6 @@ const LoginRegister = () => {
     };
     const dispatch = useDispatch();
 
-    console.log(info);
 
     return (
         <Fragment>
@@ -291,6 +287,10 @@ const LoginRegister = () => {
                                                                         style={{width: "70%"}}
                                                                         value={signupForm.code}
                                                                         onChange={signupChange}
+                                                                        onInput={({ target }) => {
+                                                                            target.value = target.value.replace(/[^0-9]/g, "");
+                                                                            target.value = target.value.replace(/,/g, "");
+                                                                        }}
                                                                     /> :
                                                                     <input
                                                                         name="code"
@@ -346,6 +346,10 @@ const LoginRegister = () => {
                                                                     style={{width: "45%"}}
                                                                     maxLength={6}
                                                                     minLength={6}
+                                                                    onInput={({ target }) => {
+                                                                        target.value = target.value.replace(/[^0-9]/g, "");
+                                                                        target.value = target.value.replace(/,/g, "");
+                                                                    }}
                                                                 />
                                                                 <span
                                                                     style={{width: "10%", textAlign: "center"}}>-</span>
@@ -359,6 +363,10 @@ const LoginRegister = () => {
                                                                         fontSize: "50px"
                                                                     }}
                                                                     maxLength={1}
+                                                                    onInput={({ target }) => {
+                                                                        target.value = target.value.replace(/[^0-9]/g, "");
+                                                                        target.value = target.value.replace(/,/g, "");
+                                                                    }}
                                                                 />
                                                                 <input
                                                                     name="dummy"

@@ -10,6 +10,7 @@ import {useToasts} from "react-toast-notifications";
 import useInputs from "../customHooks/useInputs";
 import myAccountService from "./myAccountService";
 import {signin} from "../redux/member/loginSlice";
+import {ToastInformation, ToastWarning} from "../modules/toastModule";
 
 const initState = {
     introduce:"",
@@ -27,7 +28,6 @@ const initNovel = {
 const AuthorApplication = () => {
 
     const history = useHistory();
-    const {addToast} = useToasts();
     const [application, changeApplication, setApplication] = useInputs(initState);
     const [flag, setFlag] = useState(false);
     const info = useSelector(state=>state.login);
@@ -94,25 +94,23 @@ const AuthorApplication = () => {
      */
     const registerForm = (e) => {
         e.preventDefault();
-        console.log("소설", novel);
-        console.log("정보", application);
         for (let Obj in application) {
             if (application[Obj]==="") {
-                addToast(Obj + "는 필수입력사항입니다.", {appearance: 'warning', autoDismiss: true});
+                ToastWarning(Obj + "는 필수입력사항입니다.");
                 return;
             }
         } // end of for loop
 
         for (let Obj in novel) {
             if (novel[Obj]==="") {
-                addToast(Obj + "는 필수입력사항입니다.", {appearance: 'warning', autoDismiss: true});
+                ToastWarning(Obj + "는 필수입력사항입니다.");
                 return;
             }// end of for loop
         }
 
         myAccountService.requestAuthor(application, novel).then(value => {
-            addToast(info.email + "님의 작가승인요청이 완료되었습니다.", {appearance: 'info', autoDismiss: true});
-            addToast("운영진의 수락후 작가로 임명됩니다.", {appearance: 'info', autoDismiss: true});
+            ToastInformation(info.email + "님의 작가승인요청이 완료되었습니다.")
+            ToastInformation("운영진의 수락후 작가로 임명됩니다.")
             dispatch(signin({...info, approval: true}));
         });
     }

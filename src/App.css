@@ -22,3 +22,18 @@
     border-radius: 8px !important;
     width: 100% !important;
 }
+
+.toastInformation{
+    z-index: 90 !important;
+    background-color: rgb(30, 136, 229) !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+}
+
+.toastWarning{
+    z-index: 90 !important;
+    background-color: #ffcb4f !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+    margin-top: 100px;
+}

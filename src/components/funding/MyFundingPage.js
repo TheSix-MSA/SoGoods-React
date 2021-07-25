@@ -25,47 +25,52 @@ const MyFundingPage = ({productTabClass}) => {
 
     const history = useHistory();
     const userInfo = useSelector(state=> state.login);
-    const email = "user00@bbb.com"
     const [list, setList] = useState(initList);
-    const [type, setType] = useState({});
 
-    useEffect(()=>{
-         fundingService.getMyFundingList(email).then((res)=> {
-             console.log(res.response)
-             setList(res.response)
-         })},[])
+
+    useEffect(()=> {
+        fundingService.getMyFundingList(userInfo.email)
+            .then(res1=>{
+                console.log(res1.response)
+                let fnoList = res1.response.map(f=> f.fno)
+                fundingService.getA3src('FUNDING', fnoList)
+                    .then(res2=>{
+                        res2.data.response.forEach((ele,i)=>{
+                            res1.response[i].imgSrc = ele.thumbSrc
+                        })
+                        setList(res1.response);
+                    })
+            })
+    }, [])
+
+    console.log(list);
+
 
     // 읽기 페이지로 이동
     const readTodo = (fno) => {
         history.push("/funding/read/"+fno)
     }
 
-    const change = (e) => {
-        type[e.target.name] = e.target.value;
-        setType({...type});
-        console.log(type)
-    }
-
-    const sortCloseData = (data) => {
-        return data.success === false
-    }
-    const sortOpenData = (data) => {
-        return data.success === true
-    }
-
-    const close = list.filter(sortCloseData);
-    const open = list.filter(sortOpenData);
-
-    const listPage = (list) => {
-        return list.map((li, idx)=>
-            <div key={idx} onClick={()=> readTodo(li.fno)} style={{cursor:"pointer"}}>
+    const listPage = list.map((li, idx)=>
+            <div key={idx}>
                 <h5>{li.fno}번 게시글</h5>
-                <img alt={"이미지"} src="https://i.imgur.com/WCySTkp.jpeg" height={"200px"}/>
+                {!li.success ?
+                    <div>
+                        <img alt={"이미지"} src={li.imgSrc} height={"230px"} width={"350px"} onClick={() => readTodo(li.fno)} style={{cursor: "pointer", objectFit:"cover"}}/>
+                    </div>
+                    :
+                    <div style={{position:"relative", height:"230px", width:"350px"}}>
+                        <img alt={"이미지"} src={li.imgSrc} style={{filter:"grayscale(100%)", objectFit:"cover"}}/>
+                        <span style={{fontWeight:"bold", position:"absolute", transform:"translate(-70%, -50%)", top:"50%", left:"50%", pointerEvents:"none"}}>
+                            <h3>종료된 펀딩입니다</h3>
+                        </span>
+                    </div>
+                }
                 <h5>펀딩 달성률 {Math.ceil(li.totalAmount/li.targetAmount*100)}%</h5>
                 <h5>마감일자 : {li.dueDate}</h5>
                 <h5>펀딩금액 : {li.totalAmount}</h5>
             </div>
-        )}
+        )
 
     return (
         <div>
@@ -84,23 +89,23 @@ const MyFundingPage = ({productTabClass}) => {
                             productTabClass ? productTabClass : ""
                         }`}
                     >
-                        <div>
+                        <div style={{marginTop:"30px"}}>
                             <h3>나의 펀딩</h3>
                         </div>
                     </Nav>
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-12">
-                                <div style={{float:"right"}}>
-                                    {/* shop topbar default */}
-                                    <select name='type' style={{width:"100px",border:"1px solid #EEE"}} onChange={change}>
-                                        <option value=''>전체</option>
-                                        <option value='open'>진행중</option>
-                                        <option value='close'>마감</option>
-                                    </select>
-                                </div>
+                                {/*<div style={{float:"right"}}>*/}
+                                {/*    /!* shop topbar default *!/*/}
+                                {/*    <select name='type' style={{width:"100px",border:"1px solid #EEE"}} onChange={change}>*/}
+                                {/*        <option value=''>전체</option>*/}
+                                {/*        <option value='open'>진행중</option>*/}
+                                {/*        <option value='close'>마감</option>*/}
+                                {/*    </select>*/}
+                                {/*</div>*/}
                                 <div style={{display:"grid", gridTemplateColumns: "1fr 1fr 1fr" ,gridTemplateRows: "1fr 1fr 1fr"}}>
-                                    {type==='open'?listPage(open):listPage(close)}
+                                    {listPage}
                                 </div>
                             </div>
                         </div>

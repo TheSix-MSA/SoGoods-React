@@ -102,6 +102,7 @@ const FundingSideBar = (funding) => {
                         <img
                             src={p.imgArr[0].imgSrc}
                             alt=""
+                            height="230px"
                         />
                     </div>
                     <div className="sidebar-blog-content" >

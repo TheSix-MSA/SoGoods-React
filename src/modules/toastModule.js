@@ -12,6 +12,7 @@ export const ToastCenter = (msg) => {
             color: 'black',
             fontSize: '17px',
             fontWeight: 'bold',
+            fontFamily: 'scdream4'
         },
         transition: Zoom,
         className: 'toastCenter',
@@ -28,6 +29,7 @@ export const ToastTopRight = (msg) => {
             color: 'black',
             fontSize: '17px',
             fontWeight: 'bold',
+            fontFamily: 'scdream4'
         },
         className: 'toastInfo',
     });
@@ -43,6 +45,7 @@ export const ToastError = (msg) => {
             color: 'black',
             fontSize: '17px',
             fontWeight: 'bold',
+            fontFamily: 'scdream4',
         },
         className: 'toastError',
     });

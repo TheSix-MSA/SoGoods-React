@@ -20,6 +20,8 @@ const initState = {
     keyword: '',
 }
 const BlogNoSidebar = ({match}) => {
+    const { roles } = useSelector(state => state.login)
+    console.log(roles)
     const classes = useStyles();
     const location = useLocation()
     const [boardData, setBoardData] = useState({})
@@ -29,6 +31,7 @@ const BlogNoSidebar = ({match}) => {
     const history = useHistory()
     const boardType = useRef(match.params.boardType?.toUpperCase())
     const [search, onChange, setSearch] = useInputs({...initState, page: value.page || 1})
+
     useEffect(() => {
         boardType.current = match.params.boardType.toUpperCase()
         dispatch(getBoardData({...search, page: value.page, boardType: boardType.current})).unwrap().then(res => {
@@ -63,7 +66,7 @@ const BlogNoSidebar = ({match}) => {
                 {/* breadcrumb */}
                 <div className="blog-area pt-100 pb-100 blog-no-sidebar">
                     <div className="container">
-                        { boardType.current.includes("FREE") ? (
+                        {  boardType.current.includes("FREE") || roles.includes("AUTHOR") ? (
                             <div style={{textAlign: "right"}}>
                                 <Button variant="contained" size="small" color="primary" className={classes.margin}
                                         onClick={boardRegister}> 글쓰기 </Button>
@@ -81,7 +84,7 @@ const BlogNoSidebar = ({match}) => {
                                     displayEmpty
                                     className={classes.selectEmpty}
                                     name="type"
-                                    defaultValue={MenuItem[1]}
+                                    defaultValue="t"
                                     onChange={onChange}>
                                         <MenuItem value="t"> 제목</MenuItem>
                                         <MenuItem value="w"> 작성자</MenuItem>

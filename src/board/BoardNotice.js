@@ -24,12 +24,8 @@ const BoardNotice = ({notice, page}) => {
                                 moveDetail(data.bno)
                             }}>
                                 <span style={{}}> {data.title} </span>
-                                {data.content}
-                                {getFormatDate(new Date(data.modDate))}
-                                <span
-                                    style={{display: "inline-block", paddingLeft: "10px"}}>
-                                    {data.replyCnt} <i className="fa fa-comments-o"/>
-                                </span>
+                                <span> {data.content} </span>
+                                <span style={{float:"right"}}> {getFormatDate(new Date(data.modDate))} </span>
                             </div>
                         </Paper>
                         }

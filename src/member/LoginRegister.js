@@ -13,7 +13,7 @@ import CodeDialogSlide from "./CodeDialog";
 import codeService from "./codeService";
 import FormCheckDialog from "./FormCheckDialog";
 import {useToasts} from "react-toast-notifications";
-import {ToastInformation} from "../modules/toastModule";
+import {ToastInformation, ToastWarning} from "../modules/toastModule";
 
 const initStateLogin = {
     email: "",
@@ -79,8 +79,10 @@ const LoginRegister = () => {
 
         if (signupForm.gender === "1" || signupForm.gender === "3") {
             signupForm.gender = "남자"
-        }else{
+        }else if(signupForm.gender === "2" || signupForm.gender === "4"){
             signupForm.geder = "여자";
+        }else{
+            ToastWarning("올바른 주민번호를 입력해주세요");
         }
 
         if(signupForm.password !== signupForm.passwordCheck){
@@ -128,6 +130,7 @@ const LoginRegister = () => {
             method: 'PUT',
             data: signupForm
         });
+        ToastInformation("이메일을 전송했습니다.")
         console.log("이메일인증코드", result);
         setVerifyForm({...verifyForm,verifyCode: result.data.response.code});
     };
@@ -219,13 +222,6 @@ const LoginRegister = () => {
                                                                 minLength={8}
                                                             />
                                                             <div className="button-box">
-                                                                <div className="login-toggle-btn">
-                                                                    <input type="checkbox"/>
-                                                                    <label className="ml-10">Remember me</label>
-                                                                    <Link to={process.env.PUBLIC_URL + "/"}>
-                                                                        Forgot Password?
-                                                                    </Link>
-                                                                </div>
                                                                 <div>
                                                                     <button onClick={loginBtn}>
                                                                         <span>Login</span>

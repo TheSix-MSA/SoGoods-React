@@ -86,7 +86,11 @@ const MyBoardList = () => {
             <thead style={{borderBottom:"1px solid #ebebeb"}}>
                 <tr style={{textAlign:"center"}}>
                     <th style={{width:"10%"}}>type</th>
-                    <th>title</th>
+                    <th style={{
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                        overflowX: "hidden"
+                        }}>title</th>
                     <th style={{width:"20%"}}>regDate</th>
                 </tr>
             </thead>

@@ -76,6 +76,12 @@ const AuthorApplication = () => {
         e.preventDefault();
 
         myAccountService.searchNovelList(novel.isbn).then((searchNovel)=>{
+
+            if(searchNovel.errorMessage){
+                ToastWarning(searchNovel.errorMessage);
+                return;
+            }
+
             setNovel({
                 ...novel,
                 title: searchNovel.item[0].title,

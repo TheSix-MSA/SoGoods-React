@@ -9,14 +9,12 @@ import myAccountService from "./myAccountService";
 import useInputs from "../customHooks/useInputs";
 import CodeDialogSlide from "./CodeDialog";
 import codeService from "./codeService";
-import {useToasts} from "react-toast-notifications";
 import {useHistory} from "react-router-dom";
 import NovelRegisterDialog from "./NovelRegisterDialog";
 import MyNovel from "./MyNovel";
 import MyOrders from "../pages/order/MyOrders";
 import MyBoardList from "./MyBoardList";
 import BoardPager from "./BoardPager";
-import {MenuItem, Select} from "@material-ui/core";
 import {ToastInformation, ToastWarning} from "../modules/toastModule";
 
 const initUserInfo = {
@@ -42,6 +40,7 @@ const initSearchBook = {
 
 const MyAccount = () => {
   const userSelector = useSelector(state => state.login);
+  const history = useHistory();
   const [userInfo, setUserInfo, setInfo] = useInputs(initUserInfo);
   const [passInfo, setPassInfo, setPass] = useInputs({...initPassword,email:userSelector.email});
   const [searchBook, setSearchBook, setBook] = useInputs({...initSearchBook});
@@ -58,6 +57,11 @@ const MyAccount = () => {
       isSubscribed = false
     }
   },[userSelector]);
+
+  if(localStorage.getItem("userData")===null){
+    ToastWarning("로그인이 필요합니다.");
+    history.push("/");
+  }
 
   /**
    * 유저 수정 글쓰기기능 활성화
@@ -154,6 +158,7 @@ const MyAccount = () => {
   };
 
   myAccountService.setClearInputFn(clearInput);
+
   const roles = JSON.parse(localStorage.getItem("userData")).roles.includes("AUTHOR");
 
 

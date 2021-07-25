@@ -4,6 +4,15 @@ import fundingService from "./fundingService";
 import getLeftDate from "../../modules/dateCalc";
 import {useSelector} from "react-redux";
 import ImgCarousel from "./ImgCarousel";
+import LinearWithValueLabel from "./LinearProgressWithLabel";
+
+const inputStyle = {
+    marginTop:"5px",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    overflowX: "hidden",
+    maxWidth:"350px"
+}
 
 const initFavorite = {
     fno:0,
@@ -25,12 +34,14 @@ const FundingSideBar = (funding) => {
     const [cartList, setCartList] = useState(funding.productDTOs?.map(item=>{
         return {...item,count:0}}));
 
+    const [purchasable, setPurchasable] = useState(false);
+
     // 첫 화면에 좋아요 뿌려주기
     useEffect(()=>{
         fundingService.getFavList(funding.fundingDTO.fno).then(res=>
             setFavList(res.response.favoriteDTOList)
         )
-    },[])
+    },[purchasable])
 
     /**
      * 장바구니 배열에 상품추가, 일치하는 값이 있으면 개수만 추가
@@ -41,6 +52,7 @@ const FundingSideBar = (funding) => {
             if(p.pno === product.pno) return {...p,count:(p.count||0)+1}
             return p;
         }));
+        setPurchasable(true)
     }
     console.log(cartList);
 
@@ -54,6 +66,13 @@ const FundingSideBar = (funding) => {
             if(item.pno === p.pno) return {...item,count:item.count-1}
             return item;
         }))
+
+        const setVal = cartList.reduce(function (prev, next) {
+            if (typeof prev === "object") {
+                return prev.count + next.count
+            }
+            return prev + next.count
+        }) === 0?setPurchasable(false):null;
     }
 
     /**
@@ -105,9 +124,9 @@ const FundingSideBar = (funding) => {
                         />
                     </div>
                     <div className="sidebar-blog-content" >
-                        <h4>{p.name}</h4>
-                        <h6>[ 상세 설명 ]</h6>
-                        <h6>{p.des}</h6>
+                        <h4 style={inputStyle}>{p.name}</h4>
+                        <h6 style={inputStyle}>[ 상세 설명 ]</h6>
+                        <h6 style={inputStyle}>{p.des}</h6>
                         {/* cart count button */}
                         <div style={{display:"flex"}}>
                             <button onClick={()=> deleteCart(p)}> - </button>
@@ -124,7 +143,9 @@ const FundingSideBar = (funding) => {
     const selectReward = (
          <div className="single-sidebar-blog" >
              <div>
+                 <button onClick={()=>backToList()}></button>
                  <h3>마감까지 {getLeftDate(funding.fundingDTO.dueDate)}일 남음</h3>
+                 <LinearWithValueLabel dto={funding}></LinearWithValueLabel>
                  <br/>
                  <h4>{Math.ceil(funding.fundingDTO.totalAmount/funding.fundingDTO.targetAmount*100)}% 달성</h4>
                  <br/>
@@ -138,23 +159,37 @@ const FundingSideBar = (funding) => {
                      </div>
                  </div>
                  {/* funding button */}
+                 {funding.fundingDTO.success ?
+                     <div style={{marginTop:"30px"}}>
+                         <h3>종료된 펀딩입니다</h3>
+                     </div>
+                     :
                  <form className={"searchform"}>
-                     <Link to={{
-                         pathname: "/checkout",
-                         state: {
-                             cartList
-                         }
-                     }}>
-                         <button className={"searchform__submit"} style={{height:"50px", width:"100%", position:"relative", marginTop:"10px"}}>
-                             펀딩 참여하기
+                     {purchasable ?
+                         <Link to={{
+                             pathname: "/checkout",
+                             state: {
+                                 cartList
+                             }
+                         }}>
+                             <button className={"searchform__submit"}
+                                     style={{height: "50px", width: "100%", position: "relative", marginTop: "10px"}}>
+                                 펀딩 참여하기
+                             </button>
+                         </Link>
+                         :
+                         <button className={"searchform__submit"}
+                                 style={{height: "50px", width: "100%", position: "relative", marginTop: "10px"}}>
+                             상품을 선택해 주세요
                          </button>
-                     </Link>
+                     }
                  </form>
+                 }
              </div>
          </div>
     );
 
-    // 제품 수정 삭제 버튼 -> 로그인 했을 때만 보여짐
+    // 제품 수정 삭제 버튼 -> 게시글 작성자가 접근 했을 때만 보여짐
     const update = (
         <div style={{ height:"42px", display:"flex", flexWrap:"wrap",flexDirection:"column"}}>
             <form className={"searchform"}>
@@ -183,11 +218,15 @@ const FundingSideBar = (funding) => {
         }
     }
 
+    const backToList = () => {
+        history.goBack();
+    }
+
     return (
         <div className="sidebar-style">
             <div className="sidebar-widget mt-35">
                 {selectReward}
-                { userInfo.email !== "" && update}
+                { userInfo.email===funding.fundingDTO.email && update}
             </div>
             <div className="sidebar-widget mt-40" >
                 <h4 className="pro-sidebar-title"> 리워드 선택</h4>

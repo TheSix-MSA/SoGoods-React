@@ -8,6 +8,7 @@ const BlogPostsNoSidebar = ({boardData, boardType}) => {
     const moveDetail = (bno) => {
         history.push(`/board/${boardType}/${bno}`)
     }
+    console.log(boardData)
     return (
         <Fragment>
             {boardData && boardData?.map((data, idx) => (

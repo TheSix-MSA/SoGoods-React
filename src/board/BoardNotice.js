@@ -3,15 +3,14 @@ import getFormatDate from "../modules/getFormatDate";
 import {useHistory} from "react-router-dom";
 
 const BoardNotice = ({notice, page}) => {
-    console.log(1111, notice)
-    console.log(2222, page)
     const history = useHistory()
     const moveDetail = (bno) => {
         history.push(`/board/NOTICE/${bno}`)
     }
+
     return (
         <Fragment>
-            {notice && notice?.map((data, idx) => (
+            {notice && notice.private !== false && notice?.map((data, idx) => (
                 <div className="col-lg-4 col-md-6 col-sm-12">
                     <div className="blog-wrap-2 mb-30" style={{backgroundColor:"#c60bc61c"}}>
                         <div className="blog-content-2">

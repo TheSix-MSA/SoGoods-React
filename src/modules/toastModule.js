@@ -91,17 +91,3 @@ export const ToastWarning = (msg) => {
         className: 'toastWarning',
     });
 };
-export const ToastWarning = (msg) => {
-    toast.error("❗️"+msg, {
-        toastId: 'toastError',
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 2000,
-        hideProgressBar: true,
-        bodyStyle: {
-            color: 'black',
-            fontSize: '15px',
-            fontWeight: 'bold',
-        },
-        className: 'toastWarning',
-    });
-};

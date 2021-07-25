@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -12,6 +12,8 @@ import noticeService from "../../admin/sevice/noticeService"
 import useInputs from "../../customHooks/useInputs";
 import {useHistory} from "react-router-dom";
 import {useSelector} from "react-redux";
+import {Checkbox} from "@material-ui/core";
+import {useToasts} from "react-toast-notifications";
 
 const initState = {
     title: '',
@@ -21,11 +23,15 @@ const initState = {
 }
 
 export default function Register() {
+    const { addToast } = useToasts()
     const [open, setOpen] = React.useState(false);
     const [board, onChange] = useInputs(initState);
     const history = useHistory()
     const {email, name} = useSelector(state => state.login)
     console.log(history)
+
+    const titleRef = useRef();
+    const contentRef = useRef();
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -36,6 +42,13 @@ export default function Register() {
     };
 
     const register = () => {
+        if(board.title === "" || board.title === undefined || board.title === null){
+            addToast("내용을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
+            return;
+        } else if(board.content === "" || board.content === undefined || board.content === null){
+            addToast("내용을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
+            return;
+        }
         noticeService.registerBoard({...board, email: email, writer: name}).then(res => {
             // history.push(`/admin/notice`)
             history.push(`/board/notice/list`)
@@ -48,7 +61,6 @@ export default function Register() {
             </Button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">공지글</DialogTitle>
-
                 <Tab.Container>
                     <h3> 글작성 </h3>
                     <div className="login-form-container">
@@ -56,16 +68,18 @@ export default function Register() {
                             <input
                                 type={"text"}
                                 name={"title"}
-                                placeholder="Title"
+                                placeholder="제목"
                                 value={board.title}
                                 onChange={onChange}
+                                ref={titleRef}
                             />
 
                             <textarea
                                 name={"content"}
-                                placeholder="Content"
+                                placeholder="내용"
                                 value={board.content}
                                 onChange={onChange}
+                                ref={contentRef}
                             />
                             <DialogActions>
                                 <Button type="button" color="primary" onClick={() => {
@@ -78,7 +92,6 @@ export default function Register() {
                                 </Button>
                             </DialogActions>
                         </div>
-
                     </div>
                 </Tab.Container>
             </Dialog>

@@ -143,7 +143,7 @@ const FundingUpdate = () => {
                         {product.pictures.map((file ,j)=>
                             <div>
                                 <img key={j} data-idx={j}
-                                     src={file.imgSrc}
+                                     src={file.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"}
                                      style={imgStyle}/>
                                 <input type="radio"
                                        name={`mainIdx_${i}`}

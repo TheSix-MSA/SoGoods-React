@@ -41,7 +41,6 @@ const HomeOnepageScroll = () => {
                         headerBgClass="bg-white"
                     />
                 </Header>
-                {/*<div style={{height:"20vh"}}></div>*/}
                 <SectionsContainer {...options} className="bg-purple-2">
                     {sliderData &&
                     sliderData.map((single, key) => {

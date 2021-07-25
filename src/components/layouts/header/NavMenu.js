@@ -25,7 +25,7 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
             </Link>
           </li>
           <li>
-            <Link to={process.env.PUBLIC_URL + "/blog-standard"}>
+            <Link to={process.env.PUBLIC_URL + "//board/free/list"}>
               Chit Chat
               {sidebarMenu ? (
                   <span>
@@ -45,6 +45,11 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
               <li>
                 <Link to={"/board/novelist/list"}>
                   작가게시판
+                </Link>
+              </li>
+              <li>
+                <Link to={"/board/notice/list"}>
+                  공지사항
                 </Link>
               </li>
             </ul>

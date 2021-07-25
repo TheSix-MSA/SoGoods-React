@@ -16,7 +16,7 @@ const initStateForServer =  {
     receiverAddress: "어딘가",
     receiverDetailedAddress: "어느 곳",
     receiverPhone: "01011118888",
-    receiverRequest: "그런거 없다"
+    receiverRequest: ""
 }
 
 const Checkout = ({ location }) => {

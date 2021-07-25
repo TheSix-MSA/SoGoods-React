@@ -22,8 +22,6 @@ const FundingPost = (funding) => {
         )
     })
 
-
-
     return (
         <div>
             <Fragment>
@@ -32,7 +30,7 @@ const FundingPost = (funding) => {
                     <div className="blog-details-img" >
                         <img
                             alt=""
-                            src={funding.fundingDTO && funding.fundingDTO.imgSrc}
+                            src={(funding.fundingDTO && funding.fundingDTO.imgSrc) || process.env.PUBLIC_URL+"/assets/img/default.png"}
                             style={{objectFit:"cover"}}
                         />
                     </div>

@@ -4,11 +4,12 @@ import { Link } from "react-router-dom";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import LayoutOne from "../components/layouts/header/LayoutOne";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useHistory} from "react-router-dom";
 import {useToasts} from "react-toast-notifications";
 import useInputs from "../customHooks/useInputs";
 import myAccountService from "./myAccountService";
+import {signin} from "../redux/member/loginSlice";
 
 const initState = {
     introduce:"",
@@ -31,6 +32,7 @@ const AuthorApplication = () => {
     const [flag, setFlag] = useState(false);
     const info = useSelector(state=>state.login);
     const [novel, changeNovel ,setNovel] = useInputs({...initNovel,email:info.email});
+    const dispatch = useDispatch();
 
     if(info.approval !== false ){
         history.push("/");
@@ -109,8 +111,9 @@ const AuthorApplication = () => {
         }
 
         myAccountService.requestAuthor(application, novel).then(value => {
-            addToast(info + "님의 작가승인요청이 완료되었습니다.", {appearance: 'info', autoDismiss: true});
-            addToast(info + "운영진의 수락후 작가로 임명됩니다.", {appearance: 'info', autoDismiss: true});
+            addToast(info.email + "님의 작가승인요청이 완료되었습니다.", {appearance: 'info', autoDismiss: true});
+            addToast("운영진의 수락후 작가로 임명됩니다.", {appearance: 'info', autoDismiss: true});
+            dispatch(signin({...info, approval: true}));
         });
     }
 

@@ -99,8 +99,9 @@ const FundingSideBar = (funding) => {
                 <div className="sidebar-blog-img">
                     <div to={process.env.PUBLIC_URL + "/blog-details-standard"}>
                         <img
-                            src={p.imgArr[0] && p.imgArr[0].imgSrc}
+                            src={(p.imgArr[0] && p.imgArr[0].imgSrc)||process.env.PUBLIC_URL+"/assets/img/default.png"}
                             alt=""
+                            height="230px"
                         />
                     </div>
                     <div className="sidebar-blog-content" >

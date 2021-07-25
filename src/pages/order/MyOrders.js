@@ -1,6 +1,7 @@
 import {useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
 import orderServices from "../../service/orderServices";
+import getFormatDate from "../../modules/getFormatDate";
 
 const initState = {
     page:1,
@@ -15,13 +16,13 @@ const initDto =
         {
             dto: {
                 ono: 2,
-                buyer: "buyer@hogang.mem",
-                receiverName: "Ho-Gang2",
-                receiverAddress: "Ho-Gu-si2, Ba-Bo-ro2",
-                receiverDetailedAddress: "asdsadsadadasd2",
-                receiverPhone: "010-1111-2222",
-                receiverRequest: "없음",
-                tid: "T2922580376100257874",
+                buyer: "",
+                receiverName: "",
+                receiverAddress: "",
+                receiverDetailedAddress: "",
+                receiverPhone: "",
+                receiverRequest: "",
+                tid: "",
                 shippedDate: null,
                 cancelledDate: null,
                 products: null,
@@ -47,16 +48,16 @@ const MyOrders = () => {
     }, [flag, pager.page]);
 
     const cancelOrder = async (prod) => {
-        console.log(process.env.REACT_APP_KAKAO_PAY_CID, prod)
+        console.log(prod)
 
-        await orderServices.cancelKakaoPay({
+        const kakaoCancel = await orderServices.cancelKakaoPay({
             tid: prod.dto.tid,
             amount: prod.totalPrices,
             taxAmount: 0
         })
 
-        // orderServices.cancelOrdersUserMade(prod.dto.ono).then(r =>
-        //     setFlag(!flag))
+        orderServices.cancelOrdersUserMade(prod.dto.ono).then(r =>
+            setFlag(!flag))
     };
 
     const movePages = (moveNum) => {
@@ -81,7 +82,7 @@ const MyOrders = () => {
                         <p style={{fontSize:"12px"}}><strong>구매 날짜 :</strong> {prod.dto.regDate}</p>
                         <p style={{fontSize:"12px"}}><strong>배송 :</strong> {prod.dto.shippedDate?prod.dto.shippedDate:"배송전"}</p>
                         <p style={{fontSize:"12px"}}><strong>배송시 주의 사항 :</strong> {prod.dto.receiverRequest}</p>
-                        {prod.dto.cancelledDate?<p style={{fontSize:"12px"}}><strong> 취소 일자 :</strong>{prod.dto.cancelledDate}</p>:
+                        {prod.dto.cancelledDate?<p style={{fontSize:"12px"}}><strong> 취소 일자 :</strong>{getFormatDate(new Date(prod.dto.cancelledDate))}</p>:
                             <div className="entries-edit-delete text-center">
                                 <button onClick={()=>{cancelOrder(prod)}}>취소</button>
                             </div>

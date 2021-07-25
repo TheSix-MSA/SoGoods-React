@@ -1,41 +1,58 @@
 import PropTypes from "prop-types";
-import React, { Fragment } from "react";
+import React, {Fragment, useState} from "react";
 import MetaTags from "react-meta-tags";
 import {connect, useSelector} from "react-redux";
 import queryString from "querystring";
 import orderServices from "../../service/orderServices";
+import {useHistory} from "react-router-dom";
 import LayoutOne from "../../components/layouts/header/LayoutOne";
 
 const Confirmation = ({location}) => {
   const { search } = location
+  const history = useHistory();
   const queryObj = queryString.parse(search.replace("?",""));
-
   const user = useSelector((state) => state.login.email);
 
-  const tid = localStorage.getItem("transactionId")!==null?
-      JSON.parse(localStorage.getItem("transactionId")).tid:null;
+  const purchaseInfo = {
+    tid: JSON.parse(localStorage.getItem("transactionId")).tid,
+    partner_order_id: JSON.parse(localStorage.getItem("transactionId")).orderId,
+    pg_token: queryObj.pg_token,
+    products:JSON.parse(localStorage.getItem("transactionId")).cartList
+  }
 
-  const orderId = localStorage.getItem("transactionId")!==null?
-      JSON.parse(localStorage.getItem("transactionId")).orderId:null;
+  console.log("at the beginning",purchaseInfo);
 
-  const products = localStorage.getItem("transactionId")!==null?
-      JSON.parse(localStorage.getItem("transactionId")).cartList:null;
+  // const tid = localStorage.getItem("transactionId")!==null?
+  //     JSON.parse(localStorage.getItem("transactionId")).tid:null;
+  //
+  // const orderId = localStorage.getItem("transactionId")!==null?
+  //     JSON.parse(localStorage.getItem("transactionId")).orderId:null;
+  //
+  // const products = localStorage.getItem("transactionId")!==null?
+  //     JSON.parse(localStorage.getItem("transactionId")).cartList:null;
+
 
   const finalCheckOut = async () => {
     const params = new URLSearchParams()
     params.append('cid', process.env.REACT_APP_KAKAO_PAY_CID)
-    params.append('tid', tid)
-    params.append('partner_order_id', orderId)
+    params.append('tid', purchaseInfo.tid)
+    params.append('partner_order_id', purchaseInfo.partner_order_id)
     params.append('partner_user_id', user)
-    params.append('pg_token', queryObj.pg_token)
+    params.append('pg_token', purchaseInfo.pg_token)
 
-    console.log({...queryObj, orderId: orderId,buyer:user, tid:tid, products:products});
+    console.log("after pushed the btn ",purchaseInfo)
 
-    const res = await orderServices.kakaoPayApprovePayment(params);
-    const sendToDB = orderServices.orderConfirmedSave({...queryObj, orderId: orderId,buyer:user, tid:tid,products:products});
+    // await orderServices.kakaoPayApprovePayment(params);
+    // await orderServices.orderConfirmedSave({...queryObj, orderId: orderId, buyer: user, tid: tid, products: products});
 
-    localStorage.removeItem("transactionId");
+    // history.push("/completed")
   }
+
+  const orderCancel = () => {
+    history.push("/funding")
+  }
+
+  // localStorage.removeItem("transactionId");
 
   return (
     <Fragment>
@@ -57,9 +74,13 @@ const Confirmation = ({location}) => {
                       <i className="pe-7s-like"></i>
                     </div>
                     <div className="item-empty-area__text">
-                      No items found in wishlist <br />{" "}
-                      <div className="place-order mt-25">
-                        <button className="btn-hover" onClick={() => finalCheckOut()}>결제 승인</button>
+                      마지막 기회입니다! 결제하실 건가요? <br />{" "}
+                      <div className="your-order-area">
+                        <div className="place-order mt-25">
+                          <button className="btn-hover" onClick={() => finalCheckOut()}>결제 최종 승인!</button>
+                          <hr/>
+                          <button className="btn-hover" style={{backgroundColor:"red"}} onClick={() => orderCancel()}>한번 더 생각해 볼게요</button>
+                        </div>
                       </div>
                     </div>
                   </div>

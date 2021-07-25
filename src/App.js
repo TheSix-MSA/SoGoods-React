@@ -14,6 +14,7 @@ import {refreshToken} from "./modules/refreshToken";
 import Confirmation from "./pages/order/Confirmation";
 import withAuth from "./hoc/withAuth";
 import getLeftDate from "./modules/dateCalc";
+import FinalizedPage from "./pages/order/FinalizedPage";
 
 const AuthorApplication = lazy(()=>import( "./member/AuthorApplication"));
 //the six
@@ -189,19 +190,24 @@ const App = (props) => {
                   component={withAuth(LoginRegister,["ANONYMOUS"])}
                 />
 
-
                 <Route
                   path={process.env.PUBLIC_URL + "/wishlist"}
                   component={withAuth(Wishlist,["GENERAL","AUTHOR"])}
                 />
+
                 <Route
                   path={process.env.PUBLIC_URL + "/confirmOrder"}
-                  component={Confirmation}
+                  component={withAuth(Confirmation,["GENERAL","AUTHOR"])}
                 />
 
                 <Route
                   path={process.env.PUBLIC_URL + "/checkout"}
                   component={withAuth(Checkout,["GENERAL","AUTHOR"])}
+                />
+
+                <Route
+                    path={process.env.PUBLIC_URL + "/completed"}
+                    component={withAuth(FinalizedPage,["GENERAL","AUTHOR"])}
                 />
 
                 <Route

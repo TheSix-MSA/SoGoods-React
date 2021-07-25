@@ -162,8 +162,8 @@ const FundingSideBar = (funding) => {
                              </button>
                          </Link>
                          :
-                         <button className={"searchform__submit"}
-                                 style={{height: "50px", width: "100%", position: "relative", marginTop: "10px"}}>
+                         <button className={"searchform__submit"} disabled={true}
+                                 style={{height: "50px", backgroundColor: "grey", width: "100%", position: "relative", marginTop: "10px"}}>
                              상품을 선택해 주세요
                          </button>
                      }

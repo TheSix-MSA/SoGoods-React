@@ -11,11 +11,12 @@ import orderServices from "../../service/orderServices";
 import {v4 as uuidv4} from "uuid";
 
 const initStateForServer =  {
-    buyer: "이메일", //현재 구매자 정보는 리덕스를 이용해 가져와야 할듯
-    receiverName: "hihi",
-    receiverAddress: "어딘가",
-    receiverDetailedAddress: "어느 곳",
-    receiverPhone: "01011118888",
+    buyer: "", //현재 구매자 정보는 리덕스를 이용해 가져와야 할듯
+    receiverName: "",
+    receiverAddress: "",
+    receiverDetailedAddress: "",
+    receiverPhone: "",
+    receiverEmail: "",
     receiverRequest: ""
 }
 
@@ -43,6 +44,23 @@ const Checkout = ({ location }) => {
     };
 
     const checkOut = async () => {
+        if(!receiver.receiverName.trim()){
+            console.log("이름은 써라 좀")
+            return;
+        }
+        if(!receiver.receiverAddress.trim() || !receiver.receiverDetailedAddress.trim()){
+            console.log("주소를 입력해라 좀")
+            return;
+        }
+        if(!/^[0-9]{11}/.test(receiver.receiverPhone)){
+            console.log("잘못된 폰번호다")
+            return;
+        }
+        if(!/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/.test(receiver.receiverEmail)){
+            console.log("잘못된 이메일이다")
+            return;
+        }
+
         const uuid = uuidv4();
 
         const name = cartList.length>1 ?cartList[0].name+" 외 "+(cartList.length-1)+"개":cartList[0].name;
@@ -213,7 +231,6 @@ const Checkout = ({ location }) => {
                           </ul>
                         </div>
                       </div>
-                      <div className="payment-method"></div>
                     </div>
                     <div className="place-order mt-25">
                       <button className="btn-hover" onClick={() => checkOut()}>Kakao Pay로 결제하기</button>
@@ -226,7 +243,6 @@ const Checkout = ({ location }) => {
                 <div className="col-lg-12">
                   <div className="item-empty-area text-center">
                     <div className="item-empty-area__icon mb-30">
-                      <i className="pe-7s-cash"></i>
                     </div>
                     <div className="item-empty-area__text">
                       No items found in cart to checkout <br />{" "}

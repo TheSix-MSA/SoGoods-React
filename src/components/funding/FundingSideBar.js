@@ -25,12 +25,14 @@ const FundingSideBar = (funding) => {
     const [cartList, setCartList] = useState(funding.productDTOs?.map(item=>{
         return {...item,count:0}}));
 
+    const [purchasable, setPurchasable] = useState(false);
+
     // 첫 화면에 좋아요 뿌려주기
     useEffect(()=>{
         fundingService.getFavList(funding.fundingDTO.fno).then(res=>
             setFavList(res.response.favoriteDTOList)
         )
-    },[])
+    },[purchasable])
 
     /**
      * 장바구니 배열에 상품추가, 일치하는 값이 있으면 개수만 추가
@@ -41,6 +43,7 @@ const FundingSideBar = (funding) => {
             if(p.pno === product.pno) return {...p,count:(p.count||0)+1}
             return p;
         }));
+        setPurchasable(true)
     }
     console.log(cartList);
 
@@ -54,6 +57,13 @@ const FundingSideBar = (funding) => {
             if(item.pno === p.pno) return {...item,count:item.count-1}
             return item;
         }))
+
+        const setVal = cartList.reduce(function (prev, next) {
+            if (typeof prev === "object") {
+                return prev.count + next.count
+            }
+            return prev + next.count
+        }) === 0?setPurchasable(false):null;
     }
 
     /**
@@ -139,16 +149,24 @@ const FundingSideBar = (funding) => {
                  </div>
                  {/* funding button */}
                  <form className={"searchform"}>
-                     <Link to={{
-                         pathname: "/checkout",
-                         state: {
-                             cartList
-                         }
-                     }}>
-                         <button className={"searchform__submit"} style={{height:"50px", width:"100%", position:"relative", marginTop:"10px"}}>
-                             펀딩 참여하기
+                     {purchasable ?
+                         <Link to={{
+                             pathname: "/checkout",
+                             state: {
+                                 cartList
+                             }
+                         }}>
+                             <button className={"searchform__submit"}
+                                     style={{height: "50px", width: "100%", position: "relative", marginTop: "10px"}}>
+                                 펀딩 참여하기
+                             </button>
+                         </Link>
+                         :
+                         <button className={"searchform__submit"}
+                                 style={{height: "50px", width: "100%", position: "relative", marginTop: "10px"}}>
+                             상품을 선택해 주세요
                          </button>
-                     </Link>
+                     }
                  </form>
              </div>
          </div>

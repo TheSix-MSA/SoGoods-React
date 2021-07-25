@@ -35,7 +35,7 @@ const BlogNoSidebar = ({match}) => {
         dispatch(getBoardData({...search, page: value.page, boardType: boardType.current })).unwrap().then(res => {
             setBoardData(res.response)
         })
-        boardService.noticeBoard(3).then(res => {
+        boardService.noticeBoard(20).then(res => {
             setNotice(res.data.response)
         })
     }, [dispatch, value.page, match.params.boardType])

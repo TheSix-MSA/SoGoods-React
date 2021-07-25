@@ -1,4 +1,4 @@
-import React, {useEffect, useState, Fragment} from "react";
+import React, {useEffect, useState} from "react";
 
 import {
     Card,
@@ -12,8 +12,6 @@ import {useHistory, useLocation} from "react-router-dom";
 import * as queryString from "querystring";
 import useInputs from "../../customHooks/useInputs";
 import memberService from "../sevice/memberService";
-import {Button, FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
 
 const initState = {
     memberList: [
@@ -82,7 +80,8 @@ const MemberTable = () => {
         });
     }
 
-    const search = async () => {
+    const search = async (e) => {
+        e.preventDefault();
         const res = await memberService.getMemberList(1, searchInput.keyword, searchInput.type)
         setMembers(res.data.response)
         history.push('/admin/member?page=' + page + '&keyword=' + searchInput.keyword + '&type=' + searchInput.type);
@@ -111,18 +110,21 @@ const MemberTable = () => {
         })
     }
 
-    const list = members.memberList.map(member => {
-        return <tr key={member.email}>
+    const list = members.memberList?.map(member => {
+        return <tr className='hs-style' key={member.email}>
             <td>{member.email}</td>
             <td>{member.name}</td>
             <td>{member.birth}</td>
             <td>{member.phone}</td>
             <td>{member.address} {member.detailAddress}</td>
             <td>{member.gender}</td>
-            <td onClick={() => ban(member)}
-                style={{textAlign: "center"}}>{member.banned ? "🔴" : "🟢"}</td>
+            <td onClick={() => ban(member)} style={{textAlign: "center"}}>
+                <span style={{cursor: "pointer"}}>{member.banned ? "🔴" : "🟢"} </span>
+            </td>
             <td>{member.removed ? "삭제" : "정상"}</td>
-            <td onClick={() => role(member)}>{member.roleSet[member.roleSet.length-1]} </td>
+            <td onClick={() => role(member)}>
+                <span style={{cursor: "pointer"}}>{member.roleSet[member.roleSet.length - 1]} </span>
+            </td>
             <td>{getFormatDate(new Date(member.regDate))}</td>
             <td><img src={member.identificationUrl}/></td>
         </tr>
@@ -136,16 +138,16 @@ const MemberTable = () => {
                         <Card.Title as="h4">회원 리스트</Card.Title>
 
                         <div className="pro-sidebar-search mb-55 mt-25">
-                            <form className="pro-sidebar-search-form" action="#">
-                                <select name="type" style={{width:"10%"}} onChange={searchOnChange}>
+                            <form className="pro-sidebar-search-form">
+                                <select name="type" style={{width: "10%"}} onChange={searchOnChange}>
                                     <option value='n'>이름</option>
                                     <option value='e'>이메일</option>
                                     <option value='a'>주소</option>
                                 </select>
                                 <input value={searchInput.keyword} onChange={searchOnChange} type="text"
                                        name="keyword" placeholder="검색"/>
-                                <button style={{top:"70%"}} onClick={search}>
-                                    <i className="pe-7s-search" />
+                                <button style={{top: "70%"}} onClick={search}>
+                                    <i className="pe-7s-search"/>
                                 </button>
                             </form>
                         </div>
@@ -156,7 +158,8 @@ const MemberTable = () => {
 
                     </Card.Header>
                     <Card.Body className="table-full-width table-responsive px-0">
-                        <Table className="table-hover table-striped" style={{textAlign: "center"}}>
+                        <Table className="table-hover table-striped"
+                               style={{textAlign: "center", tableLayout: "fixed"}}>
                             <thead>
                             <tr>
                                 <th className="border-0">이메일</th>

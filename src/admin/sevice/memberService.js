@@ -56,8 +56,6 @@ const memberService = () => {
         movePage = func;
     }
 
-
     return {setRender, getMemberList, changeRole, changeBanned, getMemberApprovalList, setMovePage, changeAuth}
-
 }
 export default memberService();

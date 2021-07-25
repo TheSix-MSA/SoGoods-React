@@ -1,5 +1,4 @@
-import React, {useEffect, useState, Fragment} from "react";
-
+import React, {useEffect, useState} from "react";
 import {
     Card,
     Table,
@@ -62,7 +61,6 @@ const FundingRequestTable = () => {
         });
     }, [page, flag])
 
-
     const movePage = (num) => {
         history.push('/admin/request?page=' + num)
         funding.pageMaker.page = num;
@@ -74,14 +72,15 @@ const FundingRequestTable = () => {
     const toFunding = (fno) => {
         history.push("/funding/read/" + fno)
     }
+
     const setAuthorized = (fund) => {
         fundingService.setAuthorized(fund.fno, funding.pageMaker.page)
             .then();
     }
 
     const list = funding.dtoList.map(fund => {
-        return <tr key={fund.fno}>
-            <td onClick={() => toFunding(fund.fno)}>{fund.title}</td>
+        return <tr className='hs-style' key={fund.fno}>
+            <td onClick={() => toFunding(fund.fno)}><span style={{cursor:"pointer"}}>{fund.title}</span></td>
             <td>{fund.writer}</td>
             <td>{fund.email}</td>
             <td>{fund.content}</td>
@@ -89,7 +88,7 @@ const FundingRequestTable = () => {
             <td>{fund.totalAmount}</td>
             <td>{fund.dueDate}</td>
             <td>{fund.regDate}</td>
-            <td onClick={() => setAuthorized(fund)}>{fund.authorized ? null : "✔"}</td>
+            <td onClick={() => setAuthorized(fund)}>{fund.authorized ? null : <span style={{cursor:"pointer"}}>✔</span>}</td>
         </tr>
     })
 
@@ -104,7 +103,7 @@ const FundingRequestTable = () => {
                         </p>
                     </Card.Header>
                     <Card.Body className="table-full-width table-responsive px-20">
-                        <Table className="table-hover table-striped" style={{textAlign: "center"}}>
+                        <Table className="table-hover table-striped" style={{textAlign: "center",tableLayout:"fixed"}}>
                             <thead>
                             <tr>
                                 <th className="border-0">제목</th>
@@ -127,7 +126,6 @@ const FundingRequestTable = () => {
                 </Card>
             </Col>
         </Row>
-
     );
 }
 

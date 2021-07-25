@@ -6,9 +6,10 @@ import Tab from "react-bootstrap/Tab";
 import {useHistory} from "react-router-dom";
 import boardService from "./boardService";
 import {useToasts} from "react-toast-notifications";
-import {Checkbox, TextField} from "@material-ui/core";
+import {TextField} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import {ToastTopRight} from "../modules/toastModule";
 
 const initState = {
     title: '',
@@ -19,7 +20,7 @@ const initState = {
 
 const BoardRegister = ({match}) => {
     const classes = useStyles();
-    const {addToast} = useToasts()
+    const { addToast } = useToasts()
     const boardType = useRef(match.params.boardType?.toUpperCase())
     const [board, onChange, setBoard] = useInputs(initState);
     const history = useHistory()
@@ -29,14 +30,12 @@ const BoardRegister = ({match}) => {
     const contentRef = useRef();
 
     const register = (e) => {
-        if (board.title === "" || board.title === undefined || board.title === null) {
-            if(board.content !== "" || board.content !== null) {
-                setBoard({...board, content:board.content})
-                addToast("제목을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
-                return;
-            }
-        } else if (board.content === "" || board.content === undefined || board.content === null) {
-            addToast("내용을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
+        e.preventDefault();
+        if (!board.title) {
+            ToastTopRight("💨제목을 입력해주세요.");
+            return;
+        } else if (!board.content) {
+            ToastTopRight("💨내용을 입력해주세요.");
             return;
         }
 
@@ -91,9 +90,7 @@ const BoardRegister = ({match}) => {
                                                                 <Button
                                                                     variant="contained"
                                                                     color="primary"
-                                                                    onClick={(e) => {
-                                                                        register()
-                                                                    }}>
+                                                                    onClick={register}>
                                                                     작성
                                                                 </Button>
                                                             </div>

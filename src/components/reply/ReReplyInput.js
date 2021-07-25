@@ -3,8 +3,8 @@ import useInputs from "../../customHooks/useInputs";
 import repliesService from "../../service/repliesService";
 
 const initState = {
-    writer: "라이터",
-    email: "이메일",
+    writer: "",
+    email: "",
     content: "",
     groupId: 0,
     level: 0,
@@ -12,8 +12,9 @@ const initState = {
     keyValue: 0
 }
 
-const ReReplyInput = ({dto, bno, page}) => {
-    const [reReply, changeReReply, setReReply] = useInputs(initState);
+const ReReplyInput = ({dto, bno, page, user}) => {
+    const [reReply, changeReReply, setReReply] = useInputs({...initState,
+        writer:user.name.substr(0,user.name.length-1)+"*", email:user.email});
 
     const send = () => {
         /**
@@ -49,7 +50,7 @@ const ReReplyInput = ({dto, bno, page}) => {
                         </div>
                     </div>
                     <div className="col-md-2">
-                        <input type="submit" onClick={() => send()}/>
+                        <input type="submit" onClick={() => send()} disabled={user}/>
                         <input type="submit" value="Cancel" onClick={()=> turnOff()}/>
                     </div>
                 </div>

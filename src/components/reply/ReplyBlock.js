@@ -3,7 +3,7 @@ import ReReplyInput from "./ReReplyInput";
 import ReplyModify from "./ReplyModify";
 import getFormatDate from "../../modules/getFormatDate";
 
-const ReplyBlock = ({dto, deleteReply, bno, page, reReply, isReplying, updateReply, isModifying}) => {
+const ReplyBlock = ({dto, deleteReply, bno, page, reReply, isReplying, updateReply, isModifying, user}) => {
 
     return (
         <>
@@ -11,7 +11,7 @@ const ReplyBlock = ({dto, deleteReply, bno, page, reReply, isReplying, updateRep
                 <div className="blog-comment-content">
                     <>{isModifying.val&&isModifying.id===dto.rno?(<ReplyModify bno={bno} dto={dto} page={page}/>):
                         <>
-                            <h4>{dto.writer}, {dto.rno}</h4>
+                            <h4>{dto.writer}</h4>
                             <span>{getFormatDate(new Date(dto.modDate))}</span>
                             <p>
                                 {dto.content}{" "}
@@ -20,17 +20,21 @@ const ReplyBlock = ({dto, deleteReply, bno, page, reReply, isReplying, updateRep
                                 <div className="btn">
                                     <span onClick={() => reReply(dto.rno)}>답글</span>
                                 </div>
-                                <div className="btn">
-                                    <span onClick={() => updateReply(dto.rno)}>수정</span>
-                                </div>
-                                <div className="btn">
-                                    <span onClick={() => deleteReply(dto.rno)}>삭제</span>
-                                </div>
+                                {user&&user.email===dto.email?
+                                    <div className="btn">
+                                        <span onClick={() => updateReply(dto.rno)}>수정</span>
+                                    </div>
+                                : null}
+                                {user&&(user.email===dto.email||user.roles.includes("ADMIN"))?
+                                    <div className="btn">
+                                        <span onClick={() => deleteReply(dto.rno)}>삭제</span>
+                                    </div>
+                                :null}
                             </div>
                         </>
                     }</>
                     <div>
-                        {isReplying.val&&isReplying.id===dto.rno?(<ReReplyInput bno={bno} dto={dto} page={page}/>):null}
+                        {isReplying.val&&isReplying.id===dto.rno?(<ReReplyInput user={user} bno={bno} dto={dto} page={page}/>):null}
                     </div>
                 </div>
                 :

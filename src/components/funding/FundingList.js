@@ -39,7 +39,7 @@ const FundingList = ({ location, productTabClass}) => {
     // 파라미터로 넘어가는 값
     const page = value.page||1;
     const keyword = value.keyword||"";
-    const type = value.type||"";
+    const type = value.type||"t";
     const state = value.state||"open";
 
     const history = useHistory()
@@ -102,7 +102,7 @@ const FundingList = ({ location, productTabClass}) => {
         <div key={idx} onClick={()=> readTodo(dto.fundingDTO.fno)} style={{cursor:"pointer", margin:"30px 10px", height:"300px", width:"380px"}}>
             <h5>{dto.fundingDTO.fno}번 게시글</h5>
             <img alt={"이미지"} src={dto.fundingDTO.imgSrc} height={"230px"} width={"350px"} style={{objectFit:"cover"}}/>
-            <h5 style={{marginTop:"5px"}}>{dto.fundingDTO.title}</h5>
+            <h5 style={{marginTop:"5px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflowX: "hidden", maxWidth:"350px"}}>{dto.fundingDTO.title}</h5>
             <LinearWithValueLabel dto={dto}></LinearWithValueLabel>
             <h5>마감일 : {dto.fundingDTO.dueDate}  |  펀딩금액 : {dto.fundingDTO.totalAmount}원</h5>
         </div>
@@ -138,7 +138,7 @@ const FundingList = ({ location, productTabClass}) => {
                             <div style={{display:"flex"}}>
                                 {/* select option */}
                                 <select name='type' onChange={searchOnChange} style={{width:"100px",border:"1px solid #EEE", borderRadius:"15px 0 0 15px"}}>
-                                    <option value=''>선택</option>
+                                    <option value='t'>선택</option>
                                     <option value='w'>작성자</option>
                                     <option value='t'>제목</option>
                                     <option value='c'>내용</option>

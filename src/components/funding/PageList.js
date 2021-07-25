@@ -6,7 +6,7 @@ const PageList = ({data, movePage}) => {
         <div>
             <div className="pro-pagination-style text-center mt-20">
                 <ul>
-                    {data.pageMaker &&
+                    {data.pageMaker.prev &&
                     <li>
                         <button className="prev" onClick={() => movePage(data.pageMaker.start-1)}>
                             <i className="fa fa-angle-double-left"/>
@@ -18,7 +18,7 @@ const PageList = ({data, movePage}) => {
                             <button className="active" onClick={()=> movePage(p)}> {p} </button>
                         </li>
                     )}
-                    {data.pageMaker &&
+                    {data.pageMaker.next &&
                     <li>
                         <button className="next" onClick={() => movePage(data.pageMaker.end + 1)}>
                             <i className="fa fa-angle-double-right"/>

@@ -14,8 +14,6 @@ const FundingPost = (funding) => {
         )
     })
 
-
-
     return (
         <div>
             <Fragment>

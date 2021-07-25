@@ -6,7 +6,7 @@ import Tab from "react-bootstrap/Tab";
 import {useHistory} from "react-router-dom";
 import boardService from "./boardService";
 import {useToasts} from "react-toast-notifications";
-import {Checkbox, TextField} from "@material-ui/core";
+import {TextField} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 
@@ -19,7 +19,7 @@ const initState = {
 
 const BoardRegister = ({match}) => {
     const classes = useStyles();
-    const {addToast} = useToasts()
+    const { addToast } = useToasts()
     const boardType = useRef(match.params.boardType?.toUpperCase())
     const [board, onChange, setBoard] = useInputs(initState);
     const history = useHistory()

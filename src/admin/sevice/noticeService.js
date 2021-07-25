@@ -32,6 +32,7 @@ const noticeService = () => {
         render()
         return result.data
     }
+
     const changeRemoved = async (bno) => {
         console.log("sadfsdfdsafasdfassdfdsfsa")
         const result = await instance({

@@ -47,6 +47,11 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
                   작가게시판
                 </Link>
               </li>
+              <li>
+                <Link to={"/board/notice/list"}>
+                  공지사항
+                </Link>
+              </li>
             </ul>
           </li>
           <li>
@@ -74,11 +79,6 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
               <li>
                 <Link to={process.env.PUBLIC_URL + "/checkout"}>
                   {strings["checkout"]}
-                </Link>
-              </li>
-              <li>
-                <Link to={"/board/notice/list"}>
-                  공지사항
                 </Link>
               </li>
             </ul>

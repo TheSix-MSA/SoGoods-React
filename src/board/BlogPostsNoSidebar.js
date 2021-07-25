@@ -16,9 +16,9 @@ const BlogPostsNoSidebar = ({boardData, boardType}) => {
                     <div className="blog-wrap-2 mb-30">
                         <div className="blog-content-2">
                             <div className="blog-meta-2">
-                                <ul key={idx}>
+                                <ul key={idx} >
                                     {data.private === false &&
-                                    <li>
+                                    <li >
                                         {getFormatDate(new Date(data.modDate))}
                                         <span style={{display: "inline-block", paddingLeft: "10px"}}>
                                             {data.replyCnt} <i className="fa fa-comments-o"/>
@@ -28,11 +28,11 @@ const BlogPostsNoSidebar = ({boardData, boardType}) => {
                                 </ul>
                             </div>
                             <h4>
-                                <div onClick={()=>{moveDetail(data.bno)}}>
+                                <div onClick={()=>{moveDetail(data.bno)}} style={{overflowWrap: "break-word", textOverflow: "ellipsis"}}>
                                     {data.title}
                                 </div>
                             </h4>
-                            <p>
+                            <p style={{overflowWrap: "break-word", textOverflow: "ellipsis"}}>
                                 {data.content}
                             </p>
                             <div className="blog-share-comment">

@@ -64,8 +64,10 @@ const BlogPost = ({data, boardType}) => {
                                 </li>
                             </ul>
                         </div>
+                        <div style={{overflowWrap: "break-word", textOverflow: "ellipsis"}}>
                         <h3>{data.title}</h3>
-                        <p>
+                        </div>
+                        <p style={{overflowWrap: "break-word", textOverflow: "ellipsis"}}>
                             {data.content}
                         </p>
                     </div>

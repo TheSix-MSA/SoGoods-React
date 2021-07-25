@@ -37,7 +37,6 @@ const fundingService = () => {
         }
 
         const result = await axios.post(
-          // `${process.env.REACT_APP_API_DEV_URL}/attach/upload?tableName=${tableName}&keyValue=${keyValue}&mainIdx=${mainIdx}`,
           `${process.env.REACT_APP_API_URL}/attach/upload?tableName=${tableName}&keyValue=${keyValue}&mainIdx=${mainIdx}`,
             form,
             config)
@@ -48,7 +47,6 @@ const fundingService = () => {
         let keyStr = keyValues.map(v=>'&keyValues=' + v)
 
         const result = await axios.get(
-             // `${process.env.REACT_APP_API_DEV_URL}/attach/list/uuid?type=${type}` + keyStr.join(''))
             `${process.env.REACT_APP_API_URL}/attach/list/uuid?type=${type}` + keyStr.join(''))
         return result
     }
@@ -59,7 +57,6 @@ const fundingService = () => {
         let mainListStr = mainList.map(m=>'&mainList=' + m)
 
         const result = await axios.get(
-          //  `${process.env.REACT_APP_API_DEV_URL}/attach/list/uuidlist?type=${type}` + keyStr.join('') + mainListStr.join(''))
            `${process.env.REACT_APP_API_URL}/attach/list/uuidlist?type=${type}` + keyStr.join('') + mainListStr.join(''))
         return result
     }

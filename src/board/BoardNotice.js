@@ -16,7 +16,7 @@ const BoardNotice = ({notice, page}) => {
         <Fragment>
             {notice && notice?.map((data, idx) => (
                 <Grid container>
-                    <Grid item xs={12} key={idx}>
+                    <Grid item xs={12} key={idx} style={{cursor:"pointer"}}>
                         {data.private === false &&
                         <Paper className={classes.paper}>
                             <span style={{float: "left"}}> 공지사항 </span>

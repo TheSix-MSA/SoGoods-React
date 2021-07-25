@@ -5,6 +5,8 @@ import useInputs from "../customHooks/useInputs";
 import {useHistory} from "react-router-dom";
 import boardService from "./boardService";
 import {useToasts} from "react-toast-notifications";
+import {TextField} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 
 const initState = {
     title: '',
@@ -12,28 +14,28 @@ const initState = {
 }
 
 const BoardModify = ({match}) => {
-    const { addToast } = useToasts()
+    const {addToast} = useToasts()
     const [board, onChange, setBoard] = useInputs(initState)
     const bno = useRef(match.params.bno)
     const boardType = useRef(match.params.boardType?.toUpperCase())
     const history = useHistory();
 
     const modify = () => {
-        if(board.title === "" || board.title === undefined || board.title === null){
-            addToast("내용을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
+        if (board.title === "" || board.title === undefined || board.title === null) {
+            addToast("제목을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
             return;
-        } else if(board.content === "" || board.content === undefined || board.content === null){
+        } else if (board.content === "" || board.content === undefined || board.content === null) {
             addToast("내용을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
             return;
         }
         boardService.modifyBoard(bno.current, board, boardType.current).then(res => {
             setBoard({...res})
+            if (boardType.current.includes("NOTICE")) {
+                history.push(`/admin/dashboard`)
+            } else {
+                history.push(`/board/${boardType.current}/${bno.current}`)
+            }
         })
-        if (boardType.current.includes("NOTICE")) {
-            history.push(`/admin/dashboard`)
-        } else {
-            history.push(`/board/${boardType.current}/${bno.current}`)
-        }
     }
 
     useEffect(() => {
@@ -62,23 +64,34 @@ const BoardModify = ({match}) => {
                                     <div className="login-form-container">
                                         <div className="login-register-form">
                                             <form>
-                                                <input
-                                                    type={"text"}
+                                                <TextField
+                                                    id="standard-basic"
+                                                    label="제목"
                                                     name={"title"}
-                                                    placeholder="Title"
                                                     value={board.title || ""}
                                                     onChange={onChange}
+                                                    inputProps={{maxLength:50}}
+                                                    style={{width: "100%", marginBottom: "20px"}}
                                                 />
-                                                <textarea
+                                                <TextField
+                                                    id="outlined-multiline-static"
+                                                    label="내용"
+                                                    multiline
+                                                    rows={15}
+                                                    variant="outlined"
                                                     name={"content"}
-                                                    placeholder="Content"
                                                     value={board.content || ""}
                                                     onChange={onChange}
+                                                    style={{width: "100%"}}
                                                 />
-                                                <div className="col-md-2">
-                                                    <input type="submit" onClick={() => {
-                                                        modify()
-                                                    }}/>
+                                                <div className="col-md-2" style={{marginTop: "10px", paddingLeft: "0"}}>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        onClick={() => {
+                                                            modify()
+                                                        }}> 수정
+                                                    </Button>
                                                 </div>
                                             </form>
                                         </div>

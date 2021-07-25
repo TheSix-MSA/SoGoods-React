@@ -13,12 +13,12 @@ const BlogPostsNoSidebar = ({boardData, boardType}) => {
         <Fragment>
             {boardData && boardData?.map((data, idx) => (
                 <div className="col-lg-4 col-md-6 col-sm-12" key={idx}>
-                    <div className="blog-wrap-2 mb-30">
+                    <div className="blog-wrap-2 mb-30" onClick={()=>{moveDetail(data.bno)}} style={{cursor:"pointer"}}>
                         <div className="blog-content-2">
                             <div className="blog-meta-2">
-                                <ul key={idx} >
+                                <ul>
                                     {data.private === false &&
-                                    <li >
+                                    <li>
                                         {getFormatDate(new Date(data.modDate))}
                                         <span style={{display: "inline-block", paddingLeft: "10px"}}>
                                             {data.replyCnt} <i className="fa fa-comments-o"/>
@@ -28,11 +28,12 @@ const BlogPostsNoSidebar = ({boardData, boardType}) => {
                                 </ul>
                             </div>
                             <h4>
-                                <div onClick={()=>{moveDetail(data.bno)}} style={{overflowWrap: "break-word", textOverflow: "ellipsis"}}>
+                                <div onClick={()=>{moveDetail(data.bno)}}
+                                     style={{textOverflow:"ellipsis", whiteSpace:"nowrap", overflowX:"hidden", maxWidth:"300px", height: "30px"}}>
                                     {data.title}
                                 </div>
                             </h4>
-                            <p style={{overflowWrap: "break-word", textOverflow: "ellipsis"}}>
+                            <p style={{textOverflow:"ellipsis", whiteSpace:"nowrap", overflowX:"hidden", maxWidth:"300px", height: "30px"}}>
                                 {data.content}
                             </p>
                             <div className="blog-share-comment">

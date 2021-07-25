@@ -12,12 +12,11 @@ import * as queryString from "querystring";
 import boardService from "./boardService";
 import {Button, FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import noticeService from "../admin/sevice/noticeService";
 import BoardNotice from "./BoardNotice";
 
 const initState = {
     page: 1,
-    type: '',
+    type: "t",
     keyword: '',
 }
 const BlogNoSidebar = ({match}) => {
@@ -32,7 +31,7 @@ const BlogNoSidebar = ({match}) => {
     const [search, onChange, setSearch] = useInputs({...initState, page: value.page || 1})
     useEffect(() => {
         boardType.current = match.params.boardType.toUpperCase()
-        dispatch(getBoardData({...search, page: value.page, boardType: boardType.current })).unwrap().then(res => {
+        dispatch(getBoardData({...search, page: value.page, boardType: boardType.current})).unwrap().then(res => {
             setBoardData(res.response)
         })
         boardService.noticeBoard(100).then(res => {
@@ -64,26 +63,30 @@ const BlogNoSidebar = ({match}) => {
                 {/* breadcrumb */}
                 <div className="blog-area pt-100 pb-100 blog-no-sidebar">
                     <div className="container">
-                        {boardType.current.includes("FREE") ? (
+                        { boardType.current.includes("FREE") ? (
                             <div style={{textAlign: "right"}}>
                                 <Button variant="contained" size="small" color="primary" className={classes.margin}
                                         onClick={boardRegister}> 글쓰기 </Button>
                             </div>
-                        ) : null}
+                        ) : null }
                         <div className="pro-sidebar-search mb-55 mt-25">
                             <FormControl className={classes.formControl}>
-                                <InputLabel shrink id="demo-simple-select-placeholder-label-label">
+                                <InputLabel
+                                    shrink id="demo-simple-select-placeholder-label-label">
                                     선택
                                 </InputLabel>
-                                <Select labelId="demo-simple-select-placeholder-label-label"
-                                        id="demo-simple-select-placeholder-label"
-                                        displayEmpty
-                                        className={classes.selectEmpty}
-                                        name="type" value={search.type} onChange={onChange}>
-                                    <MenuItem value="t"> 제목</MenuItem>
-                                    <MenuItem value="w"> 작성자</MenuItem>
-                                    <MenuItem value="c"> 내용</MenuItem>
-                                    <MenuItem value="tc"> 제목+내용</MenuItem>
+                                <Select
+                                    labelId="demo-simple-select-placeholder-label-label"
+                                    id="demo-simple-select-placeholder-label"
+                                    displayEmpty
+                                    className={classes.selectEmpty}
+                                    name="type"
+                                    defaultValue={MenuItem[1]}
+                                    onChange={onChange}>
+                                        <MenuItem value="t"> 제목</MenuItem>
+                                        <MenuItem value="w"> 작성자</MenuItem>
+                                        <MenuItem value="c"> 내용</MenuItem>
+                                        <MenuItem value="tc"> 제목+내용</MenuItem>
                                 </Select>
                             </FormControl>
                             <TextField
@@ -103,8 +106,8 @@ const BlogNoSidebar = ({match}) => {
                                 <div className="mr-20">
                                     <div className="row">
                                         {/* blog posts */}
-                                        { notice && boardType.current !== "NOTICE" &&
-                                            <BoardNotice notice={notice.boardDtoList} page={notice.pageMaker} />
+                                        {notice && boardType.current !== "NOTICE" &&
+                                        <BoardNotice notice={notice.boardDtoList} page={notice.pageMaker}/>
                                         }
                                         {boardData.boardDtoList !== null ? (
                                             <BlogPostsNoSidebar

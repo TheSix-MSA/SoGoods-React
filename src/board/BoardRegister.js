@@ -28,10 +28,13 @@ const BoardRegister = ({match}) => {
     const titleRef = useRef();
     const contentRef = useRef();
 
-    const register = () => {
+    const register = (e) => {
         if (board.title === "" || board.title === undefined || board.title === null) {
-            addToast("내용을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
-            return;
+            if(board.content !== "" || board.content !== null) {
+                setBoard({...board, content:board.content})
+                addToast("제목을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
+                return;
+            }
         } else if (board.content === "" || board.content === undefined || board.content === null) {
             addToast("내용을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
             return;
@@ -69,6 +72,7 @@ const BoardRegister = ({match}) => {
                                                                 value={board.title}
                                                                 onChange={onChange}
                                                                 ref={titleRef}
+                                                                inputProps={{maxLength:50}}
                                                                 style={{width: "100%", marginBottom: "20px"}}
                                                             />
                                                             <TextField
@@ -76,7 +80,6 @@ const BoardRegister = ({match}) => {
                                                                 label="내용"
                                                                 multiline
                                                                 rows={15}
-                                                                defaultValue="Default Value"
                                                                 variant="outlined"
                                                                 name={"content"}
                                                                 value={board.content}
@@ -88,7 +91,7 @@ const BoardRegister = ({match}) => {
                                                                 <Button
                                                                     variant="contained"
                                                                     color="primary"
-                                                                    onClick={() => {
+                                                                    onClick={(e) => {
                                                                         register()
                                                                     }}>
                                                                     작성

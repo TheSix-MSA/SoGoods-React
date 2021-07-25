@@ -93,7 +93,6 @@ const FundingSideBar = (funding) => {
      * 제품 리스트 뿌려주기
      * @type {unknown[]}
      */
-    console.log(cartList)
     const productList = cartList.map((p, idx)=>
             <div className="single-sidebar-blog" key={idx}>
                 <div>{idx+1}번 리워드 </div>

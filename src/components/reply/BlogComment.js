@@ -2,6 +2,7 @@ import React, {Fragment, useEffect, useState} from "react";
 import repliesService from "../../service/repliesService";
 import ReplyBlock from "./ReplyBlock";
 import ReplyInput from "./ReplyInput";
+import {useSelector} from "react-redux";
 
 const initState = {
   repliesDTOList: [
@@ -31,6 +32,7 @@ const initState = {
 const BlogComment = ({bno}) => {
   const [replies, setReplies] = useState({...initState, bno:bno});
   const [flag, setFlag] = useState(false);
+  const user = useSelector((state) => state.login);
 
   useEffect(() => {
     repliesService.getList(replies.bno, replies.pageMaker.page).then(res => {
@@ -139,6 +141,7 @@ const BlogComment = ({bno}) => {
                         removeModifyInput={removeModifyInput}
                         isReplying = {isReplying}
                         isModifying ={isModifying}
+                        user = {user}
             />
           </div>
         )}
@@ -151,7 +154,7 @@ const BlogComment = ({bno}) => {
         {replies.pageMaker.next && <span>Next</span>}
       </div>
 
-      <ReplyInput bno={replies.bno} page={replies.pageMaker.page}
+      <ReplyInput bno={replies.bno} page={replies.pageMaker.page} user={user}
                   maxPage={replies.pageMaker.pageList.length!==0?replies.pageMaker.pageList[replies.pageMaker.pageList.length-1]:1}/>
     </Fragment>
   );

@@ -6,7 +6,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import myAccountService from "./myAccountService";
-import axios from "axios";
 import {useSelector} from "react-redux";
 import {useToasts} from "react-toast-notifications";
 

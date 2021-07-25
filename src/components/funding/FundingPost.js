@@ -1,4 +1,5 @@
 import React, {Fragment} from 'react';
+import ImgCarousel from "./ImgCarousel";
 
 const FundingPost = (funding) => {
 
@@ -6,18 +7,14 @@ const FundingPost = (funding) => {
 
     const list = funding.productDTOs.map((productDTO, i)=>{
         const part = productDTO.imgArr.map(img=>{
-            return (
-                <div>
-                   <img src={img.imgSrc}/>
-                </div>
-            )
+            return {imgPath: img.imgSrc}
         })
         return (
-            <div>
-                {part}
-            </div>
+            <ImgCarousel tutorialSteps ={part} ></ImgCarousel>
         )
     })
+
+
 
     return (
         <div>
@@ -46,6 +43,7 @@ const FundingPost = (funding) => {
                         </p>
 
                         <div>
+
                             {list}
 
                         </div>

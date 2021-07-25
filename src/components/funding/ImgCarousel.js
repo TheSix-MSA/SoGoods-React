@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
 
+/*
 const tutorialSteps = [
     {
         label: 'San Francisco – Oakland Bay Bridge, United States',
@@ -33,6 +34,7 @@ const tutorialSteps = [
             'https://images.unsplash.com/photo-1512341689857-198e7e2f3ca8?auto=format&fit=crop&w=400&h=250&q=60',
     },
 ];
+*/
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -55,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function ImgCarousel() {
+export default function ImgCarousel({tutorialSteps}) {
     const classes = useStyles();
     const theme = useTheme();
     const [activeStep, setActiveStep] = React.useState(0);

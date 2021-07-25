@@ -144,7 +144,6 @@ const FundingRegister = () => {
                                        style={{flaot: 'left'}}/>
                             </div>
                         )}
-
                     </div>
                 </li>
             </>

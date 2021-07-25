@@ -1,21 +1,24 @@
 import React, {Fragment} from 'react';
+import ImgCarousel from "./ImgCarousel";
 
 const FundingPost = (funding) => {
 
-    console.log(funding)
-
+    console.log('funding.productDTOs: ', funding.productDTOs)
     const list = funding.productDTOs.map((productDTO, i)=>{
+
+
+
         const part = productDTO.imgArr.map(img=>{
-            return (
-                <div>
-                   <img src={img.imgSrc}/>
-                </div>
-            )
+
+            return {imgPath: img.imgSrc}
         })
+
+
+
         return (
-            <div>
-                {part}
-            </div>
+
+            <ImgCarousel tutorialSteps ={part} ></ImgCarousel>
+
         )
     })
 
@@ -27,7 +30,7 @@ const FundingPost = (funding) => {
                     <div className="blog-details-img" >
                         <img
                             alt=""
-                            src={funding.fundingDTO.imgSrc}
+                            src={(funding.fundingDTO && funding.fundingDTO.imgSrc) || process.env.PUBLIC_URL+"/assets/img/default.png"}
                             style={{objectFit:"cover"}}
                         />
                     </div>
@@ -46,6 +49,7 @@ const FundingPost = (funding) => {
                         </p>
 
                         <div>
+
                             {list}
 
                         </div>

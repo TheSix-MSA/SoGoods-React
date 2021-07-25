@@ -1,13 +1,31 @@
-const productService = ()=>{
+const productUpdateService = ()=>{
 
     let openFn;
     let mode;
     let prodIdx;
-
-    const productList = [
+    let tempProduct;
+    let productList = [
     ]
 
-    let product;
+    let product = {
+        text:{
+            name: '',
+            des: '',
+            price: ''
+        },
+        pictures: [
+            //{file: null, main: 0}
+        ],
+        mainIdx: 0,
+    }
+
+
+    const initTempProduct = ()=>{
+        tempProduct = {...product}
+        console.log(tempProduct)
+    }
+
+    const getTempProduct = ()=>tempProduct
 
     const fileObjList = []
 
@@ -16,6 +34,8 @@ const productService = ()=>{
     }
 
     const getMode = ()=>mode
+
+
 
     const initProduct = () => {
         product = {
@@ -35,12 +55,16 @@ const productService = ()=>{
         openFn = func
     }
 
-    // const setRegisterFn = (func) =>{
-    //     registerFn = func
-    // }
+    const setProductList = (input)=>{
+        productList = input
+    }
 
     const getProductList = () => {
         return productList
+    }
+
+    const initProductList = () => {
+        productList = []
     }
 
     const getProduct = () => product
@@ -64,28 +88,30 @@ const productService = ()=>{
     }
 
     const setText = (form) => {
-
-
-
         product.text = form
-
     }
 
     const setPictures = (pictures)=>{
+
         product.pictures = pictures
+        console.log('aaa: ', getTempProduct())
     }
 
 
 
-    //다이얼로그 창 닫기
+    //다이얼로그 창  닫기
     const closeDialog = () => {
-        console.log('close')
         openFn(false)
+        console.log(getTempProduct())
+        productList[prodIdx] = getTempProduct();
         initProduct()
+
+
     }
 
     //새 상품등록버튼 클릭시
     const openDialog = () => {
+        console.log("OPEN")
         setMode('register')
         initProduct()
 
@@ -111,9 +137,15 @@ const productService = ()=>{
     const getFileObj = () => fileObjList
 
     return {
+        initTempProduct,
+        getTempProduct,
+
         setOpenFn,
 
         getProductList,
+        setProductList,
+
+        initProductList,
         getProduct,
         addProduct,
         editProduct,
@@ -133,4 +165,4 @@ const productService = ()=>{
 
     }
 }
-export default productService()
+export default productUpdateService()

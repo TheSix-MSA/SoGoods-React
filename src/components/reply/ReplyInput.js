@@ -14,7 +14,7 @@ const initState = {
 
 const ReplyInput = ({bno, maxPage, user}) => {
     const [reply, changeReply, setReply] = useInputs({...initState,
-        writer:user.name.substr(user.name-1)+"*", email:user.email});
+        writer:user.name.substr(0,user.name.length-1)+"*", email:user.email});
 
     const send = () => {
         reply.keyValue = bno;

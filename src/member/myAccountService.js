@@ -1,21 +1,47 @@
 import instance from "../modules/axiosConfig";
 import axios from "axios";
 
-const myAccountService = () => {
-    let loginInfo={
-        email:"",
-        password: "",
-        name: "",
-        gender: "",
-        birth: "",
-        phone: "",
-        address: "",
-    };
+let initState = {
+    page:1,
+    size:12,
+    totalCount:14,
+    pageList:[],
+    prev: false,
+    next : false,
+    start : 1,
+    end: 1
+}
 
+const myAccountService = () => {
     let dialogFn;
     let closeDialogFn;
     let clearInputFn;
     let listFlagFn;
+    let pager;  //pageMaker
+    let movePageFn;
+    let pagerFlagFn
+
+    const changePagerFlag = (func) => {
+        pagerFlagFn = func
+    };
+
+    const setMovePage = (func) => {
+        movePageFn = func
+    };
+
+    const movePage = (pageMaker)=>{
+        console.log(pageMaker);
+        movePageFn(pageMaker);
+    }
+
+    const setPager = (pagerInfo)=>{
+        pager = pagerInfo;
+        pagerFlagFn();
+    }
+
+    const getPager = () => {
+        return pager;
+    }
 
     const setListFlag = (func) => {
         listFlagFn = func
@@ -170,8 +196,30 @@ const myAccountService = () => {
         return result;
     };
 
+    const getTotalBoardList = async (writer) => {
+        const result = await instance({
+            url: `/board/${writer}`,
+            method: " GET",
+        });
+
+        return result
+    };
+
+    const getOneBoardList = async (boardInfo) => {
+        const result = await instance({
+            url: `/board/member/${boardInfo.type}/${boardInfo.email}?page=${boardInfo.page}`,
+            method: "GET",
+        });
+
+        console.log("가져온 정보목록", result);
+        return result
+    };
+
+
     return {getMyInfo, modifyInfo, searchNovelList, popUpDialogFn, setDialogFn, setCloseDialogFn, registerNovel,clearInput,
-        setClearInputFn, getNovelList, setListFlag, changeFlag, removeNovel, registerIdentification, requestAuthor}
+        setClearInputFn, getNovelList, setListFlag, changeFlag, removeNovel, registerIdentification, getTotalBoardList, getOneBoardList, requestAuthor
+    ,getPager, setPager, setMovePage, movePage, changePagerFlag
+    }
 };
 
 export default myAccountService();

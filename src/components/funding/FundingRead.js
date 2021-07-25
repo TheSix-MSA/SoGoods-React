@@ -1,7 +1,7 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import LayoutOne from "../layouts/header/LayoutOne";
 import fundingService from "./fundingService";
-import {useParams} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import FundingSideBar from "./FundingSideBar";
 import FundingPost from "./FundingPost";
 
@@ -11,9 +11,24 @@ const initState = {
     favoriteCount:0
 }
 
+const buttonStyle = {
+    width:"75px",
+    height:"28px",
+    fontSize:"12px",
+    borderRadius:"5px 5px",
+    backgroundColor:"#EEE",
+    borderColor:"#EEE",
+    marginTop:"20px",
+    marginLeft:"20px",
+    border:"0",
+    outLine:"0"
+}
+
+
 
 const FundingRead = () => {
 
+    const history = useHistory();
     let {fno} = useParams()
     const [funding, setFunding] = useState(initState)
 
@@ -41,7 +56,10 @@ const FundingRead = () => {
 
     },[])
 
-
+    // 목록가기 버튼
+    const backToList = () => {
+        history.goBack();
+    }
 
     return (
         <Fragment>
@@ -49,6 +67,7 @@ const FundingRead = () => {
                 {/* breadcrumb */}
                 <div className="blog-area pt-100 pb-100">
                     <div className="container">
+                        <button style={buttonStyle} onClick={()=>backToList()}>↩ ︎목록보기</button>
                         <div className="row flex">
                             <div className="col-lg-9">
                                 <div className="blog-details-wrapper ml-20">

@@ -12,6 +12,7 @@ import FundingPagination from "../components/funding/FundingPagination";
 import * as queryString from "querystring";
 import useInputs from "../../customHooks/useInputs";
 import {makeStyles} from "@material-ui/core";
+import {ToastInformation} from "../../modules/toastModule";
 
 const initState = {
     dtoList: [
@@ -97,6 +98,13 @@ const FundingTable = () => {
         history.push("/funding/read/" + fno)
     }
 
+    const setAuthorized = (fund) => {
+        if (!fund.fundingDTO.authorized) {
+            fundingService.setAuthorized(fund.fundingDTO.fno, funding.pageMaker.page)
+                .then();
+            ToastInformation("새로운 펀딩이 등록 되었습니다.")
+        }}
+
     const list = funding.dtoList.map(fund => {
         return <tr className='hs-style' key={fund.fundingDTO.fno}>
             <td onClick={() => toFunding(fund.fundingDTO.fno)}>
@@ -115,7 +123,7 @@ const FundingTable = () => {
             <td onClick={() => fundingService.changeRemoved(fund.fundingDTO.fno,funding.pageMaker.page)}>
                 <span style={{cursor:"pointer"}}>{fund.fundingDTO.removed ? "" : "✔"}</span>
             </td>
-            <td onClick={() => fundingService.setAuthorized(fund.fundingDTO.fno,funding.pageMaker.page)}>
+            <td onClick={() => setAuthorized(fund)}>
                 <span style={{cursor:"pointer"}}>{fund.fundingDTO.authorized ? "참여중" : "처리중"}</span>
             </td>
         </tr>

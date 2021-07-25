@@ -1,4 +1,5 @@
 import instance from "../../modules/axiosConfig";
+import {ToastInformation, ToastWarning} from "../../modules/toastModule";
 
 const fundingService = () => {
     let movePage;
@@ -33,6 +34,7 @@ const fundingService = () => {
             url: `/funding/${fno}`,
             method: 'delete',
         })
+        ToastInformation("해당 펀딩이 삭제되었습니다.")
         movePage(page)
         return result.data
     }

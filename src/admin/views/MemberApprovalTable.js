@@ -10,6 +10,7 @@ import MemberPagination from "../components/member/MemberPagination";
 import {useHistory, useLocation} from "react-router-dom";
 import * as queryString from "querystring";
 import Identification from "../modal/Identification";
+import {ToastInformation, ToastWarning} from "../../modules/toastModule";
 
 const initState = {
     memberList: [
@@ -80,7 +81,14 @@ const MemberApprovalTable = () => {
         if (!member.roleSet.includes("ADMIN")) {
             memberService.changeRole(member.email, members.pageMaker.page)
                 .then();
+            ToastInformation("작가 승인처리 되었습니다.")
         }
+    }
+
+    const reject = (member) => {
+        memberService.reject(member.email, members.pageMaker.page)
+            .then();
+        ToastWarning("작가 승인 반려처리 되었습니다.")
     }
 
     const list = members.memberList.map(member => {
@@ -95,7 +103,7 @@ const MemberApprovalTable = () => {
             <td onClick={() => changeRole(member)} style={{textAlign: "center"}}>
                 <span style={{cursor: "pointer"}}>{member.approval ? "✔" : ""}</span>
             </td>
-            <td onClick={()=> memberService.reject(member.email, members.pageMaker.page)} style={{textAlign: "center"}}>
+            <td onClick={()=> reject(member)} style={{textAlign: "center"}}>
                 <span style={{cursor: "pointer"}}>{member.approval ? "❌" : ""}</span>
             </td>
         </tr>

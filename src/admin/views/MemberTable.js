@@ -12,6 +12,7 @@ import * as queryString from "querystring";
 import useInputs from "../../customHooks/useInputs";
 import memberService from "../sevice/memberService";
 import UserDetail from "../modal/UserDetail";
+import {ToastInformation, ToastWarning} from "../../modules/toastModule";
 
 const initState = {
     memberList: [
@@ -101,6 +102,8 @@ const MemberTable = () => {
                 })
             })
         })
+        const currentBan = member.banned?"밴 해제":"밴"
+        ToastInformation("해당 유저가 "+ currentBan +" 되었습니다.")
     }
 
     const role = (member) => {
@@ -113,6 +116,8 @@ const MemberTable = () => {
                 })
             })
         })
+        const currentRole = member.roleSet.includes("AUTHOR")?"작가":"일반으"
+        ToastInformation("해당 유저의 권한이 "+ currentRole +"로 변경 되었습니다.")
     }
 
     const list = members.memberList?.map(member => {
@@ -170,7 +175,7 @@ const MemberTable = () => {
                             <thead>
                             <tr>
                                 <th className="border-0">이메일</th>
-                                <th className="border-0">이름</th>
+                                <th className="border-0">이름(상세정보)</th>
                                 <th className="border-0">생년월일</th>
                                 <th className="border-0">전화번호</th>
                                 <th className="border-0">성별</th>

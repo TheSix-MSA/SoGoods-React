@@ -55,7 +55,7 @@ function Sidebar({color, image, routes}) {
                                         activeClassName="active"
                                     >
                                         <i className={prop.icon}/>
-                                        <p>{prop.name}</p>
+                                        <p style={{color:"#ddedff"}}>{prop.name}</p>
                                     </NavLink>
                                 </li>
                             );

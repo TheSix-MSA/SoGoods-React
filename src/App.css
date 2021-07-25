@@ -1,0 +1,24 @@
+@font-face {
+    font-family: 'hopang';
+    src: url('./assets/SCDream4.otf');
+}
+.toastError{
+    z-index: 90 !important;
+    background-color: #ff9292 !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+}
+
+.toastCenter{
+    z-index: 90 !important;
+    background-color: bisque !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+}
+
+.toastInfo{
+    z-index: 90 !important;
+    background-color: bisque !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+}

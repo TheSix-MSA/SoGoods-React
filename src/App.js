@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React, { useEffect, Suspense, lazy } from "react";
 import ScrollToTop from "./modules/scroll-top";
 import {BrowserRouter as Router, Switch, Route, BrowserRouter} from "react-router-dom";
-
+import "./App.css";
 import { multilanguage, loadLanguages } from "redux-multilanguage";
 import {connect, useDispatch, useSelector} from "react-redux";
 import instance from "./modules/axiosConfig";
@@ -14,10 +14,12 @@ import {refreshToken} from "./modules/refreshToken";
 import Confirmation from "./pages/order/Confirmation";
 import withAuth from "./hoc/withAuth";
 import getLeftDate from "./modules/dateCalc";
+import {ToastCenter, ToastError} from "./modules/toastModule";
 
 const AuthorApplication = lazy(()=>import( "./member/AuthorApplication"));
 //the six
 const FundingBoard = lazy(()=>import("./components/funding/FundingBoard"));
+const BoardRoute = lazy(()=>import("./board/BoardRoute"));
 const ProductInput = lazy(()=>import("./pages/attach-dragNdrop-2/ProductInputList"));
 
 
@@ -102,9 +104,7 @@ const App = (props) => {
     instance.interceptors.response.use(
         (config) => {
           if(!config.data.success){
-            addToast(
-                config.data.error.message, {appearance: 'error',autoDismiss: true, id:"errorToast"}
-            );
+            ToastError(config.data.error.message);
             return Promise.reject(config.data.error.message);
           }
           return config;
@@ -116,9 +116,7 @@ const App = (props) => {
             });
             return Promise.reject();
           }
-          addToast(
-              error.response.data.error.message, {appearance: 'error', autoDismiss: true},
-          );
+          ToastError(error.response.data.error.message);
           return Promise.reject(error.response.data.error.message);
         }
     );
@@ -150,33 +148,15 @@ const App = (props) => {
                   component={HomeOnepageScroll}
                 />
 
-                 Homepages
-
                 <Route
                     path={process.env.PUBLIC_URL + "/funding"}
                     component={FundingBoard}
                 />
-
                 <Route
-                    path={"/board/:boardType/list/"}
-                    component={BlogNoSidebar}
-                />{/* 재연 - Board 목록 컴포넌트로 사용 */}
+                    path={process.env.PUBLIC_URL + "/board"}
+                    component={BoardRoute}
+                />
 
-                <Route
-                    exact
-                    path={process.env.PUBLIC_URL + "/:boardType/boardRegister"}
-                    component={withAuth(BoardRegister,["GENERAL","AUTHOR"])}
-                /> {/* 재연 - Board 작성 컴포넌트로 사용 */}
-
-                <Route
-                    path={`/board/modify/:boardType/:bno`}
-                    component={withAuth(BoardModify,["GENERAL","AUTHOR"])}
-                /> {/* 재연 - Board 수정 컴포넌트로 사용 */}
-
-                <Route
-                  path={`/board/:boardType/:bno`}
-                  component={BlogDetailsStandard}
-                /> {/* 재연 - Board 상세보기 컴포넌트로 사용 */}
 
                 {/* Other pages */}
 

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import useInputs from "../../customHooks/useInputs";
+import useInputs from "../../../customHooks/useInputs";
 import productService from "./productService";
 // const initState = {
 //     title: '',

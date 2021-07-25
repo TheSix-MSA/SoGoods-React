@@ -7,13 +7,22 @@ import useInputs from "../../customHooks/useInputs";
 import fundingService from "./fundingService";
 import {useHistory, useLocation, useParams} from "react-router-dom";
 import {useSelector} from "react-redux";
-import productService from "../funding-attach/productService";
+import productUpdateService from "../funding-attach/update/productUpdateService";
 import Button from "@material-ui/core/Button";
 import {useToasts} from "react-toast-notifications";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import ProductRegister from "../funding-attach/ProductRegister";
+import ProductRegister from "../funding-attach/add/ProductRegister";
 import Dialog from "@material-ui/core/Dialog";
+import productService from "../funding-attach/add/productService";
+import ProductUpdateRegister from "../funding-attach/update/ProductUpdateRegister";
+
+const imgStyle = {
+    display: 'block',
+    width: 100,
+    height: 50,
+    float: 'left',
+};
 
 const inputStyle = {
     margin:"10px"
@@ -56,19 +65,62 @@ const FundingUpdate = () => {
     const [open, setOpen] = useState(false);
 
     const history = useHistory();
+    const [flag, setFlag] = useState(false)
 
-    productService.setOpenFn(setOpen)
 
+    productUpdateService.setOpenFn(setOpen)
+    let productList = [];
 
     useEffect(()=>{
+
         fundingService.getOneFunding(fno).then(res=> {
-            console.log(res.response)
+
             setFundingForm({...res.response.fundingDTO})
             setProductForm([...res.response.productDTOs])
+
+            const fno = res.response.fundingDTO.fno
+            const pnoList = res.response.productDTOs.map(dto => dto.pno)// [123, 124]
+            console.log("Product DB에서 가져온 정보", res.response.productDTOs)
+
+            productList = res.response.productDTOs.map(dto =>
+                {
+                    return{
+                        text: {
+                            name: dto.name,
+                            des: dto.des,
+                            price: dto.price,
+                        },
+                        mainIdx: 0,
+                    }
+                }
+            )
+
+            fundingService.getA3src('FUNDING', [fno])
+                .then(res => {
+                    //펀딩대표이미지
+                    //res.data.response[0].fileName.split('_')[1]
+
+                    fundingService.getA3srcList('PRODUCT', pnoList, [0,1])
+                        .then(res=>{
+                            console.log("Attach DB에서 가져온 정보", res.data.response)
+
+                            productList = productList.map((product, idx) => {
+
+                                let pictures = res.data.response[idx].map(picture=>{
+                                    return {...picture, preview: picture.imgSrc, }
+                                })
+
+                                return {...product, pictures: pictures}
+                            })
+                            productUpdateService.setProductList(productList)
+                            setFlag(!flag)
+                        })
+
+                })
+
         })
     },[fno])
 
-    console.log(fundingForm);
 
     const sendFormData = async (e) => {
         e.preventDefault();
@@ -77,6 +129,36 @@ const FundingUpdate = () => {
         console.log(result)
         history.push("/funding/list");
     }
+
+    const list = productUpdateService.getProductList().map((product, i)=>{
+
+        return (
+            <>
+                <li key={i}>
+                    <p onClick={()=>{productUpdateService.openDialogForEdit(i)}}>
+                        {product.text.name} :
+                        {product.text.desc}
+                    </p>
+                    <div>
+                        {product.pictures.map((file ,j)=>
+                            <div>
+                                <img key={j} data-idx={j}
+                                     src={file.imgSrc}
+                                     style={imgStyle}/>
+                                <input type="radio"
+                                       name={`mainIdx_${i}`}
+                                      //checked={product.mainIdx == j?"checked":""}
+                                       value={j}
+                                       //onClick={(e)=>{setProductMainImage(e,i,j)}}
+                                       style={{flaot: 'left'}}/>
+                            </div>
+                        )}
+
+                    </div>
+                </li>
+            </>
+        )
+    })
 
     return (
         <div>
@@ -134,9 +216,12 @@ const FundingUpdate = () => {
                                                                 name="mainImage"
                                                                 onChange={changeFundingForm}
                                                             />
+                                                            <ul>
+                                                                {list}
+                                                            </ul>
                                                             <h5 style={textStyle}>상품수정</h5>
-                                                            <Button style={btn} variant="outlined" color="primary" onClick={productService.openDialog}>
-                                                                상품수정
+                                                            <Button style={btn} variant="outlined" color="primary" onClick={productUpdateService.openDialog}>
+                                                                상품 추가
                                                             </Button>
                                                                 <div style={{display:"flex"}}>
                                                                     <div style={{display:"flex" ,flexWrap:"wrap"}}>
@@ -186,13 +271,13 @@ const FundingUpdate = () => {
                                 </Fragment>
                                 <Dialog
                                     open={open}
-                                    onClose={productService.closeDialog}
+                                    onClose={productUpdateService.closeDialog}
                                     aria-labelledby="alert-dialog-title"
                                     aria-describedby="alert-dialog-description"
                                     maxWidth='lg'>
                                     <DialogTitle id="alert-dialog-title">{'상품 수정'}</DialogTitle>
                                     <DialogContent>
-                                        <ProductRegister></ProductRegister>
+                                        <ProductUpdateRegister></ProductUpdateRegister>
                                     </DialogContent>
                                 </Dialog>
                             </div>

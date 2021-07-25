@@ -93,14 +93,13 @@ const FundingSideBar = (funding) => {
      * 제품 리스트 뿌려주기
      * @type {unknown[]}
      */
-    console.log(cartList)
     const productList = cartList.map((p, idx)=>
             <div className="single-sidebar-blog" key={idx}>
                 <div>{idx+1}번 리워드 </div>
                 <div className="sidebar-blog-img">
                     <div to={process.env.PUBLIC_URL + "/blog-details-standard"}>
                         <img
-                            src={p.imgArr[0].imgSrc}
+                            src={p.imgArr[0] && p.imgArr[0].imgSrc}
                             alt=""
                             height="230px"
                         />

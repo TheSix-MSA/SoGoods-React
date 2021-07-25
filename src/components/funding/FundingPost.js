@@ -3,14 +3,22 @@ import ImgCarousel from "./ImgCarousel";
 
 const FundingPost = (funding) => {
 
-    console.log(funding)
-
+    console.log('funding.productDTOs: ', funding.productDTOs)
     const list = funding.productDTOs.map((productDTO, i)=>{
+
+
+
         const part = productDTO.imgArr.map(img=>{
+
             return {imgPath: img.imgSrc}
         })
+
+
+
         return (
+
             <ImgCarousel tutorialSteps ={part} ></ImgCarousel>
+
         )
     })
 
@@ -24,7 +32,7 @@ const FundingPost = (funding) => {
                     <div className="blog-details-img" >
                         <img
                             alt=""
-                            src={funding.fundingDTO.imgSrc}
+                            src={funding.fundingDTO && funding.fundingDTO.imgSrc}
                             style={{objectFit:"cover"}}
                         />
                     </div>

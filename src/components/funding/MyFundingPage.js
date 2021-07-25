@@ -56,11 +56,11 @@ const MyFundingPage = ({productTabClass}) => {
                 <h5>{li.fno}번 게시글</h5>
                 {!li.success ?
                     <div>
-                        <img alt={"이미지"} src={li.imgSrc} height={"230px"} width={"350px"} onClick={() => readTodo(li.fno)} style={{cursor: "pointer", objectFit:"cover"}}/>
+                        <img alt={"이미지"} src={li.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"} height={"230px"} width={"350px"} onClick={() => readTodo(li.fno)} style={{cursor: "pointer", objectFit:"cover"}}/>
                     </div>
                     :
                     <div style={{position:"relative", height:"230px", width:"350px"}}>
-                        <img alt={"이미지"} src={li.imgSrc} style={{filter:"grayscale(100%)", objectFit:"cover"}}/>
+                        <img alt={"이미지"} src={li.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"} style={{filter:"grayscale(100%)", objectFit:"cover"}}/>
                         <span style={{fontWeight:"bold", position:"absolute", transform:"translate(-70%, -50%)", top:"50%", left:"50%", pointerEvents:"none"}}>
                             <h3>종료된 펀딩입니다</h3>
                         </span>

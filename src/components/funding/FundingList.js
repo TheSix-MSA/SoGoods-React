@@ -101,7 +101,7 @@ const FundingList = ({ location, productTabClass}) => {
     const list = data.dtoList.map((dto, idx)=>
         <div key={idx} onClick={()=> readTodo(dto.fundingDTO.fno)} style={{cursor:"pointer", margin:"30px 10px", height:"300px", width:"380px"}}>
             <h5>{dto.fundingDTO.fno}번 게시글</h5>
-            <img alt={"이미지"} src={dto.fundingDTO.imgSrc} height={"230px"} width={"350px"} style={{objectFit:"cover"}}/>
+            <img alt={"이미지"} src={dto.fundingDTO.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"} height={"230px"} width={"350px"} style={{objectFit:"cover"}}/>
             <h5 style={{marginTop:"5px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflowX: "hidden", maxWidth:"350px"}}>{dto.fundingDTO.title}</h5>
             <LinearWithValueLabel dto={dto}></LinearWithValueLabel>
             <h5>마감일 : {dto.fundingDTO.dueDate}  |  펀딩금액 : {dto.fundingDTO.totalAmount}원</h5>

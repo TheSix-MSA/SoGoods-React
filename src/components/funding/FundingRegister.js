@@ -135,7 +135,7 @@ const FundingRegister = () => {
                         {product.pictures.map((file ,j)=>
                             <div>
                                 <img key={j} data-idx={j}
-                                     src={file.preview}
+                                     src={file.preview||process.env.PUBLIC_URL+"/assets/img/default.png"}
                                      style={imgStyle}/>
                                 <input type="radio"
                                        name={`mainIdx_${i}`}

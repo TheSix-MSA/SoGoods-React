@@ -111,10 +111,11 @@ const FundingRegister = () => {
     }
 
     const list = productService.getProductList().map((product, i)=>{
-        console.log(product)
+
         product.pictures.map((file)=> Object.assign(file, {
             preview: URL.createObjectURL(file)
         }))
+
         return (
             <>
                 <li key={i}>
@@ -204,7 +205,6 @@ const FundingRegister = () => {
                                                     <ul>
                                                         {list}
                                                     </ul>
-                                                    {/*register product*/}
                                                     <Button style={btn} variant="outlined" color="primary" onClick={productService.openDialog}>
                                                         상품 등록
                                                     </Button>

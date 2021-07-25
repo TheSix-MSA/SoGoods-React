@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Link, useHistory} from "react-router-dom";
 import fundingService from "./fundingService";
 import getLeftDate from "../../modules/dateCalc";
@@ -15,22 +15,21 @@ const FundingSideBar = (funding) => {
 
     // 유저 정보
     const userInfo = useSelector(state=> state.login);
-    console.log(userInfo.email);
     // 주고 받을 찜 데이터
     const [favorite, setFavorite] = useState(initFavorite);
-    // 화면에서 관리할 찜 count
+    // 화면에서 관리할 찜 데이터
     const [favCount, setFavCount] = useState(funding.favoriteCount);
     const [favList, setFavList] = useState([])
     // 장바구니 배열의 상태 관리 , 초기값 -> funding.productDTOs
     const [cartList, setCartList] = useState(funding.productDTOs?.map(item=>{
         return {...item,count:0}}));
 
-    /**
-     * 펀딩 종료일 까지 남은 날짜를 구해 화면에 뿌려주기
-     * @type {string}
-     */
-    const dueDate = funding.fundingDTO.dueDate;
-
+    // 첫 화면에 좋아요 뿌려주기
+    useEffect(()=>{
+        fundingService.getFavList(funding.fundingDTO.fno).then(res=>
+            setFavList(res.response.favoriteDTOList)
+        )
+    },[])
 
     /**
      * 장바구니 배열에 상품추가, 일치하는 값이 있으면 개수만 추가
@@ -58,6 +57,7 @@ const FundingSideBar = (funding) => {
 
     /**
      * 게시글 찜하기 기능
+     * 로그인한 유저 정보로 저장
      */
     const clickFavorite = () => {
         favorite.fno = funding.fundingDTO.fno
@@ -66,10 +66,24 @@ const FundingSideBar = (funding) => {
         fundingService.insertFavorite(favorite).then(res=> {
             setFavCount(res.response.favoriteCnt)
             setFavList(res.response.favoriteDTOList)
-            console.log(111, favCount, 2222, favList)
         })
     }
 
+    /**
+     * 해당 유저가 찜한 기록이 있는지 확인
+     * @param ele
+     * @returns {boolean}
+     */
+    const checkUser = (ele) => {
+        if(ele.actor === userInfo.email){
+            return true;
+        }
+    }
+
+    /**
+     * 수정 화면으로 이동
+     * @param fno
+     */
     const toUpdate = (fno) => {
         history.push("/funding/update/"+fno);
     }
@@ -83,17 +97,18 @@ const FundingSideBar = (funding) => {
                 <div>{idx+1}번 리워드 </div>
                  <div className="sidebar-blog-img">
                     <div to={process.env.PUBLIC_URL + "/blog-details-standard"}>
+
                         <img
-                            src={
-                                process.env.PUBLIC_URL + "/assets/img/blog/sidebar-1.jpg"
-                            }
+                            src={p.imgArr[0].imgSrc}
                             alt=""
                         />
+
                     </div>
                     <div className="sidebar-blog-content" >
                         <h4>{p.name}</h4>
                         <h6>[ 상세 설명 ]</h6>
                         <h6>{p.des}</h6>
+                        {/* cart count button */}
                         <div style={{display:"flex"}}>
                             <button onClick={()=> deleteCart(p)}> - </button>
                                 <div>{p.count}개</div>
@@ -109,31 +124,37 @@ const FundingSideBar = (funding) => {
     const selectReward = (
          <div className="single-sidebar-blog" >
              <div>
-                 <h2>마감까지 {getLeftDate(dueDate)}일 남음</h2>
+                 <h2>마감까지 {getLeftDate(funding.fundingDTO.dueDate)}일 남음</h2>
                  <br/>
                  <h4>{Math.ceil(funding.fundingDTO.totalAmount/funding.fundingDTO.targetAmount*100)}% 달성</h4>
                  <br/>
                  <h4>총 펀딩액 {funding.fundingDTO.totalAmount}원 </h4>
                  <br/>
+                 {/* funding favorite */}
                  <div style={{width:"100%"}}>
-                     <div style={{fontSize:"30px", lineHeight:"150%", cursor:"pointer",display:"flex"}} onClick={clickFavorite}> {favList.indexOf(funding.fundingDTO.email) ? '💜':'♡'}
+                     <div style={{fontSize:"25px", lineHeight:"150%", cursor:"pointer",display:"flex"}} onClick={clickFavorite}>
+                         { favList.find(checkUser) ? '💜':'♡'}
                         <div style={{fontSize:"20px", margin:"0 10px"}}>{favCount}</div>
                      </div>
                  </div>
+                 {/* funding button */}
                  <form className={"searchform"}>
-                     <button className={"searchform__submit"} style={{height:"50px", width:"100%" ,position:"relative"}}>펀딩하기</button>
                      <Link to={{
                          pathname: "/checkout",
                          state: {
                              cartList
                          }
-                     }}>Check Out!</Link>
+                     }}>
+                         <button className={"searchform__submit"} style={{height:"50px", width:"100%", position:"relative", marginTop:"10px"}}>
+                             펀딩 참여하기
+                         </button>
+                     </Link>
                  </form>
              </div>
          </div>
     );
 
-    // 제품 수정 삭제 버튼
+    // 제품 수정 삭제 버튼 -> 로그인 했을 때만 보여짐
     const update = (
         <div style={{ height:"42px", display:"flex", flexWrap:"wrap",flexDirection:"column"}}>
             <form className={"searchform"}>

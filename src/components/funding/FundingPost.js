@@ -1,6 +1,24 @@
 import React, {Fragment} from 'react';
 
 const FundingPost = (funding) => {
+
+    console.log(funding)
+
+    const list = funding.productDTOs.map((productDTO, i)=>{
+        const part = productDTO.imgArr.map(img=>{
+            return (
+                <div>
+                   <img src={img.imgSrc}/>
+                </div>
+            )
+        })
+        return (
+            <div>
+                {part}
+            </div>
+        )
+    })
+
     return (
         <div>
             <Fragment>
@@ -9,7 +27,7 @@ const FundingPost = (funding) => {
                     <div className="blog-details-img">
                         <img
                             alt=""
-                            src={process.env.PUBLIC_URL + "/assets/img/blog/blog-5.jpg"}
+                            src={funding.fundingDTO.imgSrc}
                         />
                     </div>
                     <div className="blog-details-content">
@@ -25,6 +43,12 @@ const FundingPost = (funding) => {
                         <p>
                             {funding.fundingDTO.content}
                         </p>
+
+                        <div>
+                            {list}
+
+                        </div>
+
                     </div>
                     </div>
                     <div className="dec-img-wrapper">

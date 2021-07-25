@@ -35,7 +35,8 @@ const MyBoardList = () => {
     const [boardList, setBoardList] = useState({...initBoardList});
 
 
-    console.log(user);
+
+    console.log(boardList);
     /**
      * 리스트 가져오기
      */
@@ -43,19 +44,25 @@ const MyBoardList = () => {
         console.log(`email:${user.email}, type:${boardList.type}, page:${boardList.pageMaker.page}`)
         myAccountService.getOneBoardList({email:user.email, type:boardList.type, page:boardList.pageMaker.page})
             .then(value => {
-            console.log("useEffect",value.data.response);
-            setBoardList({...value.data.response,type:boardList.type});
+                console.log("useEffect", value.data.response);
+                setBoardList({...value.data.response, type: boardList.type});
+                myAccountService.setPager(value.data.response.pageMaker);
         });
     }, [boardList.pageMaker.page]);
 
+
+    const movePage = (newPage) =>{
+        setBoardList({...boardList,pageMaker: {...boardList.pageMaker,page:newPage}})
+    }
 
     const goBoard = (bno) =>{
         history.push(`/board/FREE/${bno}`);
     }
 
-    const setPager = () => {
+    myAccountService.setMovePage(movePage);
 
-    }
+
+
 
     /**
      * 랜더링 될 novel 한개.

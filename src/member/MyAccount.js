@@ -15,6 +15,7 @@ import NovelRegisterDialog from "./NovelRegisterDialog";
 import MyNovel from "./MyNovel";
 import MyOrders from "../pages/order/MyOrders";
 import MyBoardList from "./MyBoardList";
+import BoardPager from "./BoardPager";
 
 const initUserInfo = {
   email:"",
@@ -328,11 +329,7 @@ const MyAccount = () => {
                                   </div>
                                 </div>
                               </div>
-                              <div className="billing-back-btn" style={{display:"flex", justifyContent:"center"}}>
-                                <div className="billing-btn">
-                                        <button style={{padding:"5px"}}>1</button>
-                                </div>
-                              </div>
+                              <BoardPager></BoardPager>
                             </div>
                           </Card.Body>
                         </Accordion.Collapse>

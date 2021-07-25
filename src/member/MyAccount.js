@@ -16,6 +16,8 @@ import MyNovel from "./MyNovel";
 import MyOrders from "../pages/order/MyOrders";
 import MyBoardList from "./MyBoardList";
 import BoardPager from "./BoardPager";
+import {MenuItem, Select} from "@material-ui/core";
+import {ToastInformation, ToastWarning} from "../modules/toastModule";
 
 const initUserInfo = {
   email:"",
@@ -45,7 +47,6 @@ const MyAccount = () => {
   const [searchBook, setSearchBook, setBook] = useInputs({...initSearchBook});
   const [editFlag, setEditFlag] = useState(false);
   const [passEditFlag, setPassEditFlag] = useState(false);
-  const {addToast} = useToasts();
 
   useEffect(() => {
     let isSubscribed = true;
@@ -80,13 +81,13 @@ const MyAccount = () => {
 
     for (let info in userInfo) {
       if (userInfo[info] === "") {
-        addToast(info + "을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
+        ToastWarning(info + "을 입력해주세요.");
         return;
       }
     };
 
     myAccountService.modifyInfo(userInfo).then(value => {
-      addToast("회원정보가 수정되었습니다", {appearance: 'success', autoDismiss: true});
+      ToastInformation("회원정보가 수정되었습니다");
     });
 
     setEditFlag(false);
@@ -109,18 +110,18 @@ const MyAccount = () => {
     e.preventDefault()
 
     if(passInfo.password!==passInfo.passwordCheck){
-      addToast("패스워드가 일치하지 않습니다.", {appearance: 'warning', autoDismiss: true});
+      ToastWarning("패스워드가 일치하지 않습니다.");
     }else{
 
       for (let info in passInfo) {
         if (passInfo[info] === "") {
-          addToast(info + "를 입력해주세요.", {appearance: 'warning', autoDismiss: true});
+          ToastWarning(info + "를 입력해주세요.");
           return;
         }
       }//end of for loop
 
       myAccountService.modifyInfo(passInfo).then(value => {
-        addToast("회원정보가 수정되었습니다", {appearance: 'success', autoDismiss: true});
+        ToastInformation("회원정보가 수정되었습니다");
       });
 
       setPassEditFlag(false);
@@ -137,6 +138,9 @@ const MyAccount = () => {
     myAccountService.searchNovelList(9788970127248);
   };
 
+  const changeCategory = (e) => {
+    myAccountService.changeCategory(e.target.value);
+  };
 
   /**
    * 검색팝업을 올림.
@@ -318,18 +322,24 @@ const MyAccount = () => {
                         <Accordion.Collapse eventKey="2">
                           <Card.Body>
                             <div className="myaccount-info-wrapper">
-                              <div className="account-info-wrapper" style={{border:"none", marginBottom:"0px"}}>
-                                <h4>Check Your Boards</h4>
-                                <h5>You Can Change Category</h5>
+                              <div style={{display:"flex", justifyContent:"space-between"}}>
+                                <div className="account-info-wrapper" style={{border:"none", marginBottom:"0px"}}>
+                                  <h4>Check Your Boards</h4>
+                                  <h5>You Can Change Category</h5>
+                                </div>
+                                <select name='type' onChange={changeCategory} style={{width:"100px"}}>
+                                  <option value='FREE'>자유게시판</option>
+                                  <option value='NOVELIST'>작가게시판</option>
+                                </select>
                               </div>
                               <div className="row">
-                                <div className="col-lg-12 col-md-12">
-                                  <div className="billing-info">
-                                    <MyBoardList></MyBoardList>
+                                  <div className="col-lg-12 col-md-12">
+                                    <div className="billing-info">
+                                      <MyBoardList></MyBoardList>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                              <BoardPager></BoardPager>
+                                <BoardPager></BoardPager>
                             </div>
                           </Card.Body>
                         </Accordion.Collapse>

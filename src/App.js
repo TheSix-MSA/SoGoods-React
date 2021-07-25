@@ -117,7 +117,7 @@ const App = (props) => {
             });
             return Promise.reject();
           }
-          ToastError(error.response.data.error.message);
+          ToastCenter(error.response.data.error.message);
           return Promise.reject(error.response.data.error.message);
         }
     );

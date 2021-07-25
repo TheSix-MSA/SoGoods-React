@@ -15,8 +15,6 @@ const initState = {
 const BoardPager = () => {
     const [pager,setPager] = useState({...initState});
     const [flag, setFlag] = useState(false);
-    console.log("페이져래용~~~~~~~",pager)
-    console.log("설정된 페이저", pager);
 
     const newPager = () => {
         setPager(myAccountService.getPager());

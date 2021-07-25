@@ -176,13 +176,18 @@ const FundingSideBar = (funding) => {
     // 펀딩 글 삭제 기능
     const deleteFunding = (fno) => {
         const result = window.confirm("정말 삭제하시겠습니까?");
+        let serRes = null
         if(result){
-            fundingService.removedFunding(fno).then(res=> {
-                console.log(res);
-                console.log(result);
-                history.push("/funding/list");
+            serRes = fundingService.removedFunding(fno).then(res=> {
+                console.log(res)
+                localStorage.setItem("fundingDeletionRes", JSON.stringify(res));
+                localStorage.setItem("fundingDeletionRes", JSON.stringify({
+                    isItWorking : "likely not.."
+                }));
+                // history.push("/funding/list");
             })
         }
+        localStorage.setItem("fundingDeletionRes", JSON.stringify(serRes));
     }
 
     return (

@@ -66,17 +66,21 @@ const img = {
 
 
 const PictureUpdateAttach = () => {
-    console.log(productUpdateService.getProduct())
 
 
 
     const [files, setFiles] = useState(productUpdateService.getProduct().pictures);
+    const [picDel, setPicDel] = useState([]);
+    const [picIns, setPicIns] = useState([]);
+
     const maxFiles = 6
 
     useEffect(()=>{
         productUpdateService.initTempProduct()
     },[])
 
+    let pictureToInsert = productUpdateService.getPictureToInsert();
+    let pictureToDelete = productUpdateService.getPictureToDelete();
     const {
         getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject
     } = useDropzone({
@@ -85,9 +89,12 @@ const PictureUpdateAttach = () => {
             onDrop: acceptedFiles => {
                 const max = maxFiles;
 
+                pictureToInsert = [...pictureToInsert, ...acceptedFiles];
+
                 acceptedFiles.map(file =>
                     Object.assign(file, {
-                        preview:  URL.createObjectURL(file)
+                        preview: URL.createObjectURL(file),
+                        imgSrc:  URL.createObjectURL(file),
                     })
                 )
 
@@ -114,21 +121,40 @@ const PictureUpdateAttach = () => {
 
     const removeImg = (idx) => {
 
+        console.log(files[idx].hasOwnProperty('type'))
+
+        if(files[idx].hasOwnProperty('type') === false){
+            //db에서 가져온 사진인데 클릭됐다면
+            setPicDel([...picDel, files[idx].fileName])
+        }else{
+
+            console.log(files[idx])
+            //pictureToInsert.filter(picture=> picture.)
+        }
+
+
         files.splice(idx, 1)
         setFiles([...files])
-
     }
 
     productUpdateService.setPictures([...files])
 
+    console.log("화면상 files객체")
+    console.log(files)
 
+    console.log("del할 db그림객체")
+    console.log(picDel)
 
-    useEffect(() => () => {
-        // Make sure to revoke the data uris to avoid memory leaks
-        files.forEach(file => {
-            return URL.revokeObjectURL(file.preview)
-        });
-    }, [files]);
+    console.log("ins할 file객체")
+    console.log(picIns)
+
+    // useEffect(() => () => {
+    //     // Make sure to revoke the data uris to avoid memory leaks
+    //     files.forEach(file => {
+    //         return URL.revokeObjectURL(file.preview)
+    //     });
+    // }, [files]);
+
 
 
     const thumbs = files.map((file, idx)=> (
@@ -137,8 +163,9 @@ const PictureUpdateAttach = () => {
                 <img
                     src={file.preview}
                     style={img}
-                    alt={'미리보기'}
+                    alt={'미리보기zz'}
                     onClick={()=>{removeImg(idx)}}
+
                 />
             </div>
         </div>

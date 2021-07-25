@@ -5,6 +5,9 @@ import Paper from '@material-ui/core/Paper';
 import ProductUpdateText from "./ProductUpdateText";
 import PictureUpdateAttach from "./PictureUpdateAttach";
 import productUpdateService from "./productUpdateService";
+import {Button} from "@material-ui/core";
+import productService from "../add/productService";
+import {useToasts} from "react-toast-notifications";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,10 +22,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const btn ={
+    clear: "both",
+    margin:"10px"
+}
+
 const ProductUpdateRegister = () => {
     const [spacing, setSpacing] = React.useState(2);
     const classes = useStyles();
     const [flag, setFlag] = useState(false)
+    const {addToast} = useToasts();
 
     const changeState = ()=>{
         setFlag(!flag);
@@ -38,11 +47,7 @@ const ProductUpdateRegister = () => {
                         <Grid container justifyContent="center" spacing={spacing}>
                             <Grid item>
                                 <ProductUpdateText></ProductUpdateText>
-                                {productUpdateService.getMode() === 'update'?
-                                    <button onClick={productUpdateService.editProduct}>{'수정'}</button>:
-                                    <button onClick={productUpdateService.addProduct}>{'등록'}</button>
-                                }
-
+                                    <Button style={btn} variant="outlined" color="primary" onClick={()=>{productUpdateService.editProduct(addToast)}}>{'수정'}</Button>
                             </Grid>
                         </Grid>
                     </Paper>

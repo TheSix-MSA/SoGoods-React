@@ -17,6 +17,18 @@ import Dialog from "@material-ui/core/Dialog";
 import productService from "../funding-attach/add/productService";
 import ProductUpdateRegister from "../funding-attach/update/ProductUpdateRegister";
 
+const inputStyle = {
+    margin:"10px"
+}
+const textStyle = {
+    margin:"0 10px"
+}
+
+const radioBtnStyle = {
+    width: "20px",
+    margin: "6px",
+}
+
 const imgStyle = {
     display: 'block',
     width: 100,
@@ -24,19 +36,14 @@ const imgStyle = {
     float: 'left',
 };
 
-const inputStyle = {
+const btn ={
+    clear: "both",
     margin:"10px"
-}
-const textStyle = {
-    margin:"0 10px"
-}
-const underInputStyle = {
-    margin:"0 10px",
 }
 
-const btn ={
-    float: 'none',
-    margin:"10px"
+const editBtn = {
+    marginLeft: "16px",
+    height: "20px",
 }
 
 const initFundingForm = {
@@ -80,7 +87,6 @@ const FundingUpdate = () => {
 
             const fno = res.response.fundingDTO.fno
             const pnoList = res.response.productDTOs.map(dto => dto.pno)// [123, 124]
-            console.log("Product DB에서 가져온 정보", res.response.productDTOs)
 
             productList = res.response.productDTOs.map(dto =>
                 {
@@ -102,7 +108,6 @@ const FundingUpdate = () => {
 
                     fundingService.getA3srcList('PRODUCT', pnoList, [0,1])
                         .then(res=>{
-                            console.log("Attach DB에서 가져온 정보", res.data.response)
 
                             productList = productList.map((product, idx) => {
 
@@ -124,10 +129,12 @@ const FundingUpdate = () => {
 
     const sendFormData = async (e) => {
         e.preventDefault();
-        console.log(fundingForm);
         const result = await fundingService.updateFunding(fno, {...fundingForm});
-        console.log(result)
         history.push("/funding/list");
+    }
+
+    const setProductMainImage = (e, productIdx, pictureIdx)=>{
+        productUpdateService.getProductList()[productIdx].mainIdx = pictureIdx
     }
 
     const list = productUpdateService.getProductList().map((product, i)=>{
@@ -135,22 +142,28 @@ const FundingUpdate = () => {
         return (
             <>
                 <li key={i}>
-                    <p onClick={()=>{productUpdateService.openDialogForEdit(i)}}>
-                        {product.text.name} :
-                        {product.text.desc}
+                    <h3 style={{marginTop: '32px'}}>상품 {i+1}
+                        <Button style={editBtn} variant="outlined" color="primary" onClick={()=>{productUpdateService.openDialogForEdit(i)}}>
+                            수정
+                        </Button>
+                    </h3>
+                    <p>
+                        상품명 : {product.text.name}
                     </p>
-                    <div>
+                    <div style={{width: "100%",
+                                overflow: "hidden" }}>
                         {product.pictures.map((file ,j)=>
-                            <div>
+                            <div style={{width: "30%", margin: 0, float: "left"}}>
+                                <label>
                                 <img key={j} data-idx={j}
                                      src={file.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"}
                                      style={imgStyle}/>
                                 <input type="radio"
                                        name={`mainIdx_${i}`}
-                                      //checked={product.mainIdx == j?"checked":""}
                                        value={j}
-                                       //onClick={(e)=>{setProductMainImage(e,i,j)}}
-                                       style={{flaot: 'left'}}/>
+                                       onClick={(e)=>{setProductMainImage(e,i,j)}}
+                                       style={radioBtnStyle}/>
+                                </label>
                             </div>
                         )}
 
@@ -219,7 +232,7 @@ const FundingUpdate = () => {
                                                             <ul>
                                                                 {list}
                                                             </ul>
-                                                            <h5 style={textStyle}>상품수정</h5>
+
                                                             <Button style={btn} variant="outlined" color="primary" onClick={productUpdateService.openDialog}>
                                                                 상품 추가
                                                             </Button>

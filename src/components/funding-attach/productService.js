@@ -86,6 +86,7 @@ const productService = ()=>{
 
     //새 상품등록버튼 클릭시
     const openDialog = () => {
+        console.log("OPEN")
         setMode('register')
         initProduct()
 

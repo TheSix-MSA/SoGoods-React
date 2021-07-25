@@ -93,19 +93,18 @@ const FundingSideBar = (funding) => {
      * 제품 리스트 뿌려주기
      * @type {unknown[]}
      */
+    console.log(cartList)
     const productList = cartList.map((p, idx)=>
             <div className="single-sidebar-blog" key={idx}>
                 <div>{idx+1}번 리워드 </div>
-                <ImgCarousel></ImgCarousel>
-                 <div className="sidebar-blog-img">
-                    {/*<div to={process.env.PUBLIC_URL + "/blog-details-standard"}>*/}
-                    {/*    <img*/}
-                    {/*        src={*/}
-                    {/*            process.env.PUBLIC_URL + "/assets/img/blog/sidebar-1.jpg"*/}
-                    {/*        }*/}
-                    {/*        alt=""*/}
-                    {/*    />*/}
-                    {/*</div>*/}
+                <div className="sidebar-blog-img">
+                    <div to={process.env.PUBLIC_URL + "/blog-details-standard"}>
+                        <img
+                            src={p.imgArr[0].imgSrc}
+                            alt=""
+                            height="230px"
+                        />
+                    </div>
                     <div className="sidebar-blog-content" >
                         <h4>{p.name}</h4>
                         <h6>[ 상세 설명 ]</h6>

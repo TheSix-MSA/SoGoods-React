@@ -99,7 +99,7 @@ const FundingList = ({ location, productTabClass}) => {
 
     // 진행중인 펀딩 리스트 불러오기
     const list = data.dtoList.map((dto, idx)=>
-        <div key={idx} onClick={()=> readTodo(dto.fundingDTO.fno)} style={{cursor:"pointer", margin:"10px", height:"300px", width:"380px"}}>
+        <div key={idx} onClick={()=> readTodo(dto.fundingDTO.fno)} style={{cursor:"pointer", margin:"30px 10px", height:"300px", width:"380px"}}>
             <h5>{dto.fundingDTO.fno}번 게시글</h5>
             <img alt={"이미지"} src={dto.fundingDTO.imgSrc} height={"230px"} width={"350px"} style={{objectFit:"cover"}}/>
             <h5 style={{marginTop:"5px"}}>{dto.fundingDTO.title}</h5>

@@ -7,6 +7,13 @@ import useInputs from "../../customHooks/useInputs";
 import fundingService from "./fundingService";
 import {useHistory, useLocation, useParams} from "react-router-dom";
 import {useSelector} from "react-redux";
+import productService from "../funding-attach/productService";
+import Button from "@material-ui/core/Button";
+import {useToasts} from "react-toast-notifications";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import ProductRegister from "../funding-attach/ProductRegister";
+import Dialog from "@material-ui/core/Dialog";
 
 const inputStyle = {
     margin:"10px"
@@ -18,24 +25,40 @@ const underInputStyle = {
     margin:"0 10px",
 }
 
+const btn ={
+    float: 'none',
+    margin:"10px"
+}
+
 const initFundingForm = {
     title:'',
     content:'',
     writer:'',
     email:'',
     dueDate:"",
-    targetAmount:0
+    targetAmount:0,
+    productDTOs:[]
 }
 const productDTOs = []
 
 const FundingUpdate = () => {
 
    const info = useSelector(state=>state.login);
-   const history = useHistory();
+
    let {fno} = useParams();
+
 
    const [fundingForm, changeFundingForm, setFundingForm] = useInputs({...initFundingForm});
    const [productForm, changeProductForm, setProductForm] = useInputs([...productDTOs]);
+
+    const {addToast} = useToasts();
+    const userInfo = useSelector(state=> state.login);
+    const [open, setOpen] = useState(false);
+
+    const history = useHistory();
+
+    productService.setOpenFn(setOpen)
+
 
     useEffect(()=>{
         fundingService.getOneFunding(fno).then(res=> {
@@ -54,8 +77,6 @@ const FundingUpdate = () => {
         console.log(result)
         history.push("/funding/list");
     }
-
-
 
     return (
         <div>
@@ -113,8 +134,10 @@ const FundingUpdate = () => {
                                                                 name="mainImage"
                                                                 onChange={changeFundingForm}
                                                             />
-                                                            <h5 style={textStyle}>상품등록</h5>
-                                                            <img src={""} alt={"상품 추가 아이콘"}/>
+                                                            <h5 style={textStyle}>상품수정</h5>
+                                                            <Button style={btn} variant="outlined" color="primary" onClick={productService.openDialog}>
+                                                                상품수정
+                                                            </Button>
                                                                 <div style={{display:"flex"}}>
                                                                     <div style={{display:"flex" ,flexWrap:"wrap"}}>
                                                                         <h5 style={textStyle}>펀딩 만기일</h5>
@@ -161,6 +184,17 @@ const FundingUpdate = () => {
                                         </div>
                                     </LayoutOne>
                                 </Fragment>
+                                <Dialog
+                                    open={open}
+                                    onClose={productService.closeDialog}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                    maxWidth='lg'>
+                                    <DialogTitle id="alert-dialog-title">{'상품 수정'}</DialogTitle>
+                                    <DialogContent>
+                                        <ProductRegister></ProductRegister>
+                                    </DialogContent>
+                                </Dialog>
                             </div>
     );
 };

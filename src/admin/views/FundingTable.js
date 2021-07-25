@@ -55,7 +55,7 @@ const initState = {
 const param = {
     page:1,
     keyword:'',
-    type:''
+    type:'t'
 }
 
 const FundingTable = () => {
@@ -111,7 +111,7 @@ const FundingTable = () => {
                 <td>{(fund.fundingDTO.totalAmount / fund.fundingDTO.targetAmount * 100).toFixed(2)}%달성</td>:<td>0</td>}
             <td>{fund.fundingDTO.dueDate}</td>
             <td>{fund.fundingDTO.regDate}</td>
-            <td> <span style={{cursor:"pointer"}}>{fund.fundingDTO.success ? "🟢" : "🔴"}</span></td>
+            <td>{fund.fundingDTO.success ? "🟢" : "🔴"}</td>
             <td onClick={() => fundingService.changeRemoved(fund.fundingDTO.fno,funding.pageMaker.page)}>
                 <span style={{cursor:"pointer"}}>{fund.fundingDTO.removed ? "" : "✔"}</span>
             </td>
@@ -130,10 +130,9 @@ const FundingTable = () => {
 
                         <div className="pro-sidebar-search mb-55 mt-25">
                             <form className="pro-sidebar-search-form" action="#">
-                                <select name="type" onChange={searchOnChange}>
-                                    <option value=''>선택</option>
-                                    <option value='w'>작성자</option>
+                                <select name="type" style={{width: "10%"}} onChange={searchOnChange}>
                                     <option value='t'>제목</option>
+                                    <option value='w'>작성자</option>
                                     <option value='c'>내용</option>
                                 </select>
                                 <input value={searchInput.keyword} onChange={searchOnChange} type="text"
@@ -146,7 +145,6 @@ const FundingTable = () => {
                         <p className="card-category">
                             펀딩정보
                         </p>
-
 
                     </Card.Header>
                     <Card.Body className="table-full-width table-responsive px-20">

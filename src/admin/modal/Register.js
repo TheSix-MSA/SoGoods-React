@@ -1,18 +1,13 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Tab from "react-bootstrap/Tab";
-import BoardRegister from "../../board/BoardRegister";
 import noticeService from "../../admin/sevice/noticeService"
 import useInputs from "../../customHooks/useInputs";
 import {useHistory} from "react-router-dom";
 import {useSelector} from "react-redux";
-import {Checkbox} from "@material-ui/core";
 import {useToasts} from "react-toast-notifications";
 
 const initState = {
@@ -43,19 +38,18 @@ export default function Register() {
 
     const register = () => {
         if(board.title === "" || board.title === undefined || board.title === null){
-            addToast("내용을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
+            addToast("제목을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
             return;
         } else if(board.content === "" || board.content === undefined || board.content === null){
             addToast("내용을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
             return;
         }
         noticeService.registerBoard({...board, email: email, writer: name}).then(res => {
-            // history.push(`/admin/notice`)
             history.push(`/board/notice/list`)
         })
     }
     return (
-        <div>
+        <div style={{width:"1000px"}}>
             <Button variant="outlined" color="primary" onClick={handleClickOpen}>
                 공지 글 작성
             </Button>
@@ -96,7 +90,5 @@ export default function Register() {
                 </Tab.Container>
             </Dialog>
         </div>
-
-
     );
 }

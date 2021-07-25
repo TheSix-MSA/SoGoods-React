@@ -51,7 +51,7 @@ const BlogNoSidebar = ({match}) => {
     }
 
     const boardRegister = () => {
-        history.push(`/${boardType.current}/boardRegister`)
+        history.push(`/board/${boardType.current}/boardRegister`)
     }
 
     return (

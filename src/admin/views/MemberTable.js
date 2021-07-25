@@ -118,8 +118,9 @@ const MemberTable = () => {
             <td>{member.phone}</td>
             <td>{member.address} {member.detailAddress}</td>
             <td>{member.gender}</td>
-            <td onClick={() => ban(member)}
-                style={{textAlign: "center"}}>{member.banned ? "🔴" : "🟢"}</td>
+            <td onClick={() => ban(member)} style={{textAlign: "center"}}>
+                <span style={{cursor: "pointer"}}>{member.banned ? "🔴" : "🟢"} </span>
+            </td>
             <td>{member.removed ? "삭제" : "정상"}</td>
             <td onClick={() => role(member)}>
                 <span style={{cursor: "pointer"}}>{member.roleSet[member.roleSet.length - 1]} </span>

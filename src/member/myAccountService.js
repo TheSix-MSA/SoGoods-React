@@ -57,6 +57,7 @@ const myAccountService = () => {
             url: `/member/${email}`,
             method: 'GET'
         });
+
         return result;
     };
 
@@ -72,6 +73,7 @@ const myAccountService = () => {
             method: 'PUT',
             data: editInfo
         });
+
         return result;
     };
 
@@ -82,10 +84,10 @@ const myAccountService = () => {
      * @returns {Promise<any>}
      */
     const searchNovelList = async (isbnKey)=> {
-
         const result = await axios.get(
             `/ttb/api/ItemLookUp.aspx?ttbkey=${process.env.REACT_APP_ALADIN_TTB_KEY}&ItemId=${isbnKey}&itemIdType=ISBN13&output=js&Version=20131101`
         )
+
         return result.data;
     }
 
@@ -139,8 +141,37 @@ const myAccountService = () => {
     };
 
 
+    /**
+     * 신분증 업로드
+     *
+     * @param file
+     * @returns {Promise<*>}
+     */
+    const registerIdentification = async (file) =>{
+        const result = await instance({
+            url:"/attach/upload",
+            method:"POST",
+            headers:{
+                "Content-Type": "multipart/form-data"
+            },
+            data:file
+        });
+
+        return result;
+    }
+
+    const requestAuthor = async (authorInfo, novel) => {
+        const result = await instance({
+            url: "/member/novels",
+            method: "PUT",
+            data: {novelsDTO: novel, authorInfoDTO: authorInfo}
+        });
+
+        return result;
+    };
+
     return {getMyInfo, modifyInfo, searchNovelList, popUpDialogFn, setDialogFn, setCloseDialogFn, registerNovel,clearInput,
-        setClearInputFn, getNovelList, setListFlag, changeFlag, removeNovel}
+        setClearInputFn, getNovelList, setListFlag, changeFlag, removeNovel, registerIdentification, requestAuthor}
 };
 
 export default myAccountService();

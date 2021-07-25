@@ -47,7 +47,8 @@ const FundingUpdate = () => {
 
     console.log(fundingForm);
 
-    const sendFormData = async () => {
+    const sendFormData = async (e) => {
+        e.preventDefault();
         console.log(fundingForm);
         const result = await fundingService.updateFunding(fno, {...fundingForm});
         console.log(result)
@@ -143,11 +144,12 @@ const FundingUpdate = () => {
                                                                     </div>
                                                                     </div>
                                                                         <div className="button-box">
-                                                                            <button type="button"
-                                                                                    onClick={()=>sendFormData()}
-                                                                                    style={inputStyle}>
-                                                                                <span>펀딩 등록하기</span>
-                                                                            </button>
+                                                                            <form className={"searchform"}>
+                                                                                <button className={"searchform__submit"}
+                                                                                        onClick={sendFormData}
+                                                                                        style={{height:"40px", position:"relative", margin:"10px", float:"right"}}> 수정
+                                                                                </button>
+                                                                            </form>
                                                                         </div>
                                                                     </div>
                                                                 </div>

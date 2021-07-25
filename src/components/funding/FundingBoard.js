@@ -18,13 +18,14 @@ export default  () => {
                     </Route>
                     <Route path={`/funding/read/:fno`} component={FundingRead}>
                     </Route>
-                    <Route path={`/funding/register`} component={withAuth(FundingRegister,["AUTHOR"])}>
+                    <Route path={`/funding/register`} component={(FundingRegister)}>
                     </Route>
+                    {/*<Route path={`/funding/register`} component={withAuth(FundingRegister,["AUTHOR"])}>*/}
                     <Route path={`/funding/mypage/fav`} component={MyFavFundingPage}>
                     </Route>
                     <Route path={`/funding/mypage`} component={MyFundingPage}>
                     </Route>
-                    <Route path={`/funding/update/:fno`} component={withAuth(FundingUpdate,["AUTHOR"])}>
+                    <Route path={`/funding/update/:fno`} component={(FundingUpdate)}>
                     </Route>
                 </Switch>
             </div>

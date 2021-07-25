@@ -31,7 +31,7 @@ const Confirmation = ({location}) => {
 
     console.log({...queryObj, orderId: orderId,buyer:user, tid:tid, products:products});
 
-    const sendToKakao = await orderServices.kakaoPayApprovePayment(params);
+    // await orderServices.kakaoPayApprovePayment(params);
     const sendToDB = orderServices.orderConfirmedSave({...queryObj, orderId: orderId,buyer:user, tid:tid,products:products});
 
     // localStorage.removeItem("transactionId");

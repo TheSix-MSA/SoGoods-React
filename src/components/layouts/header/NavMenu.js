@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import React from "react";
 import { Link } from "react-router-dom";
 import { multilanguage } from "redux-multilanguage";
-import FundingList from "../../funding/FundingList";
 
 const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
   return (
@@ -22,47 +21,18 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
           </li>
           <li>
             <Link to={process.env.PUBLIC_URL + "/funding/list"}>
-              FundingList
+              Funding
             </Link>
           </li>
           <li>
-            <Link to={process.env.PUBLIC_URL + "/"}>
-              {strings["pages"]}
+            <Link to={process.env.PUBLIC_URL + "//board/free/list"}>
+              Chit Chat
               {sidebarMenu ? (
-                <span>
+                  <span>
                   <i className="fa fa-angle-right"></i>
                 </span>
               ) : (
-                <i className="fa fa-angle-down" />
-              )}
-            </Link>
-            <ul className="submenu">
-              <li>
-                <Link to={process.env.PUBLIC_URL + "/my-account"}>
-                  {strings["my_account"]}
-                </Link>
-              </li>
-              <li>
-                <Link to={process.env.PUBLIC_URL + "/login-register"}>
-                  {strings["login_register"]}
-                </Link>
-              </li>
-              <li>
-                <Link to={process.env.PUBLIC_URL + "/checkout"}>
-                  {strings["checkout"]}
-                </Link>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <Link to={process.env.PUBLIC_URL + "/blog-standard"}>
-              {strings["blog"]}
-              {sidebarMenu ? (
-                <span>
-                  <i className="fa fa-angle-right"></i>
-                </span>
-              ) : (
-                <i className="fa fa-angle-down" />
+                  <i className="fa fa-angle-down" />
               )}
             </Link>
             <ul className="submenu">
@@ -77,6 +47,35 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
                   작가게시판
                 </Link>
               </li>
+            </ul>
+          </li>
+          <li>
+            <Link to={process.env.PUBLIC_URL + "/my-account"}>
+              {strings["my_account"]}
+              {sidebarMenu ? (
+                <span>
+                  <i className="fa fa-angle-right"></i>
+                </span>
+              ) : (
+                <i className="fa fa-angle-down" />
+              )}
+            </Link>
+            <ul className="submenu">
+              <li>
+                <Link to={process.env.PUBLIC_URL + "/login-register"}>
+                  {strings["login_register"]}
+                </Link>
+              </li>
+              <li>
+                <Link to={process.env.PUBLIC_URL + "/my-account"}>
+                  {strings["my_account"]}
+                </Link>
+              </li>
+              <li>
+                <Link to={process.env.PUBLIC_URL + "/checkout"}>
+                  {strings["checkout"]}
+                </Link>
+              </li>
               <li>
                 <Link to={"/board/notice/list"}>
                   공지사항
@@ -84,6 +83,7 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
               </li>
             </ul>
           </li>
+
         </ul>
       </nav>
     </div>

@@ -107,11 +107,11 @@ const FundingTable = () => {
             <td>{fund.fundingDTO.targetAmount}</td>
             <td>{fund.fundingDTO.totalAmount}</td>
             <td>{(fund.fundingDTO.totalAmount / fund.fundingDTO.targetAmount * 100).toFixed(2)}%달성</td>
-            <td>{fund.fundingDTO.success ? "🟢" : "🔴"}</td>
-            <td>{fund.fundingDTO.removed ? "🟢" : "🔴"}</td>
             <td>{fund.fundingDTO.dueDate}</td>
             <td>{fund.fundingDTO.regDate}</td>
-            <td onClick={() => setAuthorized(fund)}>{fund.fundingDTO.authorized ? "true🟢" : "🔴"}</td>
+            <td>{fund.fundingDTO.success ? "🟢" : "🔴"}</td>
+            <td>{fund.fundingDTO.removed ? "🟢" : "🔴"}</td>
+            <td onClick={() => setAuthorized(fund)}>{fund.fundingDTO.authorized ? "참여중" : "처리중"}</td>
         </tr>
     })
 
@@ -154,11 +154,11 @@ const FundingTable = () => {
                                 <th className="border-0">목표금액</th>
                                 <th className="border-0">현재금액</th>
                                 <th className="border-0">펀딩 진행률</th>
-                                <th className="border-0">펀딩 성공 여부</th>
-                                <th className="border-0">삭제 여부</th>
                                 <th className="border-0">펀딩기한</th>
                                 <th className="border-0">신청날짜</th>
-                                <th className="border-0">펀딩 신청 여부</th>
+                                <th className="border-0">펀딩 성공 여부</th>
+                                <th className="border-0">삭제 여부</th>
+                                <th className="border-0">펀딩 신청</th>
                             </tr>
                             </thead>
                             <tbody>

@@ -12,8 +12,7 @@ const MemberPagination = ({members, movePage}) =>{
             {members.pageMaker.next === false ? null :
                     <span onClick={() => movePage(members.pageMaker.endPage+1)}>Next</span> }
         </div>
-    )
-
-}
+    );
+};
 
 export default MemberPagination;

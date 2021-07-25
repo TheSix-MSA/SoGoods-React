@@ -12,7 +12,7 @@ const BlogPostsNoSidebar = ({boardData, boardType}) => {
     return (
         <Fragment>
             {boardData && boardData?.map((data, idx) => (
-                <div className="col-lg-4 col-md-6 col-sm-12">
+                <div className="col-lg-4 col-md-6 col-sm-12" key={idx}>
                     <div className="blog-wrap-2 mb-30">
                         <div className="blog-content-2">
                             <div className="blog-meta-2">

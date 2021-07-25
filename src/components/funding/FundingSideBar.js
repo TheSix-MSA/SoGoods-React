@@ -169,7 +169,8 @@ const FundingSideBar = (funding) => {
                          <Link to={{
                              pathname: "/checkout",
                              state: {
-                                 cartList
+                                 cartList,
+                                 fno: funding.fundingDTO.fno
                              }
                          }}>
                              <button className={"searchform__submit"}

@@ -17,20 +17,10 @@ const Confirmation = ({location}) => {
     tid: JSON.parse(localStorage.getItem("transactionId")).tid,
     partner_order_id: JSON.parse(localStorage.getItem("transactionId")).orderId,
     pg_token: queryObj.pg_token,
-    products:JSON.parse(localStorage.getItem("transactionId")).cartList
+    products:JSON.parse(localStorage.getItem("transactionId")).cartList,
+    totalPrice: JSON.parse(localStorage.getItem("transactionId")).totalPrice,
+    fno: JSON.parse(localStorage.getItem("transactionId")).fno
   }
-
-  console.log("at the beginning",purchaseInfo);
-
-  // const tid = localStorage.getItem("transactionId")!==null?
-  //     JSON.parse(localStorage.getItem("transactionId")).tid:null;
-  //
-  // const orderId = localStorage.getItem("transactionId")!==null?
-  //     JSON.parse(localStorage.getItem("transactionId")).orderId:null;
-  //
-  // const products = localStorage.getItem("transactionId")!==null?
-  //     JSON.parse(localStorage.getItem("transactionId")).cartList:null;
-
 
   const finalCheckOut = async () => {
     const params = new URLSearchParams()
@@ -42,17 +32,18 @@ const Confirmation = ({location}) => {
 
     console.log("after pushed the btn ",purchaseInfo)
 
-    // await orderServices.kakaoPayApprovePayment(params);
-    // await orderServices.orderConfirmedSave({...queryObj, orderId: orderId, buyer: user, tid: tid, products: products});
+    await orderServices.kakaoPayApprovePayment(params);
+    await orderServices.orderConfirmedSave({...queryObj, orderId: purchaseInfo.partner_order_id, buyer: user,
+      tid: purchaseInfo.tid, products: purchaseInfo.products, totalPrice: purchaseInfo.totalPrice, fno: purchaseInfo.fno});
 
-    // history.push("/completed")
+    localStorage.removeItem("transactionId");
+    history.push("/completed")
   }
 
   const orderCancel = () => {
+    localStorage.removeItem("transactionId");
     history.push("/funding")
   }
-
-  // localStorage.removeItem("transactionId");
 
   return (
     <Fragment>

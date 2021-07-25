@@ -26,11 +26,11 @@ const initDto =
                 shippedDate: null,
                 cancelledDate: null,
                 products: null,
-                regDate: "2021-07-24",
-                modDate: "2021-07-24"
+                regDate: "",
+                modDate: ""
             },
-            totalPrices: 4,
-            prodNames: "bbb, aaa"
+            totalPrices: 0,
+            prodNames: ""
         }
     ]
 

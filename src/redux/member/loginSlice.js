@@ -12,13 +12,15 @@ const loginSlice = createSlice({
         signin:(state, action) => {
             localStorage.removeItem("userData");
             localStorage.setItem("userData",JSON.stringify(action.payload));
-            return {...state,email:action.payload.email, roles: action.payload.roles, name:action.payload.name};
+            localStorage.setItem("lastActiveTime",JSON.stringify(new Date()));
+            return {...state,email:action.payload.email, roles: action.payload.roles, name:action.payload.name, approval:action.payload.approval};
         },
         signout: (state, action) => {
             localStorage.clear();
             return {...initState}
         },
         loggedInUser:(state, action) => {
+            localStorage.setItem("lastActiveTime",JSON.stringify(new Date()));
             return {...state,email:action.payload.email, roles: action.payload.roles, name:action.payload.name};
         }
     }

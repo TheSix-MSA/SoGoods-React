@@ -25,8 +25,6 @@ const Checkout = ({ location }) => {
 
   const cartList = location.state?.cartList;
 
-  console.log(cartList)
-
   let cartTotalPrice = 0;
 
     /**
@@ -47,23 +45,6 @@ const Checkout = ({ location }) => {
     const checkOut = async () => {
         const uuid = uuidv4();
 
-        const params = {
-            cid: process.env.REACT_APP_KAKAO_PAY_CID,
-            partner_order_id: uuid, // 서버에 있는 값중 최신 값을 가져와야 한다.
-            partner_user_id: user, //결제하는 놈 이메일
-            item_name: cartList[0].name+" 외 "+(cartList.length-1)+"개",
-            quantity: cartList.reduce(function(prev, next) {
-                if(typeof prev === "object") return prev.count + next.count
-                return prev + next.count
-            }),
-            total_amount: cartTotalPrice,
-            tax_free_amount: 0,
-            approval_url: "http://localhost:3000/confirmOrder?receiverName="+receiver.receiverName+"&receiverAddress="+receiver.receiverAddress
-                +"&receiverDetailedAddress="+receiver.receiverDetailedAddress+"&receiverPhone="+receiver.receiverPhone+"&receiverRequest="+receiver.receiverRequest,
-            fail_url: "http://localhost:3000/not-found",
-            cancel_url: "http://localhost:3000/not-found"
-        }
-
         const name = cartList.length>1 ?cartList[0].name+" 외 "+(cartList.length-1)+"개":cartList[0].name;
 
         const res = await orderServices.callKakaoPay({
@@ -71,14 +52,13 @@ const Checkout = ({ location }) => {
             partner_order_id: uuid, // 서버에 있는 값중 최신 값을 가져와야 한다.
             partner_user_id: user, //결제하는 놈 이메일
             item_name: name,
-            quantity: cartList.reduce(function(prev, next) {
-                if(typeof prev === "object") return prev.count + next.count
+            quantity: cartList.length===1? cartList[0].count :cartList.reduce(function(prev, next) {
+                if(typeof prev === "object") {
+                    return prev.count + next.count
+                }
                 return prev + next.count
             }),
-            total_amount: cartList.reduce(function(prev, next) {
-                if(typeof prev === "object") return prev.count*prev.price + next.count*next.price
-                return prev + next.count*next.price
-            }),
+            total_amount: cartTotalPrice,
             tax_free_amount: 0,
             approval_url: "http://localhost:3000/confirmOrder?receiverName="+receiver.receiverName+"&receiverAddress="+receiver.receiverAddress
                 +"&receiverDetailedAddress="+receiver.receiverDetailedAddress+"&receiverPhone="+receiver.receiverPhone+"&receiverRequest="+receiver.receiverRequest,

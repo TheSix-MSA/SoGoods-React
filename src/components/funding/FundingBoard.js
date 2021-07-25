@@ -6,6 +6,7 @@ import FundingRead from "./FundingRead";
 import MyFundingPage from "./MyFundingPage";
 import MyFavFundingPage from "./MyFavFundingPage";
 import FundingUpdate from "./FundingUpdate";
+import withAuth from "../../hoc/withAuth";
 
 
 export default  () => {
@@ -17,13 +18,14 @@ export default  () => {
                     </Route>
                     <Route path={`/funding/read/:fno`} component={FundingRead}>
                     </Route>
-                    <Route path={`/funding/register`} component={FundingRegister}>
+                    <Route path={`/funding/register`} component={(FundingRegister)}>
                     </Route>
+                    {/*<Route path={`/funding/register`} component={withAuth(FundingRegister,["AUTHOR"])}>*/}
                     <Route path={`/funding/mypage/fav`} component={MyFavFundingPage}>
                     </Route>
                     <Route path={`/funding/mypage`} component={MyFundingPage}>
                     </Route>
-                    <Route path={`/funding/update/:fno`} component={FundingUpdate}>
+                    <Route path={`/funding/update/:fno`} component={(FundingUpdate)}>
                     </Route>
                 </Switch>
             </div>

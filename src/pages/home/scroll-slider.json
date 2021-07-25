@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "title": "따끈따끈한 신상",
+    "subtitle": "방금 나온 굿즈",
+    "image": "/assets/img/home/crowdfunding.jpg",
+    "url": "/funding/list"
+  },
+  {
+    "id": "2",
+    "title": "펀딩의 마지막 기회!",
+    "subtitle": "놓치면 아쉬운 <br/> 굿즈",
+    "image": "/assets/img/home/goods1.jpg",
+    "url": "/funding/list"
+  },
+  {
+    "id": "3",
+    "title": "작가와의 펀딩이야기",
+    "subtitle": "작가와의 <br/> 굿즈 이야기",
+    "image": "/assets/img/home/goods2.jpg",
+    "url": "/board/novelist/list/"
+  },
+  {
+    "id": "4",
+    "title": "궁금하다",
+    "subtitle": "내가 참여한 펀딩",
+    "image": "/assets/img/home/goods3.jpg",
+    "url": "/board/free/list/"
+  }
+]

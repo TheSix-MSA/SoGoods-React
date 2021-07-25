@@ -1,11 +1,25 @@
 import React, {useEffect, useState} from "react";
 import noticeService from "../sevice/noticeService";
 import {Card, Col, Row, Table} from "react-bootstrap";
-import MemberPagination from "../components/member/MemberPagination";
 import getFormatDate from "../../modules/getFormatDate";
+import {useHistory, useLocation} from "react-router-dom";
+import Register from "../modal/Register";
+import {Button, FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
+import queryString from "querystring";
+import useInputs from "../../customHooks/useInputs";
+import memberService from "../sevice/memberService";
+import NoticePagination from "../components/notice/NoticePagination";
+import {getBoardData} from "../../redux/board/boardAsyncService";
+import {useDispatch} from "react-redux";
 
-const initState={
-    boardListRequestDTO:{},
+const initState = {
+    boardListRequestDTO: {
+        page: 1,
+        size: 9,
+        keyword: null,
+        type: null
+    },
     boardDtoList: [{
         bno: 0,
         title: "",
@@ -17,36 +31,97 @@ const initState={
         modDate: "",
         private: false
     }],
-    pageMaker:{
-        page:1,
-        size:0,
-        totalCount:0,
-        pageList:[],
-        prev:false,
-        next:false,
-        start:0,
-        end:0
+    pageMaker: {
+        page: 1,
+        size: 10,
+        totalCount: 0,
+        pageList: [],
+        prev: false,
+        next: false,
+        start: 0,
+        end: 0
     }
 }
+const param = {
+    page: 1,
+    type: '',
+    keyword: ''
+}
+const NoticeTable = () => {
+    const classes = useStyles();
+    const history = useHistory()
+    const location = useLocation();
 
-const NoticeTable = ()=>{
+    const value = queryString.parse(location.search.replace("?", ""));
+    const page = value.page || 1;
+    const type = value.type || "";
+    const keyword = value.keyword || "";
+
     const [notices, setNotices] = useState(initState);
+    const [flag, setFlag] = useState(false);
+    const [searchInput, searchOnChange] = useInputs({...param, page: value.page || 1});
 
-    useEffect(() =>{
-        noticeService.getNoticeList(notices.pageMaker.page).then(result=>{
+    useEffect(() => {
+        noticeService.getNoticeList(page, keyword, type).then(result => {
+            console.log("result.response", result.response)
             setNotices(result.response);
         })
-    },[])
+    }, [page])
 
-    const list = notices.boardDtoList.map(notice=>{
+    const renderPage = () => {
+        setFlag(!flag)
+    }
+    noticeService.setRender(renderPage)
+
+    const toNotice = (bno) => {
+        history.push("/board/NOTICE/" + bno)
+    }
+
+    const movePage = (num) => {
+        history.push('/admin/notice?page=' + num + '&keyword=' + searchInput.keyword + '&type=' + searchInput.type)
+        noticeService.getNoticeList(num).then(res => {
+            setNotices(res.response);
+        });
+    }
+
+    const search = async () => {
+        const res = await noticeService.getNoticeList(1, searchInput.keyword, searchInput.type)
+        setNotices(res.response)
+        history.push('/admin/notice?page=' + page + '&keyword=' + searchInput.keyword + '&type=' + searchInput.type);
+    }
+
+    const changePrivate = (notice) => {
+        noticeService.changePrivate(notice.bno, notice).then(res => {
+            setNotices({
+                ...notices, boardDtoList: notices.boardDtoList.map(notice => {
+                    if (notice.bno === res.response.bno) return res.response;
+                    return notice;
+                })
+            })
+        })
+    }
+
+    const changeRemoved = (notice) => {
+        noticeService.changeRemoved(notice.bno).then(res => {
+            setNotices({
+                ...notices, boardDtoList: notices.boardDtoList.map(notice => {
+                    if (notice.bno === res.response.bno) return res.response;
+                    return notice;
+                })
+            })
+        })
+    }
+
+
+    const list = notices.boardDtoList.map(notice => {
         return <tr key={notice.bno}>
-            <td>{notice.title}</td>
+            <td onClick={() => toNotice(notice.bno)}>{notice.title}</td>
             <td>{notice.writer}</td>
             <td>{notice.content}</td>
-            <td>{notice.removed ? "⭕":"❌"}</td>
             <td>{getFormatDate(new Date(notice.regDate))}</td>
             <td>{getFormatDate(new Date(notice.modDate))}</td>
-            <td>{notice.private ? "⭕":"❌"}</td>
+            <td onClick={() => changeRemoved(notice)}>{notice.removed ? "⭕" : "❌"}</td>
+            <td onClick={() => changePrivate(notice)}>{notice.private ? "⭕" : "❌"}</td>
         </tr>
 
     })
@@ -58,21 +133,37 @@ const NoticeTable = ()=>{
                     <Card.Header>
                         <Card.Title as="h4">공지 리스트</Card.Title>
 
-                        {/*<div className="pro-sidebar-search mb-55 mt-25">*/}
-                        {/*    <form className="pro-sidebar-search-form" action="#">*/}
-                        {/*        <select name="type" style={{width:"10%"}} onChange={searchOnChange}>*/}
-                        {/*            <option value=''>선택</option>*/}
-                        {/*            <option value='n'>이름</option>*/}
-                        {/*            <option value='e'>이메일</option>*/}
-                        {/*            <option value='a'>주소</option>*/}
-                        {/*        </select>*/}
-                        {/*        <input value={searchInput.keyword} onChange={searchOnChange} type="text"*/}
-                        {/*               name="keyword" placeholder="검색"/>*/}
-                        {/*        <button style={{top:"70%"}} onClick={search}>*/}
-                        {/*            <i className="pe-7s-search" />*/}
-                        {/*        </button>*/}
-                        {/*    </form>*/}
-                        {/*</div>*/}
+                        <Register/>
+
+                        <div className="pro-sidebar-search mb-55 mt-25">
+                            <FormControl className={classes.formControl}>
+                                <InputLabel shrink id="demo-simple-select-placeholder-label-label">
+                                    선택
+                                </InputLabel>
+                                <Select labelId="demo-simple-select-placeholder-label-label"
+                                        id="demo-simple-select-placeholder-label"
+                                        displayEmpty
+                                        className={classes.selectEmpty}
+                                        name="type" onChange={searchOnChange}>
+                                    <MenuItem value="t"> 제목</MenuItem>
+                                    <MenuItem value="w"> 작성자</MenuItem>
+                                    <MenuItem value="c"> 내용</MenuItem>
+                                    <MenuItem value="tc"> 제목+내용</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <TextField
+                                style={{width: "40%", margin: "8px"}}
+                                id="standard-basic"
+                                label="검색어"
+                                name="keyword"
+                                value={searchInput.keyword}
+                                onChange={searchOnChange}/>
+                            <Button variant="outlined" onClick={search}
+                                    style={{marginTop: "15px", padding: "15px 15px"}}>
+                                <i className="pe-7s-search"/>
+                            </Button>
+                        </div>
+
                         <p className="card-category">
                             공지 정보
                         </p>
@@ -85,9 +176,9 @@ const NoticeTable = ()=>{
                                 <th className="border-0">제목</th>
                                 <th className="border-0">이름</th>
                                 <th className="border-0">내용</th>
-                                <th className="border-0">삭제 여부</th>
                                 <th className="border-0">생성 날짜</th>
                                 <th className="border-0">수정 날짜</th>
+                                <th className="border-0">삭제 여부</th>
                                 <th className="border-0">숨김</th>
                             </tr>
                             </thead>
@@ -95,17 +186,32 @@ const NoticeTable = ()=>{
                             {list}
                             </tbody>
                         </Table>
-                        {/*<MemberPagination members={members} movePage={movePage}/>*/}
+                        <NoticePagination pageMaker={notices.pageMaker} movePage={movePage}/>
                     </Card.Body>
                 </Card>
             </Col>
         </Row>
     );
-
-
-
-
-
-
 }
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& > *': {
+            margin: theme.spacing(1),
+        },
+    },
+    margin: {
+        margin: theme.spacing(1),
+    },
+    extendedIcon: {
+        marginRight: theme.spacing(1),
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
+    },
+}));
 export default NoticeTable;

@@ -21,20 +21,17 @@ const inputStyle = {
 const textStyle = {
     margin:"0 10px"
 }
-const underInputStyle = {
-    margin:"0 10px",
-}
-
 const imgStyle = {
     display: 'block',
     width: 100,
     height: 50,
+    float: 'left',
 };
 
 const btn ={
     float: 'none',
+    margin:"10px"
 }
-
 const initState = {
     title:'',
     content:'',
@@ -49,6 +46,7 @@ const FundingRegister = () => {
 
     const {addToast} = useToasts();
     const [form, changeForm, setForm] = useInputs({...initState});
+    const [fundingMainFile, setFundingMainFile] = useState(null);
     const userInfo = useSelector(state=> state.login);
     const [open, setOpen] = useState(false);
 
@@ -63,10 +61,12 @@ const FundingRegister = () => {
 
     const req = {...form, writer:userInfo.name, email:userInfo.email, productDTOs: productDTOs}
 
+    // 입력 데이터 전송
     const sendFormData = async (e) => {
         e.preventDefault();
 
-        if(form.title===""){
+        // 데이터 유효성 검사
+        if(form.title==""){
             addToast("제목은 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
             return;
         } else if (form.content===""){
@@ -75,33 +75,45 @@ const FundingRegister = () => {
         } else if (!form.dueDate){
             addToast("만기일은 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
             return;
+        } else if(req.productDTOs.length === 0 || !req.productDTOs) {
+            addToast("최소 1개 이상의 제품을 등록해주세요.", {appearance: 'warning', autoDismiss: true});
+            return;
         } else if (form.targetAmount===null || form.targetAmount === 0){
             addToast("목표금액은 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
             return;
         }
 
-        console.log(form);
+        // 펀딩 데이터 저장
         const result = await fundingService.registerFunding(req);
-        console.log(result)
-        setForm({...initState})
-        if(result){
-            history.push("/funding/list");
+        const fno = result.data.response.fundingDTO.fno
+
+        const productNums = result.data.response.productNums
+
+        await fundingService.registerAttach([fundingMainFile], 'FUNDING', fno, 0);
+
+        for (const num of productNums) {
+            const idx = productNums.indexOf(num);
+            const productList = productService.getProductList()
+            await fundingService.registerAttach(productList[idx].pictures, 'PRODUCT', num, productList[idx].mainIdx);
         }
 
+        setForm({...initState})
 
-        await fundingService.registerAttach(productList[0], 'PRODUCT',123, 0 )
+        if(result.data.success){
+            history.push("/funding/list");
+        }
+    }
 
-        // productList.reduce((prevP, product)=>{
-        //     prevP.then(async res=>{
-        //         await fundingService.registerAttach(product, 'PRODUCT',123, 0 )
-        //     })
-        // })
+
+
+    const setProductMainImage = (e, productIdx, pictureIdx)=>{
+        productService.getProductList()[productIdx].mainIdx = pictureIdx
     }
 
     const list = productService.getProductList().map((product, i)=>{
         console.log(product)
-        product.pictures.map((picture )=> Object.assign(picture, {
-            preview: URL.createObjectURL(picture)
+        product.pictures.map((file)=> Object.assign(file, {
+            preview: URL.createObjectURL(file)
         }))
         return (
             <>
@@ -111,8 +123,19 @@ const FundingRegister = () => {
                         {product.text.desc}
                     </p>
                     <div>
-                        {product.pictures.map((picture ,j)=>
-                            <img key={j} src={picture.preview} style={imgStyle}/>)}
+                        {product.pictures.map((file ,j)=>
+                            <div>
+                                <img key={j} data-idx={j}
+                                     src={file.preview}
+                                     style={imgStyle}/>
+                                <input type="radio"
+                                       name={`mainIdx_${i}`}
+                                       value={j}
+                                       onClick={(e)=>{setProductMainImage(e,i,j)}}
+                                       style={{flaot: 'left'}}/>
+                            </div>
+                        )}
+
                     </div>
                 </li>
             </>
@@ -138,48 +161,50 @@ const FundingRegister = () => {
                                                         </Nav.Link>
                                                     </Nav.Item>
                                                     </Nav>
-                                                        <div style={textStyle}>제목</div>
-                                                        <input
-                                                            style={inputStyle}
-                                                            type="title"
-                                                            name="title"
-                                                            value={form.title}
-                                                            placeholder="제목"
-                                                            onChange={changeForm}
-                                                        />
-                                                        <div style={textStyle}>내용</div>
-                                                        <input
-                                                            type="hidden"
-                                                            name="writer"
-                                                            value={form.name}
-                                                            placeholder="작성자"
-                                                            onChange={changeForm}
-                                                        />
-                                                        <input
-                                                            type="hidden"
-                                                            name="email"
-                                                            value={form.email}
-                                                            placeholder="이메일"
-                                                            onChange={changeForm}
-                                                        />
-                                                        <textarea
-                                                            style={inputStyle}
-                                                            type="text"
-                                                            name="content"
-                                                            value={form.content}
-                                                            placeholder="내용을 입력하세요."
-                                                            onChange={changeForm}
-                                                        />
-                                                         <h5 style={textStyle}>메인 이미지</h5>
-                                                        <input
-                                                            style={inputStyle}
-                                                            type="file"
-                                                            name="mainImage"
-                                                            onChange={changeForm}
-                                                        />
+                                                     {/*register funding*/}
+                                                    <div style={textStyle}>제목</div>
+                                                    <input
+                                                        style={inputStyle}
+                                                        type="title"
+                                                        name="title"
+                                                        value={form.title}
+                                                        placeholder="제목"
+                                                        onChange={changeForm}
+                                                    />
+                                                    <div style={textStyle}>내용</div>
+                                                    <input
+                                                        type="hidden"
+                                                        name="writer"
+                                                        value={form.name}
+                                                        placeholder="작성자"
+                                                        onChange={changeForm}
+                                                    />
+                                                    <input
+                                                        type="hidden"
+                                                        name="email"
+                                                        value={form.email}
+                                                        placeholder="이메일"
+                                                        onChange={changeForm}
+                                                    />
+                                                    <textarea
+                                                        style={inputStyle}
+                                                        type="text"
+                                                        name="content"
+                                                        value={form.content}
+                                                        placeholder="내용을 입력하세요."
+                                                        onChange={changeForm}
+                                                    />
+                                                     <h5 style={textStyle}>메인 이미지</h5>
+                                                    <input
+                                                        style={inputStyle}
+                                                        type="file"
+                                                        name="mainImage"
+                                                        onChange={(e)=>{setFundingMainFile(e.target.files[0])}}
+                                                    />
                                                     <ul>
                                                         {list}
                                                     </ul>
+                                                    {/*register product*/}
                                                     <Button style={btn} variant="outlined" color="primary" onClick={productService.openDialog}>
                                                         상품 등록
                                                     </Button>
@@ -196,30 +221,30 @@ const FundingRegister = () => {
                                                                 min={getFormatDate(new Date())}
                                                             />
                                                         </div>
-                                                        <div style={{display:"flex", flexWrap:"wrap"}}>
-                                                        <h5 style={textStyle}>펀딩 목표금액</h5>
-                                                        <input
-                                                            style={inputStyle}
-                                                            name="targetAmount"
-                                                            value={form.targetAmount}
-                                                            placeholder="목표금액"
-                                                            type="text"
-                                                            onChange={changeForm}
-                                                            onInput={({ target }) => {
-                                                              target.value = target.value.replace(/[^0-9]/g, "");
-                                                              target.value = target.value.replace(/,/g, "");
-                                                            }}
-                                                        />
-                                                        </div>
-                                                        </div>
-                                                        <div className="button-box">
-                                                            <form className={"searchform"}>
-                                                                <button className={"searchform__submit"}
-                                                                        onClick={sendFormData}
-                                                                        style={{height:"40px", position:"relative", margin:"10px", float:"right"}}> 등록
-                                                                </button>
-                                                            </form>
-                                                        </div>
+                                                    <div style={{display:"flex", flexWrap:"wrap"}}>
+                                                    <h5 style={textStyle}>펀딩 목표금액</h5>
+                                                    <input
+                                                        style={inputStyle}
+                                                        name="targetAmount"
+                                                        value={form.targetAmount}
+                                                        placeholder="목표금액"
+                                                        type="text"
+                                                        onChange={changeForm}
+                                                        onInput={({ target }) => {
+                                                          target.value = target.value.replace(/[^0-9]/g, "");
+                                                          target.value = target.value.replace(/,/g, "");
+                                                        }}
+                                                    />
+                                                    </div>
+                                                    </div>
+                                                    <div className="button-box">
+                                                        <form className={"searchform"}>
+                                                            <button className={"searchform__submit"}
+                                                                    onClick={sendFormData}
+                                                                    style={{height:"40px", position:"relative", margin:"10px", float:"right"}}> 등록
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </Tab.Pane>

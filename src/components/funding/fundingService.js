@@ -4,9 +4,9 @@ import instance from "../../modules/axiosConfig";
 const fundingService = () => {
 
     // 펀딩 리스트 얻어오기
-    const getList = async (page, keyword="", type="") => {
+    const getList = async (page, keyword="", type="", state) => {
         const list = await instance({
-            url: `/funding/list?page=${page}&keyword=${keyword}&type=${type}`,
+            url: `/funding/list?page=${page}&keyword=${keyword}&type=${type}&state=${state}`,
             method: 'get'
         });
        return list.data;
@@ -19,18 +19,15 @@ const fundingService = () => {
             method: 'post',
             data : form
         });
-        console.log(result)
+        return result;
     }
 
-    //사진 업로드하기 - 개발중
-    const registerAttach = async(product, tableName, keyValue, mainIdx) => {
-
+    //사진 업로드하기
+    const registerAttach = async(files, tableName, keyValue, mainIdx) => {
         const form = new FormData();
-        product.pictures.forEach(ele=>{
+        files.forEach(ele=>{
             form.append('files', ele)
         })
-
-        console.log('요청데이터',form)
 
         const config = {
             headers: {
@@ -38,10 +35,33 @@ const fundingService = () => {
                 "Authorization": `Bearer ${(JSON.parse(localStorage.getItem("userData")))?.accessToken || ""}`,
             },
         }
-        const result = await axios.post(`${process.env.REACT_APP_API_DEV_URL}/attach/upload?tableName=${tableName}&keyValue=${keyValue}&mainIdx=${mainIdx}`,
-            form, config)
 
-        console.log('첨부파일 등록완료', result)
+        const result = await axios.post(
+            // `${process.env.REACT_APP_API_DEV_URL}/attach/upload?tableName=${tableName}&keyValue=${keyValue}&mainIdx=${mainIdx}`,
+            `${process.env.REACT_APP_API_URL}/attach/upload?tableName=${tableName}&keyValue=${keyValue}&mainIdx=${mainIdx}`,
+            form,
+            config)
+    }
+
+    //1:1매칭관계인 사진 이미지
+    const getA3src = async(type, keyValues) => {
+        let keyStr = keyValues.map(v=>'&keyValues=' + v)
+
+        const result = await axios.get(
+            // `${process.env.REACT_APP_API_DEV_URL}/attach/list/uuid?type=${type}` + keyStr.join(''))
+            `${process.env.REACT_APP_API_URL}/attach/list/uuid?type=${type}` + keyStr.join(''))
+        return result
+    }
+
+    //1:N 매칭관계인 사진 이미지
+    const getA3srcList = async(type, keyValues, mainList) => {
+        let keyStr = keyValues.map(v=>'&keyValues=' + v)
+        let mainListStr = mainList.map(m=>'&mainList=' + m)
+
+        const result = await axios.get(
+            // `${process.env.REACT_APP_API_DEV_URL}/attach/list/uuidlist?type=${type}` + keyStr.join('') + mainListStr.join(''))
+            `${process.env.REACT_APP_API_URL}/attach/list/uuid?type=${type}` + keyStr.join('') + mainListStr.join(''))
+        return result
     }
 
     //펀딩 글 등록시 관련된 상품들 등록처리하기
@@ -57,7 +77,16 @@ const fundingService = () => {
     // 펀딩 게시글 한개만 가져오기
     const getOneFunding = async (fno) => {
         const result = await instance({
-            url:`/funding/`+ fno +`/`,
+            url:`/funding/${fno}/`,
+            method:'get'
+        })
+        return result.data;
+    }
+
+    // 게시글의 찜 리스트 가져오기
+    const getFavList = async (fno) => {
+        const result = await instance({
+            url:`/funding/fav/${fno}`,
             method:'get'
         })
         return result.data;
@@ -77,7 +106,7 @@ const fundingService = () => {
     // 내가 쓴 펀딩 게시글 가져오기
     const getMyFundingList = async (email) => {
         const result = await instance({
-            url:`/funding/user/list/`+ email+`/`,
+            url:`/funding/user/list/${email}/`,
             method:'get'
         })
         console.log(result.data)
@@ -87,7 +116,7 @@ const fundingService = () => {
     // 내가 찜한 펀딩 게시글 가져오기
     const getMyFavFundingList = async (email) => {
         const result = await instance({
-            url:`/funding/fav/list/`+ email+`/`,
+            url:`/funding/fav/list/${email}/`,
             method:'get'
         })
         console.log(result.data)
@@ -98,7 +127,7 @@ const fundingService = () => {
     const updateFunding = async(fno, form) => {
         console.log(form)
         const result = await instance({
-            url:`/funding/`+fno+`/`,
+            url:`/funding/${fno}/`,
             method:'put',
             data:form
         })
@@ -117,7 +146,20 @@ const fundingService = () => {
 
 
 
-    return {getList, registerFunding, getOneFunding, insertFavorite, getMyFundingList, getMyFavFundingList, updateFunding, removedFunding, registerAttach}
+    return {
+        getList,
+        registerFunding,
+        registerAttach,
+        getA3src,
+        getA3srcList,
+        getOneFunding,
+        insertFavorite,
+        getMyFundingList,
+        getMyFavFundingList,
+        updateFunding,
+        removedFunding,
+        getFavList
+    }
 }
 
 export default fundingService()

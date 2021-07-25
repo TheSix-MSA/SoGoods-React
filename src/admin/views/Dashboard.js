@@ -211,6 +211,7 @@ function Dashboard() {
                   className="ct-chart ct-perfect-fourth"
                   id="chartPreferences"
                 >
+
                   <ChartistGraph
                     data={{
                       labels: ["50%", "10%", "40%"],

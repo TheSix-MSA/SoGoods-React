@@ -30,6 +30,12 @@
     }
 }
 
+.hs-style td{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+}
+
 .icon-section {
 	margin: 0 0 3em;
 	clear: both;

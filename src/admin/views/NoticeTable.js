@@ -4,14 +4,9 @@ import {Card, Col, Row, Table} from "react-bootstrap";
 import getFormatDate from "../../modules/getFormatDate";
 import {useHistory, useLocation} from "react-router-dom";
 import Register from "../modal/Register";
-import {Button, FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
 import queryString from "querystring";
 import useInputs from "../../customHooks/useInputs";
-import memberService from "../sevice/memberService";
 import NoticePagination from "../components/notice/NoticePagination";
-import {getBoardData} from "../../redux/board/boardAsyncService";
-import {useDispatch} from "react-redux";
 
 const initState = {
     boardListRequestDTO: {
@@ -83,7 +78,8 @@ const NoticeTable = () => {
         });
     }
 
-    const search = async () => {
+    const search = async (e) => {
+        e.preventDefault();
         const res = await noticeService.getNoticeList(1, searchInput.keyword, searchInput.type)
         setNotices(res.response)
         history.push('/admin/notice?page=' + page + '&keyword=' + searchInput.keyword + '&type=' + searchInput.type);
@@ -112,14 +108,20 @@ const NoticeTable = () => {
     }
 
     const list = notices.boardDtoList.map(notice => {
-        return <tr key={notice.bno}>
-            <td onClick={() => toNotice(notice.bno)}>{notice.title}</td>
+        return <tr className='hs-style' key={notice.bno}>
+            <td onClick={() => toNotice(notice.bno)}>
+                <span style={{cursor: "pointer"}}>{notice.title}</span>
+            </td>
             <td>{notice.writer}</td>
             <td>{notice.content}</td>
             <td>{getFormatDate(new Date(notice.regDate))}</td>
             <td>{getFormatDate(new Date(notice.modDate))}</td>
-            <td onClick={() => changeRemoved(notice)}>{notice.removed ? "삭제됨" : "정상"}</td>
-            <td onClick={() => changePrivate(notice)}>{notice.private ? "공지중" : "공지 X"}</td>
+            <td onClick={() => changeRemoved(notice)}>
+                <span style={{cursor: "pointer"}}>{notice.removed ? "삭제됨" : "정상"}</span>
+            </td>
+            <td onClick={() => changePrivate(notice)}>
+                <span style={{cursor: "pointer"}}>{notice.private ? "공지중" : "공지 X"}</span>
+            </td>
         </tr>
 
     })
@@ -131,26 +133,27 @@ const NoticeTable = () => {
                     <Card.Header>
                         <Card.Title as="h4">공지 리스트</Card.Title>
 
-                            <div className="pro-sidebar-search mb-55 mt-25">
-                                <form className="pro-sidebar-search-form" action="#">
-                                    <select name="type" style={{width:"10%"}} onChange={searchOnChange}>
-                                        <option value='t'>제목</option>
-                                        <option value='w'>작성자</option>
-                                        <option value='c'>내용</option>
-                                        <option value='tc'>제목+내용</option>
-                                    </select>
-                                    <input value={searchInput.keyword} onChange={searchOnChange} type="text"
-                                           name="keyword" placeholder="검색"/>
-                                    <button style={{top:"70%"}} onClick={search}>
-                                        <i className="pe-7s-search" />
-                                    </button>
-                                </form>
-                            </div>
+                        <div className="pro-sidebar-search mb-55 mt-25">
+                            <form className="pro-sidebar-search-form" action="#">
+                                <select name="type" style={{width: "10%"}} onChange={searchOnChange}>
+                                    <option value='t'>제목</option>
+                                    <option value='w'>작성자</option>
+                                    <option value='c'>내용</option>
+                                    <option value='tc'>제목+내용</option>
+                                </select>
+                                <input value={searchInput.keyword} onChange={searchOnChange} type="text"
+                                       name="keyword" placeholder="검색"/>
+                                <button style={{top: "70%"}} onClick={search}>
+                                    <i className="pe-7s-search"/>
+                                </button>
+                            </form>
+                        </div>
 
                         <Register/>
                     </Card.Header>
                     <Card.Body className="table-full-width table-responsive px-0">
-                        <Table className="table-hover table-striped" style={{textAlign: "center"}}>
+                        <Table className="table-hover table-striped"
+                               style={{textAlign: "center", tableLayout: "fixed"}}>
                             <thead>
                             <tr>
                                 <th className="border-0">제목</th>

@@ -6,7 +6,7 @@ export const ToastCenter = (msg) => {
     toast.warn(msg, {
         toastId: 'toastCenter',
         position: toast.POSITION.BOTTOM_CENTER,
-        autoClose: 3000,
+        autoClose: 2000,
         hideProgressBar: true,
         bodyStyle: {
             color: 'black',
@@ -23,7 +23,7 @@ export const ToastTopRight = (msg) => {
     toast.info(msg, {
         toastId: 'toastTopRight',
         position: toast.POSITION.TOP_RIGHT,
-        autoClose: 3000,
+        autoClose: 2000,
         hideProgressBar: true,
         bodyStyle: {
             color: 'black',
@@ -39,7 +39,7 @@ export const ToastError = (msg) => {
     toast.error("❌"+msg, {
         toastId: 'toastError',
         position: toast.POSITION.TOP_RIGHT,
-        autoClose: 3000,
+        autoClose: 1500,
         hideProgressBar: true,
         bodyStyle: {
             color: 'black',

@@ -24,11 +24,8 @@ const ReReplyInput = ({dto, bno, page, user}) => {
         reReply.groupId = dto.groupId;
         reReply.parentId = dto.rno;
         repliesService.getRemoveInput();
-        repliesService.insertReply(reReply, page).then().catch();
+        repliesService.insertReply(reReply, page).then();
         setReReply({...reReply, content:""})
-        /***
-         * catch 문 채워줘야함
-         */
     }
 
     const turnOff = () => {
@@ -50,7 +47,7 @@ const ReReplyInput = ({dto, bno, page, user}) => {
                         </div>
                     </div>
                     <div className="col-md-2">
-                        <input type="submit" onClick={() => send()} disabled={user}/>
+                        <input type="submit" onClick={() => send()}/>
                         <input type="submit" value="Cancel" onClick={()=> turnOff()}/>
                     </div>
                 </div>

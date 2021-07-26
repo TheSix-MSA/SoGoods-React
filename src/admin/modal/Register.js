@@ -9,6 +9,7 @@ import useInputs from "../../customHooks/useInputs";
 import {useHistory} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {useToasts} from "react-toast-notifications";
+import {ToastInformation, ToastWarning} from "../../modules/toastModule";
 
 const initState = {
     title: '',
@@ -38,13 +39,14 @@ export default function Register() {
 
     const register = () => {
         if(board.title === "" || board.title === undefined || board.title === null){
-            addToast("제목을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
+            ToastWarning("제목을 입력해주세요.")
             return;
         } else if(board.content === "" || board.content === undefined || board.content === null){
-            addToast("내용을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
+            ToastWarning("내용을 입력해주세요.")
             return;
         }
         noticeService.registerBoard({...board, email: email, writer: name}).then(res => {
+            ToastInformation("공지가 등록되었습니다.")
             history.push(`/board/notice/list`)
         })
     }

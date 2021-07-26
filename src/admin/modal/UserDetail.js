@@ -17,7 +17,7 @@ export default function UserDetail({member}) {
     };
     return (
         <div>
-            <span onClick={handleClickOpen}>
+            <span onClick={handleClickOpen} style={{cursor: "pointer", color:""}}>
                 {member.name}
             </span>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -37,11 +37,11 @@ export default function UserDetail({member}) {
                                 </thead>
                                 <tbody>
                                 <td>{member.email}</td>
-                                <td>{member.name}</td>
+                                <td style={{width:"80px"}}>{member.name}</td>
                                 <td>{member.birth}</td>
-                                <td>{member.phone}</td>
+                                <td style={{width:"120px"}}>{member.phone}</td>
                                 <td>{member.address} {member.detailAddress}</td>
-                                <td>{member.gender}</td>
+                                <td style={{width:"53px"}}>{member.gender}</td>
                                 </tbody>
 
                             </Table>

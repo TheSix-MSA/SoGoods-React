@@ -7,6 +7,7 @@ import Register from "../modal/Register";
 import queryString from "querystring";
 import useInputs from "../../customHooks/useInputs";
 import NoticePagination from "../components/notice/NoticePagination";
+import {ToastInformation} from "../../modules/toastModule";
 
 const initState = {
     boardListRequestDTO: {
@@ -93,8 +94,11 @@ const NoticeTable = () => {
                     return notice;
                 })
             })
+            const currentPrivate = notice.private ? "등록" : "취소"
+            ToastInformation("공지 " + currentPrivate + " 되었습니다.")
         })
     }
+
 
     const changeRemoved = (notice) => {
         noticeService.changeRemoved(notice.bno).then(res => {
@@ -105,6 +109,7 @@ const NoticeTable = () => {
                 })
             })
         })
+        ToastInformation("삭제 되었습니다.")
     }
 
     const list = notices.boardDtoList.map(notice => {

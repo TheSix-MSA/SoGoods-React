@@ -127,7 +127,7 @@ const FundingSideBar = (funding) => {
      */
     const productList = cartList.map((p, idx)=>
             <div className="single-sidebar-blog" key={idx}>
-                <div>{idx+1}번 리워드 </div>
+                <div><h4>{idx+1}번 리워드</h4></div>
                 <div className="sidebar-blog-img">
                     <div to={process.env.PUBLIC_URL + "/blog-details-standard"}>
                         <img
@@ -237,7 +237,7 @@ const FundingSideBar = (funding) => {
                 { userInfo.email===funding.fundingDTO.email && update}
             </div>
             <div className="sidebar-widget mt-40" >
-                <h4 className="pro-sidebar-title"> 리워드 선택</h4>
+                <h3 className="pro-sidebar-title"> 리워드 선택</h3>
                 <div className="sidebar-project-wrap mt-30">
                     {productList}
                 </div>

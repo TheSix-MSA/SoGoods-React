@@ -10,9 +10,9 @@ import axios from "axios";
  * @type {AxiosInstance}
  */
 const instance = axios.create({
-    baseURL: `${process.env.REACT_APP_API_DEV_URL }`,
+    baseURL: `${process.env.REACT_APP_API_URL }`,
     timeout: 10000,
-    params: {}, // do not remove this, its added to add params later in the config
+    params: {}, // do not update this, its added to add params later in the config
     // withCredentials: true,
 });
 

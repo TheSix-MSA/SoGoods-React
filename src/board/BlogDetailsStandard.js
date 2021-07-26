@@ -22,7 +22,7 @@ const initState = {
 }
 
 const BlogDetailsStandard = ({location, match}) => {
-    const [detailData, setDetailData]  = useState(initState)
+    const [detailData, setDetailData] = useState(initState)
     const bno = useRef(match.params.bno)
     const boardType = useRef(match.params.boardType?.toUpperCase())
     const {pathname} = location;
@@ -33,33 +33,31 @@ const BlogDetailsStandard = ({location, match}) => {
         })
     }, [bno, dispatch])
     return (
-            <Fragment>
-                <MetaTags>
-                    <title>Flone | Blog Post</title>
-                    <meta
-                        name="description"
-                        content="Blog post page of flone react minimalist eCommerce template."
-                    />
-                </MetaTags>
-                <LayoutOne headerTop="visible">
-                    {/* breadcrumb */}
-                    <div className="blog-area pt-100 pb-100">
-                        <div className="container">
-                            <div className="row flex-row-reverse">
-                                <div className="col-lg-9">
-                                    <div className="blog-details-wrapper ml-20">
-                                        {detailData && (
-                                        <BlogPost data={detailData} boardType={boardType.current}/>
-                                        )}
-                                        {/* blog post comment */}
-                                        <BlogComment bno={bno.current}/>
-                                    </div>
-                                </div>
-                            </div>
+        <Fragment>
+            <MetaTags>
+                <title>Flone | Blog Post</title>
+                <meta
+                    name="description"
+                    content="Blog post page of flone react minimalist eCommerce template."
+                />
+            </MetaTags>
+            <LayoutOne headerTop="visible">
+                {/* breadcrumb */}
+                <div className="blog-area pt-100 pb-100">
+                    <div className="container">
+
+                        <div className="blog-details-wrapper ml-20">
+                            {detailData && (
+                                <BlogPost data={detailData} boardType={boardType.current}/>
+                            )}
+                            {/* blog post comment */}
+                            <BlogComment bno={bno.current}/>
                         </div>
+
                     </div>
-                </LayoutOne>
-            </Fragment>
+                </div>
+            </LayoutOne>
+        </Fragment>
 
     );
 };

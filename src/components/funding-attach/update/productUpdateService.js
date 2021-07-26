@@ -1,13 +1,33 @@
-const productService = ()=>{
+const productUpdateService = ()=>{
 
     let openFn;
     let mode;
     let prodIdx;
-
-    const productList = [
+    let tempProduct;
+    let productList = [
     ]
 
-    let product;
+    let product = {
+        text:{
+            name: '',
+            des: '',
+            price: ''
+        },
+        pictures: [
+            //{file: null, main: 0}
+        ],
+        mainIdx: 0,
+    }
+
+    const pictureToInsert = [];
+    const pictureToDelete = [];
+    const getPictureToInsert = () => pictureToInsert
+    const getPictureToDelete = () => pictureToDelete
+    const initTempProduct = ()=>{
+        tempProduct = {...product}
+    }
+
+    const getTempProduct = ()=>tempProduct
 
     const fileObjList = []
 
@@ -16,6 +36,8 @@ const productService = ()=>{
     }
 
     const getMode = ()=>mode
+
+
 
     const initProduct = () => {
         product = {
@@ -35,12 +57,16 @@ const productService = ()=>{
         openFn = func
     }
 
-    // const setRegisterFn = (func) =>{
-    //     registerFn = func
-    // }
+    const setProductList = (input)=>{
+        productList = input
+    }
 
     const getProductList = () => {
         return productList
+    }
+
+    const initProductList = () => {
+        productList = []
     }
 
     const getProduct = () => product
@@ -58,29 +84,41 @@ const productService = ()=>{
         closeDialog()
     }
 
-    const editProduct = () => {
+    const editProduct = (addToast) => {
+        if(product.text.name==""){
+            addToast("상품이름은 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
+            return;
+        } else if (product.text.des===""){
+            addToast("상품설명은 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
+            return;
+        } else if (!product.text.price){
+            addToast("가격은 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
+            return;
+        } else if(!product.pictures.length){
+            addToast("상품이미지는 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
+            return;
+        }
+
         productList[prodIdx] = {...product}
+
         openFn(false)
     }
 
     const setText = (form) => {
-
-
-
         product.text = form
-
     }
 
     const setPictures = (pictures)=>{
+
         product.pictures = pictures
     }
 
 
 
-    //다이얼로그 창 닫기
+    //다이얼로그 창  닫기
     const closeDialog = () => {
-        console.log('close')
         openFn(false)
+        productList[prodIdx] = getTempProduct();
         initProduct()
     }
 
@@ -98,7 +136,6 @@ const productService = ()=>{
         prodIdx = idx
         setMode('update')
         product = getProductByIdx(idx)
-        console.log("수정할 product: ", product)
 
         //랜더링
         openFn(true)
@@ -111,9 +148,18 @@ const productService = ()=>{
     const getFileObj = () => fileObjList
 
     return {
+        getPictureToInsert,
+        getPictureToDelete,
+
+        initTempProduct,
+        getTempProduct,
+
         setOpenFn,
 
         getProductList,
+        setProductList,
+
+        initProductList,
         getProduct,
         addProduct,
         editProduct,
@@ -133,4 +179,4 @@ const productService = ()=>{
 
     }
 }
-export default productService()
+export default productUpdateService()

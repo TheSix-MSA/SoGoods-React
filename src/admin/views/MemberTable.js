@@ -1,5 +1,4 @@
-import React, {useEffect, useState, Fragment} from "react";
-
+import React, {useEffect, useState} from "react";
 import {
     Card,
     Table,
@@ -12,8 +11,8 @@ import {useHistory, useLocation} from "react-router-dom";
 import * as queryString from "querystring";
 import useInputs from "../../customHooks/useInputs";
 import memberService from "../sevice/memberService";
-import {Button, FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import UserDetail from "../modal/UserDetail";
+import {ToastInformation, ToastWarning} from "../../modules/toastModule";
 
 const initState = {
     memberList: [
@@ -33,7 +32,11 @@ const initState = {
             approval: false,
             regDate: "",
             loginDate: "",
-            roleSet: []
+            identificationUrl: "",
+            introduce: "",
+            nickName: "",
+            roleSet: [],
+
         },],
     pageMaker: {
         page: 1,
@@ -49,19 +52,17 @@ const initState = {
 }
 const param = {
     page: 1,
-    type: '',
+    type: 'n',
     keyword: ''
 }
 const MemberTable = () => {
-    const history = useHistory();
     const location = useLocation();
 
     const value = queryString.parse(location.search.replace("?", ""));
+    const history = useHistory();
     const page = value.page || 1;
     const type = value.type || "";
     const keyword = value.keyword || "";
-    const classes = useStyles();
-
     const [members, setMembers] = useState(initState);
     const [flag, setFlag] = useState(false);
     const [searchInput, searchOnChange] = useInputs({...param, page: value.page || 1});
@@ -71,6 +72,7 @@ const MemberTable = () => {
             setMembers(res.data.response);
         });
     }, [page])
+    console.log("23123124124124", members)
 
     const renderPage = () => {
         setFlag(!flag)
@@ -84,7 +86,8 @@ const MemberTable = () => {
         });
     }
 
-    const search = async () => {
+    const search = async (e) => {
+        e.preventDefault();
         const res = await memberService.getMemberList(1, searchInput.keyword, searchInput.type)
         setMembers(res.data.response)
         history.push('/admin/member?page=' + page + '&keyword=' + searchInput.keyword + '&type=' + searchInput.type);
@@ -99,6 +102,8 @@ const MemberTable = () => {
                 })
             })
         })
+        const currentBan = member.banned?"밴 해제":"밴"
+        ToastInformation("해당 유저가 "+ currentBan +" 되었습니다.")
     }
 
     const role = (member) => {
@@ -111,20 +116,28 @@ const MemberTable = () => {
                 })
             })
         })
+        const currentRole = member.roleSet.includes("AUTHOR")?"작가":"일반으"
+        ToastInformation("해당 유저의 권한이 "+ currentRole +"로 변경 되었습니다.")
     }
 
-    const list = members.memberList.map(member => {
-        return <tr key={member.email}>
+    const list = members.memberList?.map(member => {
+        return <tr className='hs-style' key={member.email}>
             <td>{member.email}</td>
-            <td>{member.name}</td>
+            <td><UserDetail member={member}/></td>
             <td>{member.birth}</td>
             <td>{member.phone}</td>
-            <td>{member.address} {member.detailAddress}</td>
             <td>{member.gender}</td>
-            <td onClick={() => ban(member)}
-                style={{textAlign: "center"}}>{member.banned ? "🔴" : "🟢"}</td>
+            <td onClick={() => ban(member)} style={{textAlign: "center"}}>
+                <span style={{cursor: "pointer"}}>{member.banned ? "🔴" : "🟢"} </span>
+            </td>
             <td>{member.removed ? "삭제" : "정상"}</td>
-            <td onClick={() => role(member)}>{member.roleSet[0]} </td>
+            <td onClick={() => role(member)}>
+                {member.roleSet.includes("ADMIN") ?
+                    <span style={{cursor: "pointer"}}> 관리자 </span>
+                    : member.roleSet.includes("AUTHOR") ?
+                        <span style={{cursor: "pointer"}}> 작가 </span>
+                        : <span style={{cursor: "pointer"}}> 일반회원 </span>}
+            </td>
             <td>{getFormatDate(new Date(member.regDate))}</td>
         </tr>
     })
@@ -137,33 +150,18 @@ const MemberTable = () => {
                         <Card.Title as="h4">회원 리스트</Card.Title>
 
                         <div className="pro-sidebar-search mb-55 mt-25">
-                            <FormControl className={classes.formControl}>
-                                <InputLabel shrink id="demo-simple-select-placeholder-label-label">
-                                    선택
-                                </InputLabel>
-                                <Select labelId="demo-simple-select-placeholder-label-label"
-                                        id="demo-simple-select-placeholder-label"
-                                        displayEmpty
-                                        className={classes.selectEmpty}
-                                        name="type" onChange={searchOnChange}>
-                                    <MenuItem value="n"> 이름</MenuItem>
-                                    <MenuItem value="e"> 이메일</MenuItem>
-                                    <MenuItem value="a"> 주소</MenuItem>
-                                </Select>
-                            </FormControl>
-                            <TextField
-                                style={{width: "40%", margin: "8px"}}
-                                id="standard-basic"
-                                label="검색어"
-                                name="keyword"
-                                value={searchInput.keyword}
-                                onChange={searchOnChange}
-                            />
-                            <Button variant="outlined"
-                                    onClick={search}
-                                    style={{marginTop:"15px", padding:"15px 15px"}}>
-                                <i className="pe-7s-search" />
-                            </Button>
+                            <form className="pro-sidebar-search-form">
+                                <select name="type" style={{width: "10%"}} onChange={searchOnChange}>
+                                    <option value='n'>이름</option>
+                                    <option value='e'>이메일</option>
+                                    <option value='a'>주소</option>
+                                </select>
+                                <input value={searchInput.keyword} onChange={searchOnChange} type="text"
+                                       name="keyword" placeholder="검색"/>
+                                <button style={{top: "70%"}} onClick={search}>
+                                    <i className="pe-7s-search"/>
+                                </button>
+                            </form>
                         </div>
 
                         <p className="card-category">
@@ -172,14 +170,14 @@ const MemberTable = () => {
 
                     </Card.Header>
                     <Card.Body className="table-full-width table-responsive px-0">
-                        <Table className="table-hover table-striped" style={{textAlign: "center"}}>
+                        <Table className="table-hover table-striped"
+                               style={{textAlign: "center", tableLayout: "fixed"}}>
                             <thead>
                             <tr>
                                 <th className="border-0">이메일</th>
-                                <th className="border-0">이름</th>
+                                <th className="border-0">이름(상세정보)</th>
                                 <th className="border-0">생년월일</th>
                                 <th className="border-0">전화번호</th>
-                                <th className="border-0">주소</th>
                                 <th className="border-0">성별</th>
                                 <th className="border-0">밴 여부</th>
                                 <th className="border-0">삭제 여부</th>
@@ -198,28 +196,6 @@ const MemberTable = () => {
         </Row>
     );
 }
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        '& > *': {
-            margin: theme.spacing(1),
-        },
-    },
-    margin: {
-        margin: theme.spacing(1),
-    },
-    extendedIcon: {
-        marginRight: theme.spacing(1),
-    },
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: 120,
-    },
-    selectEmpty: {
-        marginTop: theme.spacing(2),
-    },
-}));
-
 export default MemberTable;
 
 

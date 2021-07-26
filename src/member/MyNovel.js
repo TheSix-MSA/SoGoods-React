@@ -39,7 +39,6 @@ const MyNovel = () => {
      */
     useEffect(() => {
         myAccountService.getNovelList({...novelList.pageMaker, email: user.email,}).then(value => {
-            console.log("useEffect",value);
             setNovelList(value.data.response);
         });
     }, [flag]);
@@ -66,7 +65,6 @@ const MyNovel = () => {
             page:novelList.pageMaker.page + moveNum
         })
             .then(value => {
-            console.log(value);
             setNovelList(value.data.response);
         });
     };

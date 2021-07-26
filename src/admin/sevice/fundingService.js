@@ -1,19 +1,16 @@
 import instance from "../../modules/axiosConfig";
-
+import {ToastInformation, ToastWarning} from "../../modules/toastModule";
 
 const fundingService = () => {
     let movePage;
-    let render;
 
-    // 펀딩 전체 리스트
-    const getFundingList = async (page,keyword,type) => {
+    const getFundingList = async (page, keyword, type) => {
         return await instance({
             url: `funding/list?page=${page}&keyword=${keyword}&type=${type}`,
             method: 'get'
         })
     }
 
-    // 승인 요청온 펀딩 리스트
     const requestFundingList = async (page) => {
         const res = await instance({
             url: `funding/false/list?page=${page}`,
@@ -31,16 +28,21 @@ const fundingService = () => {
         return res;
     }
 
-    const setRender = (func) => {
-        render = func;
+    const changeRemoved = async (fno, page) => {
+        console.log("changeRemoved started")
+        const result = await instance({
+            url: `/funding/${fno}`,
+            method: 'delete',
+        })
+        ToastInformation("해당 펀딩이 삭제되었습니다.")
+        movePage(page)
+        return result.data
     }
 
     const setMovePage = (func) => {
         movePage = func;
     }
 
-
-    return {getFundingList, setRender, setAuthorized, requestFundingList, setMovePage}
-
+    return {getFundingList, setAuthorized, requestFundingList, setMovePage, changeRemoved}
 }
 export default fundingService();

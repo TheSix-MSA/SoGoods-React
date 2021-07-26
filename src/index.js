@@ -9,7 +9,7 @@ import rootReducer from "./redux/reducers/rootReducer";
 import App from "./App";
 import "./assets/scss/style.scss";
 import * as serviceWorker from "./serviceWorker";
-import { ToastProvider } from "react-toast-notifications";
+import { ToastProvider, DefaultToastContainer } from "react-toast-notifications";
 import { composeWithDevTools } from "redux-devtools-extension";
 
 const store = createStore(
@@ -17,10 +17,14 @@ const store = createStore(
   composeWithDevTools(applyMiddleware(thunk))
 );
 
+const MyCustomToastContainer = props => (
+    <DefaultToastContainer {...props} style={{ zIndex: 9999 }} />
+);
+const TOAST_COMPONENTS = { ToastContainer: MyCustomToastContainer }
 
 ReactDOM.render(
   <Provider store={store}>
-      <ToastProvider>
+      <ToastProvider components={TOAST_COMPONENTS}>
          <App />
       </ToastProvider>
   </Provider>,

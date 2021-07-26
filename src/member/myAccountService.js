@@ -2,20 +2,43 @@ import instance from "../modules/axiosConfig";
 import axios from "axios";
 
 const myAccountService = () => {
-    let loginInfo={
-        email:"",
-        password: "",
-        name: "",
-        gender: "",
-        birth: "",
-        phone: "",
-        address: "",
-    };
-
     let dialogFn;
     let closeDialogFn;
     let clearInputFn;
     let listFlagFn;
+    let pager;  //pageMaker
+    let movePageFn;
+    let pagerFlagFn
+    let categoryChangeFn;
+
+    const setChangeType = (func) => {
+        categoryChangeFn = func;
+    };
+
+    const changeCategory = (category) => {
+        categoryChangeFn(category)
+    }
+
+    const changePagerFlag = (func) => {
+        pagerFlagFn = func
+    };
+
+    const setMovePage = (func) => {
+        movePageFn = func
+    };
+
+    const movePage = (pageMaker)=>{
+        movePageFn(pageMaker);
+    }
+
+    const setPager = (pagerInfo)=>{
+        pager = pagerInfo;
+        pagerFlagFn();
+    }
+
+    const getPager = () => {
+        return pager;
+    }
 
     const setListFlag = (func) => {
         listFlagFn = func
@@ -160,6 +183,13 @@ const myAccountService = () => {
         return result;
     }
 
+    /**
+     * 작가 승인요청.
+     *
+     * @param authorInfo
+     * @param novel
+     * @returns {Promise<*>}
+     */
     const requestAuthor = async (authorInfo, novel) => {
         const result = await instance({
             url: "/member/novels",
@@ -170,8 +200,27 @@ const myAccountService = () => {
         return result;
     };
 
+
+    /**
+     * 게시판종류를 지정해 리스트를 가져온다.
+     *
+     * @param boardInfo
+     * @returns {Promise<*>}
+     */
+    const getOneBoardList = async (boardInfo) => {
+        const result = await instance({
+            url: `/board/member/${boardInfo.type}/${boardInfo.email}?page=${boardInfo.page}`,
+            method: "GET",
+        });
+
+        return result
+    };
+
+
     return {getMyInfo, modifyInfo, searchNovelList, popUpDialogFn, setDialogFn, setCloseDialogFn, registerNovel,clearInput,
-        setClearInputFn, getNovelList, setListFlag, changeFlag, removeNovel, registerIdentification, requestAuthor}
+        setClearInputFn, getNovelList, setListFlag, changeFlag, removeNovel, registerIdentification, getOneBoardList, requestAuthor
+    ,getPager, setPager, setMovePage, movePage, changePagerFlag, setChangeType, changeCategory
+    }
 };
 
 export default myAccountService();

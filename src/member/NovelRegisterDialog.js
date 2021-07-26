@@ -8,6 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import myAccountService from "./myAccountService";
 import {useSelector} from "react-redux";
 import {useToasts} from "react-toast-notifications";
+import {ToastInformation} from "../modules/toastModule";
 
 const initNovelState = {
     isbn:"",
@@ -25,7 +26,6 @@ export default function NovelRegisterDialog({searchBook}) {
     const [bookInfo, setBook] = useState(initNovelState);
     const [errorFlag, setErrorFlag] = useState(false    );
     const userInfo = useSelector(state => state.login)
-    const {addToast} = useToasts();
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -65,7 +65,7 @@ export default function NovelRegisterDialog({searchBook}) {
             publisher: bookInfo.publisher,
             email: userInfo.email
         }).then(value => {
-            addToast("작품이 등록되었습니다.", {appearance: 'info', autoDismiss: true});
+            ToastInformation("작품이 등록되었습니다.");
             handleClose();
             myAccountService.clearInput();
             myAccountService.changeFlag();

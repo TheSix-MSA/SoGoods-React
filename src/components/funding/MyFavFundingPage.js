@@ -23,30 +23,50 @@ const MyFavFundingPage = ({productTabClass}) => {
 
     const history = useHistory();
     const userInfo = useSelector(state=> state.login);
-    const email = "user80@bbb.com"
     const [list, setList] = useState(initList);
 
-    useEffect(()=>{
-        fundingService.getMyFavFundingList(email).then((res)=> {
-            console.log(res.response)
-            setList(res.response)
-        })},[])
+    useEffect(()=> {
+        fundingService.getMyFavFundingList(userInfo.email)
+            .then(res1=>{
+                let fnoList = res1.response.map(f=> f.fno)
+                fundingService.getA3src('FUNDING', fnoList)
+                    .then(res2=>{
+                        res2.data.response.forEach((ele,i)=>{
+                            console.log(res1.response)
+                            res1.response[i].imgSrc = ele.thumbSrc
+                        })
+                        setList(res1.response);
+                    })
+            })
+    }, [])
+
+    console.log(list);
 
     // 읽기 페이지로 이동
     const readTodo = (fno) => {
         history.push("/funding/read/"+fno)
     }
 
-    console.log(list.length < 1)
     const listPage = list.map((li, idx)=>
         !list ?
             <div>
-                해당 게시글이 존재하지 않습니다.
+                <h4>찜한 내역이 존재하지 않습니다.</h4>
             </div>
             :
-            <div key={idx} onClick={() => readTodo(li.fno)} style={{cursor: "pointer"}}>
+            <div key={idx}>
                 <h5>{li.fno}번 게시글</h5>
-                <img alt={"이미지"} src="https://i.imgur.com/WCySTkp.jpeg" height={"200px"}/>
+                {!li.success ?
+                    <div>
+                    <img alt={"이미지"} src={li.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"} height={"230px"} width={"350px"} onClick={() => readTodo(li.fno)} style={{cursor: "pointer", objectFit:"cover"}}/>
+                    </div>
+                        :
+                    <div style={{position:"relative", height:"230px", width:"350px"}}>
+                        <img alt={"이미지"} src={li.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"} style={{filter:"grayscale(100%)", objectFit:"cover"}}/>
+                        <span style={{fontWeight:"bold", position:"absolute", transform:"translate(-70%, -50%)", top:"50%", left:"50%", pointerEvents:"none"}}>
+                            <h3>종료된 펀딩입니다</h3>
+                        </span>
+                    </div>
+                }
                 <h5>펀딩 달성률 {Math.ceil(li.totalAmount / li.targetAmount * 100)}%</h5>
                 <h5>마감일자 : {li.dueDate}</h5>
                 <h5>펀딩금액 : {li.totalAmount}</h5>
@@ -70,8 +90,8 @@ const MyFavFundingPage = ({productTabClass}) => {
                             productTabClass ? productTabClass : ""
                         }`}
                     >
-                        <div>
-                            <h3>찜한 펀딩</h3>
+                        <div style={{marginTop:"30px"}}>
+                            <h3>내가 찜한 펀딩</h3>
                         </div>
                     </Nav>
                     <div className="container">

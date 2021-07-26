@@ -48,21 +48,26 @@ const boardService = () => {
         return result
     }
 
-    /*
-        FREE 게시판 글 검색하기
-     */
-    const searchBoard = async (value) => {
-        const result = await instance({
-            url: `/board/FREE/list?page=${value.page}&keyword=${value.keyword}&type=${value.type}`,
-            method: 'get',
-            headers: {
-                "Content-Type" : "multi-part",
-            }
-        })
-        return { result }
+    const noticeBoard = async (size) =>{
+        const result =  await instance({
+            url: `board/NOTICE/list?size=${size}`,
+            method: 'get'
+        });
+        return result;
     }
 
-    return { registerBoard, getOneBoard, modifyBoard, removeBoard, searchBoard }
+    /*
+        자기가 작성한 게시글 가져오기
+     */
+    const myBoardList = async (writer) => {
+        const result = await instance ({
+            url: `/board/${writer}`,
+            method: 'get'
+        })
+        return result
+    }
+
+    return { registerBoard, getOneBoard, modifyBoard, removeBoard, noticeBoard, myBoardList }
 }
 
 export default boardService();

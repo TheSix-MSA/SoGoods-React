@@ -5,6 +5,11 @@ import LayoutOne from "../components/layouts/header/LayoutOne";
 import Tab from "react-bootstrap/Tab";
 import {useHistory} from "react-router-dom";
 import boardService from "./boardService";
+import {useToasts} from "react-toast-notifications";
+import {TextField} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import {ToastTopRight} from "../modules/toastModule";
 
 const initState = {
     title: '',
@@ -14,12 +19,26 @@ const initState = {
 }
 
 const BoardRegister = ({match}) => {
+    const classes = useStyles();
+    const { addToast } = useToasts()
     const boardType = useRef(match.params.boardType?.toUpperCase())
     const [board, onChange, setBoard] = useInputs(initState);
     const history = useHistory()
     const {email, name} = useSelector(state => state.login)
-    console.log(history)
-    const register = () => {
+
+    const titleRef = useRef();
+    const contentRef = useRef();
+
+    const register = (e) => {
+        e.preventDefault();
+        if (!board.title) {
+            ToastTopRight("💨제목을 입력해주세요.");
+            return;
+        } else if (!board.content) {
+            ToastTopRight("💨내용을 입력해주세요.");
+            return;
+        }
+
         boardService.registerBoard({...board, email: email, writer: name, boardType: boardType.current}).then(res => {
             if (boardType.current.includes("NOTICE")) {
                 history.push(`/admin/dashboard`)
@@ -28,6 +47,7 @@ const BoardRegister = ({match}) => {
             }
         })
     }
+
     return (
         <>
             <LayoutOne headerTop="visible">
@@ -41,27 +61,38 @@ const BoardRegister = ({match}) => {
                                         <div className="col-lg-7 col-md-12 ml-auto mr-auto">
                                             <div className="login-register-wrapper">
                                                 <Tab.Container>
-                                                    <h3> 글작성 </h3>
                                                     <div className="login-form-container">
+                                                    <h3> 글작성 </h3>
                                                         <div className="login-register-form">
-                                                            <input
-                                                                type={"text"}
+                                                            <TextField
+                                                                id="standard-basic"
+                                                                label="제목"
                                                                 name={"title"}
-                                                                placeholder="Title"
                                                                 value={board.title}
                                                                 onChange={onChange}
+                                                                ref={titleRef}
+                                                                inputProps={{maxLength:50}}
+                                                                style={{width: "100%", marginBottom: "20px"}}
                                                             />
-
-                                                            <textarea
+                                                            <TextField
+                                                                id="outlined-multiline-static"
+                                                                label="내용"
+                                                                multiline
+                                                                rows={15}
+                                                                variant="outlined"
                                                                 name={"content"}
-                                                                placeholder="Content"
                                                                 value={board.content}
                                                                 onChange={onChange}
+                                                                ref={contentRef}
+                                                                style={{width: "100%"}}
                                                             />
-                                                            <div className="col-md-2">
-                                                                <input type="button" value="작성" onClick={() => {
-                                                                    register()
-                                                                }}/>
+                                                            <div className="col-md-2" style={{marginTop: "10px", paddingLeft:"0"}}>
+                                                                <Button
+                                                                    variant="contained"
+                                                                    color="primary"
+                                                                    onClick={register}>
+                                                                    작성
+                                                                </Button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -78,5 +109,19 @@ const BoardRegister = ({match}) => {
         </>
     );
 };
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& > *': {
+            margin: theme.spacing(1),
+            width: '25ch',
+        },
+        '& .MuiTextField-root': {
+            margin: theme.spacing(1),
+            width: '25ch',
+        },
+
+    },
+}));
 
 export default BoardRegister;

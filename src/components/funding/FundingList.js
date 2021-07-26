@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, {Fragment, useState, useEffect} from "react";
-import { connect } from "react-redux";
+import {connect, useSelector} from "react-redux";
 import LayoutOne from "../layouts/header/LayoutOne";
 import Nav from "react-bootstrap/Nav";
 import * as queryString from "query-string";
@@ -34,16 +34,19 @@ const param = {
 
 const FundingList = ({ location, productTabClass}) => {
     const value = queryString.parse(location.search);	// 문자열의 쿼리스트링을 Object로 변환
-    const [searchInput, searchOnChange ,setSearchInput] = useInputs({...param, page:value.page||1, state:value.state||"open"});
+    console.log(value)
+    const [searchInput, searchOnChange ,setSearchInput] = useInputs({...param, page:value.page||1, type:value.type||"t", state:value.state||"open"});
 
     // 파라미터로 넘어가는 값
     const page = value.page||1;
     const keyword = value.keyword||"";
-    const type = value.type||"";
+    const type = value.type||"t";
     const state = value.state||"open";
 
-    const history = useHistory()
-    const [data, setData] = useState(initState)
+
+    const history = useHistory();
+    const [data, setData] = useState(initState);
+    const userInfo = useSelector(state=> state.login);
 
     // 리스트 데이터 불러오기
     useEffect(()=> {
@@ -53,7 +56,7 @@ const FundingList = ({ location, productTabClass}) => {
                 fundingService.getA3src('FUNDING', fnoList)
                     .then(res2=>{
                         res2.data.response.forEach((ele,i)=>{
-                            res1.response.dtoList[i].fundingDTO.imgSrc = ele.thumbSrc
+                            res1.response.dtoList[i].fundingDTO.imgSrc = ele.imgSrc
                         })
                         setData(res1.response);
                     })
@@ -99,10 +102,10 @@ const FundingList = ({ location, productTabClass}) => {
 
     // 진행중인 펀딩 리스트 불러오기
     const list = data.dtoList.map((dto, idx)=>
-        <div key={idx} onClick={()=> readTodo(dto.fundingDTO.fno)} style={{cursor:"pointer", margin:"10px", height:"300px", width:"380px"}}>
+        <div key={idx} onClick={()=> readTodo(dto.fundingDTO.fno)} style={{cursor:"pointer", margin:"30px 10px", height:"300px", width:"380px"}}>
             <h5>{dto.fundingDTO.fno}번 게시글</h5>
-            <img alt={"이미지"} src={dto.fundingDTO.imgSrc} height={"230px"} width={"350px"} style={{objectFit:"cover"}}/>
-            <h5 style={{marginTop:"5px"}}>{dto.fundingDTO.title}</h5>
+            <img alt={"이미지"} src={dto.fundingDTO.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"} height={"230px"} width={"350px"} style={{objectFit:"cover"}}/>
+            <h5 style={{marginTop:"5px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflowX: "hidden", overflowY:"hidden", maxWidth:"350px"}}>{dto.fundingDTO.title}</h5>
             <LinearWithValueLabel dto={dto}></LinearWithValueLabel>
             <h5>마감일 : {dto.fundingDTO.dueDate}  |  펀딩금액 : {dto.fundingDTO.totalAmount}원</h5>
         </div>
@@ -138,7 +141,7 @@ const FundingList = ({ location, productTabClass}) => {
                             <div style={{display:"flex"}}>
                                 {/* select option */}
                                 <select name='type' onChange={searchOnChange} style={{width:"100px",border:"1px solid #EEE", borderRadius:"15px 0 0 15px"}}>
-                                    <option value=''>선택</option>
+                                    <option value='t'>선택</option>
                                     <option value='w'>작성자</option>
                                     <option value='t'>제목</option>
                                     <option value='c'>내용</option>
@@ -157,6 +160,7 @@ const FundingList = ({ location, productTabClass}) => {
                                     </form>
                                 </div>
                                     {/* funding register button */}
+                                {userInfo.roles.includes("AUTHOR") &&
                                     <div style={{marginLeft:"auto"}}>
                                         <form className={"searchform"} >
                                             <button className={"searchform__submit"} style={{height:"45px", position:"relative", width:"130px", marginRight:"10px"}}
@@ -164,6 +168,7 @@ const FundingList = ({ location, productTabClass}) => {
                                             </button>
                                         </form>
                                     </div>
+                                }
                              </div>
                             {/* funding List */}
                             <div style={{display:"grid", gridTemplateColumns: "1fr 1fr 1fr" ,gridTemplateRows: "1fr 1fr 1fr", marginTop:"20px"}}>

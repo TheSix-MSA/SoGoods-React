@@ -107,6 +107,7 @@ const MemberTable = () => {
     }
 
     const role = (member) => {
+        if(!member.roleSet.includes("GENERAL")){
         memberService.changeAuth(member.email).then(res => {
             setMembers({
                 ...members, memberList: members.memberList.map(member => {
@@ -118,7 +119,7 @@ const MemberTable = () => {
         })
         const currentRole = member.roleSet.includes("AUTHOR")?"작가":"일반으"
         ToastInformation("해당 유저의 권한이 "+ currentRole +"로 변경 되었습니다.")
-    }
+    }}
 
     const list = members.memberList?.map(member => {
         return <tr className='hs-style' key={member.email}>
@@ -133,7 +134,7 @@ const MemberTable = () => {
             <td>{member.removed ? "삭제" : "정상"}</td>
             <td onClick={() => role(member)}>
                 {member.roleSet.includes("ADMIN") ?
-                    <span style={{cursor: "pointer"}}> 관리자 </span>
+                    <span> 관리자 </span>
                     : member.roleSet.includes("AUTHOR") ?
                         <span style={{cursor: "pointer"}}> 작가 </span>
                         : <span style={{cursor: "pointer"}}> 일반회원 </span>}

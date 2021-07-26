@@ -19,10 +19,12 @@ const productUpdateService = ()=>{
         mainIdx: 0,
     }
 
-
+    const pictureToInsert = [];
+    const pictureToDelete = [];
+    const getPictureToInsert = () => pictureToInsert
+    const getPictureToDelete = () => pictureToDelete
     const initTempProduct = ()=>{
         tempProduct = {...product}
-        console.log(tempProduct)
     }
 
     const getTempProduct = ()=>tempProduct
@@ -82,8 +84,23 @@ const productUpdateService = ()=>{
         closeDialog()
     }
 
-    const editProduct = () => {
+    const editProduct = (addToast) => {
+        if(product.text.name==""){
+            addToast("상품이름은 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
+            return;
+        } else if (product.text.des===""){
+            addToast("상품설명은 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
+            return;
+        } else if (!product.text.price){
+            addToast("가격은 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
+            return;
+        } else if(!product.pictures.length){
+            addToast("상품이미지는 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
+            return;
+        }
+
         productList[prodIdx] = {...product}
+
         openFn(false)
     }
 
@@ -94,7 +111,6 @@ const productUpdateService = ()=>{
     const setPictures = (pictures)=>{
 
         product.pictures = pictures
-        console.log('aaa: ', getTempProduct())
     }
 
 
@@ -102,16 +118,12 @@ const productUpdateService = ()=>{
     //다이얼로그 창  닫기
     const closeDialog = () => {
         openFn(false)
-        console.log(getTempProduct())
         productList[prodIdx] = getTempProduct();
         initProduct()
-
-
     }
 
     //새 상품등록버튼 클릭시
     const openDialog = () => {
-        console.log("OPEN")
         setMode('register')
         initProduct()
 
@@ -124,7 +136,6 @@ const productUpdateService = ()=>{
         prodIdx = idx
         setMode('update')
         product = getProductByIdx(idx)
-        console.log("수정할 product: ", product)
 
         //랜더링
         openFn(true)
@@ -137,6 +148,9 @@ const productUpdateService = ()=>{
     const getFileObj = () => fileObjList
 
     return {
+        getPictureToInsert,
+        getPictureToDelete,
+
         initTempProduct,
         getTempProduct,
 

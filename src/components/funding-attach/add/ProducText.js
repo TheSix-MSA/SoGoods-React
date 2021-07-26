@@ -30,15 +30,27 @@ const ProductText = ({}) => {
                 <input
                     name='name'
                     value={form.name}
-                    onChange={changeForm}/>
+                    onChange={changeForm}
+                    maxLength={30}
+                />
             </div>
             <div>상품설명
                 <textarea
                     name='des'
                     value={form.des}
-                    onChange={changeForm}/>
+                    onChange={changeForm}
+                    maxLength={2000}
+                />
             </div>
-            <div>가격<input type='number' name='price'   value={form.price}    onChange={changeForm}/></div>
+            <div>가격<input type='number'
+                          name='price'
+                          value={form.price}
+                          onChange={changeForm}
+                          onInput={({ target }) => {
+                              target.value = target.value.replace(/[^0-9]/g, "");
+                              target.value = target.value.replace(/,/g, "");
+                          }}/>
+            </div>
         </div>
     )
 }

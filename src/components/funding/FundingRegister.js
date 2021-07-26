@@ -20,6 +20,11 @@ import {ToastCenter, ToastWarning} from "../../modules/toastModule";
 const inputStyle = {
     margin:"10px"
 }
+
+const radioBtnStyle = {
+    width: "20px",
+    margin: "6px",
+}
 const textStyle = {
     margin:"0 10px"
 }
@@ -31,7 +36,7 @@ const imgStyle = {
 };
 
 const btn ={
-    float: 'none',
+    clear: "both",
     margin:"10px"
 }
 const initState = {
@@ -129,21 +134,23 @@ const FundingRegister = () => {
         return (
             <>
                 <li key={i}>
+                    <h3 style={{marginTop: '32px'}}>상품 {i+1}</h3>
                     <p onClick={()=>{productService.openDialogForEdit(i)}}>
-                        {product.text.name} :
-                        {product.text.desc}
+                        {product.text.name}
                     </p>
-                    <div>
+                    <div style={{width: "100%",
+                                overflow: "hidden" }}>
                         {product.pictures.map((file ,j)=>
-                            <div>
+                            <div style={{width: "30%", margin: 0, float: "left"}}>
                                 <img key={j} data-idx={j}
                                      src={file.preview||process.env.PUBLIC_URL+"/assets/img/default.png"}
-                                     style={imgStyle}/>
+                                     style={imgStyle}
+                                />
                                 <input type="radio"
                                        name={`mainIdx_${i}`}
                                        value={j}
                                        onClick={(e)=>{setProductMainImage(e,i,j)}}
-                                       style={{flaot: 'left'}}/>
+                                       style={radioBtnStyle}/>
                             </div>
                         )}
                     </div>

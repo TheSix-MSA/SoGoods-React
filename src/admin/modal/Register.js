@@ -8,7 +8,6 @@ import noticeService from "../../admin/sevice/noticeService"
 import useInputs from "../../customHooks/useInputs";
 import {useHistory} from "react-router-dom";
 import {useSelector} from "react-redux";
-import {useToasts} from "react-toast-notifications";
 import {ToastInformation, ToastWarning} from "../../modules/toastModule";
 
 const initState = {
@@ -19,7 +18,6 @@ const initState = {
 }
 
 export default function Register() {
-    const { addToast } = useToasts()
     const [open, setOpen] = React.useState(false);
     const [board, onChange] = useInputs(initState);
     const history = useHistory()
@@ -55,27 +53,34 @@ export default function Register() {
             <Button variant="outlined" color="primary" onClick={handleClickOpen}>
                 공지 글 작성
             </Button>
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" style={{minWidth:"40vw"}} maxWidth={"sm"} fullWidth={true}>
+                <div style={{padding:"25px"}}>
                 <DialogTitle id="form-dialog-title">공지글</DialogTitle>
                 <Tab.Container>
                     <h3> 글작성 </h3>
                     <div className="login-form-container">
                         <div className="login-register-form">
+                            <label htmlFor="title">제목</label>
                             <input
+                                id={"title"}
                                 type={"text"}
                                 name={"title"}
                                 placeholder="제목"
                                 value={board.title}
                                 onChange={onChange}
                                 ref={titleRef}
+                                style={{margin:"0 0 2.5vh 0"}}
                             />
 
+                            <label htmlFor="content">내용</label>
                             <textarea
+                                id={"content"}
                                 name={"content"}
                                 placeholder="내용"
                                 value={board.content}
                                 onChange={onChange}
                                 ref={contentRef}
+                                style={{resize:"none", height:"30vh"}}
                             />
                             <DialogActions>
                                 <Button type="button" color="primary" onClick={() => {
@@ -90,6 +95,7 @@ export default function Register() {
                         </div>
                     </div>
                 </Tab.Container>
+                </div>
             </Dialog>
         </div>
     );

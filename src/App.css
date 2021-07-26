@@ -45,3 +45,8 @@
     border-radius: 8px !important;
     width: 100% !important;
 }
+
+@font-face {
+    font-family: 'maruBuri';
+    src: url("./font/MaruBuri-Regular.ttf") format('truetype');
+}

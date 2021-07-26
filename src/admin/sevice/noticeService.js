@@ -41,10 +41,18 @@ const noticeService = () => {
         return result.data
     }
 
+    const getTotal = async () => {
+        const result = await instance({
+            url: `/board/allcount`,
+            method: 'get',
+        })
+        return result
+    }
+
     const setRender = (func) => {
         render = func;
     }
 
-    return {getNoticeList, registerBoard, setRender, changePrivate, changeRemoved}
+    return {getTotal,getNoticeList, registerBoard, setRender, changePrivate, changeRemoved}
 }
 export default noticeService();

@@ -27,7 +27,7 @@ const ReplyBlock = ({dto, deleteReply, bno, page, reReply, isReplying, updateRep
                                 : null}
                                 {user&&(user.email===dto.email||user.roles.includes("ADMIN"))?
                                     <div className="btn">
-                                        <span onClick={() => deleteReply(dto.rno)}>삭제</span>
+                                        <span onClick={() => deleteReply(dto.rno, bno)}>삭제</span>
                                     </div>
                                 :null}
                             </div>

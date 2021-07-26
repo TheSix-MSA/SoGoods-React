@@ -4,7 +4,7 @@ import MetaTags from "react-meta-tags";
 import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
 import LayoutOne from "../components/layouts/header/LayoutOne";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import myAccountService from "./myAccountService";
 import useInputs from "../customHooks/useInputs";
 import CodeDialogSlide from "./CodeDialog";
@@ -16,6 +16,7 @@ import MyOrders from "../pages/order/MyOrders";
 import MyBoardList from "./MyBoardList";
 import BoardPager from "./BoardPager";
 import {ToastInformation, ToastWarning} from "../modules/toastModule";
+import {signout} from "../redux/member/loginSlice";
 
 const initUserInfo = {
   email:"",
@@ -44,24 +45,25 @@ const MyAccount = () => {
   const [userInfo, setUserInfo, setInfo] = useInputs(initUserInfo);
   const [passInfo, setPassInfo, setPass] = useInputs({...initPassword,email:userSelector.email});
   const [searchBook, setSearchBook, setBook] = useInputs({...initSearchBook});
+  const [deleteText, changeDeleteText] = useInputs({writeDeleteText:""});
   const [editFlag, setEditFlag] = useState(false);
   const [passEditFlag, setPassEditFlag] = useState(false);
+  const deleteMsg = `${userSelector.email}는 SoGoods 회원탈퇴를 하겠습니다.`
+  const dispatch = useDispatch();
 
   useEffect(() => {
     let isSubscribed = true;
-    myAccountService.getMyInfo(userSelector.email)
-        .then(value => {
-          if(isSubscribed) setInfo({...value.data.response});
-        });
-    return () => {
-      isSubscribed = false
+    if(userSelector.email) {
+      myAccountService.getMyInfo(userSelector.email)
+          .then(value => {
+            if(isSubscribed) setInfo({...value.data.response});
+          });
+      return () => {
+        isSubscribed = false
+      }
     }
   },[userSelector]);
 
-  if(localStorage.getItem("userData")===null){
-    ToastWarning("로그인이 필요합니다.");
-    history.push("/");
-  }
 
   /**
    * 유저 수정 글쓰기기능 활성화
@@ -157,9 +159,26 @@ const MyAccount = () => {
     setBook({...initSearchBook});
   };
 
+  const deleteUser = (e) => {
+    e.preventDefault();
+
+    if (deleteText.writeDeleteText !== `${userSelector.email}는 SoGoods 회원탈퇴를 하겠습니다.`) {
+      ToastWarning("확인용 문자가 일치하지 않습니다.");
+      return;
+    }
+
+    myAccountService.removeUser(userSelector.email).then(value => {
+
+      ToastInformation("회원탈퇴가 완료되었습니다.");
+      dispatch(signout());
+      history.push("/");
+    });
+
+  }
+
   myAccountService.setClearInputFn(clearInput);
 
-  const roles = JSON.parse(localStorage.getItem("userData")).roles.includes("AUTHOR");
+  const roles = userSelector;
 
 
   return (
@@ -363,11 +382,35 @@ const MyAccount = () => {
                               <div className="account-info-wrapper">
                                 <h4>Your Orders</h4>
                               </div>
+                              <MyOrders/>
+                            </div>
+                          </Card.Body>
+                        </Accordion.Collapse>
+                      </Card>
+                      <Card className="single-my-account mb-20" >
+                        <Card.Header className="panel-heading">
+                          <Accordion.Toggle variant="link" eventKey="4">
+                            <h3 className="panel-title">
+                              <span>5 .</span> Delete Account
+                            </h3>
+                          </Accordion.Toggle>
+                        </Card.Header>
+                        <Accordion.Collapse eventKey="4">
+                          <Card.Body>
+                            <div className="myaccount-info-wrapper">
+                              <div className="account-info-wrapper">
+                                <h4>Delete Account</h4>
+                              </div>
                               <div className="align-items-center justify-content-center entries-wrapper">
-                                <div className="billing-info  entries-edit-delete">
+                                <div className="billing-info  entries-edit-delete" style={{padding:"15px"}}>
+                                  <p style={{textAlign:"center"}}><strong>회원탈퇴 페이지 입니다.</strong></p>
+                                  <p style={{textAlign:"center", fontSize:"12px", margin:"0px"}}>회원 탈퇴를 진행하시려면 아래에 적힌 글을 타이핑 해 주세요.</p>
+                                  <p style={{textAlign:"center", fontSize:"12px"}}>탈퇴된 회원 정보는 1년간 보관됩니다.</p>
+                                  <p style={{textAlign:"center", color:"red", fontWeight:"bold"}}>{`\"${deleteMsg}\"`}</p>
+                                  <p style={{textAlign:"center"}}><input type="text" name="writeDeleteText" onChange={changeDeleteText} style={{width:"70%"}}/></p>
+                                  <p style={{textAlign:"center", marginTop:"15px"}}><button onClick={deleteUser}>회원 탈퇴</button></p>
                                 </div>
                               </div>
-                              <MyOrders/>
                             </div>
                           </Card.Body>
                         </Accordion.Collapse>
@@ -375,13 +418,13 @@ const MyAccount = () => {
                       {roles?
                         <Card className="single-my-account mb-20">
                         <Card.Header className="panel-heading">
-                          <Accordion.Toggle variant="link" eventKey="4">
+                          <Accordion.Toggle variant="link" eventKey="5">
                             <h3 className="panel-title">
                               <span>5 .</span> Modify your address book entries{" "}
                             </h3>
                           </Accordion.Toggle>
                         </Card.Header>
-                        <Accordion.Collapse eventKey="4">
+                        <Accordion.Collapse eventKey="5">
                           <Card.Body>
                             <div className="myaccount-info-wrapper">
                               <div className="account-info-wrapper">

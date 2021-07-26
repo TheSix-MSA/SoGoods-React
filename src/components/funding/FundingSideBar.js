@@ -53,7 +53,7 @@ const FundingSideBar = (funding) => {
         fundingService.getFavList(funding.fundingDTO.fno).then(res=>
             setFavList(res.response.favoriteDTOList)
         )
-    },[purchasable])
+    },[])
 
     /**
      * 장바구니 배열에 상품추가, 일치하는 값이 있으면 개수만 추가
@@ -78,14 +78,21 @@ const FundingSideBar = (funding) => {
             if(item.pno === p.pno) return {...item,count:item.count-1}
             return item;
         }))
-
-        const setVal = cartList.reduce(function (prev, next) {
+    }
+    useEffect(()=>{
+        const setVal = cartList.length===1?cartList[0].count:cartList.reduce(function (prev, next) {
             if (typeof prev === "object") {
                 return prev.count + next.count
             }
             return prev + next.count
-        }) === 0?setPurchasable(false):null;
-    }
+        });
+
+        if(setVal === 0){
+            setPurchasable(false)
+        }
+    },[cartList])
+
+
 
     /**
      * 게시글 찜하기 기능

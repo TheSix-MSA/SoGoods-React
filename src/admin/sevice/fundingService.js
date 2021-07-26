@@ -11,11 +11,30 @@ const fundingService = () => {
         })
     }
 
+    // const requestFundingList = async (page) => {
+    //     const res = await instance({
+    //         url: `funding/false/list?page=${page}`,
+    //         method: 'get'
+    //     })
+    //     return res;
+    // }
+
+    // 승인 요청 리스트
     const requestFundingList = async (page) => {
         const res = await instance({
-            url: `funding/false/list?page=${page}`,
+            url: `funding/req/list?page=${page}`,
             method: 'get'
         })
+        return res;
+    }
+
+    // 승인 반려 리스트
+    const reject = async (fno,result,page) => {
+        const res = await instance({
+            url: `funding/req/${fno}/${result}`,
+            method: 'put'
+        })
+        movePage(page)
         return res;
     }
 
@@ -43,6 +62,6 @@ const fundingService = () => {
         movePage = func;
     }
 
-    return {getFundingList, setAuthorized, requestFundingList, setMovePage, changeRemoved}
+    return {getFundingList, requestFundingList, setMovePage, changeRemoved, reject, setAuthorized}
 }
 export default fundingService();

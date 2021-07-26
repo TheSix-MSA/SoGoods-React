@@ -18,7 +18,6 @@ const memberService = () => {
             url: `member/list?approval=true&page=${page}`,
             method: 'get'
         })
-        console.log(res)
         return res;
     }
 

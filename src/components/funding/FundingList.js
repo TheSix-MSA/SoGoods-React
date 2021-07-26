@@ -42,7 +42,6 @@ const FundingList = ({ location, productTabClass}) => {
     const type = value.type||"t";
     const state = value.state||"open";
 
-
     const history = useHistory();
     const [data, setData] = useState(initState);
     const userInfo = useSelector(state=> state.login);
@@ -102,9 +101,9 @@ const FundingList = ({ location, productTabClass}) => {
     // 진행중인 펀딩 리스트 불러오기
     const list = data.dtoList.map((dto, idx)=>
         <div key={idx} onClick={()=> readTodo(dto.fundingDTO.fno)} style={{cursor:"pointer", margin:"30px 10px", height:"300px", width:"380px"}}>
-            <h5>{dto.fundingDTO.fno}번 게시글</h5>
+            {/*<h5>{dto.fundingDTO.fno}번 게시글</h5>*/}
             <img alt={"이미지"} src={dto.fundingDTO.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"} height={"230px"} width={"350px"} style={{objectFit:"cover"}}/>
-            <h5 style={{marginTop:"5px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflowX: "hidden", overflowY:"hidden", maxWidth:"350px"}}>{dto.fundingDTO.title}</h5>
+            <h4 style={{marginTop:"5px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflowX: "hidden", overflowY:"hidden", maxWidth:"350px"}}>{dto.fundingDTO.title}</h4>
             <LinearWithValueLabel dto={dto}></LinearWithValueLabel>
             <h5>마감일 : {dto.fundingDTO.dueDate}  |  펀딩금액 : {dto.fundingDTO.totalAmount}원</h5>
         </div>

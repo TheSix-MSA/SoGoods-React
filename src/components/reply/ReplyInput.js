@@ -29,12 +29,12 @@ const ReplyInput = ({bno, maxPage, user}) => {
                 <div className="row">
                     <div className="col-md-10">
                         <div className="text-leave">
-                            <textarea className="DatGeulInput" name="content" placeholder="Message" maxLength={2000}
+                            <textarea className="DatGeulInput" name="content" placeholder="Message" maxLength={2000} style={{background:"none", border:"none"}}
                                    onChange={changeReply} value={reply.content}/>
                         </div>
                     </div>
                     <div className="col-md-2">
-                        <input type="submit" onClick={() => send()}/>
+                        <input type="submit" onClick={() => send()} style={{background:"#cecece"}}/>
                     </div>
                 </div>
             </div>

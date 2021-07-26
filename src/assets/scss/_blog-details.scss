@@ -272,22 +272,22 @@
       }
 
       .btnForReply {
-        flex-direction: row-reverse;
-        .btn {
+        //flex-direction: row-reverse;
+        div {
           span {
             font-weight: 500;
-            line-height: 20px;
-
-            width: 30px;
-            height: 20px;
+            //line-height: 20px;
+            //
+            //width: 30px;
+            //height: 20px;
 
             transition: all 0.3s ease 0s;
             transform: translateY(-50%);
             text-align: center;
 
             color: #9a9a9a;
-            border-radius: 50px;
-            background-color: #eeeeee;
+            //border-radius: 50px;
+            //background-color: #eeeeee;
           }
           &:hover,
           &.active {
@@ -312,8 +312,8 @@
 
   span {
     font-weight: 500;
-    line-height: 20px;
     width: 30px;
+    padding:3px;
 
     margin-right: 8px;
     transition: all 0.3s ease 0s;
@@ -321,7 +321,7 @@
     text-align: center;
 
     color: #9a9a9a;
-    border-radius: 50px;
+    border-radius: 3px;
     background-color: #eeeeee;
   }
 }
@@ -405,7 +405,7 @@
 
         color: #fff;
         border: none;
-        background-color: $theme-color;
+        background-color: #cecece;
 
         &:hover {
           background-color: #333;
@@ -423,7 +423,7 @@
 
         color: #fff;
         border: none;
-        background-color: #af163b;
+        background-color: #e2b6b6;
 
         &:hover {
           background-color: #333;
@@ -481,7 +481,7 @@
 
         color: #fff;
         border: none;
-        background-color: $theme-color;
+        background-color: #cecece;
 
         &:hover {
           background-color: #333;
@@ -499,7 +499,7 @@
 
         color: #fff;
         border: none;
-        background-color: #af163b;
+        background-color: #e2b6b6;
 
         &:hover {
           background-color: #333;

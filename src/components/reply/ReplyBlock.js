@@ -11,26 +11,25 @@ const ReplyBlock = ({dto, deleteReply, bno, page, reReply, isReplying, updateRep
                 <div className="blog-comment-content">
                     <>{isModifying.val&&isModifying.id===dto.rno?(<ReplyModify bno={bno} dto={dto} page={page}/>):
                         <>
-                            <h4>{dto.writer}</h4>
-                            <span>{getFormatDate(new Date(dto.modDate))}</span>
-                            <p>
+                            <div style={{display:"flex", justifyContent:"space-between"}}>
+                                <div style={{display:"flex", paddingLeft:"10px"}}>
+                                    <p style={{fontSize:"13px"}}>{dto.writer}</p>
+                                    <span style={{marginLeft:"10px", fontSize:"10px"}}>{getFormatDate(new Date(dto.modDate))}</span>
+                                </div>
+                                <div className="btnForReply" style={{display:"flex"}}>
+                                        <span onClick={() => reReply(dto.rno)} style={{marginRight:"10px", fontSize:"12px", cursor:"pointer"}}>답글</span>
+                                    {user&&user.email===dto.email?
+                                            <span onClick={() => updateReply(dto.rno)} style={{marginRight:"10px", fontSize:"12px", cursor:"pointer"}}>수정</span>
+                                        : null}
+                                    {user&&(user.email===dto.email||user.roles.includes("ADMIN"))?
+                                            <span onClick={() => deleteReply(dto.rno, bno)} style={{marginRight:"10px", fontSize:"12px", cursor:"pointer"}}>삭제</span>
+                                        :null}
+                                </div>
+                            </div>
+                            <p style={{paddingLeft:"10px"}}>
                                 {dto.content}{" "}
                             </p>
-                            <div className="btnForReply">
-                                <div className="btn">
-                                    <span onClick={() => reReply(dto.rno)}>답글</span>
-                                </div>
-                                {user&&user.email===dto.email?
-                                    <div className="btn">
-                                        <span onClick={() => updateReply(dto.rno)}>수정</span>
-                                    </div>
-                                : null}
-                                {user&&(user.email===dto.email||user.roles.includes("ADMIN"))?
-                                    <div className="btn">
-                                        <span onClick={() => deleteReply(dto.rno, bno)}>삭제</span>
-                                    </div>
-                                :null}
-                            </div>
+
                         </>
                     }</>
                     <div>
@@ -39,7 +38,7 @@ const ReplyBlock = ({dto, deleteReply, bno, page, reReply, isReplying, updateRep
                 </div>
                 :
                 <div className="blog-comment-content">
-                    <h4>삭제된 댓글입니다.</h4>
+                    <p style={{margin:"0", padding:"0", fontSize:"10px"}}>삭제된 댓글입니다.</p>
                 </div>
             }
         </>

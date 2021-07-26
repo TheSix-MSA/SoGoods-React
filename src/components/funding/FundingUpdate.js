@@ -25,6 +25,7 @@ const radioBtnStyle = {
 }
 
 const imgStyle = {
+    display: 'block',
     width: 100,
     height: 50,
     float: 'left',
@@ -65,12 +66,15 @@ const FundingUpdate = () => {
    let {fno} = useParams();
    const [fundingForm, changeFundingForm, setFundingForm] = useInputs({...initFundingForm});
    const [productForm, changeProductForm, setProductForm] = useInputs([...productDTOs]);
+   const [prodDel, setProdDel] = useState([])
 
     const [open, setOpen] = useState(false);
     const [mainImg, setMainImg] = useState([]);
     const history = useHistory();
     const [flag, setFlag] = useState(false);
 
+    const [fundingMainFile, setFundingMainFile] = useState(null);
+    const [fundingFileFlag, setFundingFileFlag] = useState(null);
 
     productUpdateService.setOpenFn(setOpen)
     let productList = [];
@@ -101,8 +105,8 @@ const FundingUpdate = () => {
             fundingService.getA3src('FUNDING', [fno])
                 .then(res => {
                     //펀딩대표이미지
-                    //res.data.response[0].fileName.split('_')[1]
-
+                    console.log(res.data.response[0])
+                    setFundingMainFile(res.data.response[0])
                     fundingService.getA3srcList('PRODUCT', pnoList, [0,1])
                         .then(res=>{
 
@@ -144,12 +148,28 @@ const FundingUpdate = () => {
 
         console.log(fundingForm);
         const result = await fundingService.updateFunding(fno, {...fundingForm});
+
+        await fundingService.registerAttach([fundingMainFile], 'FUNDING', fno, 0);
+
+        for(const product of productUpdateService.getProductList()){
+            if(product.isNew){
+                await fundingService.registerAttach(product.pictures, 'PRODUCT', fno, product.mainIdx);
+            }
+        }
+
         history.push("/funding/list");
     }
 
-    // const setProductMainImage = (e, productIdx, pictureIdx)=>{
-    //     productUpdateService.getProductList()[productIdx].mainIdx = pictureIdx
-    // }
+
+
+    const productDelete = (product, idx) => {
+        const anoList = product.pictures.map(picture=>picture.fileName)
+        productUpdateService.getProductList().splice(idx, 1)
+        setProdDel([...prodDel, ...anoList])
+    }
+
+
+
 
     const list = productUpdateService.getProductList().map((product, i)=>{
 
@@ -159,6 +179,9 @@ const FundingUpdate = () => {
                     <h3 style={{marginTop: '32px'}}>상품 {i+1}
                         <Button style={editBtn} variant="outlined" color="primary" onClick={()=>{productUpdateService.openDialogForEdit(i)}}>
                             수정
+                        </Button>
+                        <Button style={editBtn} variant="outlined" color="primary" onClick={()=>{productDelete(product, i)}}>
+                            삭제
                         </Button>
                     </h3>
                     <p>
@@ -191,10 +214,10 @@ const FundingUpdate = () => {
         document.getElementById("file").click()
     }
 
-    const setProductMainImage = (e)=>{
-       const file = e.target.files[0];
-        console.log(file);
-       setMainImg(file)
+
+
+    const setProductMainImage = (e, productIdx, pictureIdx)=>{
+        productUpdateService.getProductList()[productIdx].mainIdx = pictureIdx
     }
 
 
@@ -247,19 +270,22 @@ const FundingUpdate = () => {
                                                                 value={fundingForm.content ||""}
                                                                 onChange={changeFundingForm}
                                                             />
-                                                            <Button style={btn} variant="outlined" color="primary" onClick={clickFile}>
-                                                                메인 이미지 추가
-                                                            </Button>
+                                                            {/*<Button style={btn} variant="outlined" color="primary" onClick={clickFile} >*/}
+                                                            {/*    메인 이미지*/}
+                                                            {/*</Button>*/}
+                                                            메인 이미지<br></br>
+                                                            {fundingMainFile && <img width={"70px"} height={"70px"} src={fundingMainFile.imgSrc}/> }
                                                             <input
                                                                 id="file"
                                                                 style={{display:"none"}}
                                                                 type="file"
                                                                 name="mainImage"
-                                                                onChange={setProductMainImage}
+                                                                onChange={(e)=>{setFundingMainFile(e.target.files[0])}}
                                                             />
                                                             <ul>
                                                                 {list}
                                                             </ul>
+
                                                             <Button style={btn} variant="outlined" color="primary" onClick={productUpdateService.openDialog}>
                                                                 상품 추가
                                                             </Button>

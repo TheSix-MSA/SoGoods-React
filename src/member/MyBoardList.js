@@ -36,19 +36,22 @@ const MyBoardList = () => {
 
 
 
-    console.log(boardList);
     /**
      * 리스트 가져오기
      */
     useEffect(() => {
-        console.log(`email:${user.email}, type:${boardList.type}, page:${boardList.pageMaker.page}`)
         myAccountService.getOneBoardList({email:user.email, type:boardList.type, page:boardList.pageMaker.page})
             .then(value => {
-                console.log("useEffect", value.data.response);
                 setBoardList({...value.data.response, type: boardList.type});
                 myAccountService.setPager(value.data.response.pageMaker);
         });
-    }, [boardList.pageMaker.page]);
+    }, [boardList.pageMaker.page, boardList.type]);
+
+
+    const ChangeType = (keyWord) => {
+        setBoardList({...boardList,type:keyWord})
+    };
+
 
 
     const movePage = (newPage) =>{
@@ -60,7 +63,7 @@ const MyBoardList = () => {
     }
 
     myAccountService.setMovePage(movePage);
-
+    myAccountService.setChangeType(ChangeType);
 
 
 
@@ -83,7 +86,11 @@ const MyBoardList = () => {
             <thead style={{borderBottom:"1px solid #ebebeb"}}>
                 <tr style={{textAlign:"center"}}>
                     <th style={{width:"10%"}}>type</th>
-                    <th>title</th>
+                    <th style={{
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                        overflowX: "hidden"
+                        }}>title</th>
                     <th style={{width:"20%"}}>regDate</th>
                 </tr>
             </thead>

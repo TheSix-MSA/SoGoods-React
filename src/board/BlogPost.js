@@ -6,6 +6,7 @@ import {useSelector} from "react-redux";
 import Button from "@material-ui/core/Button";
 
 const BlogPost = ({data, boardType}) => {
+    const {roles} = useSelector(state => state.login)
     const history = useHistory()
     const location = useLocation()
     const {email, name} = useSelector(state => state.login)
@@ -31,23 +32,25 @@ const BlogPost = ({data, boardType}) => {
                 <div className="blog-details-top">
                     <div className="blog-details-content">
                         <ul style={{textAlign: "right"}}>
-                            <Button variant="outlined" style={{margin:"5px"}} onClick={() => {
+                            <Button variant="outlined" style={{margin: "5px"}} onClick={() => {
                                 goList()
                             }}>
                                 목록가기
                             </Button>
                             {data.email === email ? (
                                 <>
-                                    <Button  variant="outlined" style={{margin:"5px"}} onClick={() => {
+                                    <Button variant="outlined" style={{margin: "5px"}} onClick={() => {
                                         modify()
                                     }}>
                                         수정하기
                                     </Button>
-                                    <Button variant="outlined" style={{margin:"5px"}} onClick={() => {
+                                    { data.email === email || roles.includes("ADMIN") ? (
+                                    <Button variant="outlined" style={{margin: "5px"}} onClick={() => {
                                         remove()
                                     }}>
                                         삭제하기
                                     </Button>
+                                    ) : null }
                                 </>
                             ) : null
                             }
@@ -65,7 +68,7 @@ const BlogPost = ({data, boardType}) => {
                             </ul>
                         </div>
                         <div style={{overflowWrap: "break-word", textOverflow: "ellipsis"}}>
-                        <h3>{data.title}</h3>
+                            <h3>{data.title}</h3>
                         </div>
                         <p style={{overflowWrap: "break-word", textOverflow: "ellipsis"}}>
                             {data.content}

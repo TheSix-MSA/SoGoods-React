@@ -12,6 +12,7 @@ import FundingPagination from "../components/funding/FundingPagination";
 import * as queryString from "querystring";
 import useInputs from "../../customHooks/useInputs";
 import {makeStyles} from "@material-ui/core";
+import {ToastInformation} from "../../modules/toastModule";
 
 const initState = {
     dtoList: [
@@ -55,7 +56,7 @@ const initState = {
 const param = {
     page:1,
     keyword:'',
-    type:''
+    type:'t'
 }
 
 const FundingTable = () => {
@@ -97,6 +98,13 @@ const FundingTable = () => {
         history.push("/funding/read/" + fno)
     }
 
+    const setAuthorized = (fund) => {
+        if (!fund.fundingDTO.authorized) {
+            fundingService.setAuthorized(fund.fundingDTO.fno, funding.pageMaker.page)
+                .then();
+            ToastInformation("새로운 펀딩이 등록 되었습니다.")
+        }}
+
     const list = funding.dtoList.map(fund => {
         return <tr className='hs-style' key={fund.fundingDTO.fno}>
             <td onClick={() => toFunding(fund.fundingDTO.fno)}>
@@ -111,11 +119,11 @@ const FundingTable = () => {
                 <td>{(fund.fundingDTO.totalAmount / fund.fundingDTO.targetAmount * 100).toFixed(2)}%달성</td>:<td>0</td>}
             <td>{fund.fundingDTO.dueDate}</td>
             <td>{fund.fundingDTO.regDate}</td>
-            <td> <span style={{cursor:"pointer"}}>{fund.fundingDTO.success ? "🟢" : "🔴"}</span></td>
+            <td>{fund.fundingDTO.success ? "🟢" : "🔴"}</td>
             <td onClick={() => fundingService.changeRemoved(fund.fundingDTO.fno,funding.pageMaker.page)}>
                 <span style={{cursor:"pointer"}}>{fund.fundingDTO.removed ? "" : "✔"}</span>
             </td>
-            <td onClick={() => fundingService.setAuthorized(fund.fundingDTO.fno,funding.pageMaker.page)}>
+            <td onClick={() => setAuthorized(fund)}>
                 <span style={{cursor:"pointer"}}>{fund.fundingDTO.authorized ? "참여중" : "처리중"}</span>
             </td>
         </tr>
@@ -130,10 +138,9 @@ const FundingTable = () => {
 
                         <div className="pro-sidebar-search mb-55 mt-25">
                             <form className="pro-sidebar-search-form" action="#">
-                                <select name="type" onChange={searchOnChange}>
-                                    <option value=''>선택</option>
-                                    <option value='w'>작성자</option>
+                                <select name="type" style={{width: "10%"}} onChange={searchOnChange}>
                                     <option value='t'>제목</option>
+                                    <option value='w'>작성자</option>
                                     <option value='c'>내용</option>
                                 </select>
                                 <input value={searchInput.keyword} onChange={searchOnChange} type="text"
@@ -146,7 +153,6 @@ const FundingTable = () => {
                         <p className="card-category">
                             펀딩정보
                         </p>
-
 
                     </Card.Header>
                     <Card.Body className="table-full-width table-responsive px-20">

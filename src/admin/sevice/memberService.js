@@ -1,4 +1,5 @@
 import instance from "../../modules/axiosConfig";
+import {ToastInformation, ToastWarning} from "../../modules/toastModule";
 
 const memberService = () => {
     let render;
@@ -17,6 +18,7 @@ const memberService = () => {
             url: `member/list?approval=true&page=${page}`,
             method: 'get'
         })
+        console.log(res)
         return res;
     }
 
@@ -40,6 +42,17 @@ const memberService = () => {
         return res;
     }
 
+    // 반려 처리
+    const reject = async (email, page) => {
+        const res = await instance({
+            url: `member/reject/${email}`,
+            method: 'put'
+        })
+        movePage(page)
+        return res;
+    }
+
+
     const changeBanned = async (email) => {
         const result = await instance({
             url: `member/ban/${email}`,
@@ -56,6 +69,6 @@ const memberService = () => {
         movePage = func;
     }
 
-    return {setRender, getMemberList, changeRole, changeBanned, getMemberApprovalList, setMovePage, changeAuth}
+    return {setRender, getMemberList, changeRole, changeBanned, getMemberApprovalList, setMovePage, changeAuth, reject}
 }
 export default memberService();

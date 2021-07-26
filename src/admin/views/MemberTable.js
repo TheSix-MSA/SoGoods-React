@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-
 import {
     Card,
     Table,
@@ -12,6 +11,8 @@ import {useHistory, useLocation} from "react-router-dom";
 import * as queryString from "querystring";
 import useInputs from "../../customHooks/useInputs";
 import memberService from "../sevice/memberService";
+import UserDetail from "../modal/UserDetail";
+import {ToastInformation, ToastWarning} from "../../modules/toastModule";
 
 const initState = {
     memberList: [
@@ -31,7 +32,11 @@ const initState = {
             approval: false,
             regDate: "",
             loginDate: "",
-            roleSet: []
+            identificationUrl: "",
+            introduce: "",
+            nickName: "",
+            roleSet: [],
+
         },],
     pageMaker: {
         page: 1,
@@ -47,7 +52,7 @@ const initState = {
 }
 const param = {
     page: 1,
-    type: '',
+    type: 'n',
     keyword: ''
 }
 const MemberTable = () => {
@@ -67,6 +72,7 @@ const MemberTable = () => {
             setMembers(res.data.response);
         });
     }, [page])
+    console.log("23123124124124", members)
 
     const renderPage = () => {
         setFlag(!flag)
@@ -96,6 +102,8 @@ const MemberTable = () => {
                 })
             })
         })
+        const currentBan = member.banned?"밴 해제":"밴"
+        ToastInformation("해당 유저가 "+ currentBan +" 되었습니다.")
     }
 
     const role = (member) => {
@@ -108,25 +116,29 @@ const MemberTable = () => {
                 })
             })
         })
+        const currentRole = member.roleSet.includes("AUTHOR")?"작가":"일반으"
+        ToastInformation("해당 유저의 권한이 "+ currentRole +"로 변경 되었습니다.")
     }
 
     const list = members.memberList?.map(member => {
         return <tr className='hs-style' key={member.email}>
             <td>{member.email}</td>
-            <td>{member.name}</td>
+            <td><UserDetail member={member}/></td>
             <td>{member.birth}</td>
             <td>{member.phone}</td>
-            <td>{member.address} {member.detailAddress}</td>
             <td>{member.gender}</td>
             <td onClick={() => ban(member)} style={{textAlign: "center"}}>
                 <span style={{cursor: "pointer"}}>{member.banned ? "🔴" : "🟢"} </span>
             </td>
             <td>{member.removed ? "삭제" : "정상"}</td>
             <td onClick={() => role(member)}>
-                <span style={{cursor: "pointer"}}>{member.roleSet[member.roleSet.length - 1]} </span>
+                {member.roleSet.includes("ADMIN") ?
+                    <span style={{cursor: "pointer"}}> 관리자 </span>
+                    : member.roleSet.includes("AUTHOR") ?
+                        <span style={{cursor: "pointer"}}> 작가 </span>
+                        : <span style={{cursor: "pointer"}}> 일반회원 </span>}
             </td>
             <td>{getFormatDate(new Date(member.regDate))}</td>
-            <td><img src={member.identificationUrl}/></td>
         </tr>
     })
 
@@ -163,16 +175,14 @@ const MemberTable = () => {
                             <thead>
                             <tr>
                                 <th className="border-0">이메일</th>
-                                <th className="border-0">이름</th>
+                                <th className="border-0">이름(상세정보)</th>
                                 <th className="border-0">생년월일</th>
                                 <th className="border-0">전화번호</th>
-                                <th className="border-0">주소</th>
                                 <th className="border-0">성별</th>
                                 <th className="border-0">밴 여부</th>
                                 <th className="border-0">삭제 여부</th>
                                 <th className="border-0">권한</th>
                                 <th className="border-0">가입날짜</th>
-                                <th className="border-0">check url</th>
                             </tr>
                             </thead>
                             <tbody>

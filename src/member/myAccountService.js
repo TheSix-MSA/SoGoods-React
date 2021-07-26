@@ -1,17 +1,6 @@
 import instance from "../modules/axiosConfig";
 import axios from "axios";
 
-let initState = {
-    page:1,
-    size:12,
-    totalCount:14,
-    pageList:[],
-    prev: false,
-    next : false,
-    start : 1,
-    end: 1
-}
-
 const myAccountService = () => {
     let dialogFn;
     let closeDialogFn;
@@ -20,6 +9,15 @@ const myAccountService = () => {
     let pager;  //pageMaker
     let movePageFn;
     let pagerFlagFn
+    let categoryChangeFn;
+
+    const setChangeType = (func) => {
+        categoryChangeFn = func;
+    };
+
+    const changeCategory = (category) => {
+        categoryChangeFn(category)
+    }
 
     const changePagerFlag = (func) => {
         pagerFlagFn = func
@@ -30,7 +28,6 @@ const myAccountService = () => {
     };
 
     const movePage = (pageMaker)=>{
-        console.log(pageMaker);
         movePageFn(pageMaker);
     }
 
@@ -186,6 +183,13 @@ const myAccountService = () => {
         return result;
     }
 
+    /**
+     * 작가 승인요청.
+     *
+     * @param authorInfo
+     * @param novel
+     * @returns {Promise<*>}
+     */
     const requestAuthor = async (authorInfo, novel) => {
         const result = await instance({
             url: "/member/novels",
@@ -196,29 +200,26 @@ const myAccountService = () => {
         return result;
     };
 
-    const getTotalBoardList = async (writer) => {
-        const result = await instance({
-            url: `/board/${writer}`,
-            method: " GET",
-        });
 
-        return result
-    };
-
+    /**
+     * 게시판종류를 지정해 리스트를 가져온다.
+     *
+     * @param boardInfo
+     * @returns {Promise<*>}
+     */
     const getOneBoardList = async (boardInfo) => {
         const result = await instance({
             url: `/board/member/${boardInfo.type}/${boardInfo.email}?page=${boardInfo.page}`,
             method: "GET",
         });
 
-        console.log("가져온 정보목록", result);
         return result
     };
 
 
     return {getMyInfo, modifyInfo, searchNovelList, popUpDialogFn, setDialogFn, setCloseDialogFn, registerNovel,clearInput,
-        setClearInputFn, getNovelList, setListFlag, changeFlag, removeNovel, registerIdentification, getTotalBoardList, getOneBoardList, requestAuthor
-    ,getPager, setPager, setMovePage, movePage, changePagerFlag
+        setClearInputFn, getNovelList, setListFlag, changeFlag, removeNovel, registerIdentification, getOneBoardList, requestAuthor
+    ,getPager, setPager, setMovePage, movePage, changePagerFlag, setChangeType, changeCategory
     }
 };
 

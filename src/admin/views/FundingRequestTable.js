@@ -9,6 +9,7 @@ import fundingService from "../sevice/fundingService";
 import {useHistory, useLocation} from "react-router-dom";
 import FundingPagination from "../components/funding/FundingPagination";
 import * as queryString from "querystring";
+import {ToastInformation} from "../../modules/toastModule";
 
 const initState = {
     dtoList: [
@@ -106,7 +107,7 @@ const FundingRequestTable = () => {
                         <Table className="table-hover table-striped" style={{textAlign: "center",tableLayout:"fixed"}}>
                             <thead>
                             <tr>
-                                <th className="border-0">제목</th>
+                                <th className="border-0">제목(확인하러가기)</th>
                                 <th className="border-0">작성자</th>
                                 <th className="border-0">이메일</th>
                                 <th className="border-0">내용</th>

@@ -2,20 +2,18 @@ import React, {Fragment, useEffect, useMemo, useRef, useState} from 'react';
 import LayoutOne from "../layouts/header/LayoutOne";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
-import getFormatDate from "../../modules/getFormatDate";
 import useInputs from "../../customHooks/useInputs";
 import fundingService from "./fundingService";
-import {useHistory, useLocation, useParams} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import {useSelector} from "react-redux";
 import productUpdateService from "../funding-attach/update/productUpdateService";
 import Button from "@material-ui/core/Button";
-import {useToasts} from "react-toast-notifications";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import ProductRegister from "../funding-attach/add/ProductRegister";
 import Dialog from "@material-ui/core/Dialog";
-import productService from "../funding-attach/add/productService";
 import ProductUpdateRegister from "../funding-attach/update/ProductUpdateRegister";
+import {ToastWarning} from "../../modules/toastModule";
+import productService from "../funding-attach/add/productService";
 
 const inputStyle = {
     margin:"10px"
@@ -35,6 +33,17 @@ const imgStyle = {
     height: 50,
     float: 'left',
 };
+const textArea = {
+    resize:"none",
+    margin:"10px",
+    height:"300px"
+}
+const inputStyle = {
+    margin:"10px"
+}
+const textStyle = {
+    margin:"0 10px"
+}
 
 const btn ={
     clear: "both",
@@ -59,22 +68,16 @@ const productDTOs = []
 
 const FundingUpdate = () => {
 
-   const info = useSelector(state=>state.login);
-
    let {fno} = useParams();
-
-
    const [fundingForm, changeFundingForm, setFundingForm] = useInputs({...initFundingForm});
    const [productForm, changeProductForm, setProductForm] = useInputs([...productDTOs]);
    const [prodDel, setProdDel] = useState([])
 
 
-    const {addToast} = useToasts();
-    const userInfo = useSelector(state=> state.login);
     const [open, setOpen] = useState(false);
-
+    const [mainImg, setMainImg] = useState([]);
     const history = useHistory();
-    const [flag, setFlag] = useState(false)
+    const [flag, setFlag] = useState(false);
 
 
     productUpdateService.setOpenFn(setOpen)
@@ -129,19 +132,32 @@ const FundingUpdate = () => {
     },[fno])
 
 
-    console.log(productUpdateService.getProductList())
-
     const sendFormData = async (e) => {
         e.preventDefault();
-        await fundingService.updateFunding(fno, {...fundingForm});
 
+        //데이터 유효성 검사
+        if(fundingForm.title==""){
+            ToastWarning(" 제목은 필수입력항목입니다.");
+            return;
+        } else if (fundingForm.content===""){
+            ToastWarning("내용은 필수입력항목입니다.");
+            return;
+        } else if (!fundingForm.dueDate){
+            ToastWarning("만기일은 필수입력항목입니다.");
+            return;
+        } else if (fundingForm.targetAmount===null || fundingForm.targetAmount === 0){
+            ToastWarning("목표금액은 필수입력항목입니다.");
+            return;
+        }
 
+        console.log(fundingForm);
+        const result = await fundingService.updateFunding(fno, {...fundingForm});
         history.push("/funding/list");
     }
 
-    const setProductMainImage = (e, productIdx, pictureIdx)=>{
-        productUpdateService.getProductList()[productIdx].mainIdx = pictureIdx
-    }
+    // const setProductMainImage = (e, productIdx, pictureIdx)=>{
+    //     productUpdateService.getProductList()[productIdx].mainIdx = pictureIdx
+    // }
 
     const productDelete = (product, idx) => {
         const anoList = product.pictures.map(picture=>picture.fileName)
@@ -191,6 +207,17 @@ const FundingUpdate = () => {
         )
     })
 
+    const clickFile = () => {
+        document.getElementById("file").click()
+    }
+
+    const setProductMainImage = (e)=>{
+       const file = e.target.files[0];
+        console.log(file);
+       setMainImg(file)
+    }
+
+
     return (
         <div>
             <Fragment>
@@ -234,18 +261,21 @@ const FundingUpdate = () => {
                                                                 value={fundingForm.email ||""}
                                                             />
                                                             <textarea
-                                                                style={inputStyle}
+                                                                style={textArea}
                                                                 type="text"
                                                                 name="content"
                                                                 value={fundingForm.content ||""}
                                                                 onChange={changeFundingForm}
                                                             />
-                                                            <h5 style={textStyle}>메인 이미지</h5>
+                                                            <Button style={btn} variant="outlined" color="primary" onClick={clickFile}>
+                                                                메인 이미지 추가
+                                                            </Button>
                                                             <input
-                                                                style={inputStyle}
+                                                                id="file"
+                                                                style={{display:"none"}}
                                                                 type="file"
                                                                 name="mainImage"
-                                                                onChange={changeFundingForm}
+                                                                onChange={setProductMainImage}
                                                             />
                                                             <ul>
                                                                 {list}

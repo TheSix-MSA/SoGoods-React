@@ -44,6 +44,11 @@ const repliesService = () => {
             method: 'post',
             data: reply
         });
+
+        // const increaseReplyNum = await instance({
+        //     url: "/board/countUp/"+bno
+        //     method: "put"
+        // })
         movePage(page);
         return res;
     }

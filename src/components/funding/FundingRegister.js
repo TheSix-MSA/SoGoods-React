@@ -15,6 +15,7 @@ import {useSelector, } from "react-redux";
 import {useToasts} from "react-toast-notifications";
 import {useHistory} from "react-router-dom";
 import axios from "axios";
+import {ToastCenter, ToastWarning} from "../../modules/toastModule";
 
 const inputStyle = {
     margin:"10px"
@@ -45,12 +46,12 @@ const initState = {
     email:'',
     dueDate:"",
     targetAmount:0,
+    mainImage:"",
     productDTOs:[]
 }
 
 const FundingRegister = () => {
 
-    const {addToast} = useToasts();
     const [form, changeForm, setForm] = useInputs({...initState});
     const [fundingMainFile, setFundingMainFile] = useState(null);
     const userInfo = useSelector(state=> state.login);
@@ -73,25 +74,26 @@ const FundingRegister = () => {
     // 입력 데이터 전송
     const sendFormData = async (e) => {
 
-
-
         e.preventDefault();
 
         // 데이터 유효성 검사
         if(form.title==""){
-            addToast("제목은 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
+            ToastWarning(" 제목은 필수입력항목입니다.");
             return;
         } else if (form.content===""){
-            addToast("내용은 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
+            ToastWarning("내용은 필수입력항목입니다.");
+            return;
+        } else if (!fundingMainFile) {
+            ToastWarning("메인 이미지를 등록해주세요.");
+            return;
+        }else if (req.productDTOs.length === 0 || !req.productDTOs) {
+            ToastWarning("최소 1개 이상의 제품을 등록해주세요.");
             return;
         } else if (!form.dueDate){
-            addToast("만기일은 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
-            return;
-        } else if(req.productDTOs.length === 0 || !req.productDTOs) {
-            addToast("최소 1개 이상의 제품을 등록해주세요.", {appearance: 'warning', autoDismiss: true});
+            ToastWarning("만기일은 필수입력항목입니다.");
             return;
         } else if (form.targetAmount===null || form.targetAmount === 0){
-            addToast("목표금액은 필수입력항목입니다.", {appearance: 'warning', autoDismiss: true});
+            ToastWarning("목표금액은 필수입력항목입니다.");
             return;
         }
 
@@ -211,6 +213,7 @@ const FundingRegister = () => {
                                                     />
                                                      <h5 style={textStyle}>메인 이미지</h5>
                                                     <input
+                                                        required
                                                         style={inputStyle}
                                                         type="file"
                                                         name="mainImage"

@@ -380,10 +380,6 @@ const MyAccount = () => {
                               <div className="account-info-wrapper">
                                 <h4>Your Orders</h4>
                               </div>
-                              <div className="align-items-center justify-content-center entries-wrapper">
-                                <div className="billing-info  entries-edit-delete">
-                                </div>
-                              </div>
                               <MyOrders/>
                             </div>
                           </Card.Body>

@@ -20,7 +20,21 @@ const BoardModify = ({match}) => {
     const bno = useRef(match.params.bno)
     const boardType = useRef(match.params.boardType?.toUpperCase())
     const history = useHistory();
-
+    let boardName = "";
+    switch (boardType.current) {
+        case "FREE":
+            boardName = "자유게시판";
+            break;
+        case "NOVELIST":
+            boardName = "작가게시판";
+            break;
+        case "NOTICE":
+            boardName = "공지사항"
+            break;
+        default:
+            boardName= "치명적인 오류 게시판";
+            break;
+    }
     const modify = () => {
         if (!board.title) {
             ToastTopRight("💨제목을 입력해주세요.");
@@ -49,13 +63,6 @@ const BoardModify = ({match}) => {
     console.log(board)
     return (
         <Fragment>
-            <MetaTags>
-                <title>Flone | Blog Post</title>
-                <meta
-                    name="description"
-                    content="Blog post page of flone react minimalist eCommerce template."
-                />
-            </MetaTags>
             <LayoutOne headerTop="visible">
                 {/* breadcrumb */}
                 <div className="blog-area pt-100 pb-100">
@@ -64,6 +71,7 @@ const BoardModify = ({match}) => {
                             <div className="blog-details-top">
                                 <div className="blog-details-content">
                                     <div className="login-form-container">
+                                        <h3> {boardName} 글수정 </h3>
                                         <div className="login-register-form">
                                             <form>
                                                 <TextField

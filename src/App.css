@@ -39,6 +39,13 @@
     margin-top: 100px;
 }
 
+.ToastSuccessRegister{
+    z-index: 90 !important;
+    background-color: rgb(30, 136, 229) !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+}
+
 @font-face {
     font-family: 'maruBuri';
     src: url("./font/MaruBuri-Regular.ttf") format('truetype');

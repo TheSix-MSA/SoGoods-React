@@ -43,8 +43,8 @@ const BlogComment = ({bno}) => {
      */
   }, [replies.pageMaker.page, flag, replies.bno]);
 
-  const deleteReply = (rno) => {
-    repliesService.deleteReply(rno, replies.pageMaker.page)
+  const deleteReply = (rno, bno) => {
+    repliesService.deleteReply(rno, replies.pageMaker.page, bno)
         .then()
   }
 

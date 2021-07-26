@@ -76,11 +76,6 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
                   {strings["my_account"]}
                 </Link>
               </li>
-              <li>
-                <Link to={process.env.PUBLIC_URL + "/checkout"}>
-                  {strings["checkout"]}
-                </Link>
-              </li>
             </ul>
           </li>
 

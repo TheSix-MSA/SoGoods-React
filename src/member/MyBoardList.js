@@ -40,11 +40,14 @@ const MyBoardList = () => {
      * 리스트 가져오기
      */
     useEffect(() => {
-        myAccountService.getOneBoardList({email:user.email, type:boardList.type, page:boardList.pageMaker.page})
-            .then(value => {
-                setBoardList({...value.data.response, type: boardList.type});
-                myAccountService.setPager(value.data.response.pageMaker);
-        });
+        if(user.email) {
+            myAccountService.getOneBoardList({email:user.email, type:boardList.type, page:boardList.pageMaker.page})
+                .then(value => {
+                    setBoardList({...value.data.response, type: boardList.type});
+                    myAccountService.setPager(value.data.response.pageMaker);
+                });
+        }
+
     }, [boardList.pageMaker.page, boardList.type]);
 
 

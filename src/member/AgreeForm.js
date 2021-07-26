@@ -30,7 +30,7 @@ const AgreeForm = ({setAgreeBoxes,agreeBoxes}) => {
             </div>
             <div style={{textAlign: "right"}}>
                 <label htmlFor="acceptOne">동의합니다</label>
-                <input type="checkBox" id="acceptOne" style={{margin: "15px 0"}}
+                <input type="checkBox" id="acceptOne" style={{margin: "15px 15px"}}
                        onChange={getAccept} name="acceptOne"
                        checked={agreeBoxes.acceptOne}/>
             </div>
@@ -40,7 +40,7 @@ const AgreeForm = ({setAgreeBoxes,agreeBoxes}) => {
             </div>
             <div style={{textAlign: "right"}}>
                 <label htmlFor="acceptTwo">동의합니다</label>
-                <input type="checkBox" id="acceptTwo" style={{margin: "15px 0"}}
+                <input type="checkBox" id="acceptTwo" style={{margin: "15px 15px"}}
                        onChange={getAccept} name="acceptTwo"
                        checked={agreeBoxes.acceptTwo}/>
             </div>

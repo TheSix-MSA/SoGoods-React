@@ -42,7 +42,7 @@ const ProductText = ({}) => {
                     maxLength={2000}
                 />
             </div>
-            <div>가격<input type='number'
+            <div>가격<input type='text'
                           name='price'
                           value={form.price}
                           onChange={changeForm}

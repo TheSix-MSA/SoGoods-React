@@ -4,9 +4,8 @@ const noticeService = () => {
     let render;
 
     const getNoticeList = async (page, keyword, type) => {
-        console.log(" getNoticeList started");
         const list = await instance({
-            url: `board/NOTICE/list?page=${page}&keyword=${keyword}&type=${type}`,
+            url: `/board/NOTICE/list?page=${page}&keyword=${keyword}&type=${type}`,
             method: 'get'
         });
         return list.data;
@@ -32,7 +31,6 @@ const noticeService = () => {
     }
 
     const changeRemoved = async (bno) => {
-        console.log("sadfsdfdsafasdfassdfdsfsa")
         const result = await instance({
             url: `/board/NOTICE/${bno}`,
             method: 'delete',

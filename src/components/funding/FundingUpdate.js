@@ -153,9 +153,9 @@ const FundingUpdate = () => {
         history.push("/funding/list");
     }
 
-    const setProductMainImage = (e, productIdx, pictureIdx)=>{
-        productUpdateService.getProductList()[productIdx].mainIdx = pictureIdx
-    }
+    // const setProductMainImage = (e, productIdx, pictureIdx)=>{
+    //     productUpdateService.getProductList()[productIdx].mainIdx = pictureIdx
+    // }
 
     const list = productUpdateService.getProductList().map((product, i)=>{
 

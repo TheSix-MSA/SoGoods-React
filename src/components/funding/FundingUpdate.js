@@ -59,6 +59,8 @@ const initFundingForm = {
     targetAmount:0,
     productDTOs:[]
 }
+const toBeDeletedDTO = {}
+const toBeAddedDTO = {}
 const productDTOs = []
 
 const FundingUpdate = () => {
@@ -66,6 +68,9 @@ const FundingUpdate = () => {
    let {fno} = useParams();
    const [fundingForm, changeFundingForm, setFundingForm] = useInputs({...initFundingForm});
    const [productForm, changeProductForm, setProductForm] = useInputs([...productDTOs]);
+    const [addForm, changeAddForm, setAddForm] = useInputs({...toBeAddedDTO});
+    const [deleteForm, changeDeleteForm, setDeleteForm] = useInputs({...toBeDeletedDTO});
+
    const [prodDel, setProdDel] = useState([])
 
     const [open, setOpen] = useState(false);
@@ -176,30 +181,30 @@ const FundingUpdate = () => {
         return (
             <>
                 <li key={i}>
-                    <h3 style={{marginTop: '32px'}}>상품 {i+1}
-                        <Button style={editBtn} variant="outlined" color="primary" onClick={()=>{productUpdateService.openDialogForEdit(i)}}>
-                            수정
-                        </Button>
-                        <Button style={editBtn} variant="outlined" color="primary" onClick={()=>{productDelete(product, i)}}>
-                            삭제
-                        </Button>
-                    </h3>
+                    {/*<h3 style={{marginTop: '32px'}}>상품 {i+1}*/}
+                    {/*    <Button style={editBtn} variant="outlined" color="primary" onClick={()=>{productUpdateService.openDialogForEdit(i)}}>*/}
+                    {/*        수정*/}
+                    {/*    </Button>*/}
+                    {/*    <Button style={editBtn} variant="outlined" color="primary" onClick={()=>{productDelete(product, i)}}>*/}
+                    {/*        삭제*/}
+                    {/*    </Button>*/}
+                    {/*</h3>*/}
                     <p>
                         상품명 : {product.text.name}
                     </p>
                     <div style={{width: "100%",
                                 overflow: "hidden" }}>
                         {product.pictures.map((file ,j)=>
-                            <div style={{width: "30%", margin: 0, float: "left"}}>
+                            <div style={{width: "30%", marginLeft: "10px", float: "left"}}>
                                 <label>
                                 <img key={j} data-idx={j}
                                      src={file.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"}
                                      style={imgStyle}/>
-                                <input type="radio"
-                                       name={`mainIdx_${i}`}
-                                       value={j}
-                                       onClick={(e)=>{setProductMainImage(e,i,j)}}
-                                       style={radioBtnStyle}/>
+                                {/*<input type="radio"*/}
+                                {/*       name={`mainIdx_${i}`}*/}
+                                {/*       value={j}*/}
+                                {/*       onClick={(e)=>{setProductMainImage(e,i,j)}}*/}
+                                {/*       style={radioBtnStyle}/>*/}
                                 </label>
                             </div>
                         )}
@@ -286,9 +291,9 @@ const FundingUpdate = () => {
                                                                 {list}
                                                             </ul>
 
-                                                            <Button style={btn} variant="outlined" color="primary" onClick={productUpdateService.openDialog}>
-                                                                상품 추가
-                                                            </Button>
+                                                            {/*<Button style={btn} variant="outlined" color="primary" onClick={productUpdateService.openDialog}>*/}
+                                                            {/*    상품 추가*/}
+                                                            {/*</Button>*/}
                                                                 <div style={{display:"flex"}}>
                                                                     <div style={{display:"flex" ,flexWrap:"wrap"}}>
                                                                         <h5 style={textStyle}>펀딩 만기일</h5>

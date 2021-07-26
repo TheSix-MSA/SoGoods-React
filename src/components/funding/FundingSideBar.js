@@ -204,11 +204,11 @@ const FundingSideBar = (funding) => {
     // 제품 수정 삭제 버튼 -> 게시글 작성자가 접근 했을 때만 보여짐
     const update = (
         <div style={{ height:"42px", display:"flex", justifyContent:"space-around"}}>
-            <form className={"searchform"} style={{width:"50%"}}>
-                <button className={"searchform__submit"} style={{height:"50px", width:"100%",position:"relative", margin:"5px 5px", borderRight:"1px solid white", boxSizing:"border-box"}}
-                        onClick={()=>toUpdate(funding.fundingDTO.fno)}>수정
-                </button>
-            </form>
+            {/*<form className={"searchform"} style={{width:"50%"}}>*/}
+            {/*    <button className={"searchform__submit"} style={{height:"50px", width:"100%",position:"relative", margin:"5px 5px", borderRight:"1px solid white", boxSizing:"border-box"}}*/}
+            {/*            onClick={()=>toUpdate(funding.fundingDTO.fno)}>수정*/}
+            {/*    </button>*/}
+            {/*</form>*/}
             <form className={"searchform"} style={{width:"50%"}} >
                 <button className={"searchform__submit"} style={{height:"50px", width:"100%" ,position:"relative", margin:"5px 5px"}}
                         onClick={()=> deleteFunding(funding.fundingDTO.fno)}>삭제
@@ -222,11 +222,9 @@ const FundingSideBar = (funding) => {
         const result = window.confirm("정말 삭제하시겠습니까?");
         if(result){
             fundingService.removedFunding(fno).then(res=> {
-                console.log(res);
-                console.log(result);
-                history.push("/funding/list");
             })
         }
+        return history.push("/funding/list");
     }
 
     return (

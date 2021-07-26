@@ -41,11 +41,9 @@ const FundingList = ({ location, productTabClass}) => {
     const keyword = value.keyword||"";
     const type = value.type||"t";
     const state = value.state||"open";
-
     const history = useHistory();
     const [data, setData] = useState(initState);
     const userInfo = useSelector(state=> state.login);
-
     // 리스트 데이터 불러오기
     useEffect(()=> {
         fundingService.getList(page, keyword, type, state)
@@ -60,14 +58,13 @@ const FundingList = ({ location, productTabClass}) => {
                             setData(res1.response);
                         })
                 }
-
         })
-    }, [page, state])
+    }, [page,state])
 
 
     // 페이지 이동처리
     const movePage = (page) => {
-        const url = '/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type + '&state='+searchInput.state;
+        const url = '/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type + '&state='+state;
         history.push(url);
     }
 
@@ -84,17 +81,17 @@ const FundingList = ({ location, productTabClass}) => {
     // 검색 처리
     const search = async (e) => {
         e.preventDefault();
-        console.log(searchInput);
-        const result = await fundingService.getList(1, searchInput.keyword, searchInput.type, searchInput.state);
+        const result = await fundingService.getList(1, searchInput.keyword, searchInput.type, state);
         setData(result.response)
-        const url = '/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type + '&state=' +searchInput.state;
+        const url = '/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type + '&state=' +state;
         history.push(url);
     }
 
     // 펀딩 상태에 따라 리스트 불러오기 (open or close)
     const setState = async (state) => {
         setSearchInput({...searchInput, state:state});
-        const result = await fundingService.getList(1, searchInput.keyword, searchInput.type, searchInput.state)
+
+        const result = await fundingService.getList(1, searchInput.keyword, searchInput.type, state)
         setData(result.response);
         const url = '/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type + '&state=' +state;
         history.push(url);

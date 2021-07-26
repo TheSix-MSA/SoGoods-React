@@ -51,13 +51,16 @@ const FundingList = ({ location, productTabClass}) => {
         fundingService.getList(page, keyword, type, state)
             .then(res1=>{
                 let fnoList = res1.response.dtoList.map(dto=>dto.fundingDTO.fno)
-                fundingService.getA3src('FUNDING', fnoList)
-                    .then(res2=>{
-                        res2.data.response.forEach((ele,i)=>{
-                            res1.response.dtoList[i].fundingDTO.imgSrc = ele.imgSrc
+                if(fnoList.length != 0){
+                    fundingService.getA3src('FUNDING', fnoList)
+                        .then(res2=>{
+                            res2.data.response.forEach((ele,i)=>{
+                                res1.response.dtoList[i].fundingDTO.imgSrc = ele.imgSrc
+                            })
+                            setData(res1.response);
                         })
-                        setData(res1.response);
-                    })
+                }
+
         })
     }, [page, state])
 

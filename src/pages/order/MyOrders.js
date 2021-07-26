@@ -2,10 +2,11 @@ import {useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
 import orderServices from "../../service/orderServices";
 import getFormatDate from "../../modules/getFormatDate";
+import fundingService from "../../components/funding/fundingService";
 
 const initState = {
     page:1,
-    size:5,
+    size:10,
     prev:false,
     next:false,
     pageList:[]
@@ -15,7 +16,7 @@ const initDto =
     [
         {
             dto: {
-                ono: 2,
+                ono: 0,
                 buyer: "",
                 receiverName: "",
                 receiverAddress: "",
@@ -30,26 +31,36 @@ const initDto =
                 modDate: ""
             },
             totalPrices: 0,
-            prodNames: ""
+            prodNames: "",
+            pno:0
         }
     ]
 
 const MyOrders = () => {
     const user = useSelector(state => state.login);
-    const [pager, setPager] = useState({...initState,email:user.email});
+    const [pager, setPager] = useState({...initState});
     const [prodsList, setProdList] = useState([...initDto]);
     const [flag, setFlag] = useState(false);
+    const [imgs, setImgs] = useState([])
 
     useEffect(() => {
         orderServices.ordersUserMade({page: pager.page, email: user.email, sortingCond: ""}).then(r => {
             setProdList(r.data.response.resDto);
-            console.log(r)
+            setPager(r.data.response.pageMaker);
+            const pnolist = r.data.response.resDto.map(value => {
+                return value.pno
+            })
+            console.log("pnolist ",pnolist)
+            if(pnolist.length>0){
+                fundingService.getA3srcList("PRODUCT", pnolist, [1]).then(r =>
+                    setImgs(r.data.response)
+                );
+            }
         })
+
     }, [flag, pager.page]);
 
     const cancelOrder = async (prod) => {
-        console.log(prod)
-
         const kakaoCancel = await orderServices.cancelKakaoPay({
             tid: prod.dto.tid,
             amount: prod.totalPrices,
@@ -64,16 +75,21 @@ const MyOrders = () => {
         setPager({...pager, page: pager.page + moveNum})
     };
 
+
+    console.log(pager)
     const prods = prodsList.map((prod,idx) =>
         <div key={idx} className="entries-wrapper" style={{marginBottom: "15px"}}>
             <div className="row">
-                <div className="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">
+                <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
                     <div className="entries-edit-delete text-center">
-                        <img src="https://t1.daumcdn.net/thumb/R720x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/3hW1/image/EHQETyXIsC9eAhp8xPPGkYNTkJc.jpg"
-                             alt="" style={{maxWidth:"350px"}}/>
+                        {imgs[idx]&&imgs[idx][0]?
+                            <img src={imgs[idx][0].imgSrc} alt="" style={{maxWidth:"100%"}}/>
+                            :
+                            <img src={process.env.PUBLIC_URL+"/assets/img/default.png"} alt="" style={{maxWidth:"200px"}}/>
+                        }
                     </div>
                 </div>
-                <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
+                <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-left">
                     <div className="entries-info ">
                         <p style={{fontSize:"12px"}}><strong>상품 정보 :</strong> {prod.prodNames}</p>
                         <p style={{fontSize:"12px"}}><strong>가격 :</strong> {prod.totalPrices} 원</p>
@@ -83,8 +99,8 @@ const MyOrders = () => {
                         <p style={{fontSize:"12px"}}><strong>배송 :</strong> {prod.dto.shippedDate?prod.dto.shippedDate:"배송전"}</p>
                         <p style={{fontSize:"12px"}}><strong>배송시 주의 사항 :</strong> {prod.dto.receiverRequest}</p>
                         {prod.dto.cancelledDate?<p style={{fontSize:"12px"}}><strong> 취소 일자 :</strong>{getFormatDate(new Date(prod.dto.cancelledDate))}</p>:
-                            <div className="entries-edit-delete text-center">
-                                <button onClick={()=>{cancelOrder(prod)}}>취소</button>
+                            <div className="entries-edit-delete text-left" style={{marginTop:"10px"}}>
+                                <button onClick={()=>{cancelOrder(prod)}}>주문 취소</button>
                             </div>
                         }
                     </div>

@@ -38,12 +38,6 @@ const textArea = {
     margin:"10px",
     height:"300px"
 }
-const inputStyle = {
-    margin:"10px"
-}
-const textStyle = {
-    margin:"0 10px"
-}
 
 const btn ={
     clear: "both",

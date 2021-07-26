@@ -73,7 +73,7 @@ const IconGroup = ({
               }
               {login.email !== "" && (
                   <li>
-                    <Link to={process.env.PUBLIC_URL + "/admin"}>
+                    <Link to={process.env.PUBLIC_URL + "/admin/dashboard"}>
                       admin
                     </Link>
                   </li>
@@ -88,7 +88,7 @@ const IconGroup = ({
               }
               {login.roles.indexOf("ADMIN") === 1 ?
                   <li>
-                    <Link to={process.env.PUBLIC_URL + "/admin"}>
+                    <Link to={process.env.PUBLIC_URL + "/admin/dashboard"}>
                       admin
                     </Link>
                   </li> :

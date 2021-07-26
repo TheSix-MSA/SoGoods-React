@@ -61,6 +61,14 @@ const memberService = () => {
         return result;
     }
 
+    const getTotal = async () => {
+        const result = await instance({
+            url: `member/analysis`,
+            method: 'get'
+        })
+        return result;
+    }
+
     const setRender = (func) => {
         render = func;
     }
@@ -68,6 +76,6 @@ const memberService = () => {
         movePage = func;
     }
 
-    return {setRender, getMemberList, changeRole, changeBanned, getMemberApprovalList, setMovePage, changeAuth, reject}
+    return {getTotal,setRender, getMemberList, changeRole, changeBanned, getMemberApprovalList, setMovePage, changeAuth, reject}
 }
 export default memberService();

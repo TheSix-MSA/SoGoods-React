@@ -34,13 +34,6 @@ const BlogDetailsStandard = ({location, match}) => {
     }, [bno, dispatch])
     return (
         <Fragment>
-            <MetaTags>
-                <title>Flone | Blog Post</title>
-                <meta
-                    name="description"
-                    content="Blog post page of flone react minimalist eCommerce template."
-                />
-            </MetaTags>
             <LayoutOne headerTop="visible">
                 {/* breadcrumb */}
                 <div className="blog-area pt-100 pb-100">

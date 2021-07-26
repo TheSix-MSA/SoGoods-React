@@ -55,7 +55,7 @@ const IconGroup = ({
                       <Link to={process.env.PUBLIC_URL + "/login-register"}>Login</Link>
                     </li>
                     <li>
-                      <Link to={process.env.PUBLIC_URL + "/login-register"}>
+                      <Link to={process.env.PUBLIC_URL + "/login-register?register=true"}>
                         Register
                       </Link>
                     </li>
@@ -116,7 +116,7 @@ const IconGroup = ({
               }
               {login.email === "" ?
                   <li>
-                    <Link to={process.env.PUBLIC_URL + "/login-register"}>
+                    <Link to={process.env.PUBLIC_URL + "/login-register?register=true"}>
                       Register
                     </Link>
                   </li> :

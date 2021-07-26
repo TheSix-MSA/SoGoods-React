@@ -12,8 +12,9 @@ import instance from "../modules/axiosConfig";
 import CodeDialogSlide from "./CodeDialog";
 import codeService from "./codeService";
 import FormCheckDialog from "./FormCheckDialog";
-import {useToasts} from "react-toast-notifications";
 import {ToastInformation, ToastWarning} from "../modules/toastModule";
+import * as queryString from "querystring";
+import AgreeForm from "./AgreeForm";
 
 const initStateLogin = {
     email: "",
@@ -48,6 +49,10 @@ const LoginRegister = () => {
     const [signupForm, signupChange, setSignForm] = useInputs(initStateSignUp);
     const [verifyForm, setVerifyForm] = useState(initStateVerify);
     const [warningType, setWarningType] = useState(warningName);
+    const [agreeBoxes, setAgreeBoxes] = useState({acceptOne:false, acceptTwo:false})
+
+    const queryStrings = queryString.parse(location.search?.replace("?",""));
+    console.log(queryStrings);
 
     /**
      * 클릭시 axios로 로그인검증, 이후 LocalStorage에 저장.( email, roles, accessToken, RefreshToken )
@@ -86,24 +91,43 @@ const LoginRegister = () => {
         }
 
         if(signupForm.password !== signupForm.passwordCheck){
-            setWarningType({...warningType,type:"same"});
-            codeService.popUpWarningModal();
+            ToastWarning("비밀번호가 일치하지 않습니다.");
             return;
         }
 
         if(verifyForm.verify===false){
-            setWarningType({...warningType,type:"인증"});
-            codeService.popUpWarningModal();
+            ToastWarning("이메일 인증을 입력해주세요");
             return;
         }
 
         for(let formObj in signupForm) {
             if (signupForm[formObj] === "") {
                 setWarningType({...warningType,type:formObj});
-                codeService.popUpWarningModal();
+                if(formObj==="email"){
+                    ToastWarning("이메일을 입력해주세요");
+                }else if (formObj === "name") {
+                    ToastWarning("이름을 입력해주세요");
+                }else if (formObj === "birth") {
+                    ToastWarning("생년월일을 입력해주세요");
+                }else if (formObj === "gender") {
+                    ToastWarning("주민번호 뒷자리를 입력해주세요");
+                }else if (formObj === "phone") {
+                    ToastWarning("핸드폰 번호를 입력해주세요");
+                }else if (formObj === "address") {
+                    ToastWarning("주소를 입력해주세요");
+                }else if (formObj === "code") {
+                    ToastWarning("인증코드를 입력해주세요");
+                }
                 return;
             }
-        }
+        }// end of for loop
+
+        for (let agreeBox in agreeBoxes) {
+            if (agreeBoxes[agreeBox] === false) {
+                ToastWarning("약관에 동의가 필요합니다.");
+                return;
+            }
+        }//end of for loop
 
         const result = await instance({
             url: '/member/',
@@ -187,7 +211,7 @@ const LoginRegister = () => {
                         <div className="row">
                             <div className="col-lg-7 col-md-12 ml-auto mr-auto">
                                 <div className="login-register-wrapper">
-                                    <Tab.Container defaultActiveKey="login">
+                                    <Tab.Container defaultActiveKey={queryStrings && queryStrings.register  ? "register" : "login" }>
                                         <Nav variant="pills" className="login-register-tab-list">
                                             <Nav.Item>
                                                 <Nav.Link eventKey="login">
@@ -399,9 +423,12 @@ const LoginRegister = () => {
                                                             <div className="button-box">
                                                                 <FormCheckDialog
                                                                     warningType={warningType}/>
-                                                                <button onClick={signupBtn}>
-                                                                    <span>Register</span>
-                                                                </button>
+                                                            <AgreeForm setAgreeBoxes={setAgreeBoxes} agreeBoxes={agreeBoxes}></AgreeForm>
+                                                                <div style={{textAlign:"right", marginTop:"15px"}}>
+                                                                    <button onClick={signupBtn} >
+                                                                        <span>Register</span>
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         </form>
                                                     </div>

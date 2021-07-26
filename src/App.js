@@ -35,6 +35,7 @@ const BlogDetailsStandard = lazy(() =>
 // other pages
 const MyAccount = lazy(() => import("./member/MyAccount"));
 const LoginRegister = lazy(() => import("./member/LoginRegister"));
+const AgreeForm = lazy(() => import("./member/AgreeForm"));
 
 const Wishlist = lazy(() => import("./pages/other/Wishlist"));
 const Checkout = lazy(() => import("./pages/order/Checkout"));
@@ -196,7 +197,10 @@ const App = (props) => {
                     path={process.env.PUBLIC_URL + "/author-application"}
                     component={withAuth(AuthorApplication,["GENERAL"])}
                 />
-
+                <Route
+                    path={process.env.PUBLIC_URL + "/accept-form"}
+                    component={withAuth(AgreeForm,["ANONYMOUS"])}
+                />
 
                 <Route exact component={NotFound} />
               </Switch>

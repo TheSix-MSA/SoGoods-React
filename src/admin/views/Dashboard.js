@@ -268,8 +268,8 @@ function Dashboard() {
                 <div className="legend">
                   <i className="fas fa-circle text-info"></i>Total Board
                   <i className="fas fa-circle text-danger"></i>Free Board
-                  <i className="fas fa-circle text-danger"></i> Novelist Board
-                  <i className="fas fa-circle text-danger"></i> Notice Board
+                  <i className="fas fa-circle text-warning"></i> Novelist Board
+                  <i className="fas fa-circle text-primary"></i> Notice Board
                 </div>
                 <hr></hr>
                 <div className="stats">

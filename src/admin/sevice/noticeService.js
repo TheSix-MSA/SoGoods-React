@@ -5,7 +5,7 @@ const noticeService = () => {
 
     const getNoticeList = async (page, keyword, type) => {
         const list = await instance({
-            url: `board/NOTICE/list?page=${page}&keyword=${keyword}&type=${type}`,
+            url: `/board/NOTICE/list?page=${page}&keyword=${keyword}&type=${type}`,
             method: 'get'
         });
         return list.data;

@@ -120,7 +120,8 @@ const PictureUpdateAttach = () => {
     ]);
 
     const removeImg = (idx) => {
-
+        console.log(files[idx])
+        console.log(files[idx].type)
         console.log(files[idx].hasOwnProperty('type'))
 
         if(files[idx].hasOwnProperty('type') === false){
@@ -147,6 +148,7 @@ const PictureUpdateAttach = () => {
 
     console.log("ins할 file객체")
     console.log(picIns)
+    console.log('==========================================')
 
     // useEffect(() => () => {
     //     // Make sure to revoke the data uris to avoid memory leaks

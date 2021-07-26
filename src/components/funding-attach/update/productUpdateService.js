@@ -19,6 +19,8 @@ const productUpdateService = ()=>{
         mainIdx: 0,
     }
 
+
+
     const pictureToInsert = [];
     const pictureToDelete = [];
     const getPictureToInsert = () => pictureToInsert
@@ -50,6 +52,7 @@ const productUpdateService = ()=>{
                 //{file: null, main: 0}
             ],
             mainIdx: 0,
+            isNew: false
         }
     }
 
@@ -77,7 +80,7 @@ const productUpdateService = ()=>{
 
     //새 상품 apply눌렀을 떄
     const addProduct = () => {
-
+        product.isNew = true
         productList.push(product)
 
         //다이얼로그 닫기 -> 최상위 부모컴포넌트 랜더링

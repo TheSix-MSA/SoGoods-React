@@ -71,13 +71,6 @@ const IconGroup = ({
                     </li>
                   </>)
               }
-              {login.email !== "" && (
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/admin/dashboard"}>
-                      admin
-                    </Link>
-                  </li>
-              )}
               {login.roles.includes("AUTHOR") === false && login.email !== "" && login.approval === false ?
                   <li>
                     <Link to={process.env.PUBLIC_URL + "/author-application"}>

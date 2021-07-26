@@ -53,12 +53,14 @@ const MyAccount = () => {
 
   useEffect(() => {
     let isSubscribed = true;
-    myAccountService.getMyInfo(userSelector.email)
-        .then(value => {
-          if(isSubscribed) setInfo({...value.data.response});
-        });
-    return () => {
-      isSubscribed = false
+    if(userSelector.email) {
+      myAccountService.getMyInfo(userSelector.email)
+          .then(value => {
+            if(isSubscribed) setInfo({...value.data.response});
+          });
+      return () => {
+        isSubscribed = false
+      }
     }
   },[userSelector]);
 

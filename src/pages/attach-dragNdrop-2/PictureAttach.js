@@ -101,7 +101,7 @@ const PictureAttach = () => {
     ]);
 
     const removeImg = (idx) => {
-        console.log('click remove')
+        console.log('click update')
         files.splice(idx, 1)
         setFiles([...files])
     }

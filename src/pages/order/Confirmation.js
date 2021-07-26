@@ -15,20 +15,26 @@ const Confirmation = ({location}) => {
   const tid = localStorage.getItem("transactionId")!==null?
       JSON.parse(localStorage.getItem("transactionId")).tid:null;
 
-  const finalCheckOut = () => {
-    console.log({...queryObj, buyer:user, tid:tid})
-    //const res = orderServices.orderConfirmedSave({...queryObj, buyer:user, tid:tid});
-    const kakaoPayApprove = orderServices.kakaoPayApprovePayment({
-      cid: process.env.REACT_APP_KAKAO_PAY_TID,
-      tid: queryObj.tid,
-      partner_order_id: queryObj.partner_order_id,
+  const orderId = localStorage.getItem("transactionId")!==null?
+      JSON.parse(localStorage.getItem("transactionId")).orderId:null;
 
-    })
+  const products = localStorage.getItem("transactionId")!==null?
+      JSON.parse(localStorage.getItem("transactionId")).cartList:null;
+
+  const finalCheckOut = async () => {
+    const params = new URLSearchParams()
+    params.append('cid', process.env.REACT_APP_KAKAO_PAY_CID)
+    params.append('tid', tid)
+    params.append('partner_order_id', orderId)
+    params.append('partner_user_id', user)
+    params.append('pg_token', queryObj.pg_token)
+
+    console.log({...queryObj, orderId: orderId,buyer:user, tid:tid, products:products});
+
+    const res = await orderServices.kakaoPayApprovePayment(params);
+    const sendToDB = orderServices.orderConfirmedSave({...queryObj, orderId: orderId,buyer:user, tid:tid,products:products});
+
     localStorage.removeItem("transactionId");
-  }
-
-  const randIGen = () => {
-    console.log("sads")
   }
 
   return (
@@ -54,13 +60,11 @@ const Confirmation = ({location}) => {
                       No items found in wishlist <br />{" "}
                       <div className="place-order mt-25">
                         <button className="btn-hover" onClick={() => finalCheckOut()}>결제 승인</button>
-                        <button onClick={() => randIGen()}> 시간 제너레이션 </button>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            )}
           </div>
         </div>
       </LayoutOne>

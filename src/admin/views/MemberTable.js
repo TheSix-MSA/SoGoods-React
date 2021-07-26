@@ -1,16 +1,17 @@
-import React, {useEffect, useState, Fragment} from "react";
-
+import React, {useEffect, useState} from "react";
 import {
     Card,
     Table,
     Row,
-    Col, Form, Button,
+    Col
 } from "react-bootstrap";
-import memberService from "../sevice/memberService";
 import MemberPagination from "../components/member/MemberPagination";
 import getFormatDate from "../../modules/getFormatDate";
 import {useHistory, useLocation} from "react-router-dom";
 import * as queryString from "querystring";
+import useInputs from "../../customHooks/useInputs";
+import memberService from "../sevice/memberService";
+import UserDetail from "../modal/UserDetail";
 
 const initState = {
     memberList: [
@@ -30,7 +31,11 @@ const initState = {
             approval: false,
             regDate: "",
             loginDate: "",
-            roleSet: []
+            identificationUrl: "",
+            introduce: "",
+            nickName: "",
+            roleSet: [],
+
         },],
     pageMaker: {
         page: 1,
@@ -43,38 +48,48 @@ const initState = {
         prev: false,
         next: false
     },
-    requestListDTO: {
-        page: 1,
-        size: 10,
-        keyword: "",
-        type: ""
-    }
+}
+const param = {
+    page: 1,
+    type: 'n',
+    keyword: ''
 }
 const MemberTable = () => {
-    const history = useHistory();
     const location = useLocation();
-    const value = queryString.parse(location.search.replace("?", ""));
-    const page = value.page || 1;
 
+    const value = queryString.parse(location.search.replace("?", ""));
+    const history = useHistory();
+    const page = value.page || 1;
+    const type = value.type || "";
+    const keyword = value.keyword || "";
     const [members, setMembers] = useState(initState);
     const [flag, setFlag] = useState(false);
+    const [searchInput, searchOnChange] = useInputs({...param, page: value.page || 1});
+
+    useEffect(() => {
+        memberService.getMemberList(page, keyword, type).then(res => {
+            setMembers(res.data.response);
+        });
+    }, [page])
+    console.log("23123124124124", members)
+
     const renderPage = () => {
         setFlag(!flag)
     }
     memberService.setRender(renderPage)
 
-    useEffect(() => {
-        memberService.getMemberList(page).then(res => {
-            setMembers(res.data.response);
-        });
-    }, [page])
-
     const movePage = (num) => {
-        history.push('/admin/member?page=' + num)
-        members.pageMaker.page = num;
+        history.push('/admin/member?page=' + num + '&keyword=' + searchInput.keyword + '&type=' + searchInput.type)
         memberService.getMemberList(num).then(res => {
             setMembers(res.data.response);
         });
+    }
+
+    const search = async (e) => {
+        e.preventDefault();
+        const res = await memberService.getMemberList(1, searchInput.keyword, searchInput.type)
+        setMembers(res.data.response)
+        history.push('/admin/member?page=' + page + '&keyword=' + searchInput.keyword + '&type=' + searchInput.type);
     }
 
     const ban = (member) => {
@@ -87,33 +102,37 @@ const MemberTable = () => {
             })
         })
     }
+
     const role = (member) => {
         memberService.changeAuth(member.email).then(res => {
             setMembers({
                 ...members, memberList: members.memberList.map(member => {
-
                     if (member.email === res.data.response.email)
                         return res.data.response;
-
                     return member;
                 })
             })
         })
     }
 
-
-    const list = members.memberList.map(member => {
-        return <tr key={member.email}>
+    const list = members.memberList?.map(member => {
+        return <tr className='hs-style' key={member.email}>
             <td>{member.email}</td>
-            <td>{member.name}</td>
+            <td><UserDetail member={member}/></td>
             <td>{member.birth}</td>
             <td>{member.phone}</td>
-            <td>{member.address} {member.detailAddress}</td>
             <td>{member.gender}</td>
-            <td onClick={() => ban(member)}
-                style={{textAlign: "center"}}>{member.banned ? "🔴" : "🟢"}</td>
+            <td onClick={() => ban(member)} style={{textAlign: "center"}}>
+                <span style={{cursor: "pointer"}}>{member.banned ? "🔴" : "🟢"} </span>
+            </td>
             <td>{member.removed ? "삭제" : "정상"}</td>
-            <td onClick={() => role(member)}>{member.roleSet[0]} </td>
+            <td onClick={() => role(member)}>
+                {member.roleSet.includes("ADMIN") ?
+                    <span style={{cursor: "pointer"}}> 관리자 </span>
+                    : member.roleSet.includes("AUTHOR") ?
+                        <span style={{cursor: "pointer"}}> 작가 </span>
+                        : <span style={{cursor: "pointer"}}> 일반회원 </span>}
+            </td>
             <td>{getFormatDate(new Date(member.regDate))}</td>
         </tr>
     })
@@ -124,41 +143,36 @@ const MemberTable = () => {
                 <Card className="strpied-tabled-with-hover">
                     <Card.Header>
                         <Card.Title as="h4">회원 리스트</Card.Title>
+
+                        <div className="pro-sidebar-search mb-55 mt-25">
+                            <form className="pro-sidebar-search-form">
+                                <select name="type" style={{width: "10%"}} onChange={searchOnChange}>
+                                    <option value='n'>이름</option>
+                                    <option value='e'>이메일</option>
+                                    <option value='a'>주소</option>
+                                </select>
+                                <input value={searchInput.keyword} onChange={searchOnChange} type="text"
+                                       name="keyword" placeholder="검색"/>
+                                <button style={{top: "70%"}} onClick={search}>
+                                    <i className="pe-7s-search"/>
+                                </button>
+                            </form>
+                        </div>
+
                         <p className="card-category">
                             회원정보
                         </p>
 
-
-                        <div className="shop-top-bar mb-35">
-                            <div className="select-shoing-wrap" >
-                                <div className="shop-select">
-                                    <select >
-                                        <option value="">선택</option>
-                                        <option value="n">이름</option>
-                                        <option value="e">이메일</option>
-                                        <option value="a">주소</option>
-                                    </select>
-                                </div>
-                                <div className="pro-sidebar-search mb-50 mt-25">
-                                    <form className="pro-sidebar-search-form">
-                                        <input type="text" placeholder="Search here..." />
-                                        <button>
-                                            <i className="pe-7s-search" />
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
                     </Card.Header>
                     <Card.Body className="table-full-width table-responsive px-0">
-                        <Table className="table-hover table-striped" style={{textAlign: "center"}}>
+                        <Table className="table-hover table-striped"
+                               style={{textAlign: "center", tableLayout: "fixed"}}>
                             <thead>
                             <tr>
                                 <th className="border-0">이메일</th>
                                 <th className="border-0">이름</th>
                                 <th className="border-0">생년월일</th>
-                                <th className="border-0">전화번호</th>                                <th className="border-0">주소</th>
+                                <th className="border-0">전화번호</th>
                                 <th className="border-0">성별</th>
                                 <th className="border-0">밴 여부</th>
                                 <th className="border-0">삭제 여부</th>
@@ -177,7 +191,6 @@ const MemberTable = () => {
         </Row>
     );
 }
-
 export default MemberTable;
 
 

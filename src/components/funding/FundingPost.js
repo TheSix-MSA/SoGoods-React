@@ -1,15 +1,41 @@
 import React, {Fragment} from 'react';
+import ImgCarousel from "./ImgCarousel";
+
+const inputStyle = {
+    marginTop:"5px",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    overflowX: "hidden",
+    maxWidth:"350px"
+}
 
 const FundingPost = (funding) => {
+
+    console.log('funding.productDTOs: ', funding.productDTOs)
+    const list = funding.productDTOs.map((productDTO, i)=>{
+
+        const part = productDTO.imgArr.map(img=>{
+
+            return {imgPath: img.imgSrc}
+        })
+
+        return (
+
+            <ImgCarousel tutorialSteps ={part} ></ImgCarousel>
+
+        )
+    })
+
     return (
         <div>
             <Fragment>
                 <div className="blog-details-top">
                     <h3 style={{textAlign:"center"}}>{funding.fundingDTO.title}</h3>
-                    <div className="blog-details-img">
+                    <div className="blog-details-img" >
                         <img
                             alt=""
-                            src={process.env.PUBLIC_URL + "/assets/img/blog/blog-5.jpg"}
+                            src={(funding.fundingDTO && funding.fundingDTO.imgSrc) || process.env.PUBLIC_URL+"/assets/img/default.png"}
+                            style={{objectFit:"cover"}}
                         />
                     </div>
                     <div className="blog-details-content">
@@ -25,6 +51,13 @@ const FundingPost = (funding) => {
                         <p>
                             {funding.fundingDTO.content}
                         </p>
+
+                        <div>
+
+                            {list}
+
+                        </div>
+
                     </div>
                     </div>
                     <div className="dec-img-wrapper">

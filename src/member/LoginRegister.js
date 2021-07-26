@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, {Fragment, useState} from "react";
-import { Link } from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import LayoutOne from "../components/layouts/header/LayoutOne";
@@ -13,7 +13,7 @@ import CodeDialogSlide from "./CodeDialog";
 import codeService from "./codeService";
 import FormCheckDialog from "./FormCheckDialog";
 import {useToasts} from "react-toast-notifications";
-import axios from "axios";
+import {ToastInformation, ToastWarning} from "../modules/toastModule";
 
 const initStateLogin = {
     email: "",
@@ -40,10 +40,9 @@ const initStateVerify = {
 
 const warningName = {type:""};
 
-const LoginRegister = ({ location }) => {
-
+const LoginRegister = () => {
+    const location = useLocation();
     const history = useHistory();
-    const {addToast} = useToasts();
     const info = useSelector(state=>state.login);
     const [loginForm, onChange] = useInputs(initStateLogin);
     const [signupForm, signupChange, setSignForm] = useInputs(initStateSignUp);
@@ -64,11 +63,8 @@ const LoginRegister = ({ location }) => {
         });
 
         dispatch(signin(result.data.response));
-        addToast(
-            "✨😘어서오세요 Sogoods입니다! 😘😘😘✨", {appearance: 'info', autoDismiss: true},
-        );
-        history.push("/");
-
+        ToastInformation("어서오세요 Sogoods입니다!");
+        history.push(location.state?location.state.from:"/");
     };
 
     /**
@@ -83,8 +79,10 @@ const LoginRegister = ({ location }) => {
 
         if (signupForm.gender === "1" || signupForm.gender === "3") {
             signupForm.gender = "남자"
-        }else{
+        }else if(signupForm.gender === "2" || signupForm.gender === "4"){
             signupForm.geder = "여자";
+        }else{
+            ToastWarning("올바른 주민번호를 입력해주세요");
         }
 
         if(signupForm.password !== signupForm.passwordCheck){
@@ -101,7 +99,6 @@ const LoginRegister = ({ location }) => {
 
         for(let formObj in signupForm) {
             if (signupForm[formObj] === "") {
-                console.log(formObj);
                 setWarningType({...warningType,type:formObj});
                 codeService.popUpWarningModal();
                 return;
@@ -113,9 +110,8 @@ const LoginRegister = ({ location }) => {
             method: 'POST',
             data: signupForm
         });
-        addToast(
-            "회원가입되셨습니다! 🎉", {appearance: 'info', autoDismiss: true},
-        );
+        ToastInformation("회원가입되셨습니다! 🎉");
+
         history.push("/");
     };
 
@@ -134,6 +130,7 @@ const LoginRegister = ({ location }) => {
             method: 'PUT',
             data: signupForm
         });
+        ToastInformation("이메일을 전송했습니다.")
         console.log("이메일인증코드", result);
         setVerifyForm({...verifyForm,verifyCode: result.data.response.code});
     };
@@ -145,10 +142,10 @@ const LoginRegister = ({ location }) => {
      */
     const codeCheck = (e)=>{
         e.preventDefault();
+
         if(verifyForm.verifyCode === signupForm.code){
             verifyForm['verify'] = true;
             verifyForm['verifyBtn'] = "2";
-            console.log(verifyForm);
             setVerifyForm({...verifyForm});
         }
     }
@@ -181,11 +178,9 @@ const LoginRegister = ({ location }) => {
     };
     const dispatch = useDispatch();
 
+
     return (
         <Fragment>
-            <div>
-                <button></button>
-            </div>
             <LayoutOne headerTop="visible">
                 <div className="login-register-area pt-100 pb-100">
                     <div className="container">
@@ -227,13 +222,6 @@ const LoginRegister = ({ location }) => {
                                                                 minLength={8}
                                                             />
                                                             <div className="button-box">
-                                                                <div className="login-toggle-btn">
-                                                                    <input type="checkbox"/>
-                                                                    <label className="ml-10">Remember me</label>
-                                                                    <Link to={process.env.PUBLIC_URL + "/"}>
-                                                                        Forgot Password?
-                                                                    </Link>
-                                                                </div>
                                                                 <div>
                                                                     <button onClick={loginBtn}>
                                                                         <span>Login</span>
@@ -295,6 +283,10 @@ const LoginRegister = ({ location }) => {
                                                                         style={{width: "70%"}}
                                                                         value={signupForm.code}
                                                                         onChange={signupChange}
+                                                                        onInput={({ target }) => {
+                                                                            target.value = target.value.replace(/[^0-9]/g, "");
+                                                                            target.value = target.value.replace(/,/g, "");
+                                                                        }}
                                                                     /> :
                                                                     <input
                                                                         name="code"
@@ -350,6 +342,10 @@ const LoginRegister = ({ location }) => {
                                                                     style={{width: "45%"}}
                                                                     maxLength={6}
                                                                     minLength={6}
+                                                                    onInput={({ target }) => {
+                                                                        target.value = target.value.replace(/[^0-9]/g, "");
+                                                                        target.value = target.value.replace(/,/g, "");
+                                                                    }}
                                                                 />
                                                                 <span
                                                                     style={{width: "10%", textAlign: "center"}}>-</span>
@@ -363,6 +359,10 @@ const LoginRegister = ({ location }) => {
                                                                         fontSize: "50px"
                                                                     }}
                                                                     maxLength={1}
+                                                                    onInput={({ target }) => {
+                                                                        target.value = target.value.replace(/[^0-9]/g, "");
+                                                                        target.value = target.value.replace(/,/g, "");
+                                                                    }}
                                                                 />
                                                                 <input
                                                                     name="dummy"

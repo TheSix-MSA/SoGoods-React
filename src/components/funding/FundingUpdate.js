@@ -7,6 +7,23 @@ import useInputs from "../../customHooks/useInputs";
 import fundingService from "./fundingService";
 import {useHistory, useLocation, useParams} from "react-router-dom";
 import {useSelector} from "react-redux";
+import productUpdateService from "../funding-attach/update/productUpdateService";
+import Button from "@material-ui/core/Button";
+import {useToasts} from "react-toast-notifications";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import ProductRegister from "../funding-attach/add/ProductRegister";
+import Dialog from "@material-ui/core/Dialog";
+import productService from "../funding-attach/add/productService";
+import ProductUpdateRegister from "../funding-attach/update/ProductUpdateRegister";
+import {ToastWarning} from "../../modules/toastModule";
+
+const imgStyle = {
+    display: 'block',
+    width: 100,
+    height: 50,
+    float: 'left',
+};
 
 const inputStyle = {
     margin:"10px"
@@ -18,56 +35,145 @@ const underInputStyle = {
     margin:"0 10px",
 }
 
-const initForm = {
+const btn ={
+    float: 'none',
+    margin:"10px"
+}
+
+const initFundingForm = {
     title:'',
     content:'',
     writer:'',
     email:'',
     dueDate:"",
-    targetAmount:0
+    targetAmount:0,
+    productDTOs:[]
 }
-
 const productDTOs = []
 
-// const initForm = {
-//     fundingDTO:{},
-//     productDTOs:[],
-//     favoriteCount:0
-// }
-
 const FundingUpdate = () => {
-   const info = useSelector(state=>state.login);
-   const history = useHistory();
-   let {fno} = useParams();
-   const [form, changeForm, setForm] = useInputs({...initForm});
-   const [productForm, changeProductForm, setProductForm] = useInputs(productDTOs);
 
-   const contentRef = useRef();
-   const refArray = useMemo(
-       ()=>[
-           contentRef
-   ]
-   ,[])
+   const info = useSelector(state=>state.login);
+
+   let {fno} = useParams();
+
+   const [fundingForm, changeFundingForm, setFundingForm] = useInputs({...initFundingForm});
+   const [productForm, changeProductForm, setProductForm] = useInputs([...productDTOs]);
+
+    const userInfo = useSelector(state=> state.login);
+    const [open, setOpen] = useState(false);
+
+    const history = useHistory();
+    const [flag, setFlag] = useState(false)
+
+
+    productUpdateService.setOpenFn(setOpen)
+    let productList = [];
 
     useEffect(()=>{
+
         fundingService.getOneFunding(fno).then(res=> {
-            console.log(res.response)
-            setForm({...res.response.fundingDTO})
-            setProductForm(res.response.productDTOs)
+
+            setFundingForm({...res.response.fundingDTO})
+            setProductForm([...res.response.productDTOs])
+
+            const fno = res.response.fundingDTO.fno
+            const pnoList = res.response.productDTOs.map(dto => dto.pno)// [123, 124]
+            console.log("Product DB에서 가져온 정보", res.response.productDTOs)
+
+            productList = res.response.productDTOs.map(dto =>
+                {
+                    return{
+                        text: {
+                            name: dto.name,
+                            des: dto.des,
+                            price: dto.price,
+                        },
+                        mainIdx: 0,
+                    }
+                }
+            )
+
+            fundingService.getA3src('FUNDING', [fno])
+                .then(res => {
+                    //펀딩대표이미지
+                    //res.data.response[0].fileName.split('_')[1]
+
+                    fundingService.getA3srcList('PRODUCT', pnoList, [0,1])
+                        .then(res=>{
+                            console.log("Attach DB에서 가져온 정보", res.data.response)
+
+                            productList = productList.map((product, idx) => {
+
+                                let pictures = res.data.response[idx].map(picture=>{
+                                    return {...picture, preview: picture.imgSrc, }
+                                })
+
+                                return {...product, pictures: pictures}
+                            })
+                            productUpdateService.setProductList(productList)
+                            setFlag(!flag)
+                        })
+
+                })
+
         })
     },[fno])
 
-    console.log(form);
 
-    const sendFormData = async () => {
-        console.log(form);
-        const result = await fundingService.updateFunding(fno, {...form});
+    const sendFormData = async (e) => {
+        e.preventDefault();
+
+        // 데이터 유효성 검사
+        // if(fundingForm.title==""){
+        //     ToastWarning(" 제목은 필수입력항목입니다.");
+        //     return;
+        // } else if (fundingForm.content===""){
+        //     ToastWarning("내용은 필수입력항목입니다.");
+        //     return;
+        // } else if (!form.dueDate){
+        //     ToastWarning("만기일은 필수입력항목입니다.");
+        //     return;
+        // } else if (form.targetAmount===null || form.targetAmount === 0){
+        //     ToastWarning("목표금액은 필수입력항목입니다.");
+        //     return;
+        // }
+
+        console.log(fundingForm);
+        const result = await fundingService.updateFunding(fno, {...fundingForm});
         console.log(result)
-        setForm({...initForm})
         history.push("/funding/list");
     }
 
+    const list = productUpdateService.getProductList().map((product, i)=>{
 
+        return (
+            <>
+                <li key={i}>
+                    <p onClick={()=>{productUpdateService.openDialogForEdit(i)}}>
+                        {product.text.name} :
+                        {product.text.desc}
+                    </p>
+                    <div>
+                        {product.pictures.map((file ,j)=>
+                            <div>
+                                <img key={j} data-idx={j}
+                                     src={file.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"}
+                                     style={imgStyle}/>
+                                <input type="radio"
+                                       name={`mainIdx_${i}`}
+                                      //checked={product.mainIdx == j?"checked":""}
+                                       value={j}
+                                       //onClick={(e)=>{setProductMainImage(e,i,j)}}
+                                       style={{flaot: 'left'}}/>
+                            </div>
+                        )}
+
+                    </div>
+                </li>
+            </>
+        )
+    })
 
     return (
         <div>
@@ -88,98 +194,108 @@ const FundingUpdate = () => {
                                                             </Nav.Link>
                                                         </Nav.Item>
                                                     </Nav>
-                                                    <div style={textStyle}>제목</div>
-                                                    <input
-                                                        style={inputStyle}
-                                                        type="title"
-                                                        name="title"
-                                                        value={form.title||""}
-                                                        onChange={changeForm}
-                                                    />
-                                                    <div style={textStyle}>내용</div>
-                                                    <input
-                                                        readOnly
-                                                        style={inputStyle}
-                                                        type="hidden"
-                                                        name="writer"
-                                                        value={form.writer||""}
-                                                        onChange={changeForm}
-                                                    />
-                                                    <input
-                                                        readOnly
-                                                        style={inputStyle}
-                                                        type="hidden"
-                                                        name="email"
-                                                        value={form.email ||""}
-                                                        onChange={changeForm}
-                                                    />
-                                                    <textarea
-                                                        style={inputStyle}
-                                                        type="text"
-                                                        name="content"
-                                                        value={form.content ||""}
-                                                        ref={contentRef}
-                                                        onChange={changeForm}
-                                                    />
-                                                    <h5 style={textStyle}>메인 이미지</h5>
-                                                    <input
-                                                        style={inputStyle}
-                                                        type="file"
-                                                        name="mainImage"
-                                                        onChange={changeForm}
-                                                    />
-                                                    <h5 style={textStyle}>상품등록</h5>
-                                                        <img src={""} alt={"상품 추가 아이콘"}/>
-                                                    <div style={{display:"flex"}}>
-                                                    <div style={{display:"flex" ,flexWrap:"wrap"}}>
-                                                    <h5 style={textStyle}>펀딩 만기일</h5>
-                                                    <input
-                                                        style={inputStyle}
-                                                        readOnly
-                                                        name="dueDate"
-                                                        //placeholder={form.fundingDTO.dueDate}
-                                                        value={form.dueDate ||""}
-                                                        type="text"
-                                                        onChange={changeForm}
-                                                        onBlur={(e) => (e.currentTarget.type = "text")}
-                                                        min={getFormatDate(new Date())}
-                                                    />
-                                                    </div>
-                                                    <div style={{display:"flex", flexWrap:"wrap"}}>
-                                                    <h5 style={textStyle}>펀딩 목표금액</h5>
-                                                    <input
-                                                        style={inputStyle}
-                                                        readOnly
-                                                        name="targetAmount"
-                                                        value={form.targetAmount ||""}
-                                                        //placeholder={form.fundingDTO.targetAmount}
-                                                        type="text"
-                                                        onChange={changeForm}
-                                                        onInput={({ target }) => {
-                                                            target.value = target.value.replace(/[^0-9]/g, "");
-                                                            target.value = target.value.replace(/,/g, "");
-                                                        }}
-                                                    />
-                                                    </div>
-                                                    </div>
-                                                    <div className="button-box">
-                                                        <button type="button"
-                                                                onClick={()=>sendFormData()}
-                                                                style={inputStyle}>
-                                                            <span>펀딩 등록하기</span>
-                                                        </button>
+                                                      <div style={textStyle}>제목</div>
+                                                        <input
+                                                            style={inputStyle}
+                                                            type="title"
+                                                            name="title"
+                                                            value={fundingForm.title||""}
+                                                            onChange={changeFundingForm}
+                                                        />
+                                                        <div style={textStyle}>내용</div>
+                                                            <input
+                                                                readOnly
+                                                                style={inputStyle}
+                                                                type="hidden"
+                                                                name="writer"
+                                                                value={fundingForm.writer||""}
+                                                            />
+                                                            <input
+                                                                readOnly
+                                                                style={inputStyle}
+                                                                type="hidden"
+                                                                name="email"
+                                                                value={fundingForm.email ||""}
+                                                            />
+                                                            <textarea
+                                                                style={inputStyle}
+                                                                type="text"
+                                                                name="content"
+                                                                value={fundingForm.content ||""}
+                                                                onChange={changeFundingForm}
+                                                            />
+                                                            <h5 style={textStyle}>메인 이미지</h5>
+                                                            <input
+                                                                style={inputStyle}
+                                                                type="file"
+                                                                name="mainImage"
+                                                                onChange={changeFundingForm}
+                                                            />
+                                                            <ul>
+                                                                {list}
+                                                            </ul>
+                                                            <h5 style={textStyle}>상품수정</h5>
+                                                            <Button style={btn} variant="outlined" color="primary" onClick={productUpdateService.openDialog}>
+                                                                상품 추가
+                                                            </Button>
+                                                                <div style={{display:"flex"}}>
+                                                                    <div style={{display:"flex" ,flexWrap:"wrap"}}>
+                                                                        <h5 style={textStyle}>펀딩 만기일</h5>
+                                                                        <input
+                                                                            style={inputStyle}
+                                                                            readOnly
+                                                                            name="dueDate"
+                                                                            value={fundingForm.dueDate ||""}
+                                                                            type="text"
+                                                                            onBlur={(e) => (e.currentTarget.type = "text")}
+                                                                        />
+                                                                    </div>
+                                                                    <div style={{display:"flex", flexWrap:"wrap"}}>
+                                                                        <h5 style={textStyle}>펀딩 목표금액</h5>
+                                                                        <input
+                                                                            style={inputStyle}
+                                                                            readOnly
+                                                                            name="targetAmount"
+                                                                            value={fundingForm.targetAmount ||""}
+                                                                            type="text"
+                                                                            onChange={changeFundingForm}
+                                                                            onInput={({ target }) => {
+                                                                                target.value = target.value.replace(/[^0-9]/g, "");
+                                                                                target.value = target.value.replace(/,/g, "");
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                    </div>
+                                                                        <div className="button-box">
+                                                                            <form className={"searchform"}>
+                                                                                <button className={"searchform__submit"}
+                                                                                        onClick={sendFormData}
+                                                                                        style={{height:"40px", position:"relative", margin:"10px", float:"right"}}> 수정
+                                                                                </button>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </Tab.Pane>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </Tab.Pane>
-                                    </div>
-                                </div>
+                                        </div>
+                                    </LayoutOne>
+                                </Fragment>
+                                <Dialog
+                                    open={open}
+                                    onClose={productUpdateService.closeDialog}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                    maxWidth='lg'>
+                                    <DialogTitle id="alert-dialog-title">{'상품 수정'}</DialogTitle>
+                                    <DialogContent>
+                                        <ProductUpdateRegister></ProductUpdateRegister>
+                                    </DialogContent>
+                                </Dialog>
                             </div>
-                        </div>
-                    </div>
-                </LayoutOne>
-            </Fragment>
-        </div>
     );
 };
 

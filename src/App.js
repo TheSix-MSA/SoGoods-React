@@ -2,21 +2,24 @@ import PropTypes from "prop-types";
 import React, { useEffect, Suspense, lazy } from "react";
 import ScrollToTop from "./modules/scroll-top";
 import {BrowserRouter as Router, Switch, Route, BrowserRouter} from "react-router-dom";
-
+import "./App.css";
 import { multilanguage, loadLanguages } from "redux-multilanguage";
 import {connect, useDispatch, useSelector} from "react-redux";
-import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
 import instance from "./modules/axiosConfig";
 import {useToasts} from "react-toast-notifications";
-import ProductInputList from "./pages/attach-dragNdrop/ProductInputList";
 import BoardRegister from "./board/BoardRegister";
 import BoardModify from "./board/BoardModify";
 import {loggedInUser, signin} from "./redux/member/loginSlice";
 import {refreshToken} from "./modules/refreshToken";
 import Confirmation from "./pages/order/Confirmation";
+import withAuth from "./hoc/withAuth";
+import getLeftDate from "./modules/dateCalc";
+import {ToastCenter, ToastError} from "./modules/toastModule";
 
+const AuthorApplication = lazy(()=>import( "./member/AuthorApplication"));
 //the six
 const FundingBoard = lazy(()=>import("./components/funding/FundingBoard"));
+const BoardRoute = lazy(()=>import("./board/BoardRoute"));
 const ProductInput = lazy(()=>import("./pages/attach-dragNdrop-2/ProductInputList"));
 
 
@@ -59,15 +62,21 @@ const App = (props) => {
     );
   });
 
+// 새로고침시 자동 로그인
   useEffect(() => {
-    console.log("asdasdasd")
-    const userData = JSON.parse(localStorage.getItem("userData"));
-    console.log(userData);
-    if(!email && userData) {
-      dispatch(loggedInUser(userData));
+    const lastActiveTime = JSON.parse(localStorage.getItem("lastActiveTime"));
+    const time = Math.abs(new Date()-new Date(lastActiveTime));
+    if(time/(1000*60*60)>2) {
+      localStorage.clear();
+    } else {
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      if(!email && userData) {
+        dispatch(loggedInUser(userData));
+      }
     }
   },[]);
 
+  // 사일런스 리프레시
   useEffect(() => {
       if(email && email !== "") {
         const interval = setInterval(() => {
@@ -80,10 +89,11 @@ const App = (props) => {
     },[email]);
 
 
-
+  // axios 인터셉터
   useEffect(() => {
     instance.interceptors.request.use(
         function (config) {
+          localStorage.setItem("lastActiveTime",JSON.stringify(new Date()));
           config.headers.Authorization = `Bearer ${(JSON.parse(localStorage.getItem("userData")))?.accessToken || ""}`;
           return config;
         },
@@ -94,9 +104,7 @@ const App = (props) => {
     instance.interceptors.response.use(
         (config) => {
           if(!config.data.success){
-            addToast(
-                config.data.error.message, {appearance: 'error',autoDismiss: true, id:"errorToast"}
-            );
+            ToastError(config.data.error.message);
             return Promise.reject(config.data.error.message);
           }
           return config;
@@ -108,14 +116,11 @@ const App = (props) => {
             });
             return Promise.reject();
           }
-          addToast(
-              error.response.data.error.message, {appearance: 'error', autoDismiss: true},
-          );
+          ToastCenter(error.response.data.error.message);
           return Promise.reject(error.response.data.error.message);
         }
     );
   }, []);
-  /* 로딩 끝 */
 
   return (
         <Router>
@@ -143,48 +148,31 @@ const App = (props) => {
                   component={HomeOnepageScroll}
                 />
 
-                 Homepages
-
                 <Route
                     path={process.env.PUBLIC_URL + "/funding"}
                     component={FundingBoard}
                 />
+                <Route
+                    path={process.env.PUBLIC_URL + "/board"}
+                    component={BoardRoute}
+                />
 
-                <Route
-                    path={"/board/:boardType/list/"}
-                    component={BlogNoSidebar}
-                />{/* 재연 - Board 목록 컴포넌트로 사용 */}
-
-                <Route
-                    exact
-                    path={process.env.PUBLIC_URL + "/:boardType/boardRegister"}
-                    component={BoardRegister}
-                /> {/* 재연 - Board 작성 컴포넌트로 사용 */}
-
-                <Route
-                  path={`/board/:boardType/:bno`}
-                  component={BlogDetailsStandard}
-                /> {/* 재연 - Board 상세보기 컴포넌트로 사용 */}
-                <Route
-                  path={`/board/modify/:boardType/:bno`}
-                  component={BoardModify}
-                /> {/* 재연 - Board 수정 컴포넌트로 사용 */}
 
                 {/* Other pages */}
 
                 <Route
                   path={process.env.PUBLIC_URL + "/my-account"}
-                  component={MyAccount}
+                  component={withAuth(MyAccount,["GENERAL","AUTHOR"])}
                 />
                 <Route
                   path={process.env.PUBLIC_URL + "/login-register"}
-                  component={LoginRegister}
+                  component={withAuth(LoginRegister,["ANONYMOUS"])}
                 />
 
 
                 <Route
                   path={process.env.PUBLIC_URL + "/wishlist"}
-                  component={Wishlist}
+                  component={withAuth(Wishlist,["GENERAL","AUTHOR"])}
                 />
                 <Route
                   path={process.env.PUBLIC_URL + "/confirmOrder"}
@@ -193,7 +181,7 @@ const App = (props) => {
 
                 <Route
                   path={process.env.PUBLIC_URL + "/checkout"}
-                  component={Checkout}
+                  component={withAuth(Checkout,["GENERAL","AUTHOR"])}
                 />
 
                 <Route
@@ -202,7 +190,11 @@ const App = (props) => {
                 />
                 <Route
                     path={process.env.PUBLIC_URL + "/admin"}
-                    component={Admin}
+                    component={withAuth(Admin,["ADMIN"])}
+                />
+                <Route
+                    path={process.env.PUBLIC_URL + "/author-application"}
+                    component={withAuth(AuthorApplication,["GENERAL"])}
                 />
 
 

@@ -3,8 +3,8 @@ import useInputs from "../../customHooks/useInputs";
 import repliesService from "../../service/repliesService";
 
 const initState = {
-    writer: "라이터",
-    email: "이메일",
+    writer: "",
+    email: "",
     content: "",
     groupId: 0,
     level: 0,
@@ -12,8 +12,9 @@ const initState = {
     keyValue: 0
 }
 
-const ReReplyInput = ({dto, bno, page}) => {
-    const [reReply, changeReReply, setReReply] = useInputs(initState);
+const ReReplyInput = ({dto, bno, page, user}) => {
+    const [reReply, changeReReply, setReReply] = useInputs({...initState,
+        writer:user.name.substr(0,user.name.length-1)+"*", email:user.email});
 
     const send = () => {
         /**
@@ -23,11 +24,8 @@ const ReReplyInput = ({dto, bno, page}) => {
         reReply.groupId = dto.groupId;
         reReply.parentId = dto.rno;
         repliesService.getRemoveInput();
-        repliesService.insertReply(reReply, page).then().catch();
+        repliesService.insertReply(reReply, page).then();
         setReReply({...reReply, content:""})
-        /***
-         * catch 문 채워줘야함
-         */
     }
 
     const turnOff = () => {

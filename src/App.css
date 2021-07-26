@@ -1,0 +1,40 @@
+@font-face {
+    font-family: 'scdream4';
+    src: url('./assets/SCDream4.otf');
+}
+.toastError{
+    z-index: 90 !important;
+    background-color: #ff9292 !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+}
+
+.toastCenter{
+    z-index: 90 !important;
+    background-color: bisque !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+    top: -20vh;
+}
+
+.toastInfo{
+    z-index: 90 !important;
+    background-color: bisque !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+}
+
+.toastInformation{
+    z-index: 90 !important;
+    background-color: rgb(30, 136, 229) !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+}
+
+.toastWarning{
+    z-index: 90 !important;
+    background-color: #ffdf95 !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+    margin-top: 100px;
+}

@@ -6,9 +6,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import myAccountService from "./myAccountService";
-import axios from "axios";
 import {useSelector} from "react-redux";
 import {useToasts} from "react-toast-notifications";
+import {ToastInformation} from "../modules/toastModule";
 
 const initNovelState = {
     isbn:"",
@@ -26,7 +26,6 @@ export default function NovelRegisterDialog({searchBook}) {
     const [bookInfo, setBook] = useState(initNovelState);
     const [errorFlag, setErrorFlag] = useState(false    );
     const userInfo = useSelector(state => state.login)
-    const {addToast} = useToasts();
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -36,17 +35,17 @@ export default function NovelRegisterDialog({searchBook}) {
         setOpen(false);
     };
 
+    /**
+     * 소설정보 가져오기.
+     */
     useEffect(() => {
-
         if (open) {
             setErrorFlag(false);
             myAccountService.searchNovelList(searchBook.isbn)
                 .then(novel => {
                     if (novel.errorCode) {
-                        console.log(novel);
                         setErrorFlag(true);
                     } else {
-                        console.log(novel.item[0]);
                         setBook({...novel.item[0]});
                     }
                 });
@@ -55,6 +54,9 @@ export default function NovelRegisterDialog({searchBook}) {
     }, [open,searchBook.isbn]);
 
 
+    /**
+     * 소설등록
+     */
     const registerNovel = () => {
         myAccountService.registerNovel({
             isbn: bookInfo.isbn13,
@@ -63,9 +65,10 @@ export default function NovelRegisterDialog({searchBook}) {
             publisher: bookInfo.publisher,
             email: userInfo.email
         }).then(value => {
-            addToast("작품이 등록되었습니다.", {appearance: 'info', autoDismiss: true});
+            ToastInformation("작품이 등록되었습니다.");
             handleClose();
             myAccountService.clearInput();
+            myAccountService.changeFlag();
         });
     }
 

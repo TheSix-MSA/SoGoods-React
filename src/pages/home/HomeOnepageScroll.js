@@ -1,9 +1,10 @@
 import React, { Fragment } from "react";
 import MetaTags from "react-meta-tags";
 import { Link } from "react-router-dom";
-import sliderData from "../../data/hero-sliders/scroll-slider.json";
+import sliderData from "./scroll-slider.json";
 import { SectionsContainer, Section, Header } from "react-fullpage";
 import HeaderOne from "../../components/layouts/header/HeaderOne";
+
 
 const HomeOnepageScroll = () => {
     const anchors = [];
@@ -44,8 +45,9 @@ const HomeOnepageScroll = () => {
                     {sliderData &&
                     sliderData.map((single, key) => {
                         return (
+                            <div className={`goods_slider${key}`}>
                             <Section key={key}>
-                                <div className="slider-section flone-fp-section">
+                                <div className="slider-section flone-fp-section" >
                                     <div className="container">
                                         <div className="row fullpage-slider-wrap-mrg">
                                             <div className="col-lg-6 col-md-6 col-sm-6 col-12 d-flex align-items-center">
@@ -62,7 +64,7 @@ const HomeOnepageScroll = () => {
                                                             className="animated"
                                                             to={process.env.PUBLIC_URL + single.url}
                                                         >
-                                                            SHOP NOW
+                                                            보러가기
                                                         </Link>
                                                     </div>
                                                 </div>
@@ -80,6 +82,7 @@ const HomeOnepageScroll = () => {
                                     </div>
                                 </div>
                             </Section>
+                            </div>
                         );
                     })}
                 </SectionsContainer>

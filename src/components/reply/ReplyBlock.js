@@ -17,16 +17,16 @@ const ReplyBlock = ({dto, deleteReply, bno, page, reReply, isReplying, updateRep
                                 {dto.content}{" "}
                             </p>
                             <div className="btnForReply">
-                                <div className="btn">
+                                <div>
                                     <span onClick={() => reReply(dto.rno)}>답글</span>
                                 </div>
                                 {user&&user.email===dto.email?
-                                    <div className="btn">
+                                    <div>
                                         <span onClick={() => updateReply(dto.rno)}>수정</span>
                                     </div>
                                 : null}
                                 {user&&(user.email===dto.email||user.roles.includes("ADMIN"))?
-                                    <div className="btn">
+                                    <div>
                                         <span onClick={() => deleteReply(dto.rno, bno)}>삭제</span>
                                     </div>
                                 :null}

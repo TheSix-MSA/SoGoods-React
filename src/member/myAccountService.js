@@ -216,10 +216,19 @@ const myAccountService = () => {
         return result
     };
 
+    const removeUser = async (email) => {
+        const result = await instance({
+            url: `/member/${email}`,
+            method: "DELETE",
+        });
+
+        return result
+    }
+
 
     return {getMyInfo, modifyInfo, searchNovelList, popUpDialogFn, setDialogFn, setCloseDialogFn, registerNovel,clearInput,
         setClearInputFn, getNovelList, setListFlag, changeFlag, removeNovel, registerIdentification, getOneBoardList, requestAuthor
-    ,getPager, setPager, setMovePage, movePage, changePagerFlag, setChangeType, changeCategory
+    ,getPager, setPager, setMovePage, movePage, changePagerFlag, setChangeType, changeCategory, removeUser
     }
 };
 

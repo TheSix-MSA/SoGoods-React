@@ -46,6 +46,13 @@ const fundingService = () => {
         movePage(page)
         return res;
     }
+    const getTotal = async () => {
+        const res = await instance({
+            url: `funding/total`,
+            method: 'get'
+        });
+        return res;
+    }
 
     const changeRemoved = async (fno, page) => {
         console.log("changeRemoved started")
@@ -62,6 +69,6 @@ const fundingService = () => {
         movePage = func;
     }
 
-    return {getFundingList, requestFundingList, setMovePage, changeRemoved, reject, setAuthorized}
+    return {getTotal,getFundingList, requestFundingList, setMovePage, changeRemoved, reject, setAuthorized}
 }
 export default fundingService();

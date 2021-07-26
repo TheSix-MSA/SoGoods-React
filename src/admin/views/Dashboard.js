@@ -64,6 +64,7 @@ function Dashboard() {
   const [funding, setFunding] = useState(initState);
   const [userCount, setUserCount] = useState({total:0,author:0});
   const [boardCount, setBoardCount] = useState({NOTICE: 0, NOVELIST: 0, FREE: 0});
+  const [fundingCount, setFundingCount] = useState("");
 
   useEffect(() => {
     fundingService.getFundingList(funding.pageMaker.page).then(res => {
@@ -74,6 +75,12 @@ function Dashboard() {
     })
     noticeService.getTotal().then((res)=>{
       setBoardCount(res.data.response);
+    })
+    fundingService.getTotal().then(res=>{
+      let num = String(res.data.response);
+      num = num.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+
+      setFundingCount(num);
     })
   }, [])
 
@@ -95,7 +102,7 @@ function Dashboard() {
                   <Col xs="7">
                     <div className="numbers">
                       <p className="card-category">총 회원수</p>
-                      <Card.Title as="h4">{userCount.total}</Card.Title>
+                      <Card.Title as="h4">{userCount.total}명</Card.Title>
                     </div>
                   </Col>
                 </Row>
@@ -121,7 +128,7 @@ function Dashboard() {
                   <Col xs="7">
                     <div className="numbers">
                       <p className="card-category">총 게시글 수</p>
-                      <Card.Title as="h4">{boardCount.FREE+boardCount.NOTICE+boardCount.NOVELIST}</Card.Title>
+                      <Card.Title as="h4">{boardCount.FREE+boardCount.NOTICE+boardCount.NOVELIST}개</Card.Title>
                     </div>
                   </Col>
                 </Row>
@@ -139,15 +146,15 @@ function Dashboard() {
             <Card className="card-stats">
               <Card.Body>
                 <Row>
-                  <Col xs="5">
+                  <Col xs="2">
                     <div className="icon-big text-center icon-warning">
                       <i className="nc-icon nc-light-3 text-success"></i>
                     </div>
                   </Col>
-                  <Col xs="7">
+                  <Col xs="10">
                     <div className="numbers">
-                      <p className="card-category">Revenue</p>
-                      <Card.Title as="h4">$ 1,345</Card.Title>
+                      <p className="card-category">모인 펀딩 금액</p>
+                      <Card.Title as="h4">{fundingCount}원</Card.Title>
                     </div>
                   </Col>
                 </Row>
@@ -205,35 +212,37 @@ function Dashboard() {
                           "Novelist Board",
                           "Notice Board",
                         ],
-                        // series: [
-                        //   [
-                        //     boardCount.FREE+boardCount.NOTICE+boardCount.NOVELIST,
-                        //   ],
-                        //   [
-                        //     boardCount.FREE,
-                        //   ],
-                        //   [
-                        //     boardCount.NOVELIST,
-                        //   ],
-                        //   [
-                        //     boardCount.NOTICE
-                        //   ],
-                        // ],
+                        //색상 분리
                         series: [
                           [
                             boardCount.FREE+boardCount.NOTICE+boardCount.NOVELIST,
-
+                          ],
+                          [
                             boardCount.FREE,
-
+                          ],
+                          [
                             boardCount.NOVELIST,
-
+                          ],
+                          [
                             boardCount.NOTICE
                           ],
                         ],
+                        // 한가지 색상
+                        // series: [
+                        //   [
+                        //     boardCount.FREE+boardCount.NOTICE+boardCount.NOVELIST,
+                        //
+                        //     boardCount.FREE,
+                        //
+                        //     boardCount.NOVELIST,
+                        //
+                        //     boardCount.NOTICE
+                        //   ],
+                        // ],
                       }}
                       type="Bar"
                       options={{
-                        seriesBarDistance: 140,
+                        seriesBarDistance: 230,
                         axisX: {
                           showGrid: false,
                         },
@@ -264,8 +273,7 @@ function Dashboard() {
                 </div>
                 <hr></hr>
                 <div className="stats">
-                  <i className="fas fa-check"></i>
-                  Data information certified
+                  Bar Chart for Boards
                 </div>
               </Card.Footer>
             </Card>
@@ -274,7 +282,7 @@ function Dashboard() {
             <Card>
               <Card.Header>
                 <Card.Title as="h4">작가와 일반회원 비율</Card.Title>
-                <p className="card-category">Last Campaign Performance</p>
+                <p className="card-category">User Ratio</p>
               </Card.Header>
               <Card.Body>
                 <div
@@ -291,14 +299,15 @@ function Dashboard() {
                   />
                 </div>
                 <div className="legend">
-                  <i className="fas fa-circle text-info"></i>
-                  AUTHOR <i className="fas fa-circle text-danger"></i>
+                  <i className="fas fa-circle text-danger"></i>
                   GENERAL
+                  <i className="fas fa-circle text-info"></i>
+                  AUTHOR
                 </div>
                 <hr></hr>
                 <div className="stats">
                   <i className="far fa-clock"></i>
-                  Campaign sent 2 days ago
+                  Donut Chart for Users
                 </div>
               </Card.Body>
             </Card>

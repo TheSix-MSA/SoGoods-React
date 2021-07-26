@@ -61,6 +61,9 @@ const fundingService = () => {
         return result
     }
 
+
+
+
     //펀딩 글 등록시 관련된 상품들 등록처리하기
     const registerProduct = async (fno, productList) => {
         const result = await instance({

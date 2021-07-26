@@ -66,6 +66,8 @@ const FundingUpdate = () => {
 
    const [fundingForm, changeFundingForm, setFundingForm] = useInputs({...initFundingForm});
    const [productForm, changeProductForm, setProductForm] = useInputs([...productDTOs]);
+   const [prodDel, setProdDel] = useState([])
+
 
     const {addToast} = useToasts();
     const userInfo = useSelector(state=> state.login);
@@ -127,15 +129,28 @@ const FundingUpdate = () => {
     },[fno])
 
 
+    console.log(productUpdateService.getProductList())
+
     const sendFormData = async (e) => {
         e.preventDefault();
-        const result = await fundingService.updateFunding(fno, {...fundingForm});
+        await fundingService.updateFunding(fno, {...fundingForm});
+
+
         history.push("/funding/list");
     }
 
     const setProductMainImage = (e, productIdx, pictureIdx)=>{
         productUpdateService.getProductList()[productIdx].mainIdx = pictureIdx
     }
+
+    const productDelete = (product, idx) => {
+        const anoList = product.pictures.map(picture=>picture.fileName)
+        productUpdateService.getProductList().splice(idx, 1)
+        setProdDel([...prodDel, ...anoList])
+    }
+
+
+
 
     const list = productUpdateService.getProductList().map((product, i)=>{
 
@@ -145,6 +160,9 @@ const FundingUpdate = () => {
                     <h3 style={{marginTop: '32px'}}>상품 {i+1}
                         <Button style={editBtn} variant="outlined" color="primary" onClick={()=>{productUpdateService.openDialogForEdit(i)}}>
                             수정
+                        </Button>
+                        <Button style={editBtn} variant="outlined" color="primary" onClick={()=>{productDelete(product, i)}}>
+                            삭제
                         </Button>
                     </h3>
                     <p>

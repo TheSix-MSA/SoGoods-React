@@ -19,6 +19,8 @@ const productUpdateService = ()=>{
         mainIdx: 0,
     }
 
+
+
     const pictureToInsert = [];
     const pictureToDelete = [];
     const getPictureToInsert = () => pictureToInsert

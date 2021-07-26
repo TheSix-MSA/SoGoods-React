@@ -26,6 +26,9 @@ const orderServices = () => {
     }
 
     const kakaoPayApprovePayment = async (params) => {
+
+        console.log("From service",params)
+
         const data = await axios.post("/v1/payment/approve", params, {
             headers: {
                 Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_ADMIN_KEY}`,

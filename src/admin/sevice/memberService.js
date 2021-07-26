@@ -1,4 +1,5 @@
 import instance from "../../modules/axiosConfig";
+import {ToastInformation, ToastWarning} from "../../modules/toastModule";
 
 const memberService = () => {
     let render;
@@ -58,7 +59,6 @@ const memberService = () => {
             method: 'post'
         })
         render()
-        console.log(result)
         return result;
     }
 

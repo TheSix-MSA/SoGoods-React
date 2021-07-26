@@ -5,6 +5,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import ProductRegister from "./ProductRegister";
 import productService from "./productService";
+import productUpdateService from "./productUpdateService";
+import ProductUpdateRegister from "./ProductUpdateRegister";
 
 const imgStyle = {
     display: 'block',
@@ -17,13 +19,11 @@ const btn ={
 }
 
 const ProductUpdateInputList = () => {
-    console.log('1 랜더링')
     const [open, setOpen] = useState(false);
     
-    productService.setOpenFn(setOpen)
+    productUpdateService.setOpenFn(setOpen)
 
     const list = productService.getProductList().map((product, i)=>{
-        console.log(product)
         product.pictures.map((picture )=> Object.assign(picture, {
             preview: URL.createObjectURL(picture)
         }))
@@ -41,7 +41,6 @@ const ProductUpdateInputList = () => {
     })
 
     useEffect(() => () => {
-        console.log('uesEffect...1')
 
         // Make sure to revoke the data uris to avoid memory leaks
         //  productService.getProductList().map(product => {
@@ -50,7 +49,6 @@ const ProductUpdateInputList = () => {
         //          URL.revokeObjectURL(file.preview)
         //      });
         //  })
-        console.log('productService.getProductList(): ', productService.getProductList())
     }, [open]);
 
     return (
@@ -76,7 +74,7 @@ const ProductUpdateInputList = () => {
                 maxWidth='lg'>
                 <DialogTitle id="alert-dialog-title">{'상품 등록/수정'}</DialogTitle>
                 <DialogContent>
-                    <ProductRegister></ProductRegister>
+                    <ProductUpdateRegister></ProductUpdateRegister>
                 </DialogContent>
             </Dialog>
         </div>

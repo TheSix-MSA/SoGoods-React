@@ -36,9 +36,9 @@ const textStyle = {
 }
 const imgStyle = {
     display: 'block',
-    width: 100,
-    height: 50,
-    float: 'left',
+    width: 160,
+    height: 110,
+    // float: 'left',
 };
 
 const btn ={
@@ -147,10 +147,11 @@ const FundingRegister = () => {
                     <p onClick={()=>{productService.openDialogForEdit(i)}}>
                        <b>상품명:</b> {product.text.name}
                     </p>
+
                     <div style={{width: "100%",
-                                overflow: "hidden" }}>
+                                overflow: "hidden", display:"grid", gridTemplateColumns: "1fr 1fr 1fr" ,gridTemplateRows: "1fr 1fr", marginTop:"20px" }}>
                         {product.pictures.map((file ,j)=>
-                            <div style={{width: "30%", margin: 0, float: "left"}}>
+                            <div style={{width: "30%", margin: 0}}>
                                 <label>
                                     <img key={j} data-idx={j}
                                          src={file.preview||process.env.PUBLIC_URL+"/assets/img/default.png"}
@@ -235,7 +236,7 @@ const FundingRegister = () => {
                                                         onChange={changeForm}
                                                     />
                                                     <b>메인 이미지</b><br></br>
-                                                    {fundingMainFile && <img width={"70px"} height={"70px"} src={fundingMainFile.preview}/> }
+                                                    {fundingMainFile && <img width={"120px"} height={"120px"} src={fundingMainFile.preview}/> }
 
                                                     <Button style={btn} variant="outlined" color="primary" onClick={clickFile}>
                                                         {fundingMainFile? '메인 이미지 변경' : '메인 이미지 추가'}

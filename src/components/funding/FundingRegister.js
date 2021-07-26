@@ -15,7 +15,7 @@ import {useSelector, } from "react-redux";
 import {useToasts} from "react-toast-notifications";
 import {useHistory} from "react-router-dom";
 import axios from "axios";
-import {ToastCenter, ToastWarning} from "../../modules/toastModule";
+import {ToastCenter, ToastInformation, ToastSuccessRegister, ToastWarning} from "../../modules/toastModule";
 
 const inputStyle = {
     margin:"10px"
@@ -53,7 +53,7 @@ const initState = {
 const FundingRegister = () => {
 
     const [form, changeForm, setForm] = useInputs({...initState});
-    const [fundingMainFile, setFundingMainFile] = useState(null);
+    const [fundingMainFile, setFundingMainFile] = useState({});
     const userInfo = useSelector(state=> state.login);
     const [open, setOpen] = useState(false);
 
@@ -112,13 +112,17 @@ const FundingRegister = () => {
         }
 
         setForm({...initState})
-
         productService.initProductList()
 
+        ToastSuccessRegister("펀딩 승인까지 최소 2~3일이 소요될 수 있습니다.");
 
         if(result.data.success){
             history.push("/funding/list");
         }
+    }
+
+    const clickFile = () => {
+        document.getElementById("file").click()
     }
 
     const setProductMainImage = (e, productIdx, pictureIdx)=>{
@@ -211,10 +215,13 @@ const FundingRegister = () => {
                                                         placeholder="내용을 입력하세요."
                                                         onChange={changeForm}
                                                     />
-                                                     <h5 style={textStyle}>메인 이미지</h5>
+                                                    <Button style={btn} variant="outlined" color="primary" onClick={clickFile}>
+                                                        메인 이미지 추가
+                                                    </Button>
+                                                    <h3></h3>
                                                     <input
-                                                        required
-                                                        style={inputStyle}
+                                                        id="file"
+                                                        style={{display:"none"}}
                                                         type="file"
                                                         name="mainImage"
                                                         onChange={(e)=>{setFundingMainFile(e.target.files[0])}}

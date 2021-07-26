@@ -24,7 +24,6 @@ const buttonStyle = {
     outLine:"0",
     color:"white",
     cursor:"pointer"
-
 }
 
 const initFavorite = {

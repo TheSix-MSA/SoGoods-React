@@ -260,7 +260,6 @@ const FundingUpdate = () => {
                                                             <ul>
                                                                 {list}
                                                             </ul>
-
                                                             <Button style={btn} variant="outlined" color="primary" onClick={productUpdateService.openDialog}>
                                                                 상품 추가
                                                             </Button>

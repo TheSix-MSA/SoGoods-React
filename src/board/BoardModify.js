@@ -7,6 +7,7 @@ import boardService from "./boardService";
 import {useToasts} from "react-toast-notifications";
 import {TextField} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
+import {ToastTopRight} from "../modules/toastModule";
 
 const initState = {
     title: '',
@@ -21,13 +22,14 @@ const BoardModify = ({match}) => {
     const history = useHistory();
 
     const modify = () => {
-        if (board.title === "" || board.title === undefined || board.title === null) {
-            addToast("제목을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
+        if (!board.title) {
+            ToastTopRight("💨제목을 입력해주세요.");
             return;
-        } else if (board.content === "" || board.content === undefined || board.content === null) {
-            addToast("내용을 입력해주세요.", {appearance: 'warning', autoDismiss: true});
+        } else if (!board.content) {
+            ToastTopRight("💨내용을 입력해주세요.");
             return;
         }
+
         boardService.modifyBoard(bno.current, board, boardType.current).then(res => {
             setBoard({...res})
             if (boardType.current.includes("NOTICE")) {

@@ -1,5 +1,6 @@
 import React, {Fragment} from 'react';
 import ImgCarousel from "./ImgCarousel";
+import {useHistory} from "react-router-dom";
 
 const inputStyle = {
     marginTop:"5px",
@@ -13,24 +14,22 @@ const FundingPost = (funding) => {
 
     console.log('funding.productDTOs: ', funding.productDTOs)
     const list = funding.productDTOs.map((productDTO, i)=>{
-
         const part = productDTO.imgArr.map(img=>{
-
             return {imgPath: img.imgSrc}
         })
 
         return (
 
-            <ImgCarousel tutorialSteps ={part} ></ImgCarousel>
-
+                <ImgCarousel tutorialSteps = {part} ></ImgCarousel>
         )
     })
+
 
     return (
         <div>
             <Fragment>
                 <div className="blog-details-top">
-                    <h3 style={{textAlign:"center"}}>{funding.fundingDTO.title}</h3>
+                    <h2 style={{textAlign:"center", overflowWrap:"break-word"}}>{funding.fundingDTO.title}</h2>
                     <div className="blog-details-img" >
                         <img
                             alt=""
@@ -47,17 +46,17 @@ const FundingPost = (funding) => {
                     </div>
                     <hr/>
                     <div>
-                        <div><h4>펀딩 상세내용</h4></div>
-                        <p>
-                            {funding.fundingDTO.content}
-                        </p>
-
-                        <div>
-
-                            {list}
-
+                        <div style={{overflowWrap:"break-word", marginBottom:"20px"}}>
+                            <h4>펀딩 상세내용</h4>
+                            <p>
+                                {funding.fundingDTO.content}
+                            </p>
                         </div>
-
+                        <hr/>
+                        <h4>제품 상세내용</h4>
+                        <div style={{display:"flex"}}>
+                            {list}
+                        </div>
                     </div>
                     </div>
                     <div className="dec-img-wrapper">
@@ -66,15 +65,6 @@ const FundingPost = (funding) => {
                     </div>
                     <div className="tag-share">
                     </div>
-                    {/*<div className="next-previous-post">*/}
-                    {/*  <Link to={process.env.PUBLIC_URL + "/blog-details-standard"}>*/}
-                    {/*    {" "}*/}
-                    {/*    <i className="fa fa-angle-left" /> prev post*/}
-                    {/*  </Link>*/}
-                    {/*  <Link to={process.env.PUBLIC_URL + "/blog-details-standard"}>*/}
-                    {/*    next post <i className="fa fa-angle-right" />*/}
-                    {/*  </Link>*/}
-                    {/*</div>*/}
             </Fragment>
 
         </div>

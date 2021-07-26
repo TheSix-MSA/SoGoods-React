@@ -6,14 +6,13 @@ import {useSelector} from "react-redux";
 import Button from "@material-ui/core/Button";
 
 const BlogPost = ({data, boardType}) => {
+    const { boardListRequestDTO } = useSelector(state => state.board)
     const {roles} = useSelector(state => state.login)
     const history = useHistory()
     const location = useLocation()
     const {email, name} = useSelector(state => state.login)
-    console.log(data)
-    console.log(email, name)
     const goList = () => {
-        history.push(`/board/${boardType}/list/1`)
+        history.push(`/board/${boardType}/list?page=${boardListRequestDTO.page}&keyword=${boardListRequestDTO.keyword}&type=${boardListRequestDTO.type}`)
     }
     const modify = () => {
         history.push(`/board/modify/${boardType}/${data.bno}`)

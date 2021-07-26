@@ -1,43 +1,52 @@
-import React, {Fragment, useEffect, useMemo, useRef, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import LayoutOne from "../layouts/header/LayoutOne";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
-import getFormatDate from "../../modules/getFormatDate";
 import useInputs from "../../customHooks/useInputs";
 import fundingService from "./fundingService";
-import {useHistory, useLocation, useParams} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import {useSelector} from "react-redux";
 import productUpdateService from "../funding-attach/update/productUpdateService";
 import Button from "@material-ui/core/Button";
-import {useToasts} from "react-toast-notifications";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import ProductRegister from "../funding-attach/add/ProductRegister";
 import Dialog from "@material-ui/core/Dialog";
-import productService from "../funding-attach/add/productService";
 import ProductUpdateRegister from "../funding-attach/update/ProductUpdateRegister";
 import {ToastWarning} from "../../modules/toastModule";
-
-const imgStyle = {
-    display: 'block',
-    width: 100,
-    height: 50,
-    float: 'left',
-};
+import productService from "../funding-attach/add/productService";
 
 const inputStyle = {
     margin:"10px"
 }
+
+const radioBtnStyle = {
+    width: "20px",
+    margin: "6px",
+}
+
+const imgStyle = {
+    width: 100,
+    height: 50,
+    float: 'left',
+};
+const textArea = {
+    resize:"none",
+    margin:"10px",
+    height:"300px"
+}
+
 const textStyle = {
     margin:"0 10px"
 }
-const underInputStyle = {
-    margin:"0 10px",
-}
 
 const btn ={
-    float: 'none',
+    clear: "both",
     margin:"10px"
+}
+
+const editBtn = {
+    marginLeft: "16px",
+    height: "20px",
 }
 
 const initFundingForm = {
@@ -53,18 +62,14 @@ const productDTOs = []
 
 const FundingUpdate = () => {
 
-   const info = useSelector(state=>state.login);
-
    let {fno} = useParams();
-
    const [fundingForm, changeFundingForm, setFundingForm] = useInputs({...initFundingForm});
    const [productForm, changeProductForm, setProductForm] = useInputs([...productDTOs]);
 
-    const userInfo = useSelector(state=> state.login);
     const [open, setOpen] = useState(false);
-
+    const [mainImg, setMainImg] = useState([]);
     const history = useHistory();
-    const [flag, setFlag] = useState(false)
+    const [flag, setFlag] = useState(false);
 
 
     productUpdateService.setOpenFn(setOpen)
@@ -79,7 +84,6 @@ const FundingUpdate = () => {
 
             const fno = res.response.fundingDTO.fno
             const pnoList = res.response.productDTOs.map(dto => dto.pno)// [123, 124]
-            console.log("Product DB에서 가져온 정보", res.response.productDTOs)
 
             productList = res.response.productDTOs.map(dto =>
                 {
@@ -101,7 +105,6 @@ const FundingUpdate = () => {
 
                     fundingService.getA3srcList('PRODUCT', pnoList, [0,1])
                         .then(res=>{
-                            console.log("Attach DB에서 가져온 정보", res.data.response)
 
                             productList = productList.map((product, idx) => {
 
@@ -124,48 +127,57 @@ const FundingUpdate = () => {
     const sendFormData = async (e) => {
         e.preventDefault();
 
-        // 데이터 유효성 검사
-        // if(fundingForm.title==""){
-        //     ToastWarning(" 제목은 필수입력항목입니다.");
-        //     return;
-        // } else if (fundingForm.content===""){
-        //     ToastWarning("내용은 필수입력항목입니다.");
-        //     return;
-        // } else if (!form.dueDate){
-        //     ToastWarning("만기일은 필수입력항목입니다.");
-        //     return;
-        // } else if (form.targetAmount===null || form.targetAmount === 0){
-        //     ToastWarning("목표금액은 필수입력항목입니다.");
-        //     return;
-        // }
+        //데이터 유효성 검사
+        if(fundingForm.title==""){
+            ToastWarning(" 제목은 필수입력항목입니다.");
+            return;
+        } else if (fundingForm.content===""){
+            ToastWarning("내용은 필수입력항목입니다.");
+            return;
+        } else if (!fundingForm.dueDate){
+            ToastWarning("만기일은 필수입력항목입니다.");
+            return;
+        } else if (fundingForm.targetAmount===null || fundingForm.targetAmount === 0){
+            ToastWarning("목표금액은 필수입력항목입니다.");
+            return;
+        }
 
         console.log(fundingForm);
         const result = await fundingService.updateFunding(fno, {...fundingForm});
-        console.log(result)
         history.push("/funding/list");
     }
+
+    // const setProductMainImage = (e, productIdx, pictureIdx)=>{
+    //     productUpdateService.getProductList()[productIdx].mainIdx = pictureIdx
+    // }
 
     const list = productUpdateService.getProductList().map((product, i)=>{
 
         return (
             <>
                 <li key={i}>
-                    <p onClick={()=>{productUpdateService.openDialogForEdit(i)}}>
-                        {product.text.name} :
-                        {product.text.desc}
+                    <h3 style={{marginTop: '32px'}}>상품 {i+1}
+                        <Button style={editBtn} variant="outlined" color="primary" onClick={()=>{productUpdateService.openDialogForEdit(i)}}>
+                            수정
+                        </Button>
+                    </h3>
+                    <p>
+                        상품명 : {product.text.name}
                     </p>
-                    <div>
+                    <div style={{width: "100%",
+                                overflow: "hidden" }}>
                         {product.pictures.map((file ,j)=>
-                            <div>
+                            <div style={{width: "30%", margin: 0, float: "left"}}>
+                                <label>
                                 <img key={j} data-idx={j}
                                      src={file.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"}
                                      style={imgStyle}/>
                                 <input type="radio"
                                        name={`mainIdx_${i}`}
-                                      //checked={product.mainIdx == j?"checked":""}
                                        value={j}
-                                       //onClick={(e)=>{setProductMainImage(e,i,j)}}
-                                       style={{flaot: 'left'}}/>
+                                       onClick={(e)=>{setProductMainImage(e,i,j)}}
+                                       style={radioBtnStyle}/>
+                                </label>
                             </div>
                         )}
 
@@ -174,6 +186,17 @@ const FundingUpdate = () => {
             </>
         )
     })
+
+    const clickFile = () => {
+        document.getElementById("file").click()
+    }
+
+    const setProductMainImage = (e)=>{
+       const file = e.target.files[0];
+        console.log(file);
+       setMainImg(file)
+    }
+
 
     return (
         <div>
@@ -218,23 +241,26 @@ const FundingUpdate = () => {
                                                                 value={fundingForm.email ||""}
                                                             />
                                                             <textarea
-                                                                style={inputStyle}
+                                                                style={textArea}
                                                                 type="text"
                                                                 name="content"
                                                                 value={fundingForm.content ||""}
                                                                 onChange={changeFundingForm}
                                                             />
-                                                            <h5 style={textStyle}>메인 이미지</h5>
+                                                            <Button style={btn} variant="outlined" color="primary" onClick={clickFile}>
+                                                                메인 이미지 추가
+                                                            </Button>
                                                             <input
-                                                                style={inputStyle}
+                                                                id="file"
+                                                                style={{display:"none"}}
                                                                 type="file"
                                                                 name="mainImage"
-                                                                onChange={changeFundingForm}
+                                                                onChange={setProductMainImage}
                                                             />
                                                             <ul>
                                                                 {list}
                                                             </ul>
-                                                            <h5 style={textStyle}>상품수정</h5>
+
                                                             <Button style={btn} variant="outlined" color="primary" onClick={productUpdateService.openDialog}>
                                                                 상품 추가
                                                             </Button>

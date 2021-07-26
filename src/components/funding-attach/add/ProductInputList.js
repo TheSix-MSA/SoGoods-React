@@ -17,7 +17,6 @@ const btn ={
 }
 
 const ProductInputList = () => {
-    console.log('1 랜더링')
     const [open, setOpen] = useState(false);
     
     productService.setOpenFn(setOpen)

@@ -2281,6 +2281,18 @@ Copyright (c) 2015 Daniel Eden
   fill: none;
   stroke-width: 10px; }
 
+.ct-bar:nth-child(1){
+  stroke: #379683 !important;
+}
+
+.ct-bar:nth-child(2){
+  stroke: #91A453 !important;
+}
+
+.ct-bar:nth-child(3){
+  stroke: #EFB200 !important;
+}
+
 .ct-slice-donut {
   fill: none;
   stroke-width: 60px; }

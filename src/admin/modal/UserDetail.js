@@ -20,7 +20,7 @@ export default function UserDetail({member}) {
             <span onClick={handleClickOpen} style={{cursor: "pointer", color:""}}>
                 {member.name}
             </span>
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title"  style={{minWidth:"40vw"}} maxWidth={"md"} fullWidth={true}>
                 <DialogTitle id="form-dialog-title">회원 정보</DialogTitle>
 
                 <Tab.Container>

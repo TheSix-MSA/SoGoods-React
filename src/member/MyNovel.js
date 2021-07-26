@@ -33,10 +33,6 @@ const MyNovel = () => {
                 <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
                     <div className="entries-info text-center">
                         <p><strong>ISBN</strong></p>
-                        <p>Paul Park </p>
-                        <p>Lorem ipsum dolor set amet</p>
-                        <p>NYC</p>
-                        <p>New York</p>
                     </div>
                 </div>
                 <div className="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">

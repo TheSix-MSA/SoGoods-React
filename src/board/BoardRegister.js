@@ -29,6 +29,21 @@ const BoardRegister = ({match}) => {
     const titleRef = useRef();
     const contentRef = useRef();
 
+    let boardName = "";
+    switch (boardType.current) {
+        case "FREE":
+            boardName = "자유게시판";
+            break;
+        case "NOVELIST":
+            boardName = "작가게시판";
+            break;
+        case "NOTICE":
+            boardName = "공지사항"
+            break;
+        default:
+            boardName= "치명적인 오류 게시판";
+            break;
+    }
     const register = (e) => {
         e.preventDefault();
         if (!board.title) {
@@ -62,7 +77,7 @@ const BoardRegister = ({match}) => {
                                             <div className="login-register-wrapper">
                                                 <Tab.Container>
                                                     <div className="login-form-container">
-                                                    <h3> 글작성 </h3>
+                                                    <h3> {boardName} 글작성 </h3>
                                                         <div className="login-register-form">
                                                             <TextField
                                                                 id="standard-basic"

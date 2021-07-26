@@ -147,12 +147,15 @@ const FundingSideBar = (funding) => {
                         <h4>{p.price}원</h4>
                             <h6>[ 상세 설명 ]</h6>
                             <h6 style={{marginBottom:"15px"}}>{p.des}</h6>
-                        {/* cart count button */}
-                        <div style={{display:"flex"}}>
-                            <button style={buttonStyle} onClick={()=> deleteCart(p)}>-</button>
-                                <div style={{margin:"0 5px"}}>{p.count}개</div>
-                            <button style={buttonStyle} onClick={()=> addCart(p)}>+</button>
-                        </div>
+                        {funding.fundingDTO.success ?
+                            <></>
+                            :
+                            <div style={{display: "flex"}}>
+                                <button style={buttonStyle} onClick={() => deleteCart(p)}>-</button>
+                                <div style={{margin: "0 5px"}}>{p.count}개</div>
+                                <button style={buttonStyle} onClick={() => addCart(p)}>+</button>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -169,40 +172,42 @@ const FundingSideBar = (funding) => {
                  <h4>{Math.ceil(funding.fundingDTO.totalAmount/funding.fundingDTO.targetAmount*100)}% 달성</h4>
                  <h4>총 펀딩액 {funding.fundingDTO.totalAmount}원 </h4>
                  <br/>
-                 {/* funding favorite */}
-                 <div style={{width:"100%"}}>
-                     <div style={{fontSize:"25px", lineHeight:"150%", cursor:"pointer",display:"flex"}} onClick={clickFavorite}>
-                         { favList.find(checkUser) ? '💜':'♡'}
-                        <div style={{fontSize:"20px", margin:"0 10px"}}>{favCount}</div>
-                     </div>
-                 </div>
                  {/* funding button */}
                  {funding.fundingDTO.success ?
                      <div style={{marginTop:"30px"}}>
                          <h3>종료된 펀딩입니다</h3>
                      </div>
                      :
-                 <form className={"searchform"}>
-                     {purchasable ?
-                         <Link to={{
-                             pathname: "/checkout",
-                             state: {
-                                 cartList,
-                                 fno: funding.fundingDTO.fno
-                             }
-                         }}>
-                             <button className={"searchform__submit"}
-                                     style={{height: "50px", width: "100%", position: "relative", marginTop: "10px"}}>
-                                 펀딩 참여하기
+                     <>
+                     {/* funding favorite */}
+                     <div style={{width:"100%"}}>
+                         <div style={{fontSize:"25px", lineHeight:"150%", cursor:"pointer",display:"flex"}} onClick={clickFavorite}>
+                             { favList.find(checkUser) ? '💜':'♡'}
+                             <div style={{fontSize:"20px", margin:"0 10px"}}>{favCount}</div>
+                         </div>
+                     </div>
+                     <form className={"searchform"}>
+                         {purchasable ?
+                             <Link to={{
+                                 pathname: "/checkout",
+                                 state: {
+                                     cartList,
+                                     fno: funding.fundingDTO.fno
+                                 }
+                             }}>
+                                 <button className={"searchform__submit"}
+                                         style={{height: "50px", width: "100%", position: "relative", marginTop: "10px"}}>
+                                     펀딩 참여하기
+                                 </button>
+                             </Link>
+                             :
+                             <button className={"searchform__submit"} disabled={true}
+                                     style={{height: "50px", backgroundColor: "grey", width: "100%", position: "relative", marginTop: "10px"}}>
+                                 상품을 선택해 주세요
                              </button>
-                         </Link>
-                         :
-                         <button className={"searchform__submit"} disabled={true}
-                                 style={{height: "50px", backgroundColor: "grey", width: "100%", position: "relative", marginTop: "10px"}}>
-                             상품을 선택해 주세요
-                         </button>
-                     }
-                 </form>
+                         }
+                     </form>
+                     </>
                  }
              </div>
          </div>
@@ -211,11 +216,11 @@ const FundingSideBar = (funding) => {
     // 제품 수정 삭제 버튼 -> 게시글 작성자가 접근 했을 때만 보여짐
     const update = (
         <div style={{ height:"42px", display:"flex", justifyContent:"space-around"}}>
-            {/*<form className={"searchform"} style={{width:"50%"}}>*/}
-            {/*    <button className={"searchform__submit"} style={{height:"50px", width:"100%",position:"relative", margin:"5px 5px", borderRight:"1px solid white", boxSizing:"border-box"}}*/}
-            {/*            onClick={()=>toUpdate(funding.fundingDTO.fno)}>수정*/}
-            {/*    </button>*/}
-            {/*</form>*/}
+            <form className={"searchform"} style={{width:"50%"}}>
+                <button className={"searchform__submit"} style={{height:"50px", width:"100%",position:"relative", margin:"5px 5px", borderRight:"1px solid white", boxSizing:"border-box"}}
+                        onClick={()=>toUpdate(funding.fundingDTO.fno)}>수정
+                </button>
+            </form>
             <form className={"searchform"} style={{width:"50%"}} >
                 <button className={"searchform__submit"} style={{height:"50px", width:"100%" ,position:"relative", margin:"5px 5px"}}
                         onClick={()=> deleteFunding(funding.fundingDTO.fno)}>삭제

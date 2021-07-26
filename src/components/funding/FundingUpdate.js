@@ -59,27 +59,23 @@ const initFundingForm = {
     targetAmount:0,
     productDTOs:[]
 }
-const toBeDeletedDTO = {}
-const toBeAddedDTO = {}
+const toBeDeletedDTO = []
+const toBeAddedDTO = []
 const productDTOs = []
 
 const FundingUpdate = () => {
 
-   let {fno} = useParams();
-   const [fundingForm, changeFundingForm, setFundingForm] = useInputs({...initFundingForm});
-   const [productForm, changeProductForm, setProductForm] = useInputs([...productDTOs]);
-    const [addForm, changeAddForm, setAddForm] = useInputs({...toBeAddedDTO});
-    const [deleteForm, changeDeleteForm, setDeleteForm] = useInputs({...toBeDeletedDTO});
+    let {fno} = useParams();
+    const [fundingForm, changeFundingForm, setFundingForm] = useInputs({...initFundingForm});
+    const [productForm, changeProductForm, setProductForm] = useInputs([...productDTOs]);
 
-   const [prodDel, setProdDel] = useState([])
+    const [prodDel, setProdDel] = useState([])
 
     const [open, setOpen] = useState(false);
-    const [mainImg, setMainImg] = useState([]);
     const history = useHistory();
     const [flag, setFlag] = useState(false);
 
     const [fundingMainFile, setFundingMainFile] = useState(null);
-    const [fundingFileFlag, setFundingFileFlag] = useState(null);
 
     productUpdateService.setOpenFn(setOpen)
     let productList = [];
@@ -120,15 +116,12 @@ const FundingUpdate = () => {
                                 let pictures = res.data.response[idx].map(picture=>{
                                     return {...picture, preview: picture.imgSrc, }
                                 })
-
                                 return {...product, pictures: pictures}
                             })
                             productUpdateService.setProductList(productList)
                             setFlag(!flag)
                         })
-
                 })
-
         })
     },[fno])
 
@@ -165,21 +158,16 @@ const FundingUpdate = () => {
         history.push("/funding/list");
     }
 
-
-
     const productDelete = (product, idx) => {
+        console.log(product.text);
         const anoList = product.pictures.map(picture=>picture.fileName)
         productUpdateService.getProductList().splice(idx, 1)
         setProdDel([...prodDel, ...anoList])
     }
 
-
-
-
     const list = productUpdateService.getProductList().map((product, i)=>{
 
         return (
-            <>
                 <li key={i}>
                     {/*<h3 style={{marginTop: '32px'}}>상품 {i+1}*/}
                     {/*    <Button style={editBtn} variant="outlined" color="primary" onClick={()=>{productUpdateService.openDialogForEdit(i)}}>*/}
@@ -189,29 +177,30 @@ const FundingUpdate = () => {
                     {/*        삭제*/}
                     {/*    </Button>*/}
                     {/*</h3>*/}
-                    <p>
-                        상품명 : {product.text.name}
-                    </p>
-                    <div style={{width: "100%",
-                                overflow: "hidden" }}>
-                        {product.pictures.map((file ,j)=>
-                            <div style={{width: "30%", marginLeft: "10px", float: "left"}}>
-                                <label>
-                                <img key={j} data-idx={j}
-                                     src={file.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"}
-                                     style={imgStyle}/>
-                                {/*<input type="radio"*/}
-                                {/*       name={`mainIdx_${i}`}*/}
-                                {/*       value={j}*/}
-                                {/*       onClick={(e)=>{setProductMainImage(e,i,j)}}*/}
-                                {/*       style={radioBtnStyle}/>*/}
-                                </label>
-                            </div>
-                        )}
-
+                    <h5 style={{marginTop: '32px', marginLeft:"10px"}}>{i+1}번 상품</h5>
+                    <div style={{marginLeft:"10px"}}>
+                        <p>
+                            상품명 : {product.text.name}
+                        </p>
+                        <div style={{width: "100%",
+                                    overflow: "hidden" }}>
+                            {product.pictures.map((file ,j)=>
+                                <div style={{width: "30%",float: "left"}} key={j}>
+                                    <label>
+                                    <img key={j} data-idx={j}
+                                         src={file.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"}
+                                         style={imgStyle}/>
+                                    {/*<input type="radio"*/}
+                                    {/*       name={`mainIdx_${i}`}*/}
+                                    {/*       value={j}*/}
+                                    {/*       onClick={(e)=>{setProductMainImage(e,i,j)}}*/}
+                                    {/*       style={radioBtnStyle}/>*/}
+                                    </label>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </li>
-            </>
         )
     })
 
@@ -278,8 +267,10 @@ const FundingUpdate = () => {
                                                             {/*<Button style={btn} variant="outlined" color="primary" onClick={clickFile} >*/}
                                                             {/*    메인 이미지*/}
                                                             {/*</Button>*/}
-                                                            메인 이미지<br></br>
-                                                            {fundingMainFile && <img width={"70px"} height={"70px"} src={fundingMainFile.imgSrc}/> }
+                                                            <div style={{marginLeft:"10px"}}>
+                                                                메인 이미지<br></br>
+                                                                {fundingMainFile && <img width={"70px"} height={"70px"} src={fundingMainFile.imgSrc}/> }
+                                                            </div>
                                                             <input
                                                                 id="file"
                                                                 style={{display:"none"}}

@@ -17,6 +17,12 @@ import {useHistory} from "react-router-dom";
 import axios from "axios";
 import {ToastCenter, ToastInformation, ToastSuccessRegister, ToastWarning} from "../../modules/toastModule";
 
+const borderStyle = {
+    border: '3px solid #dcdddf',
+    display: 'overflow',
+    padding: '24px',
+}
+
 const inputStyle = {
     margin:"10px"
 }
@@ -53,7 +59,7 @@ const initState = {
 const FundingRegister = () => {
 
     const [form, changeForm, setForm] = useInputs({...initState});
-    const [fundingMainFile, setFundingMainFile] = useState({});
+    const [fundingMainFile, setFundingMainFile] = useState(null);
     const userInfo = useSelector(state=> state.login);
     const [open, setOpen] = useState(false);
 
@@ -138,30 +144,43 @@ const FundingRegister = () => {
         return (
             <>
                 <li key={i}>
-                    <h3 style={{marginTop: '32px'}}>상품 {i+1}</h3>
                     <p onClick={()=>{productService.openDialogForEdit(i)}}>
-                        {product.text.name}
+                       <b>상품명:</b> {product.text.name}
                     </p>
                     <div style={{width: "100%",
                                 overflow: "hidden" }}>
                         {product.pictures.map((file ,j)=>
                             <div style={{width: "30%", margin: 0, float: "left"}}>
-                                <img key={j} data-idx={j}
-                                     src={file.preview||process.env.PUBLIC_URL+"/assets/img/default.png"}
-                                     style={imgStyle}
-                                />
-                                <input type="radio"
-                                       name={`mainIdx_${i}`}
-                                       value={j}
-                                       onClick={(e)=>{setProductMainImage(e,i,j)}}
-                                       style={radioBtnStyle}/>
+                                <label>
+                                    <img key={j} data-idx={j}
+                                         src={file.preview||process.env.PUBLIC_URL+"/assets/img/default.png"}
+                                         style={imgStyle}
+                                    />
+                                    <input type="radio"
+                                           name={`mainIdx_${i}`}
+                                           value={j}
+                                           onClick={(e)=>{setProductMainImage(e,i,j)}}
+                                           style={radioBtnStyle}/>
+                                </label>
+
                             </div>
                         )}
                     </div>
-                </li>
+                </li><br></br><br></br>
             </>
         )
     })
+
+    const addFundingPicture = (e) => {
+
+        const file = e.target.files[0];
+        Object.assign(file, {
+            preview: URL.createObjectURL(file)
+        })
+        setFundingMainFile(e.target.files[0])
+    }
+
+
 
     return (
         <div>
@@ -178,12 +197,12 @@ const FundingRegister = () => {
                                                     <Nav variant="pills" className="login-register-tab-list">
                                                     <Nav.Item>
                                                         <Nav.Link>
-                                                            <h4>펀딩 등록</h4>
+                                                            <h3>펀딩 등록</h3>
                                                         </Nav.Link>
                                                     </Nav.Item>
                                                     </Nav>
                                                      {/*register funding*/}
-                                                    <div style={textStyle}>제목</div>
+                                                    <div style={textStyle}><h5><b>제목</b></h5></div>
                                                     <input
                                                         style={inputStyle}
                                                         type="title"
@@ -192,7 +211,7 @@ const FundingRegister = () => {
                                                         placeholder="제목"
                                                         onChange={changeForm}
                                                     />
-                                                    <div style={textStyle}>내용</div>
+                                                    <div style={textStyle}><b>내용</b></div>
                                                     <input
                                                         type="hidden"
                                                         name="writer"
@@ -215,26 +234,37 @@ const FundingRegister = () => {
                                                         placeholder="내용을 입력하세요."
                                                         onChange={changeForm}
                                                     />
+                                                    <b>메인 이미지</b><br></br>
+                                                    {fundingMainFile && <img width={"70px"} height={"70px"} src={fundingMainFile.preview}/> }
+
                                                     <Button style={btn} variant="outlined" color="primary" onClick={clickFile}>
-                                                        메인 이미지 추가
-                                                    </Button>
-                                                    <h3></h3>
+                                                        {fundingMainFile? '메인 이미지 변경' : '메인 이미지 추가'}
+                                                    </Button><br></br><br></br><br></br><br></br>
                                                     <input
                                                         id="file"
                                                         style={{display:"none"}}
                                                         type="file"
                                                         name="mainImage"
-                                                        onChange={(e)=>{setFundingMainFile(e.target.files[0])}}
+                                                        //onChange={(e)=>{setFundingMainFile(e.target.files[0])}}
+                                                        onChange={(e)=>{addFundingPicture(e)}}
                                                     />
-                                                    <ul>
-                                                        {list}
-                                                    </ul>
+
+                                                    <h4><b>등록할 상품 목록</b></h4>
+
+                                                    {list.length != 0 && <div style={borderStyle}>
+                                                        <ul>
+                                                            {list}
+                                                        </ul>
+                                                    </div>}
+
+
                                                     <Button style={btn} variant="outlined" color="primary" onClick={productService.openDialog}>
                                                         상품 등록
                                                     </Button>
+                                                    <br></br><br></br>
                                                     <div style={{display:"flex"}}>
                                                         <div style={{display:"flex" ,flexWrap:"wrap"}}>
-                                                            <h5 style={textStyle}>펀딩 만기일</h5>
+                                                            <h5 style={textStyle}><b>펀딩 만기일</b></h5>
                                                             <input
                                                                 style={inputStyle}
                                                                 name="dueDate"
@@ -246,7 +276,7 @@ const FundingRegister = () => {
                                                             />
                                                         </div>
                                                     <div style={{display:"flex", flexWrap:"wrap"}}>
-                                                    <h5 style={textStyle}>펀딩 목표금액</h5>
+                                                        <h5 style={textStyle}><b>펀딩 목표금액</b></h5>
                                                     <input
                                                         style={inputStyle}
                                                         name="targetAmount"
@@ -285,7 +315,7 @@ const FundingRegister = () => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
                 maxWidth='lg'>
-                <DialogTitle id="alert-dialog-title">{'상품 등록/수정'}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{'상품 등록'}</DialogTitle>
                 <DialogContent>
                     <ProductRegister></ProductRegister>
                 </DialogContent>

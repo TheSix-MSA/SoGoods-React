@@ -107,7 +107,7 @@ const MemberTable = () => {
     }
 
     const role = (member) => {
-        // if(!member.roleSet.includes("GENERAL")){
+        if(!member.roleSet.includes("ADMIN")){
         memberService.changeAuth(member.email).then(res => {
             setMembers({
                 ...members, memberList: members.memberList.map(member => {
@@ -116,12 +116,11 @@ const MemberTable = () => {
                     return member;
                 })
             })
-            console.log(1111,res.data.response);
         const currentRole = res.data.response.roleSet.includes("AUTHOR")?"작가":"일반으"
         ToastInformation("해당 유저의 권한이 "+ currentRole +"로 변경 되었습니다.")
         })
     }
-// }
+}
 
     const list = members.memberList?.map(member => {
         return <tr className='hs-style' key={member.email}>

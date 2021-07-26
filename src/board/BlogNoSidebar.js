@@ -32,6 +32,22 @@ const BlogNoSidebar = ({match}) => {
     const boardType = useRef(match.params.boardType?.toUpperCase())
     const [search, onChange, setSearch] = useInputs({...initState, page: value.page || 1})
 
+    let boardName = "";
+    switch (boardType.current) {
+        case "FREE":
+            boardName = "자유게시판";
+            break;
+        case "NOVELIST":
+            boardName = "작가게시판";
+            break;
+        case "NOTICE":
+            boardName = "공지사항"
+            break;
+        default:
+            boardName= "치명적인 오류 게시판";
+            break;
+    }
+
     useEffect(() => {
         boardType.current = match.params.boardType.toUpperCase()
         dispatch(getBoardData({
@@ -78,6 +94,7 @@ const BlogNoSidebar = ({match}) => {
                 {/* breadcrumb */}
                 <div className="blog-area pt-100 pb-100 blog-no-sidebar">
                     <div className="container">
+                        <h2> {boardName} </h2>
                         {boardType.current === "NOTICE" &&roles.includes("ADMIN") ?
                             registerBtn() : null}
                         {boardType.current === "NOVELIST" &&roles.includes("AUTHOR") ?

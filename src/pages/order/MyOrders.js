@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import orderServices from "../../service/orderServices";
 import getFormatDate from "../../modules/getFormatDate";
 import fundingService from "../../components/funding/fundingService";
+import {Link} from "@material-ui/core";
 
 const initState = {
     page:1,
@@ -75,38 +76,58 @@ const MyOrders = () => {
         setPager({...pager, page: pager.page + moveNum})
     };
 
-
-    console.log(pager)
-    const prods = prodsList.map((prod,idx) =>
-        <div key={idx} className="entries-wrapper" style={{marginBottom: "15px"}}>
-            <div className="row">
-                <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
-                    <div className="entries-edit-delete text-center">
-                        {imgs[idx]&&imgs[idx][0]?
-                            <img src={imgs[idx][0].imgSrc} alt="" style={{maxWidth:"100%"}}/>
-                            :
-                            <img src={process.env.PUBLIC_URL+"/assets/img/default.png"} alt="" style={{maxWidth:"200px"}}/>
-                        }
+    const prods = prodsList.length !== 0 ? prodsList.map((prod, idx) =>
+            <div key={idx} className="entries-wrapper" style={{marginBottom: "15px"}}>
+                <div className="row">
+                    <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
+                        <div className="entries-edit-delete text-center">
+                            {imgs[idx] && imgs[idx][0] ?
+                                <img src={imgs[idx][0].imgSrc} alt="" style={{maxWidth: "100%"}}/>
+                                :
+                                <img src={process.env.PUBLIC_URL + "/assets/img/default.png"} alt=""
+                                     style={{maxWidth: "200px"}}/>
+                            }
+                        </div>
+                    </div>
+                    <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-left">
+                        <div className="entries-info ">
+                            <p style={{fontSize: "12px"}}><strong>상품 정보 :</strong> {prod.prodNames}</p>
+                            <p style={{fontSize: "12px"}}><strong>가격 :</strong> {prod.totalPrices} 원</p>
+                            <p style={{fontSize: "12px"}}><strong>수령인 :</strong> {prod.dto.receiverName}</p>
+                            <p style={{fontSize: "12px"}}><strong>배송지
+                                :</strong> {prod.dto.receiverAddress + ", " + prod.dto.receiverDetailedAddress}</p>
+                            <p style={{fontSize: "12px"}}><strong>구매 날짜 :</strong> {prod.dto.regDate}</p>
+                            <p style={{fontSize: "12px"}}><strong>배송
+                                :</strong> {prod.dto.shippedDate ? prod.dto.shippedDate : "배송전"}</p>
+                            <p style={{fontSize: "12px"}}><strong>배송시 주의 사항 :</strong> {prod.dto.receiverRequest}</p>
+                            {prod.dto.cancelledDate ? <p style={{fontSize: "12px"}}><strong> 취소 일자
+                                    :</strong>{getFormatDate(new Date(prod.dto.cancelledDate))}</p> :
+                                <div className="entries-edit-delete text-left" style={{marginTop: "10px"}}>
+                                    <button onClick={() => {
+                                        cancelOrder(prod)
+                                    }}>주문 취소
+                                    </button>
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
-                <div className="col-lg-6 col-md-6 d-flex align-items-center justify-content-left">
-                    <div className="entries-info ">
-                        <p style={{fontSize:"12px"}}><strong>상품 정보 :</strong> {prod.prodNames}</p>
-                        <p style={{fontSize:"12px"}}><strong>가격 :</strong> {prod.totalPrices} 원</p>
-                        <p style={{fontSize:"12px"}}><strong>수령인 :</strong> {prod.dto.receiverName}</p>
-                        <p style={{fontSize:"12px"}}><strong>배송지 :</strong> {prod.dto.receiverAddress +", "+prod.dto.receiverDetailedAddress}</p>
-                        <p style={{fontSize:"12px"}}><strong>구매 날짜 :</strong> {prod.dto.regDate}</p>
-                        <p style={{fontSize:"12px"}}><strong>배송 :</strong> {prod.dto.shippedDate?prod.dto.shippedDate:"배송전"}</p>
-                        <p style={{fontSize:"12px"}}><strong>배송시 주의 사항 :</strong> {prod.dto.receiverRequest}</p>
-                        {prod.dto.cancelledDate?<p style={{fontSize:"12px"}}><strong> 취소 일자 :</strong>{getFormatDate(new Date(prod.dto.cancelledDate))}</p>:
-                            <div className="entries-edit-delete text-left" style={{marginTop:"10px"}}>
-                                <button onClick={()=>{cancelOrder(prod)}}>주문 취소</button>
-                            </div>
-                        }
-                    </div>
+            </div>)
+        :
+        <div className="entries-wrapper" style={{marginBottom: "15px"}}>
+            <div style={{
+                display: "flex", justifyContent: "center", alignItems: "center"
+                , padding: "15px"
+            }}>
+                <div>
+                    <p><strong style={{fontSize: "20px", color: "#c2c2c2", textAlign: "center"}}>참여한 펀딩이 없습니다.</strong>
+                    </p>
+                    <Link to={{pathname: "/funding"}}>
+                        <p style={{textAlign: "center", color: "rgb(244 61 61)"}}>펀딩하러 가기>></p>
+                    </Link>
                 </div>
             </div>
-        </div>)
+        </div>;
 
 
     return (

@@ -150,6 +150,7 @@ const AuthorApplication = () => {
                                                                     value={application.nickName}
                                                                     onChange={changeApplication}
                                                                     autoFocus
+                                                                    maxlength={15}
                                                                 />
                                                                 <input
                                                                     type="text"
@@ -157,6 +158,7 @@ const AuthorApplication = () => {
                                                                     placeholder="introduce"
                                                                     value={application.introduce}
                                                                     onChange={changeApplication}
+                                                                    maxlength={100}
                                                                 />
                                                                 <div style={{
                                                                     background: "#f2f2f2",

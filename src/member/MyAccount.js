@@ -58,10 +58,6 @@ const MyAccount = () => {
     }
   },[userSelector]);
 
-  if(localStorage.getItem("userData")===null){
-    ToastWarning("로그인이 필요합니다.");
-    history.push("/");
-  }
 
   /**
    * 유저 수정 글쓰기기능 활성화
@@ -159,7 +155,7 @@ const MyAccount = () => {
 
   myAccountService.setClearInputFn(clearInput);
 
-  const roles = JSON.parse(localStorage.getItem("userData")).roles.includes("AUTHOR");
+  const roles = userSelector;
 
 
   return (

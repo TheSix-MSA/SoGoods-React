@@ -60,7 +60,7 @@ const MyFundingPage = ({productTabClass}) => {
                     </div>
                     :
                     <div style={{position:"relative", height:"230px", width:"350px"}}>
-                        <img alt={"이미지"} src={li.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"} style={{filter:"grayscale(100%)", objectFit:"cover"}}/>
+                        <img alt={"이미지"} src={li.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"} style={{filter:"grayscale(100%)", objectFit:"cover", height:"230px", width:"350px"}}/>
                         <span style={{fontWeight:"bold", position:"absolute", transform:"translate(-70%, -50%)", top:"50%", left:"50%", pointerEvents:"none"}}>
                             <h3>종료된 펀딩입니다</h3>
                         </span>

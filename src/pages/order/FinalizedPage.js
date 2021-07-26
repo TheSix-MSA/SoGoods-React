@@ -48,8 +48,8 @@ const FinalizedPage = ({location}) => {
                                     </div>
                                     <div className="item-empty-area__text">
                                         <div className="your-order-area">
-                                            <div className="place-order mt-25">
-                                                <button className="btn-hover" onClick={() => completed()}>이용해 주셔서 감사합니다!</button>
+                                            <div className="place-order mt-25" style={{justifyContent:"center", display:"flex"}}>
+                                                <button className="btn-hover" style={{backgroundColor:"#bdbdc5", width:"50%"}} onClick={() => completed()}>이용해 주셔서 감사합니다!</button>
                                             </div>
                                         </div>
                                     </div>

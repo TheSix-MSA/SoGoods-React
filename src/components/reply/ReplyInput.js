@@ -1,6 +1,7 @@
 import React from 'react';
 import useInputs from "../../customHooks/useInputs";
 import repliesService from "../../service/repliesService";
+import {ToastTopRight} from "../../modules/toastModule";
 
 const initState = {
     writer: "라이터",
@@ -17,6 +18,11 @@ const ReplyInput = ({bno, maxPage, user}) => {
         writer:user.name.substr(0,user.name.length-1)+"*", email:user.email});
 
     const send = () => {
+        if(reply.content.trim()===""){
+            ToastTopRight("내용을 작성해 주세요.")
+            return;
+        }
+
         reply.keyValue = bno;
         repliesService.insertReply(reply, maxPage).then();
         setReply({...reply, content:""})

@@ -1,6 +1,7 @@
 import React from 'react';
 import useInputs from "../../customHooks/useInputs";
 import repliesService from "../../service/repliesService";
+import {ToastTopRight} from "../../modules/toastModule";
 
 const ReplyModify = ({dto, page}) => {
     const [reply, changeReply, setReply] = useInputs({
@@ -10,6 +11,10 @@ const ReplyModify = ({dto, page}) => {
     });
 
     const send = () => {
+        if(reply.content.trim()===""){
+            ToastTopRight("내용을 작성해 주세요.")
+            return;
+        }
         repliesService.updateReply(reply, page).then();
         repliesService.getRemoveModifyInput();
         setReply({...reply, content:""})

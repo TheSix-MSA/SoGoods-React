@@ -1,6 +1,7 @@
 import React from 'react';
 import useInputs from "../../customHooks/useInputs";
 import repliesService from "../../service/repliesService";
+import {ToastTopRight} from "../../modules/toastModule";
 
 const initState = {
     writer: "",
@@ -20,6 +21,10 @@ const ReReplyInput = ({dto, bno, page, user}) => {
         /**
          * 작성한 대댓글 저장하는 함수
          */
+        if(reReply.content.trim()===""){
+            ToastTopRight("내용을 작성해 주세요.")
+            return;
+        }
         reReply.keyValue = bno;
         reReply.groupId = dto.groupId;
         reReply.parentId = dto.rno;

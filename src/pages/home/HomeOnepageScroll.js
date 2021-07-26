@@ -27,7 +27,7 @@ const HomeOnepageScroll = () => {
     return (
         <Fragment>
             <MetaTags>
-                <title>Flone | Fashion Home</title>
+                <title> SoGoods </title>
                 <meta
                     name="description"
                     content="Fashion home of flone react minimalist eCommerce template."
@@ -45,15 +45,16 @@ const HomeOnepageScroll = () => {
                     {sliderData &&
                     sliderData.map((single, key) => {
                         return (
-                            <div className={`goods_slider${key}`}>
-                            <Section key={key}>
+                            <div className={`goods_slider${key}`}  key={key}>
+                            <Section>
                                 <div className="slider-section flone-fp-section" >
                                     <div className="container">
                                         <div className="row fullpage-slider-wrap-mrg">
                                             <div className="col-lg-6 col-md-6 col-sm-6 col-12 d-flex align-items-center">
                                                 <div className="slider-content-11 slider-animated-1 fullpage-slider-mrg fullpage-content">
-                                                    <h3 className="animated">{single.title}</h3>
+                                                    <h3 className="animated" style={{fontFamily:'maruBuri'}}>{single.title}</h3>
                                                     <h1
+                                                        style={{fontFamily:'maruBuri'}}
                                                         className="animated"
                                                         dangerouslySetInnerHTML={{
                                                             __html: single.subtitle
@@ -61,6 +62,7 @@ const HomeOnepageScroll = () => {
                                                     />
                                                     <div className="slider-btn-11 btn-hover">
                                                         <Link
+                                                            style={{fontFamily:'maruBuri'}}
                                                             className="animated"
                                                             to={process.env.PUBLIC_URL + single.url}
                                                         >

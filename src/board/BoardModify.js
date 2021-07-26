@@ -60,7 +60,6 @@ const BoardModify = ({match}) => {
         })
     }, [])
 
-    console.log(board)
     return (
         <Fragment>
             <LayoutOne headerTop="visible">

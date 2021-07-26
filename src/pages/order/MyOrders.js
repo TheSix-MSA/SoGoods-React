@@ -52,7 +52,6 @@ const MyOrders = () => {
             const pnolist = r.data.response.resDto.map(value => {
                 return value.pno
             })
-            console.log("pnolist ",pnolist)
             if(pnolist.length>0){
                 fundingService.getA3srcList("PRODUCT", pnolist, [1]).then(r =>
                     setImgs(r.data.response)

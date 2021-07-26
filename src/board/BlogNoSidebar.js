@@ -66,7 +66,6 @@ const BlogNoSidebar = ({match}) => {
         )
     }
 
-    console.log(roles)
     return (
         <Fragment>
             <MetaTags>

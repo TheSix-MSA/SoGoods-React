@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useMemo} from 'react';
 import {useDropzone} from 'react-dropzone';
+import {ToastWarning} from "../../modules/toastModule";
 
 const baseStyle = {
     flex: 1,
@@ -86,7 +87,7 @@ const PictureAttach = ({updatePictures}) => {
                 setFiles(newFiles)
                 updatePictures(newFiles)
             }else{
-                console.log(`파일갯수 ${max} 초과`)
+                ToastWarning(`파일갯수 ${max} 초과`)
             }
         }
     });

@@ -69,7 +69,6 @@ const FundingRegister = () => {
 
     const productList = productService.getProductList()
 
-    console.log(productList)
 
     const productDTOs = productList.map(product=>{
         return product.text

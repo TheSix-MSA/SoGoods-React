@@ -30,7 +30,6 @@ const Confirmation = ({location}) => {
     params.append('partner_user_id', user)
     params.append('pg_token', purchaseInfo.pg_token)
 
-    console.log("after pushed the btn ",purchaseInfo)
 
     await orderServices.kakaoPayApprovePayment(params);
     await orderServices.orderConfirmedSave({...queryObj, orderId: purchaseInfo.partner_order_id, buyer: user,
@@ -48,7 +47,7 @@ const Confirmation = ({location}) => {
   return (
     <Fragment>
       <MetaTags>
-        <title>Flone | Wishlist</title>
+        <title>SoGoods</title>
         <meta
           name="description"
           content="Wishlist page of flone react minimalist eCommerce template."

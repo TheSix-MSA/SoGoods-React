@@ -72,7 +72,6 @@ const MemberTable = () => {
             setMembers(res.data.response);
         });
     }, [page])
-    console.log("23123124124124", members)
 
     const renderPage = () => {
         setFlag(!flag)
@@ -116,7 +115,6 @@ const MemberTable = () => {
                     return member;
                 })
             })
-            console.log(1111,res.data.response);
         const currentRole = res.data.response.roleSet.includes("AUTHOR")?"작가":"일반으"
         ToastInformation("해당 유저의 권한이 "+ currentRole +"로 변경 되었습니다.")
         })

@@ -81,7 +81,6 @@ const FundingList = ({ location, productTabClass}) => {
     // 검색 처리
     const search = async (e) => {
         e.preventDefault();
-        console.log(searchInput);
         const result = await fundingService.getList(1, searchInput.keyword, searchInput.type, searchInput.state);
         setData(result.response)
         const url = '/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type + '&state=' +searchInput.state;

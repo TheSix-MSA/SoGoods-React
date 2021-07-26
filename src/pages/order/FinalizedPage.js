@@ -30,7 +30,7 @@ const FinalizedPage = ({location}) => {
     return (
         <Fragment>
             <MetaTags>
-                <title>Flone | Wishlist</title>
+                <title>SoGoods</title>
                 <meta
                     name="description"
                     content="Wishlist page of flone react minimalist eCommerce template."

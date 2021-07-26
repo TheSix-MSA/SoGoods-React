@@ -11,7 +11,6 @@ const BlogPost = ({data, boardType}) => {
     const history = useHistory()
     const location = useLocation()
     const {email, name} = useSelector(state => state.login)
-    console.log(email)
     const goList = () => {
         history.push(`/board/${boardType}/list?page=${boardListRequestDTO.page}&keyword=${boardListRequestDTO.keyword}&type=${boardListRequestDTO.type}`)
     }
@@ -25,7 +24,6 @@ const BlogPost = ({data, boardType}) => {
             })
         }
     }
-    console.log(roles)
     return (
         data && (
             <Fragment>

@@ -52,7 +52,6 @@ const LoginRegister = () => {
     const [agreeBoxes, setAgreeBoxes] = useState({acceptOne:false, acceptTwo:false})
 
     const queryStrings = queryString.parse(location.search?.replace("?",""));
-    console.log(queryStrings);
 
     /**
      * 클릭시 axios로 로그인검증, 이후 LocalStorage에 저장.( email, roles, accessToken, RefreshToken )

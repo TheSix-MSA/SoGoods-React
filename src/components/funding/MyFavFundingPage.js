@@ -32,7 +32,6 @@ const MyFavFundingPage = ({productTabClass}) => {
                 fundingService.getA3src('FUNDING', fnoList)
                     .then(res2=>{
                         res2.data.response.forEach((ele,i)=>{
-                            console.log(res1.response)
                             res1.response[i].imgSrc = ele.thumbSrc
                         })
                         setList(res1.response);
@@ -40,7 +39,6 @@ const MyFavFundingPage = ({productTabClass}) => {
             })
     }, [])
 
-    console.log(list);
 
     // 읽기 페이지로 이동
     const readTodo = (fno) => {
@@ -77,7 +75,7 @@ const MyFavFundingPage = ({productTabClass}) => {
         <div>
             <Fragment>
                 <MetaTags>
-                    <title>Flone | Furniture Home</title>
+                    <title>SoGoods</title>
                     <meta
                         name="description"
                         content="Furniture home of flone react minimalist eCommerce template."

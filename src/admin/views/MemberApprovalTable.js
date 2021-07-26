@@ -62,7 +62,6 @@ const MemberApprovalTable = () => {
     const [members, setMembers] = useState(initState);
     const [flag, setFlag] = useState(false);
 
-            console.log("23123124124124",members)
     useEffect(() => {
         memberService.getMemberApprovalList(page).then(res => {
            setMembers(res.data.response);

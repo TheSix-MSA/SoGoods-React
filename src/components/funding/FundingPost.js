@@ -12,7 +12,6 @@ const inputStyle = {
 
 const FundingPost = (funding) => {
 
-    console.log('funding.productDTOs: ', funding.productDTOs)
     const list = funding.productDTOs.map((productDTO, i)=>{
         const part = productDTO.imgArr.map(img=>{
             return {imgPath: img.imgSrc}

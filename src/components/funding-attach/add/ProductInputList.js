@@ -22,7 +22,6 @@ const ProductInputList = () => {
     productService.setOpenFn(setOpen)
 
     const list = productService.getProductList().map((product, i)=>{
-        console.log(product)
         product.pictures.map((picture )=> Object.assign(picture, {
             preview: URL.createObjectURL(picture)
         }))
@@ -40,7 +39,6 @@ const ProductInputList = () => {
     })
 
     useEffect(() => () => {
-        console.log('uesEffect...1')
 
         // Make sure to revoke the data uris to avoid memory leaks
         //  productService.getProductList().map(product => {
@@ -49,7 +47,6 @@ const ProductInputList = () => {
         //          URL.revokeObjectURL(file.preview)
         //      });
         //  })
-        console.log('productService.getProductList(): ', productService.getProductList())
     }, [open]);
 
     return (

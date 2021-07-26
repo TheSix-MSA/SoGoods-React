@@ -27,7 +27,6 @@ const orderServices = () => {
 
     const kakaoPayApprovePayment = async (params) => {
 
-        console.log("From service",params)
 
         const data = await axios.post("/v1/payment/approve", params, {
             headers: {

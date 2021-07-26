@@ -66,7 +66,6 @@ const FundingSideBar = (funding) => {
         }));
         setPurchasable(true)
     }
-    console.log(cartList);
 
     /**
      * 장바구니 배열에서 일치하는 데이터를 삭제, count=0

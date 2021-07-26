@@ -55,7 +55,6 @@ const fundingService = () => {
     }
 
     const changeRemoved = async (fno, page) => {
-        console.log("changeRemoved started")
         const result = await instance({
             url: `/funding/${fno}`,
             method: 'delete',

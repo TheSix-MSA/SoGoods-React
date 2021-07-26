@@ -18,9 +18,6 @@ import productService from "../funding-attach/add/productService";
 const inputStyle = {
     margin:"10px"
 }
-const textStyle = {
-    margin:"0 10px"
-}
 
 const radioBtnStyle = {
     width: "20px",
@@ -28,7 +25,6 @@ const radioBtnStyle = {
 }
 
 const imgStyle = {
-    display: 'block',
     width: 100,
     height: 50,
     float: 'left',
@@ -38,9 +34,7 @@ const textArea = {
     margin:"10px",
     height:"300px"
 }
-const inputStyle = {
-    margin:"10px"
-}
+
 const textStyle = {
     margin:"0 10px"
 }

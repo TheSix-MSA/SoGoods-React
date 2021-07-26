@@ -10,7 +10,6 @@ const inputStyle = {
     maxWidth:"350px"
 }
 
-
 const FundingPost = (funding) => {
 
     console.log('funding.productDTOs: ', funding.productDTOs)
@@ -21,7 +20,7 @@ const FundingPost = (funding) => {
 
         return (
 
-                <ImgCarousel tutorialSteps ={part} ></ImgCarousel>
+                <ImgCarousel tutorialSteps = {part} ></ImgCarousel>
         )
     })
 
@@ -30,7 +29,7 @@ const FundingPost = (funding) => {
         <div>
             <Fragment>
                 <div className="blog-details-top">
-                    <h3 style={{textAlign:"center", overflowWrap:"break-word"}}>{funding.fundingDTO.title}</h3>
+                    <h2 style={{textAlign:"center", overflowWrap:"break-word"}}>{funding.fundingDTO.title}</h2>
                     <div className="blog-details-img" >
                         <img
                             alt=""
@@ -54,11 +53,10 @@ const FundingPost = (funding) => {
                             </p>
                         </div>
                         <hr/>
-
+                        <h4>제품 상세내용</h4>
                         <div style={{display:"flex"}}>
                             {list}
                         </div>
-
                     </div>
                     </div>
                     <div className="dec-img-wrapper">

@@ -61,16 +61,11 @@ const Confirmation = ({location}) => {
               <div className="row">
                 <div className="col-lg-12">
                   <div className="item-empty-area text-center">
-                    <div className="item-empty-area__icon mb-30">
-                      <i className="pe-7s-like"></i>
-                    </div>
                     <div className="item-empty-area__text">
-                      마지막 기회입니다! 결제하실 건가요? <br />{" "}
+                      마지막 단계입니다! 결제를 승인해 주세요<br />{" "}
                       <div className="your-order-area">
-                        <div className="place-order mt-25">
+                        <div className="place-order mt-25" style={{maxWidth:"50%"}}>
                           <button className="btn-hover" onClick={() => finalCheckOut()}>결제 최종 승인!</button>
-                          <hr/>
-                          <button className="btn-hover" style={{backgroundColor:"red"}} onClick={() => orderCancel()}>한번 더 생각해 볼게요</button>
                         </div>
                       </div>
                     </div>

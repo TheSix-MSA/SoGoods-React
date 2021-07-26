@@ -85,7 +85,7 @@ const LoginRegister = () => {
         if (signupForm.gender === "1" || signupForm.gender === "3") {
             signupForm.gender = "남자"
         }else if(signupForm.gender === "2" || signupForm.gender === "4"){
-            signupForm.geder = "여자";
+            signupForm.gender = "여자";
         }else{
             ToastWarning("올바른 주민번호를 입력해주세요");
         }

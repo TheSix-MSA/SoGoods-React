@@ -34,7 +34,6 @@ const param = {
 
 const FundingList = ({ location, productTabClass}) => {
     const value = queryString.parse(location.search);	// 문자열의 쿼리스트링을 Object로 변환
-    console.log(value)
     const [searchInput, searchOnChange ,setSearchInput] = useInputs({...param, page:value.page||1, type:value.type||"t", state:value.state||"open"});
 
     // 파라미터로 넘어가는 값

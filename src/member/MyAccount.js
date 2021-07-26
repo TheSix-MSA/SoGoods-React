@@ -53,12 +53,14 @@ const MyAccount = () => {
 
   useEffect(() => {
     let isSubscribed = true;
-    myAccountService.getMyInfo(userSelector.email)
-        .then(value => {
-          if(isSubscribed) setInfo({...value.data.response});
-        });
-    return () => {
-      isSubscribed = false
+    if(userSelector.email) {
+      myAccountService.getMyInfo(userSelector.email)
+          .then(value => {
+            if(isSubscribed) setInfo({...value.data.response});
+          });
+      return () => {
+        isSubscribed = false
+      }
     }
   },[userSelector]);
 
@@ -379,10 +381,6 @@ const MyAccount = () => {
                             <div className="myaccount-info-wrapper">
                               <div className="account-info-wrapper">
                                 <h4>Your Orders</h4>
-                              </div>
-                              <div className="align-items-center justify-content-center entries-wrapper">
-                                <div className="billing-info  entries-edit-delete">
-                                </div>
                               </div>
                               <MyOrders/>
                             </div>

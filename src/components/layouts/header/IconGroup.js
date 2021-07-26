@@ -71,13 +71,6 @@ const IconGroup = ({
                     </li>
                   </>)
               }
-              {login.email !== "" && (
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/admin"}>
-                      admin
-                    </Link>
-                  </li>
-              )}
               {login.roles.includes("AUTHOR") === false && login.email !== "" && login.approval === false ?
                   <li>
                     <Link to={process.env.PUBLIC_URL + "/author-application"}>
@@ -88,7 +81,7 @@ const IconGroup = ({
               }
               {login.roles.indexOf("ADMIN") === 1 ?
                   <li>
-                    <Link to={process.env.PUBLIC_URL + "/admin"}>
+                    <Link to={process.env.PUBLIC_URL + "/admin/dashboard"}>
                       admin
                     </Link>
                   </li> :
@@ -144,7 +137,7 @@ const IconGroup = ({
               }
               {login.roles.indexOf("ADMIN") === 1 ?
                   <li>
-                    <Link to={process.env.PUBLIC_URL + "/admin"}>
+                    <Link to={process.env.PUBLIC_URL + "/admin/dashboard"}>
                       admin
                     </Link>
                   </li> :

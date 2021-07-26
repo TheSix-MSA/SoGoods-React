@@ -53,7 +53,7 @@ const FundingPost = (funding) => {
                             </p>
                         </div>
                         <hr/>
-                        <h4>제품 상세내용</h4>
+                        <h4>제품 상세이미지</h4>
                         <div style={{display:"flex"}}>
                             {list}
                         </div>

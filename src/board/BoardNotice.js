@@ -11,20 +11,19 @@ const BoardNotice = ({notice, page}) => {
     const moveDetail = (bno) => {
         history.push(`/board/NOTICE/${bno}`)
     }
-    console.log(notice)
     return (
         <Fragment>
             {notice && notice?.map((data, idx) => (
-                <Grid container>
-                    <Grid item xs={12} key={idx} style={{cursor:"pointer"}}>
+                <Grid container key={idx}>
+                    <Grid item xs={12} style={{cursor:"pointer"}}>
                         {data.private === false &&
                         <Paper className={classes.paper}>
                             <span style={{float: "left"}}> 공지사항 </span>
                             <div onClick={() => {
                                 moveDetail(data.bno)
                             }}>
-                                <span style={{}}> {data.title} </span>
-                                <span> {data.content} </span>
+                                <span style={{textOverflow:"ellipsis", whiteSpace:"nowrap",
+                                    overflowX:"hidden", maxWidth:"200px", height: "30px"}}> {data.title} </span>
                                 <span style={{float:"right"}}> {getFormatDate(new Date(data.modDate))} </span>
                             </div>
                         </Paper>
@@ -43,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(2),
         textAlign: 'center',
-        color: theme.palette.text.secondary,
+        color: "black",
         margin: '10px',
         backgroundColor: ''
     },

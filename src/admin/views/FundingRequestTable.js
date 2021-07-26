@@ -26,8 +26,8 @@ const initState = {
             removed: false,
             totalAmount: 0,
             targetAmount: 1,
-            authorized: false
-
+            authorized: false,
+            requestApproval: false
         },
     ],
     pageMaker: {
@@ -74,14 +74,26 @@ const FundingRequestTable = () => {
         history.push("/funding/read/" + fno)
     }
 
+    // const setAuthorized = (fund) => {
+    //     fundingService.setAuthorized(fund.fno, funding.pageMaker.page)
+    //         .then();
+    //     ToastInformation("승인 처리 되었습니다.")
+    // }
+
     const setAuthorized = (fund) => {
-        fundingService.setAuthorized(fund.fno, funding.pageMaker.page)
+        fundingService.reject(fund.fno, true, funding.pageMaker.page)
             .then();
+        ToastInformation("펀딩 승인 되었습니다.")
+    }
+    const setAuthorized2 = (fund) => {
+        fundingService.reject(fund.fno, false, funding.pageMaker.page)
+            .then();
+        ToastInformation("반려 처리 되었습니다.")
     }
 
     const list = funding.dtoList.map(fund => {
         return <tr className='hs-style' key={fund.fno}>
-            <td onClick={() => toFunding(fund.fno)}><span style={{cursor:"pointer"}}>{fund.title}</span></td>
+            <td onClick={() => toFunding(fund.fno)}><span style={{cursor: "pointer"}}>{fund.title}</span></td>
             <td>{fund.writer}</td>
             <td>{fund.email}</td>
             <td>{fund.content}</td>
@@ -89,7 +101,10 @@ const FundingRequestTable = () => {
             <td>{fund.totalAmount}</td>
             <td>{fund.dueDate}</td>
             <td>{fund.regDate}</td>
-            <td onClick={() => setAuthorized(fund)}>{fund.authorized ? null : <span style={{cursor:"pointer"}}>✔</span>}</td>
+            <td onClick={() => setAuthorized(fund)}>{fund.requestApproval ?
+                <span style={{cursor: "pointer"}}>✔</span>: null }</td>
+            <td onClick={() => setAuthorized2(fund)}>{fund.requestApproval ?
+                <span style={{cursor: "pointer"}}>❌</span>:null}</td>
         </tr>
     })
 
@@ -104,10 +119,11 @@ const FundingRequestTable = () => {
                         </p>
                     </Card.Header>
                     <Card.Body className="table-full-width table-responsive px-20">
-                        <Table className="table-hover table-striped" style={{textAlign: "center",tableLayout:"fixed"}}>
+                        <Table className="table-hover table-striped"
+                               style={{textAlign: "center", tableLayout: "fixed"}}>
                             <thead>
                             <tr>
-                                <th className="border-0">제목(확인하러가기)</th>
+                                <th className="border-0">제목(상세보기)</th>
                                 <th className="border-0">작성자</th>
                                 <th className="border-0">이메일</th>
                                 <th className="border-0">내용</th>
@@ -115,7 +131,8 @@ const FundingRequestTable = () => {
                                 <th className="border-0">현재금액</th>
                                 <th className="border-0">펀딩기한</th>
                                 <th className="border-0">신청날짜</th>
-                                <th className="border-0">펀딩 신청 여부</th>
+                                <th className="border-0">펀딩 승인</th>
+                                <th className="border-0">반려 처리</th>
                             </tr>
                             </thead>
                             <tbody>

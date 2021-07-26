@@ -94,3 +94,18 @@ export const ToastWarning = (msg) => {
         className: 'toastWarning',
     });
 };
+
+
+export const ToastSuccessRegister = (msg) => {
+    toast.error("🔔 "+msg, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+        hideProgressBar: true,
+        bodyStyle: {
+            color: 'white',
+            fontSize: '13px',
+            fontWeight: 'bold',
+        },
+        className: 'toastInformation',
+    });
+};

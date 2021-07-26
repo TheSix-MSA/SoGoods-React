@@ -25,7 +25,7 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
             </Link>
           </li>
           <li>
-            <Link to={process.env.PUBLIC_URL + "//board/free/list"}>
+            <Link to={process.env.PUBLIC_URL + "/board/free/list"}>
               Chit Chat
               {sidebarMenu ? (
                   <span>
@@ -74,11 +74,6 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
               <li>
                 <Link to={process.env.PUBLIC_URL + "/my-account"}>
                   {strings["my_account"]}
-                </Link>
-              </li>
-              <li>
-                <Link to={process.env.PUBLIC_URL + "/checkout"}>
-                  {strings["checkout"]}
                 </Link>
               </li>
             </ul>

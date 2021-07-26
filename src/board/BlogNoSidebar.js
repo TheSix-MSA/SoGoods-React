@@ -13,6 +13,7 @@ import boardService from "./boardService";
 import {Button, FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import BoardNotice from "./BoardNotice";
+import {Form} from "react-bootstrap";
 
 const initState = {
     page: 1,
@@ -21,7 +22,6 @@ const initState = {
 }
 const BlogNoSidebar = ({match}) => {
     const { roles } = useSelector(state => state.login)
-    console.log(roles)
     const classes = useStyles();
     const location = useLocation()
     const [boardData, setBoardData] = useState({})
@@ -34,7 +34,8 @@ const BlogNoSidebar = ({match}) => {
 
     useEffect(() => {
         boardType.current = match.params.boardType.toUpperCase()
-        dispatch(getBoardData({...search, page: value.page, boardType: boardType.current})).unwrap().then(res => {
+        dispatch(getBoardData({...search, page: value.page, boardType: boardType.current,
+            keyword: value.keyword, type: value.type})).unwrap().then(res => {
             setBoardData(res.response)
         })
         boardService.noticeBoard(100).then(res => {
@@ -44,9 +45,9 @@ const BlogNoSidebar = ({match}) => {
 
     const searching = (e) => {
         e.preventDefault();
-        history.push(`/board/${boardType.current}/list?page=1&keyword=${search.keyword}&type=${search.type}`)
         dispatch(getBoardData({...search, boardType: boardType.current})).unwrap().then(res => {
             setBoardData(res.response)
+            history.push(`/board/${boardType.current}/list?page=1&keyword=${search.keyword}&type=${search.type}`)
         })
     }
 
@@ -73,7 +74,8 @@ const BlogNoSidebar = ({match}) => {
                             </div>
                         ) : null }
                         <div className="pro-sidebar-search mb-55 mt-25">
-                            <FormControl className={classes.formControl}>
+                            <Form onSubmit={searching}>
+                            <FormControl className={classes.formControl} >
                                 <InputLabel
                                     shrink id="demo-simple-select-placeholder-label-label">
                                     선택
@@ -99,10 +101,11 @@ const BlogNoSidebar = ({match}) => {
                                 name="keyword"
                                 value={search.keyword}
                                 onChange={onChange}/>
-                            <Button variant="outlined" onClick={searching}
+                            <Button type="submit" variant="outlined" onClick={searching}
                                     style={{marginTop: "15px", padding: "15px 15px"}}>
                                 <i className="pe-7s-search"/>
                             </Button>
+                            </Form>
                         </div>
                         <div className="row">
                             <div className="col-lg-12">

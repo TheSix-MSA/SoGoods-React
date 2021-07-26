@@ -1,6 +1,7 @@
 import React from 'react';
 import useInputs from "../../customHooks/useInputs";
 import repliesService from "../../service/repliesService";
+import {ToastTopRight} from "../../modules/toastModule";
 
 const initState = {
     writer: "",
@@ -20,6 +21,10 @@ const ReReplyInput = ({dto, bno, page, user}) => {
         /**
          * 작성한 대댓글 저장하는 함수
          */
+        if(reReply.content.trim()===""){
+            ToastTopRight("내용을 작성해 주세요.")
+            return;
+        }
         reReply.keyValue = bno;
         reReply.groupId = dto.groupId;
         reReply.parentId = dto.rno;
@@ -37,13 +42,12 @@ const ReReplyInput = ({dto, bno, page, user}) => {
 
     return (
         <div className="blog-reply-wrapper mt-50">
-            <h4 className="blog-dec-title">post a comment</h4>
             <div className="reReply-blog-form">
                 <div className="row">
                     <div className="col-md-10">
                         <div className="text-leave">
                             <textarea className="DatGeulInput" name="content" placeholder="Message" maxLength={2000}
-                                   onChange={changeReReply} value={reReply.content}/>
+                                   onChange={changeReReply} value={reReply.content} style={{background:"white", border:"none"}}/>
                         </div>
                     </div>
                     <div className="col-md-2">

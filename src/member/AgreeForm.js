@@ -14,7 +14,6 @@ import {ToastWarning} from "../modules/toastModule";
 const AgreeForm = ({setAgreeBoxes,agreeBoxes}) => {
 
     const getAccept = (e) => {
-        console.log(e.target.name);
         setAgreeBoxes({...agreeBoxes,[e.target.name]:!agreeBoxes[e.target.name]})
 
     };

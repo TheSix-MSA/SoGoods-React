@@ -1,6 +1,7 @@
 import React from 'react';
 import useInputs from "../../customHooks/useInputs";
 import repliesService from "../../service/repliesService";
+import {ToastTopRight} from "../../modules/toastModule";
 
 const initState = {
     writer: "라이터",
@@ -17,6 +18,11 @@ const ReplyInput = ({bno, maxPage, user}) => {
         writer:user.name.substr(0,user.name.length-1)+"*", email:user.email});
 
     const send = () => {
+        if(reply.content.trim()===""){
+            ToastTopRight("내용을 작성해 주세요.")
+            return;
+        }
+
         reply.keyValue = bno;
         repliesService.insertReply(reply, maxPage).then();
         setReply({...reply, content:""})
@@ -29,12 +35,12 @@ const ReplyInput = ({bno, maxPage, user}) => {
                 <div className="row">
                     <div className="col-md-10">
                         <div className="text-leave">
-                            <textarea className="DatGeulInput" name="content" placeholder="Message" maxLength={2000}
+                            <textarea className="DatGeulInput" name="content" placeholder="Message" maxLength={2000} style={{background:"none", border:"none"}}
                                    onChange={changeReply} value={reply.content}/>
                         </div>
                     </div>
                     <div className="col-md-2">
-                        <input type="submit" onClick={() => send()}/>
+                        <input type="submit" onClick={() => send()} style={{background:"#cecece"}}/>
                     </div>
                 </div>
             </div>

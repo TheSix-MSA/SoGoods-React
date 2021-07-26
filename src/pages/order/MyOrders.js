@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import orderServices from "../../service/orderServices";
 import getFormatDate from "../../modules/getFormatDate";
 import fundingService from "../../components/funding/fundingService";
-import {Link} from "@material-ui/core";
+import {useHistory} from "react-router-dom";
 
 const initState = {
     page:1,
@@ -43,6 +43,7 @@ const MyOrders = () => {
     const [prodsList, setProdList] = useState([...initDto]);
     const [flag, setFlag] = useState(false);
     const [imgs, setImgs] = useState([])
+    const history = useHistory();
 
     useEffect(() => {
         orderServices.ordersUserMade({page: pager.page, email: user.email, sortingCond: ""}).then(r => {
@@ -51,7 +52,6 @@ const MyOrders = () => {
             const pnolist = r.data.response.resDto.map(value => {
                 return value.pno
             })
-            console.log("pnolist ",pnolist)
             if(pnolist.length>0){
                 fundingService.getA3srcList("PRODUCT", pnolist, [1]).then(r =>
                     setImgs(r.data.response)
@@ -75,6 +75,10 @@ const MyOrders = () => {
     const movePages = (moveNum) => {
         setPager({...pager, page: pager.page + moveNum})
     };
+
+    const goToFunding = () => {
+        history.push("/funding")
+    }
 
     const prods = prodsList.length !== 0 ? prodsList.map((prod, idx) =>
             <div key={idx} className="entries-wrapper" style={{marginBottom: "15px"}}>
@@ -122,9 +126,9 @@ const MyOrders = () => {
                 <div>
                     <p><strong style={{fontSize: "20px", color: "#c2c2c2", textAlign: "center"}}>참여한 펀딩이 없습니다.</strong>
                     </p>
-                    <Link to={{pathname: "/funding"}}>
+                    <button onClick={()=>goToFunding()}>
                         <p style={{textAlign: "center", color: "rgb(244 61 61)"}}>펀딩하러 가기>></p>
-                    </Link>
+                    </button>
                 </div>
             </div>
         </div>;

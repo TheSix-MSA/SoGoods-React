@@ -94,7 +94,6 @@ const fundingService = () => {
 
     // 펀딩 게시글 찜하기
     const insertFavorite = async (favorite) => {
-        console.log(favorite)
         const result = await instance({
             url:`/funding/fav/`,
             method : 'post',
@@ -109,7 +108,6 @@ const fundingService = () => {
             url:`/funding/user/list/${email}/`,
             method:'get'
         })
-        console.log(result.data)
         return result.data;
     }
 
@@ -119,13 +117,11 @@ const fundingService = () => {
             url:`/funding/fav/list/${email}/`,
             method:'get'
         })
-        console.log(result.data)
         return result.data;
     }
 
     // 게시글 수정하기
     const updateFunding = async(fno, form) => {
-        console.log(form)
         const result = await instance({
             url:`/funding/${fno}/`,
             method:'put',

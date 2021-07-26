@@ -17,6 +17,8 @@ import MyBoardList from "./MyBoardList";
 import BoardPager from "./BoardPager";
 import {ToastInformation, ToastWarning} from "../modules/toastModule";
 import {signout} from "../redux/member/loginSlice";
+import MyFavFundingPage from "../components/funding/MyFavFundingPage";
+import MyFavFundingPageFake from "../components/funding/MyFavFundingPage";
 
 const initUserInfo = {
   email:"",
@@ -184,7 +186,7 @@ const MyAccount = () => {
   return (
       <Fragment>
         <MetaTags>
-          <title>Flone | My Account</title>
+          <title>SoGoods</title>
           <meta
               name="description"
               content="Compare page of flone react minimalist eCommerce template."
@@ -391,11 +393,34 @@ const MyAccount = () => {
                         <Card.Header className="panel-heading">
                           <Accordion.Toggle variant="link" eventKey="4">
                             <h3 className="panel-title">
-                              <span>5 .</span> Delete Account
+                              <span>5 .</span> My Favorite Goods
                             </h3>
                           </Accordion.Toggle>
                         </Card.Header>
                         <Accordion.Collapse eventKey="4">
+                          <Card.Body>
+                            <div className="myaccount-info-wrapper">
+                              <div className="account-info-wrapper">
+                                <h4>Favorite Goods</h4>
+                              </div>
+                              <div className="align-items-center justify-content-center entries-wrapper">
+                                <div className="billing-info  entries-edit-delete" style={{padding:"15px"}}>
+                                  <MyFavFundingPage></MyFavFundingPage>
+                                </div>
+                              </div>
+                            </div>
+                          </Card.Body>
+                        </Accordion.Collapse>
+                      </Card>
+                      <Card className="single-my-account mb-20" >
+                        <Card.Header className="panel-heading">
+                          <Accordion.Toggle variant="link" eventKey="5">
+                            <h3 className="panel-title">
+                              <span>6 .</span> Delete Account
+                            </h3>
+                          </Accordion.Toggle>
+                        </Card.Header>
+                        <Accordion.Collapse eventKey="5">
                           <Card.Body>
                             <div className="myaccount-info-wrapper">
                               <div className="account-info-wrapper">
@@ -418,13 +443,13 @@ const MyAccount = () => {
                       {roles?
                         <Card className="single-my-account mb-20">
                         <Card.Header className="panel-heading">
-                          <Accordion.Toggle variant="link" eventKey="5">
+                          <Accordion.Toggle variant="link" eventKey="7">
                             <h3 className="panel-title">
-                              <span>5 .</span> Modify your address book entries{" "}
+                              <span>7 .</span> Modify your address book entries{" "}
                             </h3>
                           </Accordion.Toggle>
                         </Card.Header>
-                        <Accordion.Collapse eventKey="5">
+                        <Accordion.Collapse eventKey="7">
                           <Card.Body>
                             <div className="myaccount-info-wrapper">
                               <div className="account-info-wrapper">

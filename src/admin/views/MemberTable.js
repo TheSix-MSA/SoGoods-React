@@ -72,7 +72,6 @@ const MemberTable = () => {
             setMembers(res.data.response);
         });
     }, [page])
-    console.log("23123124124124", members)
 
     const renderPage = () => {
         setFlag(!flag)
@@ -107,7 +106,7 @@ const MemberTable = () => {
     }
 
     const role = (member) => {
-        if(!member.roleSet.includes("GENERAL")){
+        if(!member.roleSet.includes("ADMIN")){
         memberService.changeAuth(member.email).then(res => {
             setMembers({
                 ...members, memberList: members.memberList.map(member => {
@@ -116,10 +115,11 @@ const MemberTable = () => {
                     return member;
                 })
             })
-        })
-        const currentRole = member.roleSet.includes("AUTHOR")?"작가":"일반으"
+        const currentRole = res.data.response.roleSet.includes("AUTHOR")?"작가":"일반으"
         ToastInformation("해당 유저의 권한이 "+ currentRole +"로 변경 되었습니다.")
-    }}
+        })
+    }
+}
 
     const list = members.memberList?.map(member => {
         return <tr className='hs-style' key={member.email}>
@@ -128,7 +128,7 @@ const MemberTable = () => {
             <td>{member.birth}</td>
             <td>{member.phone}</td>
             <td>{member.gender}</td>
-            <td onClick={() => ban(member)} style={{textAlign: "center"}}>
+            <td onClick={() => ban(member)} style={{textAlign: "center", width:"5%"}}>
                 <span style={{cursor: "pointer"}}>{member.banned ? "🔴" : "🟢"} </span>
             </td>
             <td>{member.removed ? "삭제" : "정상"}</td>
@@ -175,15 +175,15 @@ const MemberTable = () => {
                                style={{textAlign: "center", tableLayout: "fixed"}}>
                             <thead>
                             <tr>
-                                <th className="border-0">이메일</th>
-                                <th className="border-0">이름(상세정보)</th>
-                                <th className="border-0">생년월일</th>
-                                <th className="border-0">전화번호</th>
-                                <th className="border-0">성별</th>
-                                <th className="border-0">밴 여부</th>
-                                <th className="border-0">삭제 여부</th>
-                                <th className="border-0">권한</th>
-                                <th className="border-0">가입날짜</th>
+                                <th className="border-0" style={{width:"25%"}}>이메일</th>
+                                <th className="border-0" style={{width:"15%"}}>이름(상세정보)</th>
+                                <th className="border-0" style={{width:"15%"}}>생년월일</th>
+                                <th className="border-0" style={{width:"20%"}}>전화번호</th>
+                                <th className="border-0" style={{width:"5%"}}>성별</th>
+                                <th className="border-0" style={{width:"5%"}}>밴 여부</th>
+                                <th className="border-0" style={{width:"5%"}}>삭제 여부</th>
+                                <th className="border-0" style={{width:"10%"}}>권한</th>
+                                <th className="border-0" style={{width:"10%"}}>가입날짜</th>
                             </tr>
                             </thead>
                             <tbody>

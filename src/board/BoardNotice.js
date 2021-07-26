@@ -15,16 +15,25 @@ const BoardNotice = ({notice, page}) => {
         <Fragment>
             {notice && notice?.map((data, idx) => (
                 <Grid container key={idx}>
-                    <Grid item xs={12} style={{cursor:"pointer"}}>
+                    <Grid item xs={12} style={{cursor: "pointer"}}>
                         {data.private === false &&
-                        <Paper className={classes.paper}>
-                            <span style={{float: "left"}}> 공지사항 </span>
-                            <div onClick={() => {
+                        <Paper className={classes.paper} style={{backgroundColor:"#d9b8d8a6"}}>
+                            <div
+                                style={{textAlign:"left"}}
+                                onClick={() => {
                                 moveDetail(data.bno)
                             }}>
-                                <span style={{textOverflow:"ellipsis", whiteSpace:"nowrap",
-                                    overflowX:"hidden", maxWidth:"200px", height: "30px"}}> {data.title} </span>
-                                <span style={{float:"right"}}> {getFormatDate(new Date(data.modDate))} </span>
+                                <span style={{display:"inline-block", width:"10%"}}> 공지사항</span>
+                                <span style={{
+                                    display:"inline-block",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                    width: "75%"
+                                }}> {data.title} </span>
+                                <span style={{display:"inline-block", width:"7%"}}> {data.replyCnt}
+                                    <i className="fa fa-comments-o" style={{marginLeft:"5px"}}/> </span>
+                                <span style={{display:"inline-block"}}>
+                                    {getFormatDate(new Date(data.modDate))} </span>
                             </div>
                         </Paper>
                         }

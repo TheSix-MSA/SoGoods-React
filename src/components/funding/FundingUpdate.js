@@ -106,7 +106,6 @@ const FundingUpdate = () => {
             fundingService.getA3src('FUNDING', [fno])
                 .then(res => {
                     //펀딩대표이미지
-                    console.log(res.data.response[0])
                     setFundingMainFile(res.data.response[0])
                     fundingService.getA3srcList('PRODUCT', pnoList, [0,1])
                         .then(res=>{
@@ -144,7 +143,6 @@ const FundingUpdate = () => {
             return;
         }
 
-        console.log(fundingForm);
         const result = await fundingService.updateFunding(fno, {...fundingForm});
 
         await fundingService.registerAttach([fundingMainFile], 'FUNDING', fno, 0);
@@ -159,7 +157,6 @@ const FundingUpdate = () => {
     }
 
     const productDelete = (product, idx) => {
-        console.log(product.text);
         const anoList = product.pictures.map(picture=>picture.fileName)
         productUpdateService.getProductList().splice(idx, 1)
         setProdDel([...prodDel, ...anoList])

@@ -22,7 +22,6 @@ export default function Register() {
     const [board, onChange] = useInputs(initState);
     const history = useHistory()
     const {email, name} = useSelector(state => state.login)
-    console.log(history)
 
     const titleRef = useRef();
     const contentRef = useRef();

@@ -29,6 +29,7 @@ const MyFavFundingPage = ({productTabClass}) => {
                 let fnoList = res1.response.map(f=> f.fno)
                 fundingService.getA3src('FUNDING', fnoList)
                     .then(res2=>{
+                        console.log(res2);
                         res2.data.response.forEach((ele,i)=>{
                             res1.response[i].imgSrc = ele.thumbSrc
                         })
@@ -42,10 +43,9 @@ const MyFavFundingPage = ({productTabClass}) => {
     const readTodo = (fno) => {
         history.push("/funding/read/"+fno)
     }
-
     const listPage = list.map((li, idx) =>
-        !list ?
-            <div>
+        li.fno === 0 ?
+            <div style={{textAlign:"center", order:5}}>
                 <h4>찜한 내역이 존재하지 않습니다.</h4>
             </div>
             :
@@ -70,30 +70,41 @@ const MyFavFundingPage = ({productTabClass}) => {
             </div>
     );
 
+    console.log(listPage[0].key);
     return (
         <div>
             <Fragment>
-                    <Nav
-                        variant="pills"
-                        className={`product-tab-list-6 justify-content-center mb-60 ${
-                            productTabClass ? productTabClass : ""
-                        }`}
-                    >
-                        <div style={{marginTop:"30px"}}>
-                            <h3>내가 찜한 펀딩</h3>
-                        </div>
-                    </Nav>
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-lg-12">
-                                <div style={{float:"right"}}>
-                                </div>
-                                <div style={{display:"grid", gridTemplateColumns: "1fr 1fr 1fr" ,gridTemplateRows: "1fr 1fr 1fr", justifyContent:"center", alignItems:"center"}}>
+                <Nav
+                    variant="pills"
+                    className={`product-tab-list-6 justify-content-center mb-60 ${
+                        productTabClass ? productTabClass : ""
+                    }`}
+                >
+                    <div style={{marginTop: "30px"}}>
+                        <h3>내가 찜한 펀딩</h3>
+                    </div>
+                </Nav>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <div style={{float: "right"}}>
+                            </div>
+                            {list[0].fno === 0 ?
+                                <div style={{justifyContent: "center", alignItems: "center"}}>
                                     {listPage}
                                 </div>
-                            </div>
+                                : <div style={{
+                                    display: "grid",
+                                    gridTemplateColumns: "1fr 1fr 1fr",
+                                    gridTemplateRows: "1fr 1fr 1fr",
+                                    justifyContent: "center",
+                                    alignItems: "center"
+                                }}>
+                                    {listPage}
+                                </div>}
                         </div>
                     </div>
+                </div>
             </Fragment>
 
         </div>

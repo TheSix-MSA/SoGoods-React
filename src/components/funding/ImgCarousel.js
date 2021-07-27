@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.default,
     },
     img: {
-        height: 180,
+        height: 230,
         maxWidth: 270,
         overflow: 'hidden',
         display: 'block',
@@ -40,7 +40,6 @@ export default function ImgCarousel({tutorialSteps}) {
 
     return (
         <div className={classes.root}>
-            <h4></h4>
             <img
                 className={classes.img}
                 src={tutorialSteps[activeStep] && tutorialSteps[activeStep].imgPath}

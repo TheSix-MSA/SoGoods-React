@@ -242,7 +242,7 @@ const FundingSideBar = (funding) => {
         <div className="sidebar-style">
             <div className="sidebar-widget mt-35">
                 {selectReward}
-                { userInfo.email===funding.fundingDTO.email && update}
+                { userInfo.email===funding.fundingDTO.email && !funding.fundingDTO.success && update}
             </div>
             <div className="sidebar-widget mt-40" >
                 <h3 className="pro-sidebar-title"> 리워드 선택</h3>

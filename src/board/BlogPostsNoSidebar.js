@@ -8,7 +8,6 @@ const BlogPostsNoSidebar = ({boardData, boardType}) => {
     const moveDetail = (bno) => {
         history.push(`/board/${boardType}/${bno}`)
     }
-    console.log(boardData)
     return (
         <Fragment>
             {boardData && boardData?.map((data, idx) => (
@@ -29,7 +28,8 @@ const BlogPostsNoSidebar = ({boardData, boardType}) => {
                             </div>
                             <h4>
                                 <div onClick={()=>{moveDetail(data.bno)}}
-                                     style={{textOverflow:"ellipsis", whiteSpace:"nowrap", overflowX:"hidden", maxWidth:"300px", height: "30px"}}>
+                                     style={{textOverflow:"ellipsis", whiteSpace:"nowrap",
+                                         overflowX:"hidden", maxWidth:"300px", height: "30px"}}>
                                     {data.title}
                                 </div>
                             </h4>

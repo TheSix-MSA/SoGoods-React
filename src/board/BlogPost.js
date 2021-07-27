@@ -6,14 +6,13 @@ import {useSelector} from "react-redux";
 import Button from "@material-ui/core/Button";
 
 const BlogPost = ({data, boardType}) => {
+    const {boardListRequestDTO} = useSelector(state => state.board)
     const {roles} = useSelector(state => state.login)
     const history = useHistory()
     const location = useLocation()
     const {email, name} = useSelector(state => state.login)
-    console.log(data)
-    console.log(email, name)
     const goList = () => {
-        history.push(`/board/${boardType}/list/1`)
+        history.push(`/board/${boardType}/list?page=${boardListRequestDTO.page}&keyword=${boardListRequestDTO.keyword}&type=${boardListRequestDTO.type}`)
     }
     const modify = () => {
         history.push(`/board/modify/${boardType}/${data.bno}`)
@@ -25,7 +24,6 @@ const BlogPost = ({data, boardType}) => {
             })
         }
     }
-
     return (
         data && (
             <Fragment>
@@ -37,23 +35,20 @@ const BlogPost = ({data, boardType}) => {
                             }}>
                                 목록가기
                             </Button>
-                            {data.email === email ? (
-                                <>
-                                    <Button variant="outlined" style={{margin: "5px"}} onClick={() => {
-                                        modify()
-                                    }}>
-                                        수정하기
-                                    </Button>
-                                    { data.email === email || roles.includes("ADMIN") ? (
-                                    <Button variant="outlined" style={{margin: "5px"}} onClick={() => {
-                                        remove()
-                                    }}>
-                                        삭제하기
-                                    </Button>
-                                    ) : null }
-                                </>
-                            ) : null
+                            {data.email === email &&
+                            <Button variant="outlined" style={{margin: "5px"}} onClick={() => {
+                                modify()
+                            }}>
+                                수정하기
+                            </Button>
                             }
+                            {data.email === email || roles.includes("ADMIN") ? (
+                                <Button variant="outlined" style={{margin: "5px"}} onClick={() => {
+                                    remove()
+                                }}>
+                                    삭제하기
+                                </Button>
+                            ) : null }
                         </ul>
                         <div className="blog-meta-2">
                             <ul>

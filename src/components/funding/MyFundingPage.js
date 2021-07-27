@@ -31,7 +31,6 @@ const MyFundingPage = ({productTabClass}) => {
     useEffect(()=> {
         fundingService.getMyFundingList(userInfo.email)
             .then(res1=>{
-                console.log(res1.response)
                 let fnoList = res1.response.map(f=> f.fno)
                 fundingService.getA3src('FUNDING', fnoList)
                     .then(res2=>{
@@ -43,7 +42,6 @@ const MyFundingPage = ({productTabClass}) => {
             })
     }, [])
 
-    console.log(list);
 
 
     // 읽기 페이지로 이동
@@ -60,7 +58,7 @@ const MyFundingPage = ({productTabClass}) => {
                     </div>
                     :
                     <div style={{position:"relative", height:"230px", width:"350px"}}>
-                        <img alt={"이미지"} src={li.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"} style={{filter:"grayscale(100%)", objectFit:"cover"}}/>
+                        <img alt={"이미지"} src={li.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"} style={{filter:"grayscale(100%)", objectFit:"cover", height:"230px", width:"350px"}}/>
                         <span style={{fontWeight:"bold", position:"absolute", transform:"translate(-70%, -50%)", top:"50%", left:"50%", pointerEvents:"none"}}>
                             <h3>종료된 펀딩입니다</h3>
                         </span>
@@ -76,7 +74,7 @@ const MyFundingPage = ({productTabClass}) => {
         <div>
             <Fragment>
                 <MetaTags>
-                    <title>Flone | Furniture Home</title>
+                    <title>SoGoods</title>
                     <meta
                         name="description"
                         content="Furniture home of flone react minimalist eCommerce template."

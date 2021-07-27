@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useMemo} from 'react';
 import {useDropzone} from 'react-dropzone';
 import productUpdateService from "./productUpdateService";
+import {ToastWarning} from "../../../modules/toastModule";
 
 const baseStyle = {
     flex: 1,
@@ -103,7 +104,7 @@ const PictureUpdateAttach = () => {
                 if(newFiles.length <= max){
                     setFiles(newFiles)
                 }else{
-                    console.log(`파일갯수 ${max} 초과`)
+                    ToastWarning(`파일갯수 ${max} 초과`)
                 }
             }
     });
@@ -121,15 +122,9 @@ const PictureUpdateAttach = () => {
 
     const removeImg = (idx) => {
 
-        console.log(files[idx].hasOwnProperty('type'))
-
         if(files[idx].hasOwnProperty('type') === false){
             //db에서 가져온 사진인데 클릭됐다면
             setPicDel([...picDel, files[idx].fileName])
-        }else{
-
-            console.log(files[idx])
-            //pictureToInsert.filter(picture=> picture.)
         }
 
 
@@ -139,14 +134,6 @@ const PictureUpdateAttach = () => {
 
     productUpdateService.setPictures([...files])
 
-    console.log("화면상 files객체")
-    console.log(files)
-
-    console.log("del할 db그림객체")
-    console.log(picDel)
-
-    console.log("ins할 file객체")
-    console.log(picIns)
 
     // useEffect(() => () => {
     //     // Make sure to revoke the data uris to avoid memory leaks

@@ -10,7 +10,6 @@ import {Table} from "react-bootstrap";
 export default function Identification({member}) {
     const [open, setOpen] = React.useState(false);
     const history = useHistory()
-    console.log(history)
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -31,19 +30,18 @@ export default function Identification({member}) {
                             <Table>
                                 <thead>
                                 <tr>
-                                    <th className="border-0">이메일</th>
-                                    <th className="border-0">이름</th>
-                                    <th className="border-0">필명</th>
-                                    <th className="border-0">작가 소개</th>
+                                    <th style={{width:"100px"}}>이름</th>
+                                    <td>{member.name}</td>
                                 </tr>
-                                </thead>
-                                <tbody>
-                                <td>{member.email}</td>
-                                <td>{member.name}</td>
+                                <tr>
+                                    <th>필명</th>
                                 <td>{member.nickName}</td>
-                                <td>{member.introduce}</td>
-                                </tbody>
-
+                                </tr>
+                                    <tr>
+                                        <th>작가 소개</th>
+                                        <td style={{borderBottom:"1px solid #dee2e6"}}>{member.introduce}</td>
+                                    </tr>
+                                </thead>
                             </Table>
                     <div style={{display:"flex", justifyContent:"center", background:"rgb(235,235,235)", padding:"15px"}}>
                     <img src={member.identificationUrl} style={{width:"300px"}}/>

@@ -45,19 +45,25 @@ const repliesService = () => {
             data: reply
         });
 
-        // const increaseReplyNum = await instance({
-        //     url: "/board/countUp/"+bno
-        //     method: "put"
-        // })
+        const increaseReplyNum = await instance({
+            url: "/board/countup/"+reply.keyValue,
+            method: "put"
+        })
         movePage(page);
         return res;
     }
 
-    const deleteReply = async (rno, page) => {
+    const deleteReply = async (rno, page, bno) => {
         const res = await instance({
             url: "/reply/"+rno,
             method: 'delete'
         });
+
+        await instance({
+            url: "/board/countdown/"+bno,
+            method: "put"
+        })
+
         movePage(page);
         return res;
     }

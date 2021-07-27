@@ -43,8 +43,8 @@ const BlogComment = ({bno}) => {
      */
   }, [replies.pageMaker.page, flag, replies.bno]);
 
-  const deleteReply = (rno) => {
-    repliesService.deleteReply(rno, replies.pageMaker.page)
+  const deleteReply = (rno, bno) => {
+    repliesService.deleteReply(rno, replies.pageMaker.page, bno)
         .then()
   }
 
@@ -130,7 +130,7 @@ const BlogComment = ({bno}) => {
         <h4 className="blog-dec-title">comments</h4>
         {replies.repliesDTOList && replies.repliesDTOList.map(dto =>
           <div className={ dto.rno !== dto.groupId ?
-              "single-comment-wrapper mt-50 ml-120":"single-comment-wrapper mt-35"} key={dto.rno}>
+              "single-comment-wrapper mt-50 ml-120":"single-comment-wrapper mt-35"} style={{border:"none",background:"#fafafa"}} key={dto.rno}>
             <ReplyBlock dto={dto}
                         deleteReply={deleteReply}
                         bno={replies.bno}
@@ -147,7 +147,7 @@ const BlogComment = ({bno}) => {
         )}
       </div>
 
-      <div className="reply-pagination">
+      <div className="reply-pagination" style={{marginTop:"10px"}}>
         {replies.pageMaker.prev && <span>Prev</span>}
         {replies.pageMaker.pageList.map(i => i===replies.pageMaker.page? <span key={i}><b>{i}</b></span>:
             <span key={i} onClick={() => movePage(i)}>{i}</span>)}

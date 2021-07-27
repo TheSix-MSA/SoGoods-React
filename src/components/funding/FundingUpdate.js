@@ -18,9 +18,6 @@ import productService from "../funding-attach/add/productService";
 const inputStyle = {
     margin:"10px"
 }
-const textStyle = {
-    margin:"0 10px"
-}
 
 const radioBtnStyle = {
     width: "20px",
@@ -38,9 +35,7 @@ const textArea = {
     margin:"10px",
     height:"300px"
 }
-const inputStyle = {
-    margin:"10px"
-}
+
 const textStyle = {
     margin:"0 10px"
 }
@@ -64,19 +59,23 @@ const initFundingForm = {
     targetAmount:0,
     productDTOs:[]
 }
+const toBeDeletedDTO = []
+const toBeAddedDTO = []
 const productDTOs = []
 
 const FundingUpdate = () => {
 
-   let {fno} = useParams();
-   const [fundingForm, changeFundingForm, setFundingForm] = useInputs({...initFundingForm});
-   const [productForm, changeProductForm, setProductForm] = useInputs([...productDTOs]);
+    let {fno} = useParams();
+    const [fundingForm, changeFundingForm, setFundingForm] = useInputs({...initFundingForm});
+    const [productForm, changeProductForm, setProductForm] = useInputs([...productDTOs]);
+
+    const [prodDel, setProdDel] = useState([])
 
     const [open, setOpen] = useState(false);
-    const [mainImg, setMainImg] = useState([]);
     const history = useHistory();
     const [flag, setFlag] = useState(false);
 
+    const [fundingMainFile, setFundingMainFile] = useState(null);
 
     productUpdateService.setOpenFn(setOpen)
     let productList = [];
@@ -107,8 +106,7 @@ const FundingUpdate = () => {
             fundingService.getA3src('FUNDING', [fno])
                 .then(res => {
                     //펀딩대표이미지
-                    //res.data.response[0].fileName.split('_')[1]
-
+                    setFundingMainFile(res.data.response[0])
                     fundingService.getA3srcList('PRODUCT', pnoList, [0,1])
                         .then(res=>{
 
@@ -117,15 +115,12 @@ const FundingUpdate = () => {
                                 let pictures = res.data.response[idx].map(picture=>{
                                     return {...picture, preview: picture.imgSrc, }
                                 })
-
                                 return {...product, pictures: pictures}
                             })
                             productUpdateService.setProductList(productList)
                             setFlag(!flag)
                         })
-
                 })
-
         })
     },[fno])
 
@@ -148,48 +143,61 @@ const FundingUpdate = () => {
             return;
         }
 
-        console.log(fundingForm);
         const result = await fundingService.updateFunding(fno, {...fundingForm});
+
+        await fundingService.registerAttach([fundingMainFile], 'FUNDING', fno, 0);
+
+        for(const product of productUpdateService.getProductList()){
+            if(product.isNew){
+                await fundingService.registerAttach(product.pictures, 'PRODUCT', fno, product.mainIdx);
+            }
+        }
+
         history.push("/funding/list");
     }
 
-    // const setProductMainImage = (e, productIdx, pictureIdx)=>{
-    //     productUpdateService.getProductList()[productIdx].mainIdx = pictureIdx
-    // }
+    const productDelete = (product, idx) => {
+        const anoList = product.pictures.map(picture=>picture.fileName)
+        productUpdateService.getProductList().splice(idx, 1)
+        setProdDel([...prodDel, ...anoList])
+    }
 
     const list = productUpdateService.getProductList().map((product, i)=>{
 
         return (
-            <>
                 <li key={i}>
-                    <h3 style={{marginTop: '32px'}}>상품 {i+1}
-                        <Button style={editBtn} variant="outlined" color="primary" onClick={()=>{productUpdateService.openDialogForEdit(i)}}>
-                            수정
-                        </Button>
-                    </h3>
-                    <p>
-                        상품명 : {product.text.name}
-                    </p>
-                    <div style={{width: "100%",
-                                overflow: "hidden" }}>
-                        {product.pictures.map((file ,j)=>
-                            <div style={{width: "30%", margin: 0, float: "left"}}>
-                                <label>
-                                <img key={j} data-idx={j}
-                                     src={file.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"}
-                                     style={imgStyle}/>
-                                <input type="radio"
-                                       name={`mainIdx_${i}`}
-                                       value={j}
-                                       onClick={(e)=>{setProductMainImage(e,i,j)}}
-                                       style={radioBtnStyle}/>
-                                </label>
-                            </div>
-                        )}
-
+                    {/*<h3 style={{marginTop: '32px'}}>상품 {i+1}*/}
+                    {/*    <Button style={editBtn} variant="outlined" color="primary" onClick={()=>{productUpdateService.openDialogForEdit(i)}}>*/}
+                    {/*        수정*/}
+                    {/*    </Button>*/}
+                    {/*    <Button style={editBtn} variant="outlined" color="primary" onClick={()=>{productDelete(product, i)}}>*/}
+                    {/*        삭제*/}
+                    {/*    </Button>*/}
+                    {/*</h3>*/}
+                    <h5 style={{marginTop: '32px', marginLeft:"10px"}}>{i+1}번 상품</h5>
+                    <div style={{marginLeft:"10px"}}>
+                        <p>
+                            상품명 : {product.text.name}
+                        </p>
+                        <div style={{width: "100%",
+                                    overflow: "hidden" }}>
+                            {product.pictures.map((file ,j)=>
+                                <div style={{width: "30%",float: "left"}} key={j}>
+                                    <label>
+                                    <img key={j} data-idx={j}
+                                         src={file.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"}
+                                         style={imgStyle}/>
+                                    {/*<input type="radio"*/}
+                                    {/*       name={`mainIdx_${i}`}*/}
+                                    {/*       value={j}*/}
+                                    {/*       onClick={(e)=>{setProductMainImage(e,i,j)}}*/}
+                                    {/*       style={radioBtnStyle}/>*/}
+                                    </label>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </li>
-            </>
         )
     })
 
@@ -197,10 +205,10 @@ const FundingUpdate = () => {
         document.getElementById("file").click()
     }
 
-    const setProductMainImage = (e)=>{
-       const file = e.target.files[0];
-        console.log(file);
-       setMainImg(file)
+
+
+    const setProductMainImage = (e, productIdx, pictureIdx)=>{
+        productUpdateService.getProductList()[productIdx].mainIdx = pictureIdx
     }
 
 
@@ -253,23 +261,27 @@ const FundingUpdate = () => {
                                                                 value={fundingForm.content ||""}
                                                                 onChange={changeFundingForm}
                                                             />
-                                                            <Button style={btn} variant="outlined" color="primary" onClick={clickFile}>
-                                                                메인 이미지 추가
-                                                            </Button>
+                                                            {/*<Button style={btn} variant="outlined" color="primary" onClick={clickFile} >*/}
+                                                            {/*    메인 이미지*/}
+                                                            {/*</Button>*/}
+                                                            <div style={{marginLeft:"10px"}}>
+                                                                메인 이미지<br></br>
+                                                                {fundingMainFile && <img width={"70px"} height={"70px"} src={fundingMainFile.imgSrc}/> }
+                                                            </div>
                                                             <input
                                                                 id="file"
                                                                 style={{display:"none"}}
                                                                 type="file"
                                                                 name="mainImage"
-                                                                onChange={setProductMainImage}
+                                                                onChange={(e)=>{setFundingMainFile(e.target.files[0])}}
                                                             />
                                                             <ul>
                                                                 {list}
                                                             </ul>
 
-                                                            <Button style={btn} variant="outlined" color="primary" onClick={productUpdateService.openDialog}>
-                                                                상품 추가
-                                                            </Button>
+                                                            {/*<Button style={btn} variant="outlined" color="primary" onClick={productUpdateService.openDialog}>*/}
+                                                            {/*    상품 추가*/}
+                                                            {/*</Button>*/}
                                                                 <div style={{display:"flex"}}>
                                                                     <div style={{display:"flex" ,flexWrap:"wrap"}}>
                                                                         <h5 style={textStyle}>펀딩 만기일</h5>

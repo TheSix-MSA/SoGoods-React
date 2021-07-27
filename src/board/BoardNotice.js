@@ -11,21 +11,29 @@ const BoardNotice = ({notice, page}) => {
     const moveDetail = (bno) => {
         history.push(`/board/NOTICE/${bno}`)
     }
-    console.log(notice)
     return (
         <Fragment>
             {notice && notice?.map((data, idx) => (
-                <Grid container>
-                    <Grid item xs={12} key={idx} style={{cursor:"pointer"}}>
+                <Grid container key={idx}>
+                    <Grid item xs={12} style={{cursor: "pointer"}}>
                         {data.private === false &&
-                        <Paper className={classes.paper}>
-                            <span style={{float: "left"}}> 공지사항 </span>
-                            <div onClick={() => {
+                        <Paper className={classes.paper} style={{backgroundColor:"#d9b8d8a6"}}>
+                            <div
+                                style={{textAlign:"left"}}
+                                onClick={() => {
                                 moveDetail(data.bno)
                             }}>
-                                <span style={{}}> {data.title} </span>
-                                <span> {data.content} </span>
-                                <span style={{float:"right"}}> {getFormatDate(new Date(data.modDate))} </span>
+                                <span style={{display:"inline-block", width:"10%"}}> 공지사항</span>
+                                <span style={{
+                                    display:"inline-block",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                    width: "75%"
+                                }}> {data.title} </span>
+                                <span style={{display:"inline-block", width:"7%"}}> {data.replyCnt}
+                                    <i className="fa fa-comments-o" style={{marginLeft:"5px"}}/> </span>
+                                <span style={{display:"inline-block"}}>
+                                    {getFormatDate(new Date(data.modDate))} </span>
                             </div>
                         </Paper>
                         }
@@ -43,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(2),
         textAlign: 'center',
-        color: theme.palette.text.secondary,
+        color: "black",
         margin: '10px',
         backgroundColor: ''
     },

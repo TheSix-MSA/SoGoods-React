@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-
 import {
     Card,
     Table,
@@ -12,7 +11,6 @@ import FundingPagination from "../components/funding/FundingPagination";
 import * as queryString from "querystring";
 import useInputs from "../../customHooks/useInputs";
 import {makeStyles} from "@material-ui/core";
-import {ToastInformation} from "../../modules/toastModule";
 
 const initState = {
     dtoList: [
@@ -60,8 +58,6 @@ const param = {
 }
 
 const FundingTable = () => {
-    const classes = useStyles();
-
     const location = useLocation();
     const history = useHistory();
     const value = queryString.parse(location.search.replace("?", ""));
@@ -98,20 +94,12 @@ const FundingTable = () => {
         history.push("/funding/read/" + fno)
     }
 
-    const setAuthorized = (fund) => {
-        if (!fund.fundingDTO.authorized) {
-            fundingService.setAuthorized(fund.fundingDTO.fno, funding.pageMaker.page)
-                .then();
-            ToastInformation("새로운 펀딩이 등록 되었습니다.")
-        }}
-
     const list = funding.dtoList.map(fund => {
         return <tr className='hs-style' key={fund.fundingDTO.fno}>
             <td onClick={() => toFunding(fund.fundingDTO.fno)}>
                 <span style={{cursor:"pointer"}}>{fund.fundingDTO.title}</span>
             </td>
             <td>{fund.fundingDTO.writer}</td>
-            <td className={classes.root}>{fund.fundingDTO.email}</td>
             <td>{fund.fundingDTO.content}</td>
             <td>{fund.fundingDTO.targetAmount}</td>
             <td>{fund.fundingDTO.totalAmount}</td>
@@ -123,8 +111,9 @@ const FundingTable = () => {
             <td onClick={() => fundingService.changeRemoved(fund.fundingDTO.fno,funding.pageMaker.page)}>
                 <span style={{cursor:"pointer"}}>{fund.fundingDTO.removed ? "" : "✔"}</span>
             </td>
-            <td onClick={() => setAuthorized(fund)}>
-                <span style={{cursor:"pointer"}}>{fund.fundingDTO.authorized ? "참여중" : "처리중"}</span>
+            {/*<td onClick={() => setAuthorized(fund)}>*/}
+            <td>
+                {fund.fundingDTO.authorized ? "참여중" : "처리중"}
             </td>
         </tr>
     })
@@ -159,9 +148,8 @@ const FundingTable = () => {
                         <Table className="table-hover table-striped" style={{textAlign: "center",tableLayout:"fixed"}}>
                             <thead>
                             <tr>
-                                <th className="border-0">제목</th>
+                                <th className="border-0">제목(상세보기)</th>
                                 <th className="border-0">작성자</th>
-                                <th className="border-0">이메일</th>
                                 <th className="border-0">내용</th>
                                 <th className="border-0">목표금액</th>
                                 <th className="border-0">현재금액</th>
@@ -185,12 +173,5 @@ const FundingTable = () => {
 
     );
 }
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        textOverflow: 'ellipse',
-        overflow:'hidden'
-    }
-}));
 
 export default FundingTable;

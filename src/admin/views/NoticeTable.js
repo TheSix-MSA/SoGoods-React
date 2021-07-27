@@ -58,7 +58,6 @@ const NoticeTable = () => {
 
     useEffect(() => {
         noticeService.getNoticeList(page, keyword, type).then(result => {
-            console.log("result.response", result.response)
             setNotices(result.response);
         })
     }, [page])

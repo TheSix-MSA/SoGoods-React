@@ -119,13 +119,13 @@ const Checkout = ({ location }) => {
                     <div className="col-lg-6 col-md-6">
                       <div className="billing-info mb-20">
                         <label>Receiver's Name</label>
-                        <input type="text" name="receiverName" onChange={changeReceiver}/>
+                        <input type="text" name="receiverName" onChange={changeReceiver} maxLength={50}/>
                       </div>
                     </div>
                     <div className="col-lg-12 col-md-6">
                       <div className="billing-info mb-20">
                           <label>Address</label>
-                          <input type="text" name="receiverAddress" readOnly={true} value={receiver.receiverAddress}/>
+                          <input type="text" name="receiverAddress" readOnly={true} value={receiver.receiverAddress} maxLength={200}/>
                           <input type="submit" value="주소 찾기" onClick={() => popupPost()}/>
                           <CodeDialogSlide addAddress={addAddress}/>
                       </div>
@@ -133,7 +133,7 @@ const Checkout = ({ location }) => {
                     <div className="col-lg-12 col-md-6">
                       <div className="billing-info mb-20">
                         <label>Detailed Address</label>
-                        <input type="text" name="receiverDetailedAddress" onChange={changeReceiver}/>
+                        <input type="text" name="receiverDetailedAddress" onChange={changeReceiver} maxLength={200}/>
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6">
@@ -145,7 +145,7 @@ const Checkout = ({ location }) => {
                     <div className="col-lg-6 col-md-6">
                       <div className="billing-info mb-20">
                         <label>Receiver's Email Address</label>
-                        <input type="text" name="receiverEmail" onChange={changeReceiver}/>
+                        <input type="text" name="receiverEmail" onChange={changeReceiver} maxLength={200}/>
                       </div>
                     </div>
                   </div>
@@ -157,6 +157,7 @@ const Checkout = ({ location }) => {
                         placeholder="Notes about your order, e.g. special notes for delivery. "
                         name="receiverRequest"
                         defaultValue={""}
+                        maxLength={200}
                         onChange={changeReceiver}
                       />
                     </div>

@@ -103,14 +103,12 @@ const productService = ()=>{
 
     //다이얼로그 창 닫기
     const closeDialog = () => {
-        console.log('close')
         openFn(false)
         initProduct()
     }
 
     //새 상품등록버튼 클릭시
     const openDialog = () => {
-        console.log("OPEN")
         setMode('register')
         initProduct()
 
@@ -123,7 +121,6 @@ const productService = ()=>{
         prodIdx = idx
         setMode('update')
         product = getProductByIdx(idx)
-        console.log("수정할 product: ", product)
 
         //랜더링
         openFn(true)

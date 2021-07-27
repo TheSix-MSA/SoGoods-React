@@ -37,7 +37,7 @@ const fundingService = () => {
         }
 
         const result = await axios.post(
-          `${process.env.REACT_APP_API_URL}attach/upload?tableName=${tableName}&keyValue=${keyValue}&mainIdx=${mainIdx}`,
+          `${process.env.REACT_APP_API_URL}/attach/upload?tableName=${tableName}&keyValue=${keyValue}&mainIdx=${mainIdx}`,
             form,
             config)
     }
@@ -47,7 +47,7 @@ const fundingService = () => {
         let keyStr = keyValues.map(v=>'&keyValues=' + v)
 
         const result = await axios.get(
-            `${process.env.REACT_APP_API_URL}attach/list/uuid?type=${type}` + keyStr.join(''))
+            `${process.env.REACT_APP_API_URL}/attach/list/uuid?type=${type}` + keyStr.join(''))
         return result
     }
 
@@ -57,9 +57,12 @@ const fundingService = () => {
         let mainListStr = mainList.map(m=>'&mainList=' + m)
 
         const result = await axios.get(
-           `${process.env.REACT_APP_API_URL}attach/list/uuidlist?type=${type}` + keyStr.join('') + mainListStr.join(''))
+           `${process.env.REACT_APP_API_URL}/attach/list/uuidlist?type=${type}` + keyStr.join('') + mainListStr.join(''))
         return result
     }
+
+
+
 
     //펀딩 글 등록시 관련된 상품들 등록처리하기
     const registerProduct = async (fno, productList) => {
@@ -91,7 +94,6 @@ const fundingService = () => {
 
     // 펀딩 게시글 찜하기
     const insertFavorite = async (favorite) => {
-        console.log(favorite)
         const result = await instance({
             url:`/funding/fav/`,
             method : 'post',
@@ -106,7 +108,6 @@ const fundingService = () => {
             url:`/funding/user/list/${email}/`,
             method:'get'
         })
-        console.log(result.data)
         return result.data;
     }
 
@@ -116,13 +117,11 @@ const fundingService = () => {
             url:`/funding/fav/list/${email}/`,
             method:'get'
         })
-        console.log(result.data)
         return result.data;
     }
 
     // 게시글 수정하기
     const updateFunding = async(fno, form) => {
-        console.log(form)
         const result = await instance({
             url:`/funding/${fno}/`,
             method:'put',

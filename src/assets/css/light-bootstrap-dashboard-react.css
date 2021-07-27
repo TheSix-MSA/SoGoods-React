@@ -2288,6 +2288,7 @@ Copyright (c) 2015 Daniel Eden
 .ct-series-a .ct-point, .ct-series-a .ct-line, .ct-series-a .ct-bar, .ct-series-a .ct-slice-donut {
   stroke: #1DC7EA; }
 
+
 .ct-series-a .ct-slice-pie, .ct-series-a .ct-area {
   fill: #1DC7EA; }
 

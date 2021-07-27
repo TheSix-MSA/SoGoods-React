@@ -24,7 +24,6 @@ const buttonStyle = {
     outLine:"0",
     color:"white",
     cursor:"pointer"
-
 }
 
 const initFavorite = {
@@ -54,7 +53,7 @@ const FundingSideBar = (funding) => {
         fundingService.getFavList(funding.fundingDTO.fno).then(res=>
             setFavList(res.response.favoriteDTOList)
         )
-    },[purchasable])
+    },[])
 
     /**
      * 장바구니 배열에 상품추가, 일치하는 값이 있으면 개수만 추가
@@ -67,7 +66,6 @@ const FundingSideBar = (funding) => {
         }));
         setPurchasable(true)
     }
-    console.log(cartList);
 
     /**
      * 장바구니 배열에서 일치하는 데이터를 삭제, count=0
@@ -79,14 +77,21 @@ const FundingSideBar = (funding) => {
             if(item.pno === p.pno) return {...item,count:item.count-1}
             return item;
         }))
-
-        const setVal = cartList.reduce(function (prev, next) {
+    }
+    useEffect(()=>{
+        const setVal = cartList.length===1?cartList[0].count:cartList.reduce(function (prev, next) {
             if (typeof prev === "object") {
                 return prev.count + next.count
             }
             return prev + next.count
-        }) === 0?setPurchasable(false):null;
-    }
+        });
+
+        if(setVal === 0){
+            setPurchasable(false)
+        }
+    },[cartList])
+
+
 
     /**
      * 게시글 찜하기 기능
@@ -127,7 +132,7 @@ const FundingSideBar = (funding) => {
      */
     const productList = cartList.map((p, idx)=>
             <div className="single-sidebar-blog" key={idx}>
-                <div>{idx+1}번 리워드 </div>
+                <div><h4>{idx+1}번 리워드</h4></div>
                 <div className="sidebar-blog-img">
                     <div to={process.env.PUBLIC_URL + "/blog-details-standard"}>
                         <img
@@ -141,12 +146,15 @@ const FundingSideBar = (funding) => {
                         <h4>{p.price}원</h4>
                             <h6>[ 상세 설명 ]</h6>
                             <h6 style={{marginBottom:"15px"}}>{p.des}</h6>
-                        {/* cart count button */}
-                        <div style={{display:"flex"}}>
-                            <button style={buttonStyle} onClick={()=> deleteCart(p)}>-</button>
-                                <div style={{margin:"0 5px"}}>{p.count}개</div>
-                            <button style={buttonStyle} onClick={()=> addCart(p)}>+</button>
-                        </div>
+                        {funding.fundingDTO.success ?
+                            <></>
+                            :
+                            <div style={{display: "flex"}}>
+                                <button style={buttonStyle} onClick={() => deleteCart(p)}>-</button>
+                                <div style={{margin: "0 5px"}}>{p.count}개</div>
+                                <button style={buttonStyle} onClick={() => addCart(p)}>+</button>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -163,40 +171,42 @@ const FundingSideBar = (funding) => {
                  <h4>{Math.ceil(funding.fundingDTO.totalAmount/funding.fundingDTO.targetAmount*100)}% 달성</h4>
                  <h4>총 펀딩액 {funding.fundingDTO.totalAmount}원 </h4>
                  <br/>
-                 {/* funding favorite */}
-                 <div style={{width:"100%"}}>
-                     <div style={{fontSize:"25px", lineHeight:"150%", cursor:"pointer",display:"flex"}} onClick={clickFavorite}>
-                         { favList.find(checkUser) ? '💜':'♡'}
-                        <div style={{fontSize:"20px", margin:"0 10px"}}>{favCount}</div>
-                     </div>
-                 </div>
                  {/* funding button */}
                  {funding.fundingDTO.success ?
                      <div style={{marginTop:"30px"}}>
                          <h3>종료된 펀딩입니다</h3>
                      </div>
                      :
-                 <form className={"searchform"}>
-                     {purchasable ?
-                         <Link to={{
-                             pathname: "/checkout",
-                             state: {
-                                 cartList,
-                                 fno: funding.fundingDTO.fno
-                             }
-                         }}>
-                             <button className={"searchform__submit"}
-                                     style={{height: "50px", width: "100%", position: "relative", marginTop: "10px"}}>
-                                 펀딩 참여하기
+                     <>
+                     {/* funding favorite */}
+                     <div style={{width:"100%"}}>
+                         <div style={{fontSize:"25px", lineHeight:"150%", cursor:"pointer",display:"flex"}} onClick={clickFavorite}>
+                             { favList.find(checkUser) ? '💜':'♡'}
+                             <div style={{fontSize:"20px", margin:"0 10px"}}>{favCount}</div>
+                         </div>
+                     </div>
+                     <form className={"searchform"}>
+                         {purchasable ?
+                             <Link to={{
+                                 pathname: "/checkout",
+                                 state: {
+                                     cartList,
+                                     fno: funding.fundingDTO.fno
+                                 }
+                             }}>
+                                 <button className={"searchform__submit"}
+                                         style={{height: "50px", width: "100%", position: "relative", marginTop: "10px"}}>
+                                     펀딩 참여하기
+                                 </button>
+                             </Link>
+                             :
+                             <button className={"searchform__submit"} disabled={true}
+                                     style={{height: "50px", backgroundColor: "grey", width: "100%", position: "relative", marginTop: "10px"}}>
+                                 상품을 선택해 주세요
                              </button>
-                         </Link>
-                         :
-                         <button className={"searchform__submit"} disabled={true}
-                                 style={{height: "50px", backgroundColor: "grey", width: "100%", position: "relative", marginTop: "10px"}}>
-                             상품을 선택해 주세요
-                         </button>
-                     }
-                 </form>
+                         }
+                     </form>
+                     </>
                  }
              </div>
          </div>
@@ -223,21 +233,19 @@ const FundingSideBar = (funding) => {
         const result = window.confirm("정말 삭제하시겠습니까?");
         if(result){
             fundingService.removedFunding(fno).then(res=> {
-                console.log(res);
-                console.log(result);
-                history.push("/funding/list");
             })
         }
+        return history.push("/funding/list");
     }
 
     return (
         <div className="sidebar-style">
             <div className="sidebar-widget mt-35">
                 {selectReward}
-                { userInfo.email===funding.fundingDTO.email && update}
+                { userInfo.email===funding.fundingDTO.email && !funding.fundingDTO.success && update}
             </div>
             <div className="sidebar-widget mt-40" >
-                <h4 className="pro-sidebar-title"> 리워드 선택</h4>
+                <h3 className="pro-sidebar-title"> 리워드 선택</h3>
                 <div className="sidebar-project-wrap mt-30">
                     {productList}
                 </div>

@@ -36,11 +36,10 @@ const ProductInputList = () => {
     };
 
     const addRegister = () => {
-        console.log(allProduct)
+        // console.log(allProduct)
     }
 
     const editProduct = (product)=>{
-        console.log('test')
         productService.updateProduct(product)
     }
 

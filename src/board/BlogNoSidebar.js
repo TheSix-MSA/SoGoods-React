@@ -13,6 +13,7 @@ import boardService from "./boardService";
 import {Button, FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import BoardNotice from "./BoardNotice";
+import {Form} from "react-bootstrap";
 
 const initState = {
     page: 1,
@@ -20,8 +21,7 @@ const initState = {
     keyword: '',
 }
 const BlogNoSidebar = ({match}) => {
-    const { roles } = useSelector(state => state.login)
-    console.log(roles)
+    const {roles} = useSelector(state => state.login)
     const classes = useStyles();
     const location = useLocation()
     const [boardData, setBoardData] = useState({})
@@ -32,9 +32,28 @@ const BlogNoSidebar = ({match}) => {
     const boardType = useRef(match.params.boardType?.toUpperCase())
     const [search, onChange, setSearch] = useInputs({...initState, page: value.page || 1})
 
+    let boardName = "";
+    switch (boardType.current) {
+        case "FREE":
+            boardName = "자유게시판";
+            break;
+        case "NOVELIST":
+            boardName = "작가게시판";
+            break;
+        case "NOTICE":
+            boardName = "공지사항"
+            break;
+        default:
+            boardName= "치명적인 오류 게시판";
+            break;
+    }
+
     useEffect(() => {
         boardType.current = match.params.boardType.toUpperCase()
-        dispatch(getBoardData({...search, page: value.page, boardType: boardType.current})).unwrap().then(res => {
+        dispatch(getBoardData({
+            ...search, page: value.page, boardType: boardType.current,
+            keyword: value.keyword, type: value.type
+        })).unwrap().then(res => {
             setBoardData(res.response)
         })
         boardService.noticeBoard(100).then(res => {
@@ -44,14 +63,23 @@ const BlogNoSidebar = ({match}) => {
 
     const searching = (e) => {
         e.preventDefault();
-        history.push(`/board/${boardType.current}/list?page=1&keyword=${search.keyword}&type=${search.type}`)
         dispatch(getBoardData({...search, boardType: boardType.current})).unwrap().then(res => {
             setBoardData(res.response)
+            history.push(`/board/${boardType.current}/list?page=1&keyword=${search.keyword}&type=${search.type}`)
         })
     }
 
     const boardRegister = () => {
         history.push(`/board/${boardType.current}/boardRegister`)
+    }
+
+    const registerBtn = () => {
+        return (
+            <div style={{textAlign: "right"}}>
+                <Button variant="contained" size="small" color="primary" className={classes.margin}
+                        onClick={boardRegister}> 글쓰기 </Button>
+            </div>
+        )
     }
 
     return (
@@ -66,43 +94,46 @@ const BlogNoSidebar = ({match}) => {
                 {/* breadcrumb */}
                 <div className="blog-area pt-100 pb-100 blog-no-sidebar">
                     <div className="container">
-                        {  boardType.current.includes("FREE") || roles.includes("AUTHOR") ? (
-                            <div style={{textAlign: "right"}}>
-                                <Button variant="contained" size="small" color="primary" className={classes.margin}
-                                        onClick={boardRegister}> 글쓰기 </Button>
-                            </div>
-                        ) : null }
+                        <h2> {boardName} </h2>
+                        {boardType.current === "NOTICE" &&roles.includes("ADMIN") ?
+                            registerBtn() : null}
+                        {boardType.current === "NOVELIST" &&roles.includes("AUTHOR") ?
+                            registerBtn() : null}
+                        {boardType.current === "FREE" ?
+                            registerBtn() : null}
                         <div className="pro-sidebar-search mb-55 mt-25">
-                            <FormControl className={classes.formControl}>
-                                <InputLabel
-                                    shrink id="demo-simple-select-placeholder-label-label">
-                                    선택
-                                </InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-placeholder-label-label"
-                                    id="demo-simple-select-placeholder-label"
-                                    displayEmpty
-                                    className={classes.selectEmpty}
-                                    name="type"
-                                    defaultValue="t"
-                                    onChange={onChange}>
+                            <Form onSubmit={searching}>
+                                <FormControl className={classes.formControl}>
+                                    <InputLabel
+                                        shrink id="demo-simple-select-placeholder-label-label">
+                                        선택
+                                    </InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-placeholder-label-label"
+                                        id="demo-simple-select-placeholder-label"
+                                        displayEmpty
+                                        className={classes.selectEmpty}
+                                        name="type"
+                                        defaultValue="t"
+                                        onChange={onChange}>
                                         <MenuItem value="t"> 제목</MenuItem>
                                         <MenuItem value="w"> 작성자</MenuItem>
                                         <MenuItem value="c"> 내용</MenuItem>
                                         <MenuItem value="tc"> 제목+내용</MenuItem>
-                                </Select>
-                            </FormControl>
-                            <TextField
-                                style={{width: "80%", margin: "8px"}}
-                                id="standard-basic"
-                                label="검색어"
-                                name="keyword"
-                                value={search.keyword}
-                                onChange={onChange}/>
-                            <Button variant="outlined" onClick={searching}
-                                    style={{marginTop: "15px", padding: "15px 15px"}}>
-                                <i className="pe-7s-search"/>
-                            </Button>
+                                    </Select>
+                                </FormControl>
+                                <TextField
+                                    style={{width: "80%", margin: "8px"}}
+                                    id="standard-basic"
+                                    label="검색어"
+                                    name="keyword"
+                                    value={search.keyword}
+                                    onChange={onChange}/>
+                                <Button type="submit" variant="outlined" onClick={searching}
+                                        style={{marginTop: "15px", padding: "15px 15px"}}>
+                                    <i className="pe-7s-search"/>
+                                </Button>
+                            </Form>
                         </div>
                         <div className="row">
                             <div className="col-lg-12">

@@ -37,7 +37,7 @@ const ProductUpdateRegister = () => {
         setFlag(!flag);
     }
 
-
+    const mode = productUpdateService.getMode()
 
     return (
         <>
@@ -47,7 +47,11 @@ const ProductUpdateRegister = () => {
                         <Grid container justifyContent="center" spacing={spacing}>
                             <Grid item>
                                 <ProductUpdateText></ProductUpdateText>
+                                {mode=='register'?
+                                    <Button style={btn} variant="outlined" color="primary" onClick={()=>{productUpdateService.addProduct()}}>{'등록'}</Button>:
                                     <Button style={btn} variant="outlined" color="primary" onClick={()=>{productUpdateService.editProduct(addToast)}}>{'수정'}</Button>
+                                }
+
                             </Grid>
                         </Grid>
                     </Paper>

@@ -10,7 +10,6 @@ import {Table} from "react-bootstrap";
 export default function Identification({member}) {
     const [open, setOpen] = React.useState(false);
     const history = useHistory()
-    console.log(history)
 
     const handleClickOpen = () => {
         setOpen(true);

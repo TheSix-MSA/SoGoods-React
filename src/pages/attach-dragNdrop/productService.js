@@ -34,7 +34,6 @@ const productService = ()=>{
 
     const addProduct = (product) => {
         productList.push(product)
-        console.log(productList)
         openFlag(false)//다이얼로그 창 닫기
     }
 

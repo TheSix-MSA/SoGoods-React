@@ -72,7 +72,6 @@ const MemberTable = () => {
             setMembers(res.data.response);
         });
     }, [page])
-    console.log("23123124124124", members)
 
     const renderPage = () => {
         setFlag(!flag)

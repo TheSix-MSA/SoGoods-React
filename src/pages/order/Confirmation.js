@@ -30,7 +30,6 @@ const Confirmation = ({location}) => {
     params.append('partner_user_id', user)
     params.append('pg_token', purchaseInfo.pg_token)
 
-    console.log("after pushed the btn ",purchaseInfo)
 
     await orderServices.kakaoPayApprovePayment(params);
     await orderServices.orderConfirmedSave({...queryObj, orderId: purchaseInfo.partner_order_id, buyer: user,
@@ -48,7 +47,7 @@ const Confirmation = ({location}) => {
   return (
     <Fragment>
       <MetaTags>
-        <title>Flone | Wishlist</title>
+        <title>SoGoods</title>
         <meta
           name="description"
           content="Wishlist page of flone react minimalist eCommerce template."
@@ -62,10 +61,12 @@ const Confirmation = ({location}) => {
                 <div className="col-lg-12">
                   <div className="item-empty-area text-center">
                     <div className="item-empty-area__text">
-                      마지막 단계입니다! 결제를 승인해 주세요<br />{" "}
-                      <div className="your-order-area">
-                        <div className="place-order mt-25" style={{maxWidth:"50%"}}>
-                          <button className="btn-hover" onClick={() => finalCheckOut()}>결제 최종 승인!</button>
+                      <div style={{marginBottom: "30px"}}>
+                        마지막 단계입니다! 결제를 승인해 주세요<br />{" "}
+                      </div>
+                      <div className="your-order-area" style={{}}>
+                        <div className="place-order" style={{display:"flex", justifyContent:"center", borderRadius:"none"}}>
+                          <button className="btn-hover" style={{maxWidth:"30%"}} onClick={() => finalCheckOut()}>결제 최종 승인!</button>
                         </div>
                       </div>
                     </div>

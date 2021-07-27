@@ -41,31 +41,30 @@ const FundingList = ({ location, productTabClass}) => {
     const keyword = value.keyword||"";
     const type = value.type||"t";
     const state = value.state||"open";
-
-
     const history = useHistory();
     const [data, setData] = useState(initState);
     const userInfo = useSelector(state=> state.login);
-
     // 리스트 데이터 불러오기
     useEffect(()=> {
         fundingService.getList(page, keyword, type, state)
             .then(res1=>{
                 let fnoList = res1.response.dtoList.map(dto=>dto.fundingDTO.fno)
-                fundingService.getA3src('FUNDING', fnoList)
-                    .then(res2=>{
-                        res2.data.response.forEach((ele,i)=>{
-                            res1.response.dtoList[i].fundingDTO.imgSrc = ele.imgSrc
+                if(fnoList.length != 0){
+                    fundingService.getA3src('FUNDING', fnoList)
+                        .then(res2=>{
+                            res2.data.response.forEach((ele,i)=>{
+                                res1.response.dtoList[i].fundingDTO.imgSrc = ele.imgSrc
+                            })
+                            setData(res1.response);
                         })
-                        setData(res1.response);
-                    })
+                }
         })
-    }, [page, state])
+    }, [page,state])
 
 
     // 페이지 이동처리
     const movePage = (page) => {
-        const url = '/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type + '&state='+searchInput.state;
+        const url = '/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type + '&state='+state;
         history.push(url);
     }
 
@@ -82,17 +81,17 @@ const FundingList = ({ location, productTabClass}) => {
     // 검색 처리
     const search = async (e) => {
         e.preventDefault();
-        console.log(searchInput);
-        const result = await fundingService.getList(1, searchInput.keyword, searchInput.type, searchInput.state);
+        const result = await fundingService.getList(1, searchInput.keyword, searchInput.type, state);
         setData(result.response)
-        const url = '/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type + '&state=' +searchInput.state;
+        const url = '/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type + '&state=' +state;
         history.push(url);
     }
 
     // 펀딩 상태에 따라 리스트 불러오기 (open or close)
     const setState = async (state) => {
         setSearchInput({...searchInput, state:state});
-        const result = await fundingService.getList(1, searchInput.keyword, searchInput.type, searchInput.state)
+
+        const result = await fundingService.getList(1, searchInput.keyword, searchInput.type, state)
         setData(result.response);
         const url = '/funding/list?page='+page+'&keyword='+searchInput.keyword+ '&type='+ searchInput.type + '&state=' +state;
         history.push(url);
@@ -102,9 +101,9 @@ const FundingList = ({ location, productTabClass}) => {
     // 진행중인 펀딩 리스트 불러오기
     const list = data.dtoList.map((dto, idx)=>
         <div key={idx} onClick={()=> readTodo(dto.fundingDTO.fno)} style={{cursor:"pointer", margin:"30px 10px", height:"300px", width:"380px"}}>
-            <h5>{dto.fundingDTO.fno}번 게시글</h5>
+            {/*<h5>{dto.fundingDTO.fno}번 게시글</h5>*/}
             <img alt={"이미지"} src={dto.fundingDTO.imgSrc||process.env.PUBLIC_URL+"/assets/img/default.png"} height={"230px"} width={"350px"} style={{objectFit:"cover"}}/>
-            <h5 style={{marginTop:"5px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflowX: "hidden", overflowY:"hidden", maxWidth:"350px"}}>{dto.fundingDTO.title}</h5>
+            <h4 style={{marginTop:"5px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflowX: "hidden", overflowY:"hidden", maxWidth:"350px"}}>{dto.fundingDTO.title}</h4>
             <LinearWithValueLabel dto={dto}></LinearWithValueLabel>
             <h5>마감일 : {dto.fundingDTO.dueDate}  |  펀딩금액 : {dto.fundingDTO.totalAmount}원</h5>
         </div>

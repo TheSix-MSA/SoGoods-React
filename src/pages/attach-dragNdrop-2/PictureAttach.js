@@ -80,11 +80,11 @@ const PictureAttach = () => {
 
                 if(newFiles.length <= max){
                     setFiles(newFiles)
-                    setTimeout(()=>{
-                        console.log('files-setTimeout',files)
-                    },5000)
+                    // setTimeout(()=>{
+                    //     console.log('files-setTimeout',files)
+                    // },5000)
                 }else{
-                    console.log(`파일갯수 ${max} 초과`)
+                    // console.log(`파일갯수 ${max} 초과`)
                 }
             }
     });
@@ -101,7 +101,6 @@ const PictureAttach = () => {
     ]);
 
     const removeImg = (idx) => {
-        console.log('click update')
         files.splice(idx, 1)
         setFiles([...files])
     }
@@ -121,7 +120,6 @@ const PictureAttach = () => {
     }, [files]);
 
 
-    console.log('files length2: ', files.length)
     const thumbs = files.map((file, idx)=> (
         <div style={thumb} key={file.name}>
             <div style={thumbInner}>

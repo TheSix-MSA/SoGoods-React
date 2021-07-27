@@ -74,12 +74,6 @@ const FundingRequestTable = () => {
         history.push("/funding/read/" + fno)
     }
 
-    // const setAuthorized = (fund) => {
-    //     fundingService.setAuthorized(fund.fno, funding.pageMaker.page)
-    //         .then();
-    //     ToastInformation("승인 처리 되었습니다.")
-    // }
-
     const setAuthorized = (fund) => {
         fundingService.reject(fund.fno, true, funding.pageMaker.page)
             .then();

@@ -31,7 +31,6 @@ const MyFundingPage = ({productTabClass}) => {
     useEffect(()=> {
         fundingService.getMyFundingList(userInfo.email)
             .then(res1=>{
-                console.log(res1.response)
                 let fnoList = res1.response.map(f=> f.fno)
                 fundingService.getA3src('FUNDING', fnoList)
                     .then(res2=>{
@@ -43,7 +42,6 @@ const MyFundingPage = ({productTabClass}) => {
             })
     }, [])
 
-    console.log(list);
 
 
     // 읽기 페이지로 이동
@@ -76,7 +74,7 @@ const MyFundingPage = ({productTabClass}) => {
         <div>
             <Fragment>
                 <MetaTags>
-                    <title>Flone | Furniture Home</title>
+                    <title>SoGoods</title>
                     <meta
                         name="description"
                         content="Furniture home of flone react minimalist eCommerce template."

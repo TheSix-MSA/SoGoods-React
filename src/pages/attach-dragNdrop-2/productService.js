@@ -84,7 +84,6 @@ const productService = ()=>{
 
     //다이얼로그 창 닫기
     const closeDialog = () => {
-        console.log('close')
         openFn(false)
         initProduct()
     }
@@ -103,7 +102,6 @@ const productService = ()=>{
         prodIdx = idx
         setMode('update')
         product = getProductByIdx(idx)
-        console.log(product)
 
         //랜더링
         openFn(true)

@@ -217,6 +217,11 @@ const myAccountService = () => {
         return result
     };
 
+    /**
+     * 유저 탈퇴
+     * @param email
+     * @returns {Promise<*>}
+     */
     const removeUser = async (email) => {
         const result = await instance({
             url: `/member/${email}`,
